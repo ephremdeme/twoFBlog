@@ -26,7 +26,7 @@ export const Blockqoute: React.FC<BlockqouteProps> = ({
   fontSize,
 }) => {
   const classes = useStyles();
-  const html = useRef(text);
+  const html = useRef(text ||  "Edit Blockqoute");
   const inputRef = useRef<HTMLLinkElement>(null);
 
   const {
@@ -107,9 +107,9 @@ const EditButton: React.FC<{ name: string; cmd: string }> = (props) => {
 };
 
 type BlockqouteProps = {
-  text: string;
-  fontSize: number;
-  textAlign: string;
+  text?: string;
+  fontSize?: number;
+  textAlign?: string;
 };
 
 export default Blockqoute;
