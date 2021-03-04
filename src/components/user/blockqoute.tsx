@@ -20,11 +20,25 @@ const useStyles = makeStyles({
   },
 });
 
+<<<<<<< Updated upstream
 export const Blockqoute: React.FC<BlockqouteProps> = ({
+=======
+
+type BlockqouteProps = {
+  text?: string;
+  fontSize?: number;
+  textAlign?: string;
+  bold?: string;
+};
+
+
+export const Blockqoute = ({
+>>>>>>> Stashed changes
   text,
   textAlign,
   fontSize,
-}) => {
+  bold
+}: Partial<BlockqouteProps>) => {
   const classes = useStyles();
   const html = useRef(text);
   const inputRef = useRef<HTMLLinkElement>(null);
@@ -76,7 +90,7 @@ export const Blockqoute: React.FC<BlockqouteProps> = ({
         onFocus={handleClick}
         tagName={"blockqoute"}
         className={classes.blockqoute}
-        style={{ fontSize: `${fontSize}px`, textAlign }}
+        style={{ fontSize: `${fontSize}px`, fontWeight: bold, textAlign }}
         title="Editable"
       />
 
@@ -91,11 +105,11 @@ export const Blockqoute: React.FC<BlockqouteProps> = ({
   );
 };
 
-const EditButton: React.FC<{ name: string; cmd: string }> = (props) => {
+const EditButton: React.FC<{ name: string; cmd: string, }> = (props) => {
   return (
     <Button
       key={props.cmd}
-      style={{ margin: "8px" }}
+      style={{ margin: "8px"}}
       onMouseDown={(evt) => {
         evt.preventDefault(); // Avoids loosing focus from the editable area
         document.execCommand(props.cmd, false); // Send the command to the browser
@@ -106,10 +120,19 @@ const EditButton: React.FC<{ name: string; cmd: string }> = (props) => {
   );
 };
 
+<<<<<<< Updated upstream
 type BlockqouteProps = {
   text: string;
   fontSize: number;
   textAlign: string;
 };
+=======
+Blockqoute.craft = {
+  displayName: 'Blockquote',
+  props: {
+    bold: 'normal'
+  }
+}
+>>>>>>> Stashed changes
 
 export default Blockqoute;
