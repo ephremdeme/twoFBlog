@@ -1,15 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { Button, makeStyles, Popper } from "@material-ui/core";
-import { useNode } from "@craftjs/core";
+import { useNode, UserComponent } from "@craftjs/core";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import { AnyCnameRecord } from "dns";
 
 const useStyles = makeStyles({
-  root: {
-    marginTop: "16px",
-    marginBottom: "16px",
-  },
+  root: {},
   blockqoute: {
     display: "block",
     paddingLeft: "16px",
@@ -20,7 +17,6 @@ const useStyles = makeStyles({
   },
 });
 
-
 type BlockqouteProps = {
   text?: string;
   fontSize?: number;
@@ -28,15 +24,14 @@ type BlockqouteProps = {
   bold?: string;
 };
 
-
 export const Blockqoute = ({
   text,
   textAlign,
   fontSize,
-  bold
+  bold,
 }: Partial<BlockqouteProps>) => {
   const classes = useStyles();
-  const html = useRef(text);
+  const html = useRef(text || "Edit Blockqoute");
   const inputRef = useRef<HTMLLinkElement>(null);
 
   const {
@@ -84,7 +79,7 @@ export const Blockqoute = ({
         disabled={!editable}
         aria-describedby={id}
         onFocus={handleClick}
-        tagName={"blockqoute"}
+        tagName={"blockquote"}
         className={classes.blockqoute}
         style={{ fontSize: `${fontSize}px`, fontWeight: bold, textAlign }}
         title="Editable"
@@ -101,26 +96,26 @@ export const Blockqoute = ({
   );
 };
 
-const EditButton: React.FC<{ name: string; cmd: string, }> = (props) => {
+const EditButton: React.FC<{ name: string; cmd: string }> = (props) => {
   return (
     <Button
       key={props.cmd}
-      style={{ margin: "8px"}}
+      style={{ margin: "8px" }}
       onMouseDown={(evt) => {
         evt.preventDefault(); // Avoids loosing focus from the editable area
         document.execCommand(props.cmd, false); // Send the command to the browser
       }}
     >
       {props.name || props.cmd}
-    </Button>S
+    </Button>
   );
 };
 
 Blockqoute.craft = {
-  displayName: 'Blockquote',
+  displayName: "Blockquote",
   props: {
-    bold: 'normal'
-  }
-}
+    bold: "normal",
+  },
+};
 
 export default Blockqoute;
