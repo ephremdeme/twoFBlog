@@ -101,7 +101,7 @@ const RenderNode = ({ render }: any) => {
                   className="btn btn-cursor"
                   onClick={() => {
                     actions.setProp(id, (props) => {
-                      if (props.bold == "bold" || props.bold == "bolder")
+                      if (props.bold === "bold" || props.bold === "bolder")
                         props.bold = "normal";
                       else props.bold = "bolder";
                     });
@@ -129,6 +129,6 @@ const RenderNode = ({ render }: any) => {
       {render}
     </>
   );
-}
+};
 
-export default RenderNode
+export default RenderNode;

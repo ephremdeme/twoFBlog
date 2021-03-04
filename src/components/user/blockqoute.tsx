@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
 import { Button, makeStyles, Popper } from "@material-ui/core";
-import { useNode, UserComponent } from "@craftjs/core";
+import { useNode } from "@craftjs/core";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
-import { AnyCnameRecord } from "dns";
 
 const useStyles = makeStyles({
   root: {},
