@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { Button, makeStyles, Popper } from "@material-ui/core";
-import { useNode } from "@craftjs/core";
+import { useNode, UserComponent } from "@craftjs/core";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import { AnyCnameRecord } from "dns";
 
 const useStyles = makeStyles({
   root: {
-    marginTop: "16px",
-    marginBottom: "16px",
   },
   blockqoute: {
     display: "block",
@@ -20,13 +18,13 @@ const useStyles = makeStyles({
   },
 });
 
-export const Blockqoute: React.FC<BlockqouteProps> = ({
+export const Blockqoute: UserComponent<BlockqouteProps> = ({
   text,
   textAlign,
   fontSize,
 }) => {
   const classes = useStyles();
-  const html = useRef(text ||  "Edit Blockqoute");
+  const html = useRef(text || "Edit Blockqoute");
   const inputRef = useRef<HTMLLinkElement>(null);
 
   const {
@@ -74,7 +72,7 @@ export const Blockqoute: React.FC<BlockqouteProps> = ({
         disabled={!editable}
         aria-describedby={id}
         onFocus={handleClick}
-        tagName={"blockqoute"}
+        tagName={"blockquote"}
         className={classes.blockqoute}
         style={{ fontSize: `${fontSize}px`, textAlign }}
         title="Editable"
@@ -111,5 +109,8 @@ type BlockqouteProps = {
   fontSize?: number;
   textAlign?: string;
 };
+
+
+
 
 export default Blockqoute;
