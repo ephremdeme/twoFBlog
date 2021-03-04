@@ -5,7 +5,7 @@ import { ROOT_NODE } from "@craftjs/utils";
 import { ArrowUpward, Delete, MoveToInbox } from "@material-ui/icons";
 import "./RenderNode.css";
 
-export const RenderNode = ({ render }: any) => {
+const RenderNode = ({ render }: any) => {
   const { actions, query, connectors } = useEditor();
 
   const {
@@ -129,4 +129,6 @@ export const RenderNode = ({ render }: any) => {
       {render}
     </>
   );
-};
+}
+
+export default RenderNode

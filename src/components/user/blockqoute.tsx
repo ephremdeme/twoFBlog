@@ -20,9 +20,6 @@ const useStyles = makeStyles({
   },
 });
 
-<<<<<<< Updated upstream
-export const Blockqoute: React.FC<BlockqouteProps> = ({
-=======
 
 type BlockqouteProps = {
   text?: string;
@@ -33,7 +30,6 @@ type BlockqouteProps = {
 
 
 export const Blockqoute = ({
->>>>>>> Stashed changes
   text,
   textAlign,
   fontSize,
@@ -116,23 +112,15 @@ const EditButton: React.FC<{ name: string; cmd: string, }> = (props) => {
       }}
     >
       {props.name || props.cmd}
-    </Button>
+    </Button>S
   );
 };
 
-<<<<<<< Updated upstream
-type BlockqouteProps = {
-  text: string;
-  fontSize: number;
-  textAlign: string;
-};
-=======
 Blockqoute.craft = {
   displayName: 'Blockquote',
   props: {
     bold: 'normal'
   }
 }
->>>>>>> Stashed changes
 
 export default Blockqoute;
