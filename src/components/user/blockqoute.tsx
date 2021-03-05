@@ -3,15 +3,13 @@ import PropTypes from "prop-types";
 import { Button, makeStyles, Popper } from "@material-ui/core";
 import { useNode, UserComponent } from "@craftjs/core";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
-import { AnyCnameRecord } from "dns";
+
 
 const useStyles = makeStyles({
   root: {
   },
   blockqoute: {
     display: "block",
-    paddingLeft: "16px",
-    marginLeft: "10px",
     borderLeftStyle: "solid",
     borderLeftColor: "#1279BE",
     minHeight: "70px",
@@ -80,23 +78,31 @@ export const Blockqoute: UserComponent<BlockqouteProps> = ({
 
       <Popper id={id} open={open} anchorEl={anchorEl} placement={"top"}>
         <div style={{ display: "inline-block" }}>
+          
           <EditButton cmd="bold" name={"B"} />
           <EditButton cmd="italic" name={"I"} />
           <EditButton cmd="underline" name={"U"} />
+          <EditButton cmd="justifyleft" name={"AL"} />
+          <EditButton cmd="justifycenter" name={"AC"} />
+          <EditButton cmd="justifyright" name={"AR"} />
+          <EditButton cmd="insertorderedlist" name={"Ol"} />
+          <EditButton cmd="insertunorderedlist" name={"UL"} />
+          <EditButton cmd="formatblock" value="blockquote" name={"BQ"} />
+          <EditButton cmd="createlink" name={"Link"} />
         </div>
       </Popper>
     </div>
   );
 };
 
-const EditButton: React.FC<{ name: string; cmd: string }> = (props) => {
+const EditButton: React.FC<{ name: string; cmd: string; value?: string }> = (props) => {
   return (
     <Button
       key={props.cmd}
       style={{ margin: "8px" }}
       onMouseDown={(evt) => {
         evt.preventDefault(); // Avoids loosing focus from the editable area
-        document.execCommand(props.cmd, false); // Send the command to the browser
+        document.execCommand(props.cmd, false, props.value); // Send the command to the browser
       }}
     >
       {props.name || props.cmd}
@@ -111,6 +117,9 @@ type BlockqouteProps = {
 };
 
 
+Blockqoute.craft ={
+  displayName: "Blockquote",
+}
 
 
 export default Blockqoute;
