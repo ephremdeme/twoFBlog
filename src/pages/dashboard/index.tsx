@@ -20,10 +20,10 @@ import {
 	Theme,
 	createStyles,
 } from '@material-ui/core/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import {RootState} from '../../app/store'
-import {setTheme} from '../../features/app'
-
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../app/store';
+import {setTheme} from '../../features/app';
+import {Avatar, Grid} from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -59,6 +59,13 @@ const useStyles = makeStyles((theme: Theme) =>
 			flexGrow: 1,
 			padding: theme.spacing(3),
 		},
+		// list items
+		listItems: {
+			width: '90%',
+			borderRadius: '4px',
+			margin: '5px auto',
+			transition: 'all .4s',
+		},
 	})
 );
 
@@ -80,11 +87,10 @@ export default function ResponsiveDrawer(props: Props) {
 
 	const drawer = (
 		<div>
-			<div className={classes.toolbar} />
 			<Divider />
 			<List>
 				{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-					<ListItem button key={text}>
+					<ListItem button key={text} className={classes.listItems}>
 						<ListItemIcon>
 							{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
 						</ListItemIcon>
@@ -95,7 +101,7 @@ export default function ResponsiveDrawer(props: Props) {
 			<Divider />
 			<List>
 				{['All mail', 'Trash', 'Spam'].map((text, index) => (
-					<ListItem button key={text}>
+					<ListItem button key={text} className={classes.listItems}>
 						<ListItemIcon>
 							{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
 						</ListItemIcon>
@@ -127,7 +133,7 @@ export default function ResponsiveDrawer(props: Props) {
 						size="small">
 						<MenuIcon />
 					</IconButton>
-					<Typography variant="h6"  noWrap>
+					<Typography variant="h6" noWrap>
 						Responsive drawer
 					</Typography>
 				</Toolbar>
@@ -144,7 +150,7 @@ export default function ResponsiveDrawer(props: Props) {
 							paper: classes.drawerPaper,
 						}}
 						ModalProps={{
-							keepMounted: true, // Better open performance on mobile.
+							keepMounted: true,
 						}}>
 						{drawer}
 					</Drawer>
@@ -156,16 +162,24 @@ export default function ResponsiveDrawer(props: Props) {
 						}}
 						variant="permanent"
 						open>
+						<Grid container spacing={2} style={{margin: '0.5rem'}}>
+							<Grid item justify="center" alignItems="center">
+								<Avatar alt="Remy Sharp" />
+							</Grid>
+							<Grid item>
+								<h3 style={{margin: '0'}}>Jean Doe</h3>
+								<p  style={{margin: '0'}}>Online</p>
+							</Grid>
+						</Grid>
 						{drawer}
 					</Drawer>
 				</Hidden>
 			</nav>
 			<main className={classes.content}>
 				<div className={classes.toolbar} />
-				<button
-					onClick={() => dispatch(setTheme(!appTheme))}
-				>
-					Set Thme {appTheme ? 'HM' : "MU"}
+				<button onClick={() => dispatch(setTheme(true))}>Set Thme Dark</button>
+				<button onClick={() => dispatch(setTheme(false))}>
+					Set Thme Light
 				</button>
 			</main>
 		</div>
