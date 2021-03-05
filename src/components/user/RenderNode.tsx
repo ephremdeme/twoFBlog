@@ -2,36 +2,12 @@ import React, { useEffect, useRef, useCallback } from "react";
 import { useNode, useEditor } from "@craftjs/core";
 import ReactDOM from "react-dom";
 import { ROOT_NODE } from "@craftjs/utils";
-import styled from "styled-components";
 import { ArrowUpward, Delete, MoveToInbox } from "@material-ui/icons";
+import "./RenderNode.css";
 
-const IndicatorDiv = styled.div`
-  height: 30px;
-  margin-top: -29px;
-  font-size: 12px;
-  line-height: 12px;
-
-  svg {
-    fill: #000;
-    width: 15px;
-    height: 15px;
-  }
-`;
-
-const Btn = styled.a`
-  padding: 0 0px;
-  opacity: 0.9;
-  display: flex;
-  align-items: center;
-  > div {
-    position: relative;
-    top: -50%;
-    left: -50%;
-  }
-`;
-
-export const RenderNode = ({ render }: any) => {
+const RenderNode = ({ render }: any) => {
   const { actions, query, connectors } = useEditor();
+
   const {
     id,
     isActive,
@@ -57,7 +33,7 @@ export const RenderNode = ({ render }: any) => {
 
   useEffect(() => {
     if (dom) {
-      if (isActive || isHover) dom.classList.add("component-selected");
+      if (isActive && isHover) dom.classList.add("component-selected");
       else dom.classList.remove("component-selected");
     }
   }, [dom, isActive, isHover]);
@@ -92,11 +68,11 @@ export const RenderNode = ({ render }: any) => {
 
   return (
     <>
-      {isHover || isActive
+      {isActive && isHover
         ? ReactDOM.createPortal(
-            <IndicatorDiv
+            <div
               ref={currentRef}
-              className="px-2 py-2 text-white bg-primary fixed flex items-center"
+              className="indicator"
               style={{
                 left: getPos(dom).left,
                 top: getPos(dom).top,
@@ -105,32 +81,48 @@ export const RenderNode = ({ render }: any) => {
             >
               <h2 className="flex-1 mr-4">{name}</h2>
               {moveable ? (
-                <Btn className="mr-2 cursor-move" ref={drag}>
+                <button className="btn btn-move" ref={drag}>
                   <MoveToInbox />
-                </Btn>
+                </button>
               ) : null}
               {id !== ROOT_NODE && (
-                <Btn
-                  className="mr-2 cursor-pointer"
+                <button
+                  className="btn btn-cursor"
                   onClick={() => {
                     actions.selectNode(parent);
                   }}
                 >
                   <ArrowUpward />
-                </Btn>
+                </button>
               )}
+
+              {name === "Blockquote" && (
+                <button
+                  className="btn btn-cursor"
+                  onClick={() => {
+                    actions.setProp(id, (props) => {
+                      if (props.bold === "bold" || props.bold === "bolder")
+                        props.bold = "normal";
+                      else props.bold = "bolder";
+                    });
+                  }}
+                >
+                  BB
+                </button>
+              )}
+
               {deletable ? (
-                <Btn
-                  className="cursor-pointer"
+                <button
+                  className="btn-cursor"
                   onMouseDown={(e: React.MouseEvent) => {
                     e.stopPropagation();
                     actions.delete(id);
                   }}
                 >
                   <Delete />
-                </Btn>
+                </button>
               ) : null}
-            </IndicatorDiv>,
+            </div>,
             document.body
           )
         : null}
@@ -138,3 +130,5 @@ export const RenderNode = ({ render }: any) => {
     </>
   );
 };
+
+export default RenderNode;
