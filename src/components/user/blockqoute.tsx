@@ -3,13 +3,19 @@ import PropTypes, {ReactComponentLike} from 'prop-types';
 import {Button, makeStyles, Popper} from '@material-ui/core';
 import {useNode, UserComponent} from '@craftjs/core';
 import ContentEditable, {ContentEditableEvent} from 'react-contenteditable';
-import {ReactComponent as Bold} from '../../public/svg/bold.svg';
-import {ReactComponent as Italic} from '../../public/svg/italic.svg';
-import {ReactComponent as Link} from '../../public/svg/link.svg';
-import {ReactComponent as Quote} from '../../public/svg/quote.svg';
-import {ReactComponent as OrderedList} from '../../public/svg/number.svg';
-import {ReactComponent as UnorderedList} from '../../public/svg/bulletlist.svg';
-import {ReactComponent as Underline} from '../../public/svg/underline.svg';
+import {
+	FormatAlignJustify,
+	FormatAlignLeft,
+	FormatAlignRight,
+	FormatBold,
+	FormatItalic,
+	FormatListBulleted,
+	FormatListNumbered,
+	FormatQuote,
+	FormatUnderlined,
+	InsertLink,
+} from '@material-ui/icons';
+import {AnyMxRecord} from 'dns';
 
 const useStyles = makeStyles({
 	root: {},
@@ -18,6 +24,9 @@ const useStyles = makeStyles({
 		borderLeftStyle: 'solid',
 		borderLeftColor: '#1279BE',
 		minHeight: '70px',
+	},
+	button: {
+		backgroundColor: 'black',
 	},
 });
 
@@ -74,12 +83,17 @@ export const Blockqoute: UserComponent<BlockqouteProps> = ({
 const EditButton: React.FC<{name?: string; cmd: string; value?: string}> = (
 	props
 ) => {
+	const classes = useStyles();
+	const [active, setActive] = useState(false);
 	return (
 		<Button
 			key={props.cmd}
 			style={{margin: '3px'}}
+			title={props.name}
+			className={active ? classes.button : ''}
 			onMouseDown={(evt) => {
 				evt.preventDefault(); // Avoids loosing focus from the editable area
+				setActive(!active);
 				document.execCommand(props.cmd, false, props.value); // Send the command to the browser
 			}}>
 			{props.children || props.name}
@@ -87,32 +101,120 @@ const EditButton: React.FC<{name?: string; cmd: string; value?: string}> = (
 	);
 };
 
+interface AlignActiveProp {
+	[index: string]: boolean;
+	justifyleft: boolean;
+	justifycenter: boolean;
+	justifyright: boolean;
+}
+interface ListActiveProp {
+	[index: string]: boolean;
+	insertorderedlist: boolean;
+	insertunorderedlist: boolean;
+}
+
+const EditButtonMultiple: React.FC<{
+	name?: string;
+	cmd: any;
+	value?: string;
+	active: ListActiveProp | AlignActiveProp;
+	setActive: (active: any) => void;
+}> = (props) => {
+	const classes = useStyles();
+	const active = props.active[props.cmd];
+	return (
+		<Button
+			key={props.cmd}
+			style={{margin: '3px'}}
+			title={props.name}
+			className={active ? classes.button : ''}
+			onMouseDown={(evt) => {
+				evt.preventDefault(); // Avoids loosing focus from the editable area
+
+				Object.keys(props.active).forEach((key) => (props.active[key] = false));
+				props.setActive({
+					...props.active,
+					[props.cmd]: !active,
+				});
+				document.execCommand(props.cmd, false, props.value); // Send the command to the browser
+			}}>
+			{props.children || props.name}
+		</Button>
+	);
+};
+
+const AlignButtons = () => {
+	const [active, setActive] = useState({
+		justifyleft: false,
+		justifycenter: false,
+		justifyright: false,
+	});
+
+	return (
+		<>
+			<EditButtonMultiple
+				cmd="justifyleft"
+				name={'Align Left'}
+				active={active}
+				setActive={setActive}>
+				<FormatAlignLeft />
+			</EditButtonMultiple>
+			<EditButtonMultiple
+				cmd="justifycenter"
+				name={'Align Center'}
+				active={active}
+				setActive={setActive}>
+				<FormatAlignJustify />
+			</EditButtonMultiple>
+			<EditButtonMultiple
+				cmd="justifyright"
+				name={'Align Right'}
+				active={active}
+				setActive={setActive}>
+				<FormatAlignRight />
+			</EditButtonMultiple>
+		</>
+	);
+};
+
+const ListButtons = () => {
+	const [active, setActive] = useState({
+		insertorderedlist: false,
+		insertunorderedlist: false,
+	});
+
+	return (
+		<>
+			<EditButton cmd="insertorderedlist" name={'Ordered List'}>
+				<FormatListNumbered />
+			</EditButton>
+			<EditButton cmd="insertunorderedlist" name={'UnOrdered List'}>
+				<FormatListBulleted />
+			</EditButton>
+		</>
+	);
+};
+
 const BlockquoteSettings = () => {
 	return (
 		<div style={{display: 'inline-block'}}>
-			<EditButton cmd="bold">
-				<Bold />
+			<EditButton cmd="bold" name="Bold">
+				<FormatBold />
 			</EditButton>
-			<EditButton cmd="italic" name={'I'}>
-				<Italic />
+			<EditButton cmd="italic" name={'Italic'}>
+				<FormatItalic />
 			</EditButton>
-			<EditButton cmd="underline" name={'U'}>
-				<Underline />
+			<EditButton cmd="underline" name={'Underline'}>
+				<FormatUnderlined />
 			</EditButton>
-			<EditButton cmd="justifyleft" name={'AL'}></EditButton>
-			<EditButton cmd="justifycenter" name={'AC'}></EditButton>
-			<EditButton cmd="justifyright" name={'AR'}></EditButton>
-			<EditButton cmd="insertorderedlist" name={'Ol'}>
-				<OrderedList />
-			</EditButton>
-			<EditButton cmd="insertunorderedlist" name={'UL'}>
-				<UnorderedList />
-			</EditButton>
-			<EditButton cmd="formatblock" value="blockquote" name={'BQ'}>
-				<Quote />
+			<AlignButtons />
+
+			<ListButtons />
+			<EditButton cmd="formatblock" value="blockquote" name={'Blockqoute'}>
+				<FormatQuote />
 			</EditButton>
 			<EditButton cmd="createlink" name={'Link'}>
-				<Link />
+				<InsertLink />
 			</EditButton>
 		</div>
 	);
