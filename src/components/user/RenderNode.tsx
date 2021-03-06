@@ -97,7 +97,6 @@ const RenderNode = ({render}: any) => {
 								top: getPos(dom).top,
 								zIndex: 9999,
 							}}>
-							<h2 className="flex-1 mr-4">{name}</h2>
 							{moveable ? (
 								<button className="btn btn-move" ref={drag}>
 									<MoveToInbox />
@@ -113,7 +112,7 @@ const RenderNode = ({render}: any) => {
 								</button>
 							)}
 
-							{name === 'Blockquote' &&
+							{name === 'Text' &&
 								selected &&
 								selected.settings &&
 								React.createElement(selected.settings)}
