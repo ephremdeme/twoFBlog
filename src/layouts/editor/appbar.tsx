@@ -22,7 +22,7 @@ export default function NavBar() {
 
 	return (
 		<div className={classes.root}>
-			<AppBar elevation={2} position="fixed" color="transparent">
+			<AppBar elevation={2} position="fixed">
 				<Toolbar>
 					<IconButton
 						color="inherit"

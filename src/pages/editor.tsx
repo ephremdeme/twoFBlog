@@ -1,6 +1,6 @@
 import {Editor, Element, Frame} from '@craftjs/core';
 import {Box, Grid} from '@material-ui/core';
-import Container from 'components/user/container/container';
+import {Container} from 'components/selectors/Container';
 import NavBar from 'layouts/editor/appbar';
 import MiniDrawer from 'layouts/editor/drawer';
 import React from 'react';

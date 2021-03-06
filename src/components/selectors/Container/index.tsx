@@ -16,6 +16,7 @@ export type Container = {
 	fillSpace: string;
 	width: string;
 	height: string;
+	className: string;
 	padding: string[];
 	margin: string[];
 	marginTop: number;
@@ -54,6 +55,7 @@ export const Container = (props: Partial<Container>) => {
 		margin,
 		shadow,
 		radius,
+		className,
 		children,
 	} = {
 		...defaultProps,
@@ -62,6 +64,7 @@ export const Container = (props: Partial<Container>) => {
 	return (
 		<Resizer
 			propKey={{width: 'width', height: 'height'}}
+			className={className}
 			style={{
 				justifyContent,
 				flexDirection,
@@ -75,7 +78,7 @@ export const Container = (props: Partial<Container>) => {
 						? 'none'
 						: `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
 				borderRadius: `${radius}px`,
-				flex: fillSpace === 'yes' ? 1 : 'unset'
+				flex: fillSpace === 'yes' ? 1 : 'unset',
 			}}>
 			{children}
 		</Resizer>

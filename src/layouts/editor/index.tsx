@@ -1,2 +1,2 @@
 export * from './appbar';
-export * from './toolbox';
+export * from './drawer';
