@@ -1,5 +1,6 @@
 import {Editor, Element, Frame} from '@craftjs/core';
 import {Box} from '@material-ui/core';
+import {Container} from 'components/selectors/Container';
 import React from 'react';
 import RenderNode from '../components/user/RenderNode';
 import {Text} from '../components/user/text/text';
