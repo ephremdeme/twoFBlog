@@ -1,9 +1,7 @@
-import {Element, useEditor, useNode} from '@craftjs/core';
-import {FormControl, makeStyles, TextField} from '@material-ui/core';
-import React, {useEffect} from 'react';
+import {useEditor, useNode} from '@craftjs/core';
+import React from 'react';
 import YouTube from 'react-youtube';
 import styled from 'styled-components';
-import Container from '../container/container';
 import VideoSetting from './videoSetting';
 
 const YoutubeDiv = styled.div<any>`
@@ -13,7 +11,8 @@ const YoutubeDiv = styled.div<any>`
 		height: 100%;
 	}
 	iframe {
-		pointer-events: ${(props) => (props.enabled ? 'none' : 'auto')};
+		pointer-events: ${(props: {enabled: boolean}) =>
+			props.enabled ? 'none' : 'auto'};
 		// width:100%!important;
 		// height:100%!important;
 	}
