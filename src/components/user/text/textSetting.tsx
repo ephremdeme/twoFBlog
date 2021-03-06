@@ -3,6 +3,8 @@ import {
 	Button,
 	DialogActions,
 	DialogContent,
+	FormControl,
+	FormLabel,
 	IconButton,
 	makeStyles,
 	Menu,
@@ -11,6 +13,8 @@ import {
 	Typography,
 } from '@material-ui/core';
 import {
+	Backspace,
+	Colorize,
 	ExpandLess,
 	ExpandMore,
 	FormatAlignJustify,
@@ -20,6 +24,7 @@ import {
 	FormatItalic,
 	FormatListBulleted,
 	FormatListNumbered,
+	FormatPaintSharp,
 	FormatQuote,
 	FormatUnderlined,
 	InsertLink,
@@ -30,7 +35,6 @@ import {Grow} from '@material-ui/core';
 import {ClickAwayListener} from '@material-ui/core';
 import {MenuList} from '@material-ui/core';
 import {Paper} from '@material-ui/core';
-import {setTextRange} from 'typescript';
 import {DialogTitle} from '@material-ui/core';
 import {Dialog} from '@material-ui/core';
 import {TextField} from '@material-ui/core';
@@ -308,25 +312,32 @@ const TextStyleMenu: React.FC<{
 };
 
 export const TextSettings = () => {
+	const [active, setActive] = useState(false);
+
 	return (
-		<div style={{display: 'inline-block'}}>
-			<MoreMenu Choose={TextStyleMenu} text="Paragraph" />
-			<EditButton cmd="bold" name="Bold">
-				<FormatBold />
-			</EditButton>
-			<EditButton cmd="italic" name={'Italic'}>
-				<FormatItalic />
-			</EditButton>
-			<EditButton cmd="underline" name={'Underline'}>
-				<FormatUnderlined />
-			</EditButton>
-			<AlignButtons />
-			<EditButton cmd="formatblock" value="Blockqoute" name={'Blockqoute'}>
-				<FormatQuote />
-			</EditButton>
-			<LinkButton cmd="createlink" name={'Link'}>
-				<InsertLink />
-			</LinkButton>
+		<div>
+			<div>
+				<MoreMenu Choose={TextStyleMenu} text="Paragraph" />
+				<EditButton cmd="bold" name="Bold">
+					<FormatBold />
+				</EditButton>
+				<EditButton cmd="italic" name={'Italic'}>
+					<FormatItalic />
+				</EditButton>
+				<EditButton cmd="underline" name={'Underline'}>
+					<FormatUnderlined />
+				</EditButton>
+				<AlignButtons />
+				<EditButton cmd="formatblock" value="blockquote" name={'Blockquote'}>
+					<FormatQuote />
+				</EditButton>
+				<LinkButton cmd="createlink" name={'Link'}>
+					<InsertLink />
+				</LinkButton>
+				<IconButton onClick={() => setActive(!active)}>
+					{active ? <ExpandLess /> : <ExpandMore />}
+				</IconButton>
+			</div>
 		</div>
 	);
 };
