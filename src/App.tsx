@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import './App.css';
 import EditorPage from './pages/editor';
@@ -9,26 +9,15 @@ import {getAppTheme, IAppState} from './features/app';
 import {RootState} from './app/store';
 
 function App() {
-	const appTheme = useSelector((state: RootState) => state.app.appTheme);
-
-	const theme = createMuiTheme({
-		typography: {
-			fontSize: 12,
-		},
-		palette: {
-			type: appTheme ? 'dark' : 'light',
-		},
-	});
+	// const appTheme = useSelector((state: RootState) => state.app.appTheme);
 
 	return (
-		<ThemeProvider theme={theme}>
-			<Router>
-				<Switch>
-					<Route exact path="/" component={DashboardPage} />
-					<Route path="/editor" component={EditorPage} />
-				</Switch>
-			</Router>
-		</ThemeProvider>
+		<Router>
+			<Switch>
+				<Route exact path="/" component={DashboardPage} />
+				<Route path="/editor" component={EditorPage} />
+			</Switch>
+		</Router>
 	);
 }
 

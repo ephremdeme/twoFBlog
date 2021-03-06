@@ -8,15 +8,19 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import {useEditor} from '@craftjs/core';
 import Text from 'components/user/text/Text';
+import MaximizeIcon from '@material-ui/icons/Maximize';
 import {
 	CheckBoxOutlineBlankOutlined,
 	TextFields,
 	Undo,
 	Redo,
 	YouTube,
+	Image,
 } from '@material-ui/icons';
-import Container from 'components/user/container/container';
 import {Video} from 'components/user/video/video';
+import {Image as ImageComp} from 'components/user/image/image';
+import {Container} from 'components/selectors/Container';
+import Divider from 'components/selectors/Divider';
 
 const drawerWidth = 240;
 
@@ -104,6 +108,18 @@ export default function MiniDrawer() {
 								innerRef={(ref: ReactElement) => create(ref, <Video />)}>
 								<ListItemIcon>
 									<YouTube />
+								</ListItemIcon>
+							</ListItem>
+							<ListItem
+								innerRef={(ref: ReactElement) => create(ref, <ImageComp />)}>
+								<ListItemIcon>
+									<Image />
+								</ListItemIcon>
+							</ListItem>
+							<ListItem
+								innerRef={(ref: ReactElement) => create(ref, <Divider />)}>
+								<ListItemIcon>
+									<MaximizeIcon />
 								</ListItemIcon>
 							</ListItem>
 						</List>
