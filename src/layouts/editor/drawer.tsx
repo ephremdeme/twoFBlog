@@ -6,7 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import {useEditor} from '@craftjs/core';
+import {Element, useEditor} from '@craftjs/core';
 import Text from 'components/user/text/Text';
 import MaximizeIcon from '@material-ui/icons/Maximize';
 import {
@@ -99,7 +99,16 @@ export default function MiniDrawer() {
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
-								innerRef={(ref: ReactElement) => create(ref, <Container />)}>
+								innerRef={(ref: ReactElement) =>
+									create(
+										ref,
+										<Element
+											canvas
+											is={Container}
+											height="300px"
+											width="300px"></Element>
+									)
+								}>
 								<ListItemIcon>
 									<CheckBoxOutlineBlankOutlined />
 								</ListItemIcon>
@@ -131,7 +140,7 @@ export default function MiniDrawer() {
 									className="copy-state-btn"
 									size="small"
 									disabled={!canUndo}
-									onClick={() => actions.history.redo()}
+									onClick={() => actions.history.undo()}
 									style={{marginRight: '10px'}}>
 									<Undo />
 								</IconButton>
