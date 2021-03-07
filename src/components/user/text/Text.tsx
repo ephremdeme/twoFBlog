@@ -62,7 +62,7 @@ export const Text: UserComponent<TextProps> = ({text, textAlign, fontSize}) => {
 				onChange={handleChange}
 				onBlur={handleBlur}
 				disabled={!editable}
-				tagName={'Text'}
+				tagName={'p'}
 				className={classes.text}
 				// style={{fontSize: `${fontSize}px`, textAlign}}
 				title="Editable"
@@ -73,12 +73,17 @@ export const Text: UserComponent<TextProps> = ({text, textAlign, fontSize}) => {
 
 type TextProps = {
 	text?: string;
-	fontSize?: number;
+	fontSize?: string;
 	textAlign?: string;
 };
 
 Text.craft = {
 	displayName: 'Text',
+	props: {
+		text: '',
+		fontSize: '12',
+		textAlign: '',
+	},
 	related: {
 		settings: TextSettings,
 	},
