@@ -26,10 +26,11 @@ export type Container = {
 	shadow: number;
 	children: React.ReactNode;
 	radius: number;
+	float: string | null;
 };
 
 const defaultProps = {
-	flexDirection: 'column',
+	flexDirection: '',
 	alignItems: 'flex-start',
 	justifyContent: 'flex-start',
 	fillSpace: 'no',
@@ -61,14 +62,16 @@ export const Container = (props: Partial<Container>) => {
 		...defaultProps,
 		...props,
 	};
+	console.log(flexDirection, 'props');
+
 	return (
 		<Resizer
 			propKey={{width: 'width', height: 'height'}}
 			className={className}
 			style={{
 				justifyContent,
-				flexDirection,
-				alignItems,
+				flexDirection: flexDirection,
+				alignItems: alignItems,
 				background: `rgba(${Object.values(background)})`,
 				color: `rgba(${Object.values(color)})`,
 				padding: `${padding[0]}px ${padding[1]}px ${padding[2]}px ${padding[3]}px`,
@@ -79,6 +82,7 @@ export const Container = (props: Partial<Container>) => {
 						: `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
 				borderRadius: `${radius}px`,
 				flex: fillSpace === 'yes' ? 1 : 'unset',
+				display: 'flex',
 			}}>
 			{children}
 		</Resizer>
@@ -92,6 +96,6 @@ Container.craft = {
 		canDrag: () => true,
 	},
 	related: {
-		toolbar: ContainerSettings,
+		settings: ContainerSettings,
 	},
 };
