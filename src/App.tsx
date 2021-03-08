@@ -8,18 +8,14 @@ import './App.css';
 import EditorPage from './pages/editor';
 import DashboardPage from './pages/dashboard';
 import ProductPage from './pages/product';
-import AppNav from 'layout/AppNav';
+import AppNav from 'layouts/AppNav';
 
 function App() {
 	// const appTheme = useSelector((state: RootState) => state.app.appTheme);
 
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 
-	const theme = createMuiTheme({
-		palette: {
-			type: appTheme ? 'dark' : 'light',
-		},
-	});
+	const theme = createMuiTheme({});
 
 	return (
 		<ThemeProvider theme={theme}>
