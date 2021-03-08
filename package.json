@@ -20,7 +20,9 @@
     "chartist": "^0.11.4",
     "es6-shim": "^0.35.6",
     "event-source-polyfill": "^1.0.22",
+    "file-loader": "^6.2.0",
     "firebase": "^8.2.9",
+    "js-cookie": "^2.2.1",
     "lzutf8": "^0.6.0",
     "material-table": "^1.69.2",
     "prop-types": "^15.7.2",
@@ -32,6 +34,7 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-scroll-to-bottom": "^4.1.0",
     "react-youtube": "^7.13.1",
     "sanitize-html": "^2.3.2",
     "typescript": "~3.8.2"
