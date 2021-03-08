@@ -120,7 +120,9 @@ export default function MiniDrawer() {
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
-								innerRef={(ref: ReactElement) => create(ref, <ImageComp />)}>
+								innerRef={(ref: ReactElement) =>
+									create(ref, <ImageComp id={Date.now()} />)
+								}>
 								<ListItemIcon>
 									<Image />
 								</ListItemIcon>

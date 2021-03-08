@@ -16,13 +16,19 @@ import MiniDrawer from 'layouts/editor/drawer';
 import React, {useState} from 'react';
 import RenderNode from '../components/user/RenderNode';
 import {Text} from '../components/user/text/Text';
+import lz from 'lzutf8';
 
 const EditorPage = () => {
 	const resolvers = {Text, Image, Video, Divider, Container};
-	const [values, setValues] = useState({
+
+	const hashed =
+		'eyJST09UIjp7InR5cGXECHJlc29sdmVkTmFtZSI6IkNvbnRhaW5lciJ9LCJpc0NhbnZhcyI6dHJ1ZSwicHJvcHPENWZsZXhEaXJlY3Rpb24iOiJjb2x1bW4iLCJhbGlnbkl0ZW1zIjrFJi1zdGFydCIsImp1c3RpZnnEYGVudNAeZmlsbFNwYWPkAINubyIsInBhZGRpbmciOlsiNDAiLM4FXSwibWFyZ2luxB/EFMoEXSwiYmFja2dyb3VuZOUA4CI6MjU1LCJnxwhixwhhIjoxfSzkALpvcscoMMUmMMUkMMkic2hhZG93xRJyYWRpdXPFC3dpZHRoIjoiOTkwcHgiLCJoZWlnaOQA1zEwMThweOQBPmRpc3BsYXnxAVksImN1c3RvbSI6e30sImhpZGRlbiI6ZmFsc2UsIm5vZGVz5ADXalZiUDFrX01weiIsInNENHlyLXZkSeQA4GxpbmtlZE7GKXt9fSzMLP8B2v8B2vIB2nJvd/8B1/8B1/8B1/8B18cd/wHY/wHY/wHY9QHYMTAwJewB12F1dG//AdX/AdXlAdVjT3dxN2JOT1IiLCJJYkFGVzFsQWdL8wHW5AErcuYBUuUDsuQB5so9/wHm/wHm8gHm/wHj/wHj+QHj5AG7MugByTL/A7j/AeD/AeD/AeDxAeA07gHf5QHv/wHf/wHfOlsibXFFcjNWcU1OSv4B0usDsH0szDb6AdhUZXh07gHTx33pAdR0xCI6IkNyYWZ0LmpzIGlzIGEgUmVhY3QgZnJhbWV3b3JrIGZvciBidWls5AGiIHBvd2VyZnVsICYgZmVhdHVyZS1yaWNoIGRyYWctbi1kcm9wIHBhZ2UgZWRpdG9ycy7kAe9vbnRTaXrkAJMyMyIsxXZB5AI75AJG8QFB5QC2/wE85gE8/gEw6gL6fe0DOP8DCP8DCP8DCP8DCP8DCP8DCP8DCP8DCP8DCP8DCOwDCDb/Awj/Awj2Awh1anRSLUFSSmFz/wMI7QMIyzb/Awj/AwjlAwhFdmVyeXRo5ALoeW91IHNlZSBoZXJlLCBpbmNsdeUDAHRo6ALbLCBpdHNlbGbkAzVtYWRlIG9m5wM7Y29tcG9uZW50cy4gIOkDXGNvbWVzIG9ubHkgd2l0aMVK6QNXYmxvY2tz5QNrYewDQDsgaXQgcHJvdmlkZeQDnOwDZ3N5c3RlbSBhbmQgaGFuZGxlc8VUd2F5IHVzZXIg6wCIIHNob3VsZCBiZSByZW5kZXJlZCwgdXBkYXRlZMVBbW92xBNhbW9uZyBvdGhlciDlAQjkAMI8YnIgLz7IB1lvdSBjb250cm9syW95b3Vy5wCxIGxvb2tzxVRiZWhhdmXvBAExNP8EAf8EAf8EAesCKesD8+QC0ukJDvoCKEltYWdl/gIpc21hbGzJF2Jlc3RGaXTJEGZ1bGxX5gMlxxJpZCI6MTYxNTIwMTI3ODI0M/EA7sV1VXBsb2FkRHJhZ2FibGX/AP3/AP3rCAB9';
+	const json = lz.decompress(lz.decodeBase64(hashed));
+
+	const [values, setValues] = useState<any>({
 		id: null,
 		title: '',
-		coverImage: null,
+		coverImageUrl: undefined,
 		blogHash: null,
 		date: new Date().toLocaleDateString(),
 	});
@@ -46,7 +52,10 @@ const EditorPage = () => {
 			<MuiContainer maxWidth={'lg'}>
 				<Grid container spacing={5}>
 					<Grid item xs={12} md={10} style={{marginTop: '80px'}}>
-						<CoverImage handleChange={handleChange} />
+						<CoverImage
+							handleChange={handleChange}
+							imageUrl={values.coverImageUrl}
+						/>
 
 						<Typography style={{margin: '20px 0'}} variant="h5" align="center">
 							{enabled && (
@@ -56,12 +65,13 @@ const EditorPage = () => {
 								/>
 							)}
 						</Typography>
-						<Frame>
+						<Frame data={json}>
 							<Element
 								canvas
 								is={Container}
 								width="800px"
 								height="auto"
+								flexDirection="column"
 								padding={['40', '40', '40', '40']}>
 								<Element
 									canvas

@@ -30,7 +30,7 @@ export const NavBar: React.FC<{
 	values: {
 		id: null;
 		title: string;
-		coverImage: null;
+		coverImageUrl: undefined;
 		blogHash: null;
 		date: string;
 	};
@@ -68,7 +68,16 @@ export const NavBar: React.FC<{
 						}}>
 						{enabled ? 'Preview' : 'Edit'}{' '}
 					</Button>
-					<Button color="inherit" onClick={() => console.log(values)}>
+					<Button
+						color="inherit"
+						onClick={() => {
+							const json = query.serialize();
+							const hash = lz.encodeBase64(lz.compress(json));
+
+							handleChange('blogHash', hash);
+
+							console.log(values);
+						}}>
 						Publish
 					</Button>
 				</Toolbar>
