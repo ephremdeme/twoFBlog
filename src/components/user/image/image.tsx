@@ -1,9 +1,11 @@
 import {useNode, UserComponent} from '@craftjs/core';
 import {Button, makeStyles, Container as MuiContainer} from '@material-ui/core';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import {Container} from 'components/selectors/Container';
 import {ImageSettings} from './imageSettings';
+import Firebase from '../../../firebase/firebase';
+import {CloudUpload, TapAndPlayOutlined} from '@material-ui/icons';
 
 const useStyles = makeStyles({
 	root: {
@@ -55,35 +57,49 @@ type ImageProp = {
 	bestFit?: boolean;
 	small?: boolean;
 	fullWidth?: boolean;
+	imageUrl?: string;
+	id: number;
 };
 
 export const Image: UserComponent<ImageProp> = ({
 	bestFit,
 	small,
 	fullWidth,
+	imageUrl,
+	id,
 }) => {
 	const {
 		connectors: {connect, drag},
 	} = useNode();
 	const classes = useStyles();
-	const [{alt, src}, setImg] = useState({
-		src: 'null',
+	const [{alt, src, file}, setImg] = useState<any>({
+		src: imageUrl || 'null',
 		alt: '',
+		file: null,
 	});
 
-	let time = Date.now();
-
-	useEffect(() => {
-		time = Date.now();
-	});
+	const [isUploaded, setIsUploaded] = useState(false);
 
 	const handleChange = (e: any) => {
 		if (e.target.files[0]) {
 			setImg({
 				src: URL.createObjectURL(e.target.files[0]),
 				alt: e.target.files[0].name,
+				file: e.target.files[0],
 			});
 		}
+	};
+
+	const handleUpload = async () => {
+		const storageRef = Firebase.getInstance().storage.ref();
+		const fileRef = storageRef.child('images/' + Date.now() + file.name);
+		await fileRef.put(file);
+		const url = await fileRef.getDownloadURL();
+		setImg((prevProp: any) => ({
+			...prevProp,
+			src: url,
+		}));
+		setIsUploaded(true);
 	};
 	return (
 		<div ref={(ref) => connect(drag(ref))}>
@@ -106,23 +122,32 @@ export const Image: UserComponent<ImageProp> = ({
 				</div>
 			</Container>
 
-			<input
-				accept="image/*"
-				className={classes.input}
-				id={' ' + time}
-				type="file"
-				onChange={handleChange}
-			/>
-			<label htmlFor={' ' + time}>
-				<Button
-					variant="text"
-					size="medium"
-					aria-label="upload picture"
-					component="span"
-					startIcon={<InsertPhotoIcon />}>
-					{!src ? ' Add Image' : 'Change Image'}
-				</Button>
-			</label>
+			{!isUploaded && (
+				<>
+					<input
+						accept="image/*"
+						className={classes.input}
+						id={' ' + id}
+						type="file"
+						onChange={handleChange}
+					/>
+					<label htmlFor={' ' + id}>
+						<Button
+							variant="text"
+							size="medium"
+							aria-label="upload picture"
+							component="span"
+							startIcon={<InsertPhotoIcon />}>
+							{src === 'null' ? ' Add Image' : 'Change Image'}
+						</Button>
+					</label>
+					{file && (
+						<Button onClick={handleUpload} startIcon={<CloudUpload />}>
+							Upload
+						</Button>
+					)}
+				</>
+			)}
 		</div>
 	);
 };
@@ -133,6 +158,7 @@ Image.craft = {
 		small: false,
 		bestFit: false,
 		fullWidth: false,
+		imageUrl: undefined,
 	},
 	related: {
 		settings: ImageSettings,
@@ -141,19 +167,37 @@ Image.craft = {
 
 export const CoverImage: React.FC<{
 	handleChange: (key: string, value: string) => void;
-}> = ({handleChange}) => {
+	imageUrl: string | undefined;
+}> = ({handleChange, imageUrl}) => {
 	const classes = useStyles();
-	const [{alt, src}, setImg] = useState({
-		src: '',
+	const [{alt, src, file}, setImg] = useState<any>({
+		src: imageUrl || 'null',
 		alt: '',
+		file: null,
 	});
+
+	const [isUploaded, setIsUploaded] = useState(false);
+
+	const handleUpload = async () => {
+		const storageRef = Firebase.getInstance().storage.ref();
+		const fileRef = storageRef.child('images/' + Date.now() + file.name);
+		await fileRef.put(file);
+		const url = await fileRef.getDownloadURL();
+		setImg((prevProp: any) => ({
+			...prevProp,
+			src: url,
+		}));
+
+		handleChange('coverImageUrl', url);
+		setIsUploaded(true);
+	};
 
 	const handleFileChange = (e: any) => {
 		if (e.target.files[0]) {
-			handleChange('coverImage', e.target.files[0]);
 			setImg({
 				src: URL.createObjectURL(e.target.files[0]),
 				alt: e.target.files[0].name,
+				file: e.target.files[0],
 			});
 		}
 	};
@@ -168,24 +212,32 @@ export const CoverImage: React.FC<{
 					style={{maxWidth: '100%', height: 'auto', width: 'auto'}}
 				/>
 			</MuiContainer>
-
-			<input
-				accept="image/*"
-				className={classes.input}
-				id="icon-button-file"
-				type="file"
-				onChange={handleFileChange}
-			/>
-			<label htmlFor="icon-button-file">
-				<Button
-					variant="outlined"
-					size="medium"
-					aria-label="upload picture"
-					component="span"
-					startIcon={<InsertPhotoIcon />}>
-					Add Cover Image
-				</Button>
-			</label>
+			{!isUploaded && (
+				<>
+					<input
+						accept="image/*"
+						className={classes.input}
+						id="icon-button-file"
+						type="file"
+						onChange={handleFileChange}
+					/>
+					<label htmlFor="icon-button-file">
+						<Button
+							variant="outlined"
+							size="medium"
+							aria-label="upload picture"
+							component="span"
+							startIcon={<InsertPhotoIcon />}>
+							Add Cover Image
+						</Button>
+					</label>
+					{file && (
+						<Button onClick={handleUpload} startIcon={<CloudUpload />}>
+							Upload
+						</Button>
+					)}
+				</>
+			)}
 		</div>
 	);
 };

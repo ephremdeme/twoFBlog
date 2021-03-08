@@ -1,5 +1,5 @@
 import {useNode} from '@craftjs/core';
-import {IconButton} from '@material-ui/core';
+import {Button, IconButton} from '@material-ui/core';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
@@ -8,6 +8,7 @@ import {ReactComponent as SmallFit} from '../../../public/icons/svgexport-20.svg
 import React from 'react';
 import {ReactComponent as BestFit} from '../../../public/icons/svgexport-21.svg';
 import {ReactComponent as FullWidth} from '../../../public/icons/svgexport-22.svg';
+import {CloudUpload} from '@material-ui/icons';
 
 export const ImageSettings = () => {
 	const {
@@ -50,6 +51,7 @@ export const ImageSettings = () => {
 				}}>
 				<FullWidth />
 			</IconButton>
+			{/* <Button startIcon={<CloudUpload />}>Upload</Button> */}
 		</React.Fragment>
 	);
 };
