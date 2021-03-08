@@ -28,6 +28,10 @@ export default class Firebase {
     this.database = app.database();
   }
 
+  static getTimestamp = ():firebase.firestore.FieldValue => {
+    return firebase.firestore.FieldValue.serverTimestamp();
+  }
+
   static getInstance(): Firebase {
     if (!this.firebaseInstance) {
       this.firebaseInstance = new Firebase();

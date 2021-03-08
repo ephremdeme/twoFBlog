@@ -10,8 +10,14 @@ import SignUp from "./pages/signup/SignUp";
 import Chat from "./pages/chat/Chatbox";
 import firebase from './firebase/firebase';
 import { setLogged, setRole, setEmail } from "./features/user";
+import ProductPage from './pages/product';
+import AppNav from 'layout/AppNav';
+import {getAppTheme, IAppState} from './features/app';
+
 
 function App() {
+	// const appTheme = useSelector((state: RootState) => state.app.appTheme);
+
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const logged = useSelector((state: RootState) => state.user.logged);
 	const roles = useSelector((state: RootState) => state.user.role);
@@ -19,9 +25,6 @@ function App() {
 	const dispatch = useDispatch();
 
 	const theme = createMuiTheme({
-		typography: {
-			fontSize: 12,
-		},
 		palette: {
 			type: appTheme ? 'dark' : 'light',
 		},
@@ -65,7 +68,10 @@ function App() {
 						<Router>
 							<Switch>
 								<ProtectedLogin exact path="/" component={SignUp} logged={logged} />
+                <AppNav>
 								<ProtectedRoutes exact path="/dash" component={DashboardPage} logged={logged} />
+                <ProtectedRoutes path="/product" component={ProductPage} logged={logged} />
+                  </AppNav>
 								<ProtectedRoutes path="/editor" component={EditorPage} logged={logged} />
 							</Switch>
 						</Router>

@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useCallback} from 'react';
 import {useNode, useEditor} from '@craftjs/core';
 import ReactDOM from 'react-dom';
 import {ROOT_NODE} from '@craftjs/utils';
+import ControlCameraIcon from '@material-ui/icons/ControlCamera';
 import {ArrowUpward, Delete, MoveToInbox} from '@material-ui/icons';
 import './RenderNode.css';
 
@@ -97,10 +98,9 @@ const RenderNode = ({render}: any) => {
 								top: getPos(dom).top,
 								zIndex: 9999,
 							}}>
-							<h2 className="flex-1 mr-4">{name}</h2>
 							{moveable ? (
 								<button className="btn btn-move" ref={drag}>
-									<MoveToInbox />
+									<ControlCameraIcon />
 								</button>
 							) : null}
 							{id !== ROOT_NODE && (
@@ -113,8 +113,7 @@ const RenderNode = ({render}: any) => {
 								</button>
 							)}
 
-							{name === 'Blockquote' &&
-								selected &&
+							{selected &&
 								selected.settings &&
 								React.createElement(selected.settings)}
 
