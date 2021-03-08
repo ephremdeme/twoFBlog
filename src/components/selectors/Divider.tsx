@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		divide: {
 			margin: '8px',
+			width: '20px',
 		},
 	})
 );
