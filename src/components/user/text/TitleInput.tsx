@@ -1,4 +1,4 @@
-import {makeStyles, TextField} from '@material-ui/core';
+import {Box, makeStyles, TextField} from '@material-ui/core';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,14 +19,16 @@ const TitleInput: React.FC<{
 
 	return (
 		<>
-			<TextField
-				className={classes.placeholder}
-				multiline
-				fullWidth
-				defaultValue={value}
-				onChange={(e) => handleChange('title', e.target.value)}
-				placeholder="Title..."
-			/>
+			<Box mx={5} p={5}>
+				<TextField
+					className={classes.placeholder}
+					multiline
+					fullWidth
+					defaultValue={value}
+					onChange={(e) => handleChange('title', e.target.value)}
+					placeholder="Title..."
+				/>
+			</Box>
 		</>
 	);
 };
