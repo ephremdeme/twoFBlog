@@ -41,7 +41,7 @@ const defaultProps = {
 	shadow: 0,
 	radius: 0,
 	width: '100%',
-	height: 'auto',
+	height: 'max-content',
 };
 
 export const Container = (props: Partial<Container>) => {
@@ -70,6 +70,8 @@ export const Container = (props: Partial<Container>) => {
 			className={className}
 			style={{
 				justifyContent,
+				minHeight: 'max-content',
+				maxHeight: '100%',
 				flexDirection: flexDirection,
 				alignItems: alignItems,
 				background: `rgba(${Object.values(background)})`,
