@@ -16,8 +16,7 @@ import Chat from './pages/chat/Chatbox';
 import firebase from './firebase/firebase';
 import {setLogged, setRole, setEmail} from './features/user';
 import ProductPage from './pages/product';
-import AppNav from 'layouts/AppNav';
-import {getAppTheme, IAppState} from './features/app';
+// import AppNav from 'layouts/AppNav';
 
 function App() {
 	// const appTheme = useSelector((state: RootState) => state.app.appTheme);
@@ -36,7 +35,7 @@ function App() {
 
 	const checkUser = async () => {
 		setLoaing(true);
-		firebase.getInstance().auth.onAuthStateChanged((user): any => {
+		return firebase.getInstance().auth.onAuthStateChanged((user): any => {
 			if (user) {
 				if (user.isAnonymous) {
 					dispatch(setRole('guest'));
@@ -78,19 +77,17 @@ function App() {
 								component={SignUp}
 								logged={logged}
 							/>
-							<AppNav>
-								<ProtectedRoutes
-									exact
-									path="/dash"
-									component={DashboardPage}
-									logged={logged}
-								/>
-								<ProtectedRoutes
-									path="/product"
-									component={ProductPage}
-									logged={logged}
-								/>
-							</AppNav>
+							<ProtectedRoutes
+								exact
+								path="/dash"
+								component={DashboardPage}
+								logged={logged}
+							/>
+							<ProtectedRoutes
+								path="/product"
+								component={ProductPage}
+								logged={logged}
+							/>
 							<ProtectedRoutes
 								path="/editor"
 								component={EditorPage}
@@ -100,7 +97,9 @@ function App() {
 					</Router>
 					{logged && roles !== 'guest' && <Chat />}
 				</div>
-			) : null}
+			) : (
+				<SignUp />
+			)}
 		</ThemeProvider>
 	);
 }
