@@ -4,18 +4,18 @@ import {
 	Typography,
 	makeStyles,
 } from '@material-ui/core';
-import {Container} from 'components/selectors/Container';
-import Divider from 'components/selectors/Divider';
-import {CoverImage, Image} from 'components/user/image/image';
-import TitleInput from 'components/user/text/TitleInput';
-import {Video} from 'components/user/video/video';
-import NavBar from 'layouts/editor/appbar';
-import MiniDrawer from 'layouts/editor/drawer';
+import {Container} from '../../components/selectors/Container';
+import Divider from '../../components/selectors/Divider';
+import {CoverImage, Image} from '../../components/user/image/image';
+import TitleInput from '../../components/user/text/TitleInput';
+import {Video} from '../../components/user/video/video';
+import NavBar from '../../layouts/editor/appbar';
+import MiniDrawer from '../../layouts/editor/drawer';
 import React, {useState} from 'react';
 import RenderNode from '../../components/user/RenderNode';
 import {Text} from '../../components/user/text/Text';
 import lz from 'lzutf8';
-import {IBlog} from 'features/editor';
+import {IBlog} from '../../features/editor';
 
 const useStyles = makeStyles({
 	main: {
