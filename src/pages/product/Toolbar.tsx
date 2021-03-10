@@ -5,23 +5,18 @@ import {
 	Box,
 	Button,
 	Card,
-	CardContent,
-	TextField,
-	InputAdornment,
-	SvgIcon,
 	makeStyles,
 	Theme,
 	Grid,
 } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import DirectionsIcon from '@material-ui/icons/Directions';
-import { useRouteMatch } from 'react-router';
-import { Link } from 'react-router-dom';
+import {useRouteMatch} from 'react-router';
+import {Link} from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setFilterableProducts } from '../../features/product';
 
 const useStyles = makeStyles((theme: Theme) => ({
 	root: {},
@@ -44,35 +39,73 @@ const useStyles = makeStyles((theme: Theme) => ({
 	},
 }));
 
-const Toolbar = ({className, ...rest}: any) => {
+type IProps = {
+	backbtn?: boolean,
+	title?: string,
+	className: any,
+} 
+
+const Toolbar = (props: IProps) => {
 	const classes = useStyles();
-	const { url } = useRouteMatch();
+	const dispatch = useDispatch();
+	const {backbtn, title, className} = props;
+	const {url} = useRouteMatch();
+
+	const handleFilterProducts = (e: React.ChangeEvent<HTMLInputElement>) => {
+		dispatch(setFilterableProducts(e.target.value))
+	}
 
 	return (
-		<div className={clsx(classes.root, className)} {...rest}>
+		<div className={clsx(classes.root, className)}>
 			<Box>
-				<Card variant="outlined" color="default">
+				<Card elevation={0} color="default">
 					<Box m={3}>
-						<Grid container spacing={3} justify="space-between" alignItems="center">
+						<Grid
+							container
+							spacing={3}
+							justify="space-between"
+							alignItems="center">
 							<Grid item lg={6} md={6} xs={12}>
-								<Paper variant="outlined" component="form" className={classes.root}>
-									<IconButton
-										type="submit"
-										className={classes.iconButton}
-										aria-label="search">
-										<SearchIcon />
-									</IconButton>
-									<InputBase
-										className={classes.input}
-										placeholder="Search Products"
-										inputProps={{'aria-label': 'search product'}}
-									/>
-								</Paper>
+								{title ? (
+									<h2>{title}</h2>
+								) : (
+									<Paper
+										variant="outlined"
+										component="form"
+										className={classes.root}>
+										<IconButton
+											type="submit"
+											className={classes.iconButton}
+											aria-label="search">
+											<SearchIcon />
+										</IconButton>
+										<InputBase
+											onChange={handleFilterProducts}
+											className={classes.input}
+											placeholder="Search Products"
+											inputProps={{'aria-label': 'search product'}}
+										/>
+									</Paper>
+								)}
 							</Grid>
 							<Grid item lg={4} md={6} xs={12}>
-								<Button component={Link} to={`${url}/create`} variant="outlined" disableElevation>
-									Add Product
-								</Button>
+								{backbtn ? (
+									<Button
+										component={Link}
+										to={`/product`}
+										variant="outlined"
+										disableElevation>
+										Back To Products
+									</Button>
+								) : (
+									<Button
+										component={Link}
+										to={`${url}/create`}
+										variant="outlined"
+										disableElevation>
+										Add Product
+									</Button>
+								)}
 							</Grid>
 						</Grid>
 					</Box>

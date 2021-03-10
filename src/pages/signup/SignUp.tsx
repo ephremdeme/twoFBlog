@@ -83,6 +83,7 @@ export default function SignIn() {
 					.get()
 					.then((userData: any) => {
 						if (userData.exists) {
+							console.log('userData: ', userData.data().role)
 							dispatch(setRole(userData.data().role));
 							dispatch(setLogged(true));
 							dispatch(setEmail(userData.data().email));

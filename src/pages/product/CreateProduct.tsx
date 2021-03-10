@@ -16,6 +16,7 @@ import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 import {postProduct, selectLoading} from '../../features/product';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router';
+import Toolbar from './Toolbar';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -92,9 +93,7 @@ const CreateProduct = () => {
 			<Box ml={6} mr={6}>
 				<div>
 					{loading ? <h1>UpLoading...</h1> : ''}
-					<Box display="flex" justifyContent="center">
-						<h2>Add New Product Deatil</h2>
-					</Box>
+					<Toolbar backbtn={true} title="Add New Product Deatil" />
 					<Box display="flex" justifyContent="center" width="100%">
 						<form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
 							<Grid container spacing={4} justify="center" alignItems="center">
