@@ -21,6 +21,7 @@ const useStyles = makeStyles({
 	main: {
 		boxShadow:
 			'0 8px 60px 0 rgb(103 151 255 / 11%), 0 12px 90px 0 rgb(103 151 255 / 11%)',
+		marginBottom: '40vh',
 	},
 	title: {
 		marginTop: '50px',
@@ -81,15 +82,22 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 			<MiniDrawer />
 			<MuiContainer maxWidth={'lg'}>
 				<div className={classes.title}>
-					<Typography variant="h1" align="center">
+					<Typography variant="h2" style={{fontWeight: 'bolder'}} align="left">
 						{enabled && (
 							<TitleInput value={values.title} handleChange={handleChange} />
 						)}
-						{!enabled && values.title}
 					</Typography>
-					<Typography variant="body1" align="center" className={classes.author}>
-						Posted on Posted on {values.date} by B.J. Keeton
-					</Typography>
+					{!enabled && (
+						<>
+							<Typography variant="h2">{values.title}</Typography>
+							<Typography
+								variant="body1"
+								align="center"
+								className={classes.author}>
+								Posted on Posted on {values.date} by B.J. Keeton
+							</Typography>
+						</>
+					)}
 				</div>
 			</MuiContainer>
 
@@ -108,42 +116,7 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 						width="100%"
 						height="auto"
 						flexDirection="column"
-						padding={['30', '30', '30', '30']}>
-						<Element
-							canvas
-							is={Container}
-							flexDirection="row"
-							width="auto"
-							height="auto"
-							padding={['30', '30', '30', '30']}
-							margin={['0', '0', '40', '0']}>
-							<Element
-								canvas
-								is={Container}
-								width="40%"
-								height="100%"
-								padding={['0', '20', '0', '20']}>
-								<Text
-									fontSize="23"
-									text="Craft.js is a React framework for building powerful &amp; feature-rich drag-n-drop page editors."></Text>
-							</Element>
-							<Element
-								canvas
-								is={Container}
-								width="60%"
-								height="100%"
-								padding={['0', '20', '0', '20']}>
-								<Text
-									fontSize="14"
-									text="Everything you see here, including the editor, itself is
-										 made of React components. 
-										Craft.js comes only with the building blocks for a page editor;
-										 it provides a drag-n-drop system and handles the way user 
-										 components should be rendered, updated and moved, among other things. 
-										 <br /> <br /> You control the way your editor looks and behave."></Text>
-							</Element>
-						</Element>
-					</Element>
+						padding={['30', '30', '30', '30']}></Element>
 				</Frame>
 
 				{/* <Grid container spacing={5}>

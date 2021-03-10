@@ -10,12 +10,12 @@ import {Element, useEditor} from '@craftjs/core';
 import Text from '../../components/user/text/Text';
 import MaximizeIcon from '@material-ui/icons/Maximize';
 import {
-	CheckBoxOutlineBlankOutlined,
-	TextFields,
+	CheckBoxOutlineBlankRounded,
+	TextFieldsRounded,
 	Undo,
 	Redo,
 	YouTube,
-	Image,
+	ImageRounded,
 } from '@material-ui/icons';
 import {Video} from '../../components/user/video/video';
 import {Image as ImageComp} from '../../components/user/image/image';
@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		hide: {
 			display: 'none',
+		},
+		icon: {
+			fontSize: '2rem',
 		},
 		drawer: {
 			width: drawerWidth,
@@ -97,8 +100,8 @@ export default function MiniDrawer() {
 								innerRef={(ref: ReactElement) =>
 									create(ref, <Text text="edit text" />)
 								}>
-								<ListItemIcon>
-									<TextFields />
+								<ListItemIcon className={classes.icon}>
+									<TextFieldsRounded />
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
@@ -112,25 +115,25 @@ export default function MiniDrawer() {
 											width="300px"></Element>
 									)
 								}>
-								<ListItemIcon>
-									<CheckBoxOutlineBlankOutlined />
+								<ListItemIcon className={classes.icon}>
+									<CheckBoxOutlineBlankRounded />
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
 								innerRef={(ref: ReactElement) => create(ref, <Video />)}>
-								<ListItemIcon>
+								<ListItemIcon className={classes.icon}>
 									<YouTube />
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
 								innerRef={(ref: ReactElement) => create(ref, <ImageComp />)}>
-								<ListItemIcon>
-									<Image />
+								<ListItemIcon className={classes.icon}>
+									<ImageRounded />
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
 								innerRef={(ref: ReactElement) => create(ref, <Divider />)}>
-								<ListItemIcon>
+								<ListItemIcon className={classes.icon}>
 									<MaximizeIcon />
 								</ListItemIcon>
 							</ListItem>
