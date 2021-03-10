@@ -5,7 +5,7 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
 import {ReactComponent as SmallFit} from '../../../public/icons/svgexport-20.svg';
-import React, {useState} from 'react';
+import React from 'react';
 import {ReactComponent as BestFit} from '../../../public/icons/svgexport-21.svg';
 import {ReactComponent as FullWidth} from '../../../public/icons/svgexport-22.svg';
 import {CloudUpload} from '@material-ui/icons';
@@ -21,8 +21,6 @@ export const ImageSettings = () => {
 		small: node.data.props.alignItems,
 		fullWidth: node.data.props.justifyContent,
 	}));
-
-	const [file, setFile] = useState<any>(null);
 
 	return (
 		<React.Fragment>

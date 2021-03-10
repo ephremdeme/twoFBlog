@@ -5,7 +5,7 @@ import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import {Container} from 'components/selectors/Container';
 import {ImageSettings} from './imageSettings';
 import Firebase from '../../../firebase/firebase';
-import {CloudUpload} from '@material-ui/icons';
+import {CloudUpload, TapAndPlayOutlined} from '@material-ui/icons';
 
 const useStyles = makeStyles({
 	root: {
@@ -204,7 +204,7 @@ export const CoverImage: React.FC<{
 
 	return (
 		<div className={classes.root}>
-			<MuiContainer className={classes.fill + ' rounded z-depth-2'}>
+			<MuiContainer className={classes.fill}>
 				<img
 					src={src}
 					alt={alt}
@@ -212,33 +212,32 @@ export const CoverImage: React.FC<{
 					style={{maxWidth: '100%', height: 'auto', width: 'auto'}}
 				/>
 			</MuiContainer>
-			{!isUploaded ||
-				(file && (
-					<>
-						<input
-							accept="image/*"
-							className={classes.input + ' z-depth-2'}
-							id="icon-button-file"
-							type="file"
-							onChange={handleFileChange}
-						/>
-						<label htmlFor="icon-button-file">
-							<Button
-								variant="outlined"
-								size="medium"
-								aria-label="upload picture"
-								component="span"
-								startIcon={<InsertPhotoIcon />}>
-								Add Cover Image
-							</Button>
-						</label>
-						{file && (
-							<Button onClick={handleUpload} startIcon={<CloudUpload />}>
-								Upload
-							</Button>
-						)}
-					</>
-				))}
+			{!isUploaded && (
+				<>
+					<input
+						accept="image/*"
+						className={classes.input}
+						id="icon-button-file"
+						type="file"
+						onChange={handleFileChange}
+					/>
+					<label htmlFor="icon-button-file">
+						<Button
+							variant="outlined"
+							size="medium"
+							aria-label="upload picture"
+							component="span"
+							startIcon={<InsertPhotoIcon />}>
+							Add Cover Image
+						</Button>
+					</label>
+					{file && (
+						<Button onClick={handleUpload} startIcon={<CloudUpload />}>
+							Upload
+						</Button>
+					)}
+				</>
+			)}
 		</div>
 	);
 };
