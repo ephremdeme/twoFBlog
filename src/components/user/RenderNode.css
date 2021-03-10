@@ -1,47 +1,68 @@
 .indicator {
-  height: 50px;
-  margin-top: -50px;
-  font-size: 12px;
-  line-height: 12px;
-  padding: 0.4rem;
+	height: 50px;
+	margin-top: -50px;
+	font-size: 12px;
+	line-height: 12px;
+	padding: 0.4rem;
 	display: flex;
-  color: #222;
-  background: #fff;
-	box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  position: fixed;
-  align-items: center;
-  justify-content: center;
-	transition: all .2;
+	color: #222;
+	background: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	position: fixed;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.2;
 	transition-delay: 1s;
 }
 
 svg {
-  fill: #000;
-  width: 15px;
-  height: 15px;
+	fill: #000;
+	width: 15px;
+	height: 15px;
 }
 
 .btn {
-  padding: 0 0px;
-  opacity: 0.9;
-  display: flex;
-  align-items: center;
-  margin-right: 1rem;
-  cursor: move;
+	padding: 0 0px;
+	opacity: 0.9;
+	display: flex;
+	align-items: center;
+	margin-right: 1rem;
+	cursor: move;
 }
 .btn > div {
-  position: relative;
-  top: -50%;
-  left: -50%;
+	position: relative;
+	top: -50%;
+	left: -50%;
 }
 
-.test-svg :active{
-  color: aqua;
+.test-svg :active {
+	color: aqua;
 }
 
 .btn-move {
-  cursor: move;
+	cursor: move;
 }
 .btn-cursor {
-  cursor: pointer;
+	cursor: pointer;
+}
+
+.controled-width {
+	max-width: 100%;
+	min-width: 20%;
+}
+
+.component-selected {
+	position: relative;
+}
+
+.component-selected:after {
+	content: ' ';
+	border: 1px dashed #2680eb;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	pointer-events: none;
+	display: block;
 }

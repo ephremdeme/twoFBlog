@@ -42,6 +42,7 @@ const defaultProps = {
 	radius: 0,
 	width: '100%',
 	height: 'max-content',
+	className: 'controled-width',
 };
 
 export const Container = (props: Partial<Container>) => {
@@ -85,6 +86,8 @@ export const Container = (props: Partial<Container>) => {
 				borderRadius: `${radius}px`,
 				flexGrow: fillSpace === 'yes' ? 1 : 'unset',
 				display: 'flex',
+				maxWidth: '100%',
+				minWidth: '20%',
 			}}>
 			{children}
 		</Resizer>

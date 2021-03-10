@@ -1,9 +1,5 @@
-import {useAppSelector} from '../../app/hooks';
-import Firebase from '../../firebase/firebase';
-
 // import {fetchBlog, IBlog, selectBlog} from 'features/editor';
-import React, {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React from 'react';
 import {useParams} from 'react-router-dom';
 import EditorPage from './editor';
 import {useFetchBlog} from '../../features/editor';
