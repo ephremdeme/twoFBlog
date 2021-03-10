@@ -12,6 +12,7 @@ import {
 	VerticalAlignBottom,
 	VerticalAlignCenter,
 } from '@material-ui/icons';
+import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 import React from 'react';
 
 export const ContainerSettings = () => {
@@ -24,6 +25,7 @@ export const ContainerSettings = () => {
 		flexDirection: node.data.props.flexDirection,
 		alignItems: node.data.props.alignItems,
 		justifyContent: node.data.props.justifyContent,
+		fillSpace: node.data.props.fillSpace,
 	}));
 
 	return (
@@ -90,6 +92,12 @@ export const ContainerSettings = () => {
 					</IconButton>
 				</React.Fragment>
 			)}
+
+			<IconButton
+				title="Fill Space"
+				onClick={() => setProp((props) => (props.fillSpace = 'yes'))}>
+				<SettingsEthernetIcon />
+			</IconButton>
 		</React.Fragment>
 	);
 };

@@ -5,7 +5,7 @@ import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import {Container} from 'components/selectors/Container';
 import {ImageSettings} from './imageSettings';
 import Firebase from '../../../firebase/firebase';
-import {CloudUpload} from '@material-ui/icons';
+import {CloudUpload, TapAndPlayOutlined} from '@material-ui/icons';
 
 const useStyles = makeStyles({
 	root: {
@@ -58,7 +58,6 @@ type ImageProp = {
 	small?: boolean;
 	fullWidth?: boolean;
 	imageUrl?: string;
-	id: number;
 };
 
 export const Image: UserComponent<ImageProp> = ({
@@ -66,10 +65,10 @@ export const Image: UserComponent<ImageProp> = ({
 	small,
 	fullWidth,
 	imageUrl,
-	id,
 }) => {
 	const {
 		connectors: {connect, drag},
+		actions: {setProp},
 	} = useNode();
 	const classes = useStyles();
 	const [{alt, src, file}, setImg] = useState<any>({
@@ -77,6 +76,10 @@ export const Image: UserComponent<ImageProp> = ({
 		alt: '',
 		file: null,
 	});
+
+	const [imageId, setImageId] = useState(Date.now());
+
+	useEffect(() => setImageId(Date.now()), []);
 
 	const [isUploaded, setIsUploaded] = useState(false);
 
@@ -87,8 +90,14 @@ export const Image: UserComponent<ImageProp> = ({
 				alt: e.target.files[0].name,
 				file: e.target.files[0],
 			});
+			setProp(
+				(props) => (props.imageUrl = URL.createObjectURL(e.target.files[0])),
+				500
+			);
 		}
 	};
+
+	console.log(imageUrl);
 
 	const handleUpload = async () => {
 		const storageRef = Firebase.getInstance().storage.ref();
@@ -99,6 +108,7 @@ export const Image: UserComponent<ImageProp> = ({
 			...prevProp,
 			src: url,
 		}));
+		setProp((props) => (props.imageUrl = url), 500);
 		setIsUploaded(true);
 	};
 	return (
@@ -114,11 +124,7 @@ export const Image: UserComponent<ImageProp> = ({
 							? classes.fullWidth
 							: undefined
 					}>
-					<img
-						src={src === 'null' ? undefined : src}
-						alt={alt}
-						className={classes.img}
-					/>
+					<img src={imageUrl} alt={alt} className={classes.img} />
 				</div>
 			</Container>
 
@@ -127,11 +133,11 @@ export const Image: UserComponent<ImageProp> = ({
 					<input
 						accept="image/*"
 						className={classes.input}
-						id={' ' + id}
+						id={' ' + imageId}
 						type="file"
 						onChange={handleChange}
 					/>
-					<label htmlFor={' ' + id}>
+					<label htmlFor={' ' + imageId}>
 						<Button
 							variant="text"
 							size="medium"
@@ -169,9 +175,11 @@ export const CoverImage: React.FC<{
 	handleChange: (key: string, value: string) => void;
 	imageUrl: string | undefined;
 }> = ({handleChange, imageUrl}) => {
+	console.log('Cover', imageUrl);
+
 	const classes = useStyles();
 	const [{alt, src, file}, setImg] = useState<any>({
-		src: imageUrl || 'null',
+		src: imageUrl || null,
 		alt: '',
 		file: null,
 	});
@@ -204,41 +212,40 @@ export const CoverImage: React.FC<{
 
 	return (
 		<div className={classes.root}>
-			<MuiContainer className={classes.fill + ' rounded z-depth-2'}>
+			<MuiContainer className={classes.fill}>
 				<img
-					src={src}
+					src={src || imageUrl}
 					alt={alt}
 					className={classes.img}
 					style={{maxWidth: '100%', height: 'auto', width: 'auto'}}
 				/>
 			</MuiContainer>
-			{!isUploaded ||
-				(file && (
-					<>
-						<input
-							accept="image/*"
-							className={classes.input + ' z-depth-2'}
-							id="icon-button-file"
-							type="file"
-							onChange={handleFileChange}
-						/>
-						<label htmlFor="icon-button-file">
-							<Button
-								variant="outlined"
-								size="medium"
-								aria-label="upload picture"
-								component="span"
-								startIcon={<InsertPhotoIcon />}>
-								Add Cover Image
-							</Button>
-						</label>
-						{file && (
-							<Button onClick={handleUpload} startIcon={<CloudUpload />}>
-								Upload
-							</Button>
-						)}
-					</>
-				))}
+			{!isUploaded && (
+				<>
+					<input
+						accept="image/*"
+						className={classes.input + ' z-depth-2'}
+						id="icon-button-file"
+						type="file"
+						onChange={handleFileChange}
+					/>
+					<label htmlFor="icon-button-file">
+						<Button
+							variant="outlined"
+							size="medium"
+							aria-label="upload picture"
+							component="span"
+							startIcon={<InsertPhotoIcon />}>
+							Add Cover Image
+						</Button>
+					</label>
+					{file && (
+						<Button onClick={handleUpload} startIcon={<CloudUpload />}>
+							Upload
+						</Button>
+					)}
+				</>
+			)}
 		</div>
 	);
 };

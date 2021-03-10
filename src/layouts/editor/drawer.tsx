@@ -93,7 +93,10 @@ export default function MiniDrawer() {
 				<div className={classes.side}>
 					<div className={classes.component}>
 						<List>
-							<ListItem innerRef={(ref: ReactElement) => create(ref, <Text />)}>
+							<ListItem
+								innerRef={(ref: ReactElement) =>
+									create(ref, <Text text="edit text" />)
+								}>
 								<ListItemIcon>
 									<TextFields />
 								</ListItemIcon>
@@ -120,9 +123,7 @@ export default function MiniDrawer() {
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
-								innerRef={(ref: ReactElement) =>
-									create(ref, <ImageComp id={Date.now()} />)
-								}>
+								innerRef={(ref: ReactElement) => create(ref, <ImageComp />)}>
 								<ListItemIcon>
 									<Image />
 								</ListItemIcon>
@@ -137,7 +138,7 @@ export default function MiniDrawer() {
 					</div>
 					<div className={classes.undo}>
 						<List>
-							<ListItem innerRef={(ref: ReactElement) => create(ref, <Text />)}>
+							<ListItem>
 								<IconButton
 									className="copy-state-btn"
 									size="small"
