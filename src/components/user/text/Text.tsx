@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 export const Text: UserComponent<TextProps> = ({text, textAlign, fontSize}) => {
 	const classes = useStyles();
-	const html = useRef(text || 'Edit Text');
+	const html = useRef<string>(text);
 	const inputRef = useRef<HTMLLinkElement>(null);
 
 	const {
@@ -43,12 +43,13 @@ export const Text: UserComponent<TextProps> = ({text, textAlign, fontSize}) => {
 
 	const handleChange = (e: ContentEditableEvent) => {
 		html.current = e.target.value;
+		setProp((props) => (props.text = html.current), 500);
 	};
 
 	const handleBlur = () => {
-		console.log(sanitizeHtml(html.current));
-
+		console.log(sanitizeHtml(html.current), 'Blur');
 		html.current = sanitizeHtml(html.current);
+		setProp((props) => (props.text = html.current), 500);
 	};
 
 	return (
@@ -72,7 +73,7 @@ export const Text: UserComponent<TextProps> = ({text, textAlign, fontSize}) => {
 };
 
 type TextProps = {
-	text?: string;
+	text: string;
 	fontSize?: string;
 	textAlign?: string;
 };
@@ -80,7 +81,7 @@ type TextProps = {
 Text.craft = {
 	displayName: 'Text',
 	props: {
-		text: '',
+		text: 'edit',
 		fontSize: '12',
 		textAlign: '',
 	},

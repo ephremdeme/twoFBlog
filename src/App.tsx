@@ -6,7 +6,7 @@ import {
 	Redirect,
 } from 'react-router-dom';
 import './App.css';
-import EditorPage from './pages/editor';
+import EditorPage from './pages/editor/editor';
 import DashboardPage from './pages/dashboard';
 import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import {useSelector, useDispatch} from 'react-redux';
@@ -16,6 +16,8 @@ import Chat from './pages/chat/Chatbox';
 import firebase from './firebase/firebase';
 import {setLogged, setRole, setEmail} from './features/user';
 import ProductPage from './pages/product';
+import BlogsIndex from './pages/editor';
+import ShowBlog from 'pages/editor/show';
 // import AppNav from 'layouts/AppNav';
 
 function App() {
@@ -29,7 +31,7 @@ function App() {
 
 	const theme = createMuiTheme({
 		palette: {
-			type: appTheme ? 'dark' : 'light',
+			// type: appTheme ? 'dark' : 'light',
 		},
 	});
 
@@ -37,6 +39,8 @@ function App() {
 		setLoaing(true);
 		return firebase.getInstance().auth.onAuthStateChanged((user): any => {
 			if (user) {
+				console.log(user);
+
 				if (user.isAnonymous) {
 					dispatch(setRole('guest'));
 					dispatch(setLogged(true));
@@ -91,6 +95,17 @@ function App() {
 							<ProtectedRoutes
 								path="/editor"
 								component={EditorPage}
+								logged={logged}
+							/>
+							<ProtectedRoutes
+								path="/blogs/:blogId"
+								component={ShowBlog}
+								logged={logged}
+							/>
+							<ProtectedRoutes
+								exact
+								path="/blogs"
+								component={BlogsIndex}
 								logged={logged}
 							/>
 						</Switch>

@@ -84,7 +84,7 @@ export const Container = (props: Partial<Container>) => {
 						? 'none'
 						: `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
 				borderRadius: `${radius}px`,
-				flex: fillSpace === 'yes' ? 1 : 'unset',
+				flexGrow: fillSpace === 'yes' ? 1 : 'unset',
 				display: 'flex',
 				flexWrap: 'wrap',
 				maxWidth: '100%',

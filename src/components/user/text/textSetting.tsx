@@ -47,6 +47,7 @@ const useStyles = makeStyles({
 	},
 	button: {
 		backgroundColor: 'black',
+		color: 'white',
 	},
 });
 
@@ -230,14 +231,16 @@ const MoreMenu: React.FC<{text?: string; Choose: typeof TextStyleMenu}> = ({
 								placement === 'bottom' ? 'center top' : 'center bottom',
 						}}>
 						<Paper>
-							<ClickAwayListener onClickAway={handleClose}>
-								<Choose
-									handleClose={handleClose}
-									open={open}
-									setText={setSelected}
-									handleListKeyDown={handleListKeyDown}
-								/>
-							</ClickAwayListener>
+							<div>
+								<ClickAwayListener onClickAway={handleClose}>
+									<Choose
+										handleClose={handleClose}
+										open={open}
+										setText={setSelected}
+										handleListKeyDown={handleListKeyDown}
+									/>
+								</ClickAwayListener>
+							</div>
 						</Paper>
 					</Grow>
 				)}
