@@ -7,7 +7,10 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Button} from '@material-ui/core';
 import {useEditor} from '@craftjs/core';
+import copy from 'copy-to-clipboard';
 import lz from 'lzutf8';
+import {useAppDispatch} from 'app/hooks';
+import {postBlog, updateBlog} from 'features/editor';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -28,11 +31,12 @@ export const NavBar: React.FC<{
 	setEnable: (enabled: boolean) => void;
 	handleChange: (title: string, value: string) => void;
 	values: {
-		id: null;
+		id: string;
 		title: string;
-		coverImageUrl: undefined;
-		blogHash: null;
+		coverImageUrl: string;
+		blogHash: string;
 		date: string;
+		authorId: string;
 	};
 }> = ({enabled, setEnable, handleChange, values}) => {
 	const classes = useStyles();
@@ -40,6 +44,7 @@ export const NavBar: React.FC<{
 	const {actions, query} = useEditor((state, query) => ({
 		enabled: state.options.enabled,
 	}));
+	const dispatch = useAppDispatch();
 
 	return (
 		<div className={classes.root}>
@@ -63,8 +68,10 @@ export const NavBar: React.FC<{
 							setEnable(!enabled);
 							const json = query.serialize();
 							const hash = lz.encodeBase64(lz.compress(json));
-
 							handleChange('blogHash', hash);
+							console.log(values);
+
+							copy(hash);
 						}}>
 						{enabled ? 'Preview' : 'Edit'}{' '}
 					</Button>
@@ -75,7 +82,11 @@ export const NavBar: React.FC<{
 							const hash = lz.encodeBase64(lz.compress(json));
 
 							handleChange('blogHash', hash);
-
+							if (values.id === '') dispatch(postBlog(values));
+							else {
+								// dispatch(postBlog(values));
+								dispatch(updateBlog(values));
+							}
 							console.log(values);
 						}}>
 						Publish
