@@ -16,6 +16,7 @@ import Chat from './pages/chat/Chatbox';
 import firebase from './firebase/firebase';
 import {setLogged, setRole, setEmail} from './features/user';
 import ProductPage from './pages/product';
+import AppNav from 'layouts/app_layout/AppNav';
 // import AppNav from 'layouts/AppNav';
 
 function App() {
@@ -78,21 +79,23 @@ function App() {
 								logged={logged}
 							/>
 							<ProtectedRoutes
-								exact
-								path="/dash"
-								component={DashboardPage}
-								logged={logged}
-							/>
-							<ProtectedRoutes
-								path="/product"
-								component={ProductPage}
-								logged={logged}
-							/>
-							<ProtectedRoutes
 								path="/editor"
 								component={EditorPage}
 								logged={logged}
 							/>
+							<AppNav>
+								<ProtectedRoutes
+									exact
+									path="/dash"
+									component={DashboardPage}
+									logged={logged}
+								/>
+								<ProtectedRoutes
+									path="/product"
+									component={ProductPage}
+									logged={logged}
+								/>
+							</AppNav>
 						</Switch>
 					</Router>
 					{logged && roles !== 'guest' && <Chat />}

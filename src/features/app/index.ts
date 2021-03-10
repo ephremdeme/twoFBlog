@@ -7,7 +7,7 @@ export interface IAppState {
 }
 
 const initialState: IAppState = {
-	appTheme: true
+	appTheme: false
 }
 
 const appSlice = createSlice({

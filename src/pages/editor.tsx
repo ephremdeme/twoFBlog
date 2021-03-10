@@ -19,7 +19,7 @@ import RenderNode from '../components/user/RenderNode';
 import {Text} from '../components/user/text/Text';
 import lz from 'lzutf8';
 import {useDispatch} from 'react-redux';
-import {fetchBlogs} from 'features/editor';
+// import {fetchBlogs} from 'features/editor';
 
 const useStyles = makeStyles({
 	main: {
@@ -58,7 +58,7 @@ const EditorPage = () => {
 		date: new Date().toLocaleDateString(),
 	});
 	const dispatch = useDispatch();
-	let blogs = dispatch(fetchBlogs());
+	// let blogs = dispatch(fetchBlogs());
 	const handleChange = (key: string, value: string) => {
 		setValues({
 			...values,
