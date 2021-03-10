@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import {Element, useEditor} from '@craftjs/core';
-import Text from 'components/user/text/Text';
+import Text from '../../components/user/text/Text';
 import MaximizeIcon from '@material-ui/icons/Maximize';
 import {
 	CheckBoxOutlineBlankOutlined,
@@ -17,10 +17,10 @@ import {
 	YouTube,
 	Image,
 } from '@material-ui/icons';
-import {Video} from 'components/user/video/video';
-import {Image as ImageComp} from 'components/user/image/image';
-import {Container} from 'components/selectors/Container';
-import Divider from 'components/selectors/Divider';
+import {Video} from '../../components/user/video/video';
+import {Image as ImageComp} from '../../components/user/image/image';
+import {Container} from '../../components/selectors/Container';
+import Divider from '../../components/selectors/Divider';
 
 const drawerWidth = 240;
 

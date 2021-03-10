@@ -2,10 +2,10 @@ import {useNode, UserComponent} from '@craftjs/core';
 import {Button, makeStyles, Container as MuiContainer} from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
-import {Container} from 'components/selectors/Container';
 import {ImageSettings} from './imageSettings';
 import Firebase from '../../../firebase/firebase';
 import {CloudUpload, TapAndPlayOutlined} from '@material-ui/icons';
+import {Container} from '../../selectors/Container';
 
 const useStyles = makeStyles({
 	root: {

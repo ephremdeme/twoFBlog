@@ -17,7 +17,7 @@ import firebase from './firebase/firebase';
 import {setLogged, setRole, setEmail} from './features/user';
 import ProductPage from './pages/product';
 import BlogsIndex from './pages/editor';
-import ShowBlog from 'pages/editor/show';
+import ShowBlog from './pages/editor/show';
 // import AppNav from 'layouts/AppNav';
 
 function App() {
