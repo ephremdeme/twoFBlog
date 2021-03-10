@@ -18,11 +18,9 @@ import {setLogged, setRole, setEmail} from './features/user';
 import ProductPage from './pages/product';
 import BlogsIndex from './pages/editor';
 import ShowBlog from './pages/editor/show';
-// import AppNav from 'layouts/AppNav';
+import AppNav from './layouts/appLayout/AppNav';
 
 function App() {
-	// const appTheme = useSelector((state: RootState) => state.app.appTheme);
-
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const logged = useSelector((state: RootState) => state.user.logged);
 	const roles = useSelector((state: RootState) => state.user.role);
@@ -81,17 +79,7 @@ function App() {
 								component={SignUp}
 								logged={logged}
 							/>
-							<ProtectedRoutes
-								exact
-								path="/dash"
-								component={DashboardPage}
-								logged={logged}
-							/>
-							<ProtectedRoutes
-								path="/product"
-								component={ProductPage}
-								logged={logged}
-							/>
+
 							<ProtectedRoutes
 								path="/editor"
 								component={EditorPage}
@@ -108,6 +96,19 @@ function App() {
 								component={BlogsIndex}
 								logged={logged}
 							/>
+							<AppNav>
+								<ProtectedRoutes
+									exact
+									path="/dash"
+									component={DashboardPage}
+									logged={logged}
+								/>
+								<ProtectedRoutes
+									path="/product"
+									component={ProductPage}
+									logged={logged}
+								/>
+							</AppNav>
 						</Switch>
 					</Router>
 					{logged && roles !== 'guest' && <Chat />}
