@@ -20,9 +20,7 @@ const userSlice = createSlice({
 	reducers
 })
 
-export const { setLogged } = userSlice.actions;
-export const { setRole } = userSlice.actions;
-export const { setEmail } = userSlice.actions;
-export const { getLogged } = selectors;
+export const { setLogged, setRole, setEmail } = userSlice.actions;
+export const { getLogged, getRole, getEmail } = selectors;
 
 export default userSlice.reducer
