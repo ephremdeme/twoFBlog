@@ -113,8 +113,7 @@ const RenderNode = ({render}: any) => {
 								</button>
 							)}
 
-							{isActive &&
-								selected &&
+							{selected &&
 								selected.settings &&
 								React.createElement(selected.settings)}
 

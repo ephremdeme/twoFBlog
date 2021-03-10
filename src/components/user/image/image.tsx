@@ -5,7 +5,7 @@ import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import {Container} from 'components/selectors/Container';
 import {ImageSettings} from './imageSettings';
 import Firebase from '../../../firebase/firebase';
-import {CloudUpload} from '@material-ui/icons';
+import {CloudUpload, TapAndPlayOutlined} from '@material-ui/icons';
 
 const useStyles = makeStyles({
 	root: {
@@ -212,7 +212,7 @@ export const CoverImage: React.FC<{
 
 	return (
 		<div className={classes.root}>
-			<MuiContainer className={classes.fill + ' rounded z-depth-2'}>
+			<MuiContainer className={classes.fill}>
 				<img
 					src={src || imageUrl}
 					alt={alt}

@@ -337,7 +337,6 @@ export const TextSettings = () => {
 				<LinkButton cmd="createlink" name={'Link'}>
 					<InsertLink />
 				</LinkButton>
-				<ListButtons />
 				<IconButton onClick={() => setActive(!active)}>
 					{active ? <ExpandLess /> : <ExpandMore />}
 				</IconButton>
