@@ -21,6 +21,6 @@ const userSlice = createSlice({
 })
 
 export const { setLogged, setRole, setEmail } = userSlice.actions;
-export const { getLogged } = selectors;
+export const { getLogged, getRole, getEmail } = selectors;
 
 export default userSlice.reducer
