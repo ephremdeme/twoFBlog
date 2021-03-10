@@ -9,8 +9,9 @@ import {Button} from '@material-ui/core';
 import {useEditor} from '@craftjs/core';
 import copy from 'copy-to-clipboard';
 import lz from 'lzutf8';
-import {useAppDispatch} from 'app/hooks';
-import {postBlog, updateBlog} from 'features/editor';
+import { postBlog, updateBlog } from '../../features/editor';
+import { useAppDispatch } from '../../app/hooks';
+
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
