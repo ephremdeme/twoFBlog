@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Link, useRouteMatch } from 'react-router-dom';
+import {Link, useRouteMatch} from 'react-router-dom';
 
 const useStyles = makeStyles({
 	root: {
@@ -15,19 +15,19 @@ const useStyles = makeStyles({
 		maxHeight: 340,
 		minHeight: 340,
 		overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'column'
+		display: 'flex',
+		flexDirection: 'column',
 	},
-  end: {
-    flex: 1,
-    alignSelf: 'end',
-    justifySelf: 'flex-end'
-  }
+	end: {
+		flex: 1,
+		alignSelf: 'end',
+		justifySelf: 'flex-end',
+	},
 });
 
 const ProductCard = ({className, product, ...rest}: any) => {
 	const classes = useStyles();
-  const {url} = useRouteMatch()
+	const {url} = useRouteMatch();
 
 	return (
 		<Card className={classes.root}>
@@ -44,17 +44,20 @@ const ProductCard = ({className, product, ...rest}: any) => {
 						<b>{product.name}</b>
 					</Typography>
 					<Typography variant="body2" color="textSecondary" component="p">
-						{product.product_description.slice(0, 30)}
+						{product.product_description.slice(0, 70)}...
 					</Typography>
 				</CardContent>
+				<Box className={classes.end}>
+					<CardActions>
+						<Button
+							variant="outlined"
+							component={Link}
+							to={`${url}/${product.id}/detail`}>
+							See Detail
+						</Button>
+					</CardActions>
+				</Box>
 			</CardActionArea>
-			<Box className={classes.end}>
-				<CardActions>
-					<Button variant="outlined" component={Link} to={`${url}/${product.id}/detail`}>
-						See Detail
-					</Button>
-				</CardActions>
-			</Box>
 		</Card>
 	);
 };

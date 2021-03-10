@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {Box, Container, Grid, makeStyles} from '@material-ui/core';
-import {Pagination} from '@material-ui/lab';
 import {
 	fetchProducts,
-	selectProducts,
+	selectFilterableProducts,
 	selectLoading,
 } from '../../features/product';
 import {useSelector, useDispatch} from 'react-redux';
@@ -27,13 +26,11 @@ const ProductList = () => {
 	const classes = useStyles();
 
 	const dispatch = useDispatch();
-	const products = useSelector(selectProducts);
+	const products = useSelector(selectFilterableProducts);
 	const loading = useSelector(selectLoading);
 
 	useEffect(() => {
-		console.log('now....');
 		dispatch(fetchProducts());
-
 		return () => {};
 	}, []);
 
@@ -43,7 +40,7 @@ const ProductList = () => {
 				<h1>Loading prodcuts...</h1>
 			) : (
 				<Container maxWidth={false}>
-					<Toolbar />
+					<Toolbar backbtn={false} />
 					<Box mt={3}>
 						<Grid container spacing={3}>
 							{products.map((product) => (

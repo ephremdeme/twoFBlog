@@ -8,11 +8,13 @@ const PRODUCT_COLLECTION = 'products';
 export interface IProductState {
 	loading: boolean;
 	products: any[];
+	filterableProducts: any[];
 }
 
 const initialState: IProductState = {
 	loading: false,
 	products: [],
+	filterableProducts: []
 };
 
 const productSlice = createSlice({
@@ -23,15 +25,21 @@ const productSlice = createSlice({
 			state.loading = action.payload;
 		},
 		setProducts: (state: IProductState, action: PayloadAction<any>) => {
-			console.log('dispatched hook: ', action.payload);
 			state.products = action.payload;
+			state.filterableProducts = action.payload
 		},
+		setFilterableProducts: (state: IProductState, action: PayloadAction<string>) => {
+			console.log('filter here dood come on WTF: ', action.payload)
+			const filteredData = state.products.filter(prod => prod.name.toLowerCase().includes(action.payload.toLowerCase()));	
+			console.log(filteredData);
+			state.filterableProducts = filteredData;
+		}
 	},
 });
 
-export const {setLoadingPost, setProducts} = productSlice.actions;
+export const {setLoadingPost, setProducts, setFilterableProducts} = productSlice.actions;
 export const selectLoading = (state: RootState) => state.product.loading;
-export const selectProducts = (state: RootState) => state.product.products;
+export const selectFilterableProducts = (state: RootState) => state.product.filterableProducts;
 
 export const postProduct = ({file, data}: any): AppThunk => async (
 	dispatch
@@ -53,19 +61,19 @@ export const postProduct = ({file, data}: any): AppThunk => async (
 		},
 		async () => {
 			const url = await storageRef.getDownloadURL();
-			collectionRef.add({
+			const productPost = {
 				image: url,
 				...data,
 				createdAt: FB.getTimestamp(),
-			});
+			};
+
+			collectionRef.add(productPost);
 			dispatch(setLoadingPost(false));
 		}
 	);
 };
 
 export const fetchProducts = (): AppThunk => async (dispatch) => {
-	console.log('we are here');
-
 	dispatch(setLoadingPost(true));
 	FB.getInstance()
 		.db.collection(PRODUCT_COLLECTION)
