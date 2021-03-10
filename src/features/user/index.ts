@@ -15,6 +15,11 @@ export interface IUser {
 	email: string;
 	photo: string;
 }
+export interface IAppState {
+	logged: boolean;
+	role: string;
+	email: string;
+}
 
 const initialState: IAppState = {
 	logged: false,
