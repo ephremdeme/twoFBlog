@@ -1,22 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import {
-	Box,
-	Button,
-	Card,
-	makeStyles,
-	Theme,
-	Grid,
-} from '@material-ui/core';
+import {Box, Button, Card, makeStyles, Theme, Grid} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import {useRouteMatch} from 'react-router';
 import {Link} from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setFilterableProducts } from '../../features/product';
+import {useDispatch} from 'react-redux';
+import {setFilterableProducts} from '../../features/product';
 
 const useStyles = makeStyles((theme: Theme) => ({
 	root: {},
@@ -40,10 +33,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type IProps = {
-	backbtn?: boolean,
-	title?: string,
-	className: any,
-} 
+	backbtn?: boolean;
+	title?: string;
+	className: any;
+};
 
 const Toolbar = (props: IProps) => {
 	const classes = useStyles();
@@ -52,14 +45,14 @@ const Toolbar = (props: IProps) => {
 	const {url} = useRouteMatch();
 
 	const handleFilterProducts = (e: React.ChangeEvent<HTMLInputElement>) => {
-		dispatch(setFilterableProducts(e.target.value))
-	}
+		dispatch(setFilterableProducts(e.target.value));
+	};
 
 	return (
 		<div className={clsx(classes.root, className)}>
 			<Box>
 				<Card elevation={0} color="default">
-					<Box m={3}>
+					<Box m={2}>
 						<Grid
 							container
 							spacing={3}

@@ -11,17 +11,22 @@ import {Link, useRouteMatch} from 'react-router-dom';
 
 const useStyles = makeStyles({
 	root: {
-		maxWidth: 345,
-		maxHeight: 340,
-		minHeight: 340,
+		maxHeight: 260,
+		minHeight: 260,
 		overflow: 'hidden',
 		display: 'flex',
+		flexGrow: 1,
 		flexDirection: 'column',
+		borderRadius: 0,
 	},
-	end: {
-		flex: 1,
-		alignSelf: 'end',
-		justifySelf: 'flex-end',
+	cardImageContainer: {
+		alignSelf: 'start',
+	},
+	cardImage: {
+		maxHeight: '140px',
+	},
+	center: {
+		flexGrow: 1,
 	},
 });
 
@@ -30,34 +35,31 @@ const ProductCard = ({className, product, ...rest}: any) => {
 	const {url} = useRouteMatch();
 
 	return (
-		<Card className={classes.root}>
-			<CardActionArea style={{flex: '3'}}>
-				<CardMedia
-					component="img"
-					alt="Contemplative Reptile"
-					height="140"
-					image={product.image}
-					title="Contemplative Reptile"
-				/>
-				<CardContent>
-					<Typography gutterBottom variant="h6" component="h6">
-						<b>{product.name}</b>
+		<Card className={classes.root} elevation={0}>
+			<CardMedia
+				component="img"
+				alt="Product Image"
+				className={classes.cardImage}
+				image={product.image}
+				title="Product Image"
+			/>
+			<CardContent className={classes.center}>
+				<Box pb={1}>
+					<Typography gutterBottom variant="body1" component="p">
+						<b>{product.name.slice(0, 20)}</b>
 					</Typography>
 					<Typography variant="body2" color="textSecondary" component="p">
-						{product.product_description.slice(0, 70)}...
+						{product.description.slice(0, 30)}...
 					</Typography>
-				</CardContent>
-				<Box className={classes.end}>
-					<CardActions>
-						<Button
-							variant="outlined"
-							component={Link}
-							to={`${url}/${product.id}/detail`}>
-							See Detail
-						</Button>
-					</CardActions>
 				</Box>
-			</CardActionArea>
+				<Button
+					variant="outlined"
+					size="small"
+					component={Link}
+					to={`${url}/${product.id}/detail`}>
+					See Detail
+				</Button>
+			</CardContent>
 		</Card>
 	);
 };

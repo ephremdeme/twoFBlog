@@ -56,13 +56,15 @@ const useStyles = makeStyles((theme: Theme) =>
 			},
 		},
 		// necessary for content to be below app bar
-		toolbar: theme.mixins.toolbar,
+		toolbar: {
+			minHeight: '45px'
+		},
 		drawerPaper: {
 			width: drawerWidth,
+			marginTop: '45px'
 		},
 		content: {
 			flexGrow: 1,
-			padding: theme.spacing(3),
 		},
 		// list items
 		listItems: {

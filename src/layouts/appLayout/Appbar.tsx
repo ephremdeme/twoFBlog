@@ -13,16 +13,17 @@ import firebase from '../../firebase/firebase';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLogged, getLogged} from '../../features/user';
 import {RootState} from '../../app/store';
+import {PlayCircleFilledTwoTone} from '@material-ui/icons';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		appBar: {
-			[theme.breakpoints.up('sm')]: {
-				width: `calc(100% - ${drawerWidth}px)`,
-				marginLeft: drawerWidth,
-			},
+			minHeight: 45,
+		},
+		customizeToolbar: {
+			minHeight: '45px !important',
 		},
 		menuButton: {
 			marginRight: theme.spacing(2),
@@ -30,6 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
 				display: 'none',
 			},
 		},
+		appBarTitlte: {
+			marginTop: '8px',
+		}
 	})
 );
 
@@ -57,34 +61,36 @@ export default function Appbar(): JSX.Element {
 	return (
 		<div>
 			<CssBaseline />
-			<AppBar
-				elevation={2}
-				position="fixed"
-				color="default"
-				className={classes.appBar}>
-				<Toolbar>
-					<Box display="flex" flexDirection="row" width="100%">
-						<Box flexGrow={1}>
-							<IconButton
-								color="inherit"
-								aria-label="open drawer"
-								edge="start"
-								onClick={handleDrawerToggle}
-								className={classes.menuButton}
-								size="small">
-								<MenuIcon />
-							</IconButton>
-							<Typography variant="h6" noWrap>
-								DashBoard
-							</Typography>
+			<Box border={1}>
+				<AppBar
+					elevation={0}
+					position="fixed"
+					color="default"
+					className={classes.appBar}>
+					<Toolbar className={classes.customizeToolbar}>
+						<Box display="flex" flexDirection="row" width="100%">
+							<Box flexGrow={1} display="flex" alignContent="center">
+								<IconButton
+									color="inherit"
+									aria-label="open drawer"
+									edge="start"
+									onClick={handleDrawerToggle}
+									className={classes.menuButton}
+									size="small">
+									<MenuIcon />
+								</IconButton>
+								<Typography variant="body1" noWrap className={classes.appBarTitlte}>
+									<b>DashBoard</b>
+								</Typography>
+							</Box>
+							<Box flexShrink={1} display="flex" flexDirection="row">
+								<SwitchBtn />
+								<Button onClick={onSignOut}>Log out</Button>
+							</Box>
 						</Box>
-						<Box flexShrink={1} display="flex" flexDirection="row">
-							<SwitchBtn />
-							<Button onClick={onSignOut}>Log out</Button>
-						</Box>
-					</Box>
-				</Toolbar>
-			</AppBar>
+					</Toolbar>
+				</AppBar>
+			</Box>
 		</div>
 	);
 }
