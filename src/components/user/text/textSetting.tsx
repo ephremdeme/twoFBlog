@@ -9,6 +9,7 @@ import {
 	makeStyles,
 	Menu,
 	MenuItem,
+	Paper,
 	Popper,
 	Typography,
 } from '@material-ui/core';
@@ -17,11 +18,13 @@ import {
 	Colorize,
 	ExpandLess,
 	ExpandMore,
+	FormatAlignCenter,
 	FormatAlignJustify,
 	FormatAlignLeft,
 	FormatAlignRight,
 	FormatBold,
 	FormatItalic,
+	FormatLineSpacing,
 	FormatListBulleted,
 	FormatListNumbered,
 	FormatPaintSharp,
@@ -34,10 +37,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import {Grow} from '@material-ui/core';
 import {ClickAwayListener} from '@material-ui/core';
 import {MenuList} from '@material-ui/core';
-import {Paper} from '@material-ui/core';
 import {DialogTitle} from '@material-ui/core';
 import {Dialog} from '@material-ui/core';
 import {TextField} from '@material-ui/core';
+import {useNode} from '@craftjs/core';
 
 const useStyles = makeStyles({
 	root: {},
@@ -106,7 +109,7 @@ const EditButtonMultiple: React.FC<{
 				Object.keys(props.active).forEach((key) => (props.active[key] = false));
 				props.setActive({
 					...props.active,
-					[props.cmd]: !active,
+					[props.cmd]: true,
 				});
 				document.execCommand(props.cmd, false, props.value); // Send the command to the browser
 			}}>
@@ -117,34 +120,244 @@ const EditButtonMultiple: React.FC<{
 
 const AlignButtons = () => {
 	const [active, setActive] = useState({
-		justifyleft: false,
+		justifyleft: true,
 		justifycenter: false,
 		justifyright: false,
+		justifyfull: false,
 	});
+
+	const classes = useStyles();
+	const [open, setOpen] = React.useState(false);
+	const anchorRef = React.useRef<HTMLButtonElement>(null);
+	const [selected, setSelected] = useState('');
+
+	const handleToggle = () => {
+		setOpen((prevOpen) => !prevOpen);
+	};
+
+	const handleClose = (event: React.MouseEvent<EventTarget>) => {
+		if (
+			anchorRef.current &&
+			anchorRef.current.contains(event.target as HTMLElement)
+		) {
+			return;
+		}
+
+		setOpen(false);
+	};
+
+	function handleListKeyDown(event: React.KeyboardEvent) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+			setOpen(false);
+		}
+	}
+
+	// return focus to the button when we transitioned from !open -> open
+	const prevOpen = React.useRef(open);
+	React.useEffect(() => {
+		if (prevOpen.current === true && open === false) {
+			anchorRef.current!.focus();
+		}
+
+		prevOpen.current = open;
+	}, [open]);
 
 	return (
 		<>
-			<EditButtonMultiple
-				cmd="justifyleft"
-				name={'Align Left'}
-				active={active}
-				setActive={setActive}>
-				<FormatAlignLeft />
-			</EditButtonMultiple>
-			<EditButtonMultiple
-				cmd="justifycenter"
-				name={'Align Center'}
-				active={active}
-				setActive={setActive}>
-				<FormatAlignJustify />
-			</EditButtonMultiple>
-			<EditButtonMultiple
-				cmd="justifyright"
-				name={'Align Right'}
-				active={active}
-				setActive={setActive}>
-				<FormatAlignRight />
-			</EditButtonMultiple>
+			<IconButton
+				ref={anchorRef}
+				aria-controls={open ? 'menu-list-grow' : undefined}
+				aria-haspopup="true"
+				title="Align Text"
+				onClick={handleToggle}>
+				{active.justifycenter ? (
+					<FormatAlignCenter />
+				) : active.justifyfull ? (
+					<FormatAlignJustify />
+				) : active.justifyleft ? (
+					<FormatAlignLeft />
+				) : active.justifyright ? (
+					<FormatAlignRight />
+				) : (
+					<FormatAlignLeft />
+				)}
+			</IconButton>
+			<Popper
+				open={open}
+				anchorEl={anchorRef.current}
+				role={undefined}
+				transition
+				disablePortal>
+				{({TransitionProps, placement}) => (
+					<Grow
+						{...TransitionProps}
+						style={{
+							transformOrigin:
+								placement === 'bottom' ? 'center top' : 'center bottom',
+						}}>
+						<Paper>
+							<ClickAwayListener onClickAway={handleClose}>
+								<MenuList
+									autoFocusItem={open}
+									id="menu-list-grow"
+									onKeyDown={handleListKeyDown}>
+									<MenuItem onClick={handleClose}>
+										<EditButtonMultiple
+											cmd="justifyfull"
+											name={'Justify Full'}
+											active={active}
+											setActive={setActive}>
+											<FormatAlignJustify />
+										</EditButtonMultiple>
+									</MenuItem>
+									<MenuItem onClick={handleClose}>
+										<EditButtonMultiple
+											cmd="justifyleft"
+											name={'Align Left'}
+											active={active}
+											setActive={setActive}>
+											<FormatAlignLeft />
+										</EditButtonMultiple>
+									</MenuItem>
+									<MenuItem onClick={handleClose}>
+										<EditButtonMultiple
+											cmd="justifycenter"
+											name={'Align Center'}
+											active={active}
+											setActive={setActive}>
+											<FormatAlignCenter />
+										</EditButtonMultiple>
+									</MenuItem>
+									<MenuItem onClick={handleClose}>
+										<EditButtonMultiple
+											cmd="justifyright"
+											name={'Align Right'}
+											active={active}
+											setActive={setActive}>
+											<FormatAlignRight />
+										</EditButtonMultiple>
+									</MenuItem>
+								</MenuList>
+							</ClickAwayListener>
+						</Paper>
+					</Grow>
+				)}
+			</Popper>
+		</>
+	);
+};
+const LineSpacing = () => {
+	const classes = useStyles();
+	const [open, setOpen] = React.useState(false);
+	const anchorRef = React.useRef<HTMLButtonElement>(null);
+	const [selected, setSelected] = useState(1.5);
+
+	const {
+		actions: {setProp},
+	} = useNode((node) => ({
+		lineSpacing: node.data.props.lineSpacing,
+	}));
+
+	const handleToggle = () => {
+		setOpen((prevOpen) => !prevOpen);
+	};
+
+	const handleClose = (
+		event: React.MouseEvent<EventTarget>,
+		lineSpacing?: number
+	) => {
+		if (lineSpacing) {
+			setProp((props) => (props.lineSpacing = lineSpacing));
+			setSelected(lineSpacing);
+		}
+		if (
+			anchorRef.current &&
+			anchorRef.current.contains(event.target as HTMLElement)
+		) {
+			return;
+		}
+
+		setOpen(false);
+	};
+
+	function handleListKeyDown(event: React.KeyboardEvent) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+			setOpen(false);
+		}
+	}
+
+	// return focus to the button when we transitioned from !open -> open
+	const prevOpen = React.useRef(open);
+	React.useEffect(() => {
+		if (prevOpen.current === true && open === false) {
+			anchorRef.current!.focus();
+		}
+
+		prevOpen.current = open;
+	}, [open]);
+
+	return (
+		<>
+			<IconButton
+				ref={anchorRef}
+				aria-controls={open ? 'menu-list-grow' : undefined}
+				aria-haspopup="true"
+				title="Align Text"
+				onClick={handleToggle}>
+				<FormatLineSpacing />
+			</IconButton>
+			<Popper
+				open={open}
+				anchorEl={anchorRef.current}
+				role={undefined}
+				transition
+				disablePortal>
+				{({TransitionProps, placement}) => (
+					<Grow
+						{...TransitionProps}
+						style={{
+							transformOrigin:
+								placement === 'bottom' ? 'center top' : 'center bottom',
+						}}>
+						<Paper>
+							<ClickAwayListener onClickAway={handleClose}>
+								<MenuList
+									autoFocusItem={open}
+									id="menu-list-grow"
+									onKeyDown={handleListKeyDown}>
+									<MenuItem
+										className={selected === 1 ? classes.button : ''}
+										onClick={(e) => handleClose(e, 1)}>
+										1
+									</MenuItem>
+									<MenuItem
+										className={selected === 1.5 ? classes.button : ''}
+										onClick={(e) => handleClose(e, 1.5)}>
+										1.5
+									</MenuItem>
+									<MenuItem
+										className={selected === 2 ? classes.button : ''}
+										onClick={(e) => handleClose(e, 2)}>
+										2
+									</MenuItem>
+									<MenuItem
+										className={selected === 2.5 ? classes.button : ''}
+										onClick={(e) => handleClose(e, 2.5)}>
+										2.5
+									</MenuItem>
+									<MenuItem
+										className={selected === 3 ? classes.button : ''}
+										onClick={(e) => handleClose(e, 3)}>
+										3
+									</MenuItem>
+								</MenuList>
+							</ClickAwayListener>
+						</Paper>
+					</Grow>
+				)}
+			</Popper>
 		</>
 	);
 };
@@ -330,10 +543,13 @@ export const TextSettings = () => {
 				<EditButton cmd="underline" name={'Underline'}>
 					<FormatUnderlined />
 				</EditButton>
-				<AlignButtons />
 				<EditButton cmd="formatblock" value="blockquote" name={'Blockquote'}>
 					<FormatQuote />
 				</EditButton>
+				<AlignButtons />
+
+				<ListButtons />
+				<LineSpacing />
 				<LinkButton cmd="createlink" name={'Link'}>
 					<InsertLink />
 				</LinkButton>
