@@ -95,7 +95,12 @@ export const ContainerSettings = () => {
 
 			<IconButton
 				title="Fill Space"
-				onClick={() => setProp((props) => (props.fillSpace = 'yes'))}>
+				onClick={() =>
+					setProp(
+						(props) =>
+							(props.fillSpace = props.fillSpace === 'yes' ? 'unset' : 'yes')
+					)
+				}>
 				<SettingsEthernetIcon />
 			</IconButton>
 		</React.Fragment>
