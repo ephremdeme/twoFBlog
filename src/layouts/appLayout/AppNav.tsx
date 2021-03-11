@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../app/store';
-import {Avatar, Grid} from '@material-ui/core';
+import {Avatar, Box, Grid} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import dashboardRoutes from './routes';
 import FB from '../../firebase/firebase';
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
 		toolbar: theme.mixins.toolbar,
 		drawerPaper: {
 			width: drawerWidth,
-			marginTop: '65px'
+			marginTop: '65px',
 		},
 		content: {
 			flexGrow: 1,
@@ -71,10 +71,6 @@ const useStyles = makeStyles((theme: Theme) =>
 			margin: '5px auto',
 			transition: 'all .4s',
 		},
-		dashboardText: {
-			fontSize: '.9rem',
-			fontWeight: 'bold'
-		}
 	})
 );
 
@@ -132,9 +128,11 @@ export default function AppNav(props: Props) {
 						key={i}
 						className={classes.listItems}>
 						<ListItemIcon>
-							<Icon>{nav.icon}</Icon>
+							<Icon style={{ fontSize: 20 }}>{nav.icon}</Icon>
 						</ListItemIcon>
-						<ListItemText className={classes.dashboardText} primary={nav.name} />
+						<Box fontSize={14} fontWeight={500}>
+							{nav.name}
+						</Box>
 					</ListItem>
 				))}
 			</List>

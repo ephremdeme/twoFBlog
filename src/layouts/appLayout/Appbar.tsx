@@ -34,8 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		appBar: {},
 		customizeToolbar: {
-			display: 'flex',
-			borderBottom: '1px solid #aaa',
+			display: 'flex', 
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
@@ -118,7 +117,7 @@ export default function Appbar(): JSX.Element {
 		<div>
 			<CssBaseline />
 			<AppBar
-				elevation={1}
+				elevation={0}
 				position="fixed"
 				color="default"
 				className={classes.appBar}>
