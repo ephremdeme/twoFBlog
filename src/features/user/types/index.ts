@@ -7,6 +7,7 @@ export enum UserRole {
 	SHOPE_ADMIN = 'SHOPE_ADMIN',
 	SELLER = 'SELLER'
 }
+
 export interface User {
 	uid: string;
 	role: UserRole;
