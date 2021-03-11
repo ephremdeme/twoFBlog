@@ -56,6 +56,11 @@ const navs = {
 			path: '/editor',
 			icon: "format_color_text",
 		},
+		{
+			name: 'Chat',
+			path: '/chat',
+			icon: "forum",
+		},
 	]
 }
 

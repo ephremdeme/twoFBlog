@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	BrowserRouter as Router,
 	Route,
@@ -8,13 +8,13 @@ import {
 import './App.css';
 import EditorPage from './pages/editor/editor';
 import DashboardPage from './pages/dashboard';
-import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
-import {useSelector, useDispatch} from 'react-redux';
-import {RootState} from './app/store';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from './app/store';
 import SignUp from './pages/signup/SignUp';
-import Chat from './pages/chat/Chatbox';
+import Chat from './pages/chat/ChatPage';
 import firebase from './firebase/firebase';
-import {setLogged, setRole, setEmail} from './features/user';
+import { setLogged, setRole, setEmail } from './features/user';
 import ProductPage from './pages/product';
 import BlogsIndex from './pages/editor';
 import ShowBlog from './pages/editor/show';
@@ -108,10 +108,15 @@ function App() {
 									component={ProductPage}
 									logged={logged}
 								/>
+								<ProtectedRoutes
+									path="/chat"
+									component={Chat}
+									logged={logged}
+								/>
 							</AppNav>
 						</Switch>
 					</Router>
-					{logged && roles !== 'guest' && <Chat />}
+					{/* {logged && roles !== 'guest' && <Chat />} */}
 				</div>
 			) : (
 				<SignUp />
@@ -120,7 +125,7 @@ function App() {
 	);
 }
 
-const ProtectedLogin = ({logged, component: Component, ...rest}: any) => {
+const ProtectedLogin = ({ logged, component: Component, ...rest }: any) => {
 	return (
 		<Route
 			{...rest}
@@ -131,7 +136,7 @@ const ProtectedLogin = ({logged, component: Component, ...rest}: any) => {
 	);
 };
 
-const ProtectedRoutes = ({logged, component: Component, ...rest}: any) => {
+const ProtectedRoutes = ({ logged, component: Component, ...rest }: any) => {
 	return (
 		<Route
 			{...rest}
