@@ -6,15 +6,11 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import SwitchBtn from './switchBtn';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Avatar, Button, Divider, Grid, Popover } from '@material-ui/core';
-import firebase from '../../firebase/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../features/auth';
 import { RootState } from '../../app/store';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -83,6 +79,7 @@ function Appbar({ history }: any): JSX.Element {
 		setMobileOpen(!mobileOpen);
 	};
 
+
 	// user popover
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const handleUserPopoverClick = (event: any) => {
@@ -132,6 +129,7 @@ function Appbar({ history }: any): JSX.Element {
 							</Typography>
 						</Box>
 						<Box flexShrink={1} display="flex" flexDirection="row">
+
 							<Avatar
 								aria-describedby={id}
 								className={classes.smallAvatar}
