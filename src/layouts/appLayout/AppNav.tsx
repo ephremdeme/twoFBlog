@@ -1,17 +1,11 @@
 import React, {useState} from 'react';
-import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import {
 	makeStyles,
 	useTheme,
@@ -19,16 +13,14 @@ import {
 	createStyles,
 } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../app/store';
-import {Avatar, Box, Grid} from '@material-ui/core';
+import {Box} from '@material-ui/core';
 import {Link} from 'react-router-dom';
+import {RootState} from '../../app/store';
 import dashboardRoutes from './routes';
-import FB from '../../firebase/firebase';
 import {INavRouter} from './routes';
+import FB from '../../firebase/firebase';
 import Icon from '@material-ui/core/Icon';
-import {setTheme} from '../../features/app';
 import Appbar from './Appbar';
-import Dashboard from '@material-ui/icons/Dashboard';
 
 const drawerWidth = 240;
 
@@ -80,18 +72,17 @@ interface Props {
 }
 
 export default function AppNav(props: Props) {
-	const {window} = props;
 	const classes = useStyles();
+	const {window} = props;
+	const dispatch = useDispatch();
 	const theme = useTheme();
 	const [mobileOpen, setMobileOpen] = React.useState(false);
-	const appTheme = useSelector((state: RootState) => state.app.appTheme);
-	const dispatch = useDispatch();
 	const role = useSelector((state: RootState) => state.user.role);
+	const [navs, setNavs] = useState<INavRouter[]>([]);
 	const logged = useSelector((state: RootState) => state.user.logged);
 	const [photo, setPhoto] = React.useState<any>('');
 	const [name, setName] = React.useState<any>(null);
 	const [email, setEmail] = React.useState<any>(null);
-	const [navs, setNavs] = useState<INavRouter[]>([]);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);

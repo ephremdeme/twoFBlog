@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -6,19 +6,14 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import SwitchBtn from './switchBtn';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
-import {Avatar, Button, Divider, Grid, Popover} from '@material-ui/core';
+import {Avatar, Divider, Grid, Popover} from '@material-ui/core';
 import firebase from '../../firebase/firebase';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLogged, getLogged} from '../../features/user';
-import {RootState} from '../../app/store';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
@@ -27,6 +22,10 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import {RootState} from '../../app/store';
+import {toggleTheme} from 'features/app';
 
 const drawerWidth = 240;
 
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		appBar: {},
 		customizeToolbar: {
-			display: 'flex', 
+			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
@@ -67,14 +66,15 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		smallAvatar: {
 			width: theme.spacing(4),
-      height: theme.spacing(4),
-		}
+			height: theme.spacing(4),
+		},
 	})
 );
 
 export default function Appbar(): JSX.Element {
 	const classes = useStyles();
 	const dispatch = useDispatch();
+	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
 	const handleDrawerToggle = () => {
@@ -139,6 +139,7 @@ export default function Appbar(): JSX.Element {
 							</IconButton>
 							<Typography variant="body1" className={classes.appBarTitlte}>
 								<b>DashBoard</b>
+								{appTheme ? 'xxx' : 'yyy'}
 							</Typography>
 						</Box>
 						<Box flexShrink={1} display="flex" flexDirection="row">
@@ -161,7 +162,7 @@ export default function Appbar(): JSX.Element {
 								transformOrigin={{
 									vertical: 'top',
 									horizontal: 'center',
-								}}>	
+								}}>
 								<Box pt={2} className={classes.userPopoverContent}>
 									<Box m={2}>
 										<Grid container spacing={2}>
@@ -183,19 +184,25 @@ export default function Appbar(): JSX.Element {
 											<ListItemIcon>
 												<SendIcon />
 											</ListItemIcon>
-											<ListItemText primary="Sent mail" />
+											<Box fontSize={14} fontWeight={500} onClick={signOut}>
+												Sent mail
+											</Box>
 										</ListItem>
 										<ListItem button>
 											<ListItemIcon>
 												<DraftsIcon />
 											</ListItemIcon>
-											<ListItemText primary="Drafts" />
+											<Box fontSize={14} fontWeight={500} onClick={signOut}>
+												Drafts
+											</Box>
 										</ListItem>
 										<ListItem button onClick={handlePopMenuClick}>
 											<ListItemIcon>
 												<InboxIcon />
 											</ListItemIcon>
-											<ListItemText primary="Inbox" />
+											<Box fontSize={14} fontWeight={500} onClick={signOut}>
+												Inbox
+											</Box>
 											{openPopMenu ? <ExpandLess /> : <ExpandMore />}
 										</ListItem>
 										<Collapse in={openPopMenu} timeout="auto" unmountOnExit>
@@ -204,7 +211,9 @@ export default function Appbar(): JSX.Element {
 													<ListItemIcon>
 														<StarBorder />
 													</ListItemIcon>
-													<ListItemText primary="Starred" />
+													<Box fontSize={14} fontWeight={500} onClick={signOut}>
+														Starred
+													</Box>
 												</ListItem>
 											</List>
 										</Collapse>
@@ -212,7 +221,20 @@ export default function Appbar(): JSX.Element {
 											<ListItemIcon>
 												<ExitToAppIcon />
 											</ListItemIcon>
-											<ListItemText primary="Logout" onClick={signOut} />
+											<Box fontSize={14} fontWeight={500} onClick={signOut}>
+												Logout
+											</Box>
+										</ListItem>
+										<ListItem button>
+											<ListItemIcon>
+												{appTheme ? <Brightness7Icon /> : <Brightness4Icon />}
+											</ListItemIcon>
+											<Box
+												fontSize={14}
+												fontWeight={500}
+												onClick={() => dispatch(toggleTheme(appTheme))}>
+												Switch Theme
+											</Box>
 										</ListItem>
 									</List>
 								</Box>

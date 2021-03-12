@@ -31,7 +31,7 @@ const ProductList = () => {
 			) : (
 				<>
 					<Toolbar backbtn={false} />
-					{isAdmin ? (
+					{!isAdmin ? (
 						<ProductListUser products={products} />
 					) : (
 						<ProductListAdmin products={products} />

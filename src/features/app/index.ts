@@ -16,7 +16,7 @@ const appSlice = createSlice({
 	reducers
 })
 
-export const { setTheme } = appSlice.actions;
+export const { toggleTheme } = appSlice.actions;
 export const { getAppTheme } = selectors;
 
 export default appSlice.reducer

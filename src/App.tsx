@@ -8,28 +8,28 @@ import {
 import './App.css';
 import EditorPage from './pages/editor/editor';
 import DashboardPage from './pages/dashboard';
+import { setLogged, setRole, setEmail } from './features/user';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './app/store';
 import SignUp from './pages/signup/SignUp';
 import Chat from './pages/chat/ChatPage';
 import firebase from './firebase/firebase';
-import { setLogged, setRole, setEmail } from './features/user';
 import ProductPage from './pages/product';
 import BlogsIndex from './pages/editor';
 import ShowBlog from './pages/editor/show';
 import AppNav from './layouts/appLayout/AppNav';
+import { useSelector, useDispatch } from 'react-redux';
 
 function App() {
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const logged = useSelector((state: RootState) => state.user.logged);
-	const roles = useSelector((state: RootState) => state.user.role);
 	const [loading, setLoaing] = useState(true);
 	const dispatch = useDispatch();
+	const roles = useSelector((state: RootState) => state.user.role);
 
 	const theme = createMuiTheme({
 		palette: {
-			// type: appTheme ? 'dark' : 'light',
+			type: appTheme ? 'dark' : 'light',
 		},
 	});
 
