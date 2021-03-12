@@ -9,10 +9,10 @@ import Typography from '@material-ui/core/Typography';
 import SwitchBtn from './switchBtn';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import {Button} from '@material-ui/core';
-import firebase from '../../firebase/firebase';
 import {useDispatch, useSelector} from 'react-redux';
-import {setLogged, getLogged} from '../../features/user';
+import {logoutUser} from '../../features/auth';
 import {RootState} from '../../app/store';
+import { Redirect, withRouter } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -33,26 +33,16 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-export default function Appbar(): JSX.Element {
+function Appbar({history}: any): JSX.Element {
 	const classes = useStyles();
 	const dispatch = useDispatch();
+	const auth = useSelector((state: RootState) => state.auth)
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
 	};
 
-	const onSignOut = () => {
-		firebase
-			.getInstance()
-			.auth.signOut()
-			.then(() => {
-				dispatch(setLogged(false));
-			})
-			.catch((error) => {
-				// An error happened.
-			});
-	};
 
 	return (
 		<div>
@@ -80,7 +70,10 @@ export default function Appbar(): JSX.Element {
 						</Box>
 						<Box flexShrink={1} display="flex" flexDirection="row">
 							<SwitchBtn />
-							<Button onClick={onSignOut}>Log out</Button>
+							<Button 
+								onClick={()=>{
+									dispatch(logoutUser(auth.uid, auth.isGuest))
+								}}>Log out</Button>
 						</Box>
 					</Box>
 				</Toolbar>
@@ -88,3 +81,5 @@ export default function Appbar(): JSX.Element {
 		</div>
 	);
 }
+
+export default withRouter(Appbar);
