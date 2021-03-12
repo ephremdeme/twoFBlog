@@ -27,3 +27,6 @@ package.lock.json
 yarn.lock
 .vscode/settings.json
 package-lock.json
+.firebase/hosting.YnVpbGQ.cache
+.firebaserc
+firebase.json

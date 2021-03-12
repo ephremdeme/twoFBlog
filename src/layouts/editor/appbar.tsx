@@ -7,11 +7,9 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Button} from '@material-ui/core';
 import {useEditor} from '@craftjs/core';
-import copy from 'copy-to-clipboard';
 import lz from 'lzutf8';
-import { postBlog, updateBlog } from '../../features/editor';
-import { useAppDispatch } from '../../app/hooks';
-
+import {postBlog, updateBlog} from '../../features/editor';
+import {useAppDispatch} from '../../app/hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -49,7 +47,7 @@ export const NavBar: React.FC<{
 
 	return (
 		<div className={classes.root}>
-			<AppBar elevation={2} position="fixed">
+			<AppBar elevation={0} position="fixed" color="default">
 				<Toolbar>
 					<IconButton
 						color="inherit"
@@ -71,8 +69,6 @@ export const NavBar: React.FC<{
 							const hash = lz.encodeBase64(lz.compress(json));
 							handleChange('blogHash', hash);
 							console.log(values);
-
-							copy(hash);
 						}}>
 						{enabled ? 'Preview' : 'Edit'}{' '}
 					</Button>

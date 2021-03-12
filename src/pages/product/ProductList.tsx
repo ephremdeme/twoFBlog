@@ -1,33 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import {Box, Container, Grid, makeStyles} from '@material-ui/core';
+import React, {useEffect} from 'react';
 import {
 	fetchProducts,
 	selectFilterableProducts,
 	selectLoading,
 } from '../../features/product';
-import {useSelector, useDispatch} from 'react-redux';
-
-import Page from '../../components/shared/Page';
 import Toolbar from './Toolbar';
-import ProductCard from './ProductCard';
-
-const useStyles = makeStyles((theme) => ({
-	root: {
-		minHeight: '100%',
-		paddingBottom: theme.spacing(3),
-		paddingTop: theme.spacing(3),
-	},
-	productCard: {
-		height: '100%',
-	},
-}));
+import {useSelector, useDispatch} from 'react-redux';
+import Page from '../../components/shared/Page';
+import ProductListAdmin from './admin/ProductListAdmin';
+import ProductListUser from './user/ProductListUser';
+import data from './data';
 
 const ProductList = () => {
-	const classes = useStyles();
-
 	const dispatch = useDispatch();
-	const products = useSelector(selectFilterableProducts);
+	// const products = useSelector(selectFilterableProducts);
+	// dummy data load
+	const products = data;
 	const loading = useSelector(selectLoading);
+	const isAdmin = false;
 
 	useEffect(() => {
 		dispatch(fetchProducts());
@@ -39,21 +29,14 @@ const ProductList = () => {
 			{loading ? (
 				<h1>Loading prodcuts...</h1>
 			) : (
-				<Container maxWidth={false}>
+				<>
 					<Toolbar backbtn={false} />
-					<Box mt={3}>
-						<Grid container spacing={3}>
-							{products.map((product) => (
-								<Grid item key={product.id} lg={4} md={6} xs={12}>
-									<ProductCard
-										className={classes.productCard}
-										product={product}
-									/>
-								</Grid>
-							))}
-						</Grid>
-					</Box>
-				</Container>
+					{!isAdmin ? (
+						<ProductListUser products={products} />
+					) : (
+						<ProductListAdmin products={products} />
+					)}
+				</>
 			)}
 		</Page>
 	);

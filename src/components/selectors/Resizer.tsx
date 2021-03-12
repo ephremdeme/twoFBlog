@@ -262,7 +262,7 @@ export const Resizer = ({propKey, children, ...props}: any) => {
 			{...props}>
 			{children}
 			{active && (
-				<Indicators bound={fillSpace == 'yes' ? parentDirection : false}>
+				<Indicators bound={fillSpace === 'yes' ? parentDirection : false}>
 					<span></span>
 					<span></span>
 					<span></span>
