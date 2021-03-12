@@ -3,6 +3,7 @@ import editorReducer from '../features/editor';
 import productReducer from '../features/product';
 import appReducer from '../features/app';
 import userReducer from '../features/user';
+import authReducer from '../features/auth';
 
 export const store = configureStore({
 	reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
 		editor: editorReducer,
 		product: productReducer,
 		user: userReducer,
+		auth: authReducer
 	},
 });
 
