@@ -13,19 +13,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './app/store';
 import SignUp from './pages/signup/SignUp';
 import Chat from './pages/chat/ChatPage';
-import firebase from './firebase/firebase';
-import { setLogged, setRole, setEmail } from './features/user';
+import { isLoggedIn } from './features/auth';
 import ProductPage from './pages/product';
 import BlogsIndex from './pages/editor';
 import ShowBlog from './pages/editor/show';
 import AppNav from './layouts/appLayout/AppNav';
+import PrivateRoutes from "./pages/private/private_route";
 
 function App() {
-	const appTheme = useSelector((state: RootState) => state.app.appTheme);
-	const logged = useSelector((state: RootState) => state.user.logged);
-	const roles = useSelector((state: RootState) => state.user.role);
 	const [loading, setLoaing] = useState(true);
 	const dispatch = useDispatch();
+	const auth = useSelector((state: RootState) => state.auth)
 
 	const theme = createMuiTheme({
 		palette: {
@@ -33,38 +31,15 @@ function App() {
 		},
 	});
 
-	const checkUser = async () => {
-		setLoaing(true);
-		return firebase.getInstance().auth.onAuthStateChanged((user): any => {
-			if (user) {
-				console.log(user);
-
-				if (user.isAnonymous) {
-					dispatch(setRole('guest'));
-					dispatch(setLogged(true));
-					setLoaing(false);
-				} else {
-					firebase
-						.getInstance()
-						.db.collection('users')
-						.doc(user.uid)
-						.get()
-						.then((userData: any) => {
-							if (userData.exists) {
-								dispatch(setRole(userData.data().role));
-								dispatch(setLogged(true));
-								dispatch(setEmail(userData.data().email));
-							}
-							setLoaing(false);
-						});
-				}
-			} else {
-			}
-		});
-	};
+	console.log(auth.authenticated)
 
 	useEffect(() => {
-		checkUser();
+		setLoaing(true)
+		if(!auth.authenticated){
+			dispatch(isLoggedIn())
+			setLoaing(false);
+		}
+		setLoaing(false);
 	}, []);
 
 	return (
@@ -73,45 +48,38 @@ function App() {
 				<div>
 					<Router>
 						<Switch>
-							<ProtectedLogin
+							<Route
 								exact
 								path="/"
 								component={SignUp}
-								logged={logged}
 							/>
 
-							<ProtectedRoutes
+							<PrivateRoutes
 								path="/editor"
 								component={EditorPage}
-								logged={logged}
 							/>
-							<ProtectedRoutes
+							<PrivateRoutes
 								path="/blogs/:blogId"
 								component={ShowBlog}
-								logged={logged}
 							/>
-							<ProtectedRoutes
+							<PrivateRoutes
 								exact
 								path="/blogs"
 								component={BlogsIndex}
-								logged={logged}
 							/>
 							<AppNav>
-								<ProtectedRoutes
+								<PrivateRoutes
 									exact
 									path="/dash"
 									component={DashboardPage}
-									logged={logged}
 								/>
-								<ProtectedRoutes
+								<PrivateRoutes
 									path="/product"
 									component={ProductPage}
-									logged={logged}
 								/>
-								<ProtectedRoutes
+								<PrivateRoutes
 									path="/chat"
 									component={Chat}
-									logged={logged}
 								/>
 							</AppNav>
 						</Switch>
@@ -119,32 +87,10 @@ function App() {
 					{/* {logged && roles !== 'guest' && <Chat />} */}
 				</div>
 			) : (
-				<SignUp />
+				<h1>Loading page ...</h1>
 			)}
 		</ThemeProvider>
 	);
 }
-
-const ProtectedLogin = ({ logged, component: Component, ...rest }: any) => {
-	return (
-		<Route
-			{...rest}
-			render={(props) =>
-				!logged ? <Component {...props} /> : <Redirect to="/dash" />
-			}
-		/>
-	);
-};
-
-const ProtectedRoutes = ({ logged, component: Component, ...rest }: any) => {
-	return (
-		<Route
-			{...rest}
-			render={(props) =>
-				logged ? <Component {...props} /> : <Redirect to="/" />
-			}
-		/>
-	);
-};
 
 export default App;
