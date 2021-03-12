@@ -74,7 +74,7 @@ export const ContainerSettings = () => {
 							setProp((props) => (props.alignItems = 'flex-start'));
 						}}>
 						{/* <VerticalAlignTopIcon /> */}
-						<KeyboardArrowLeft />
+						<VerticalAlignTopIcon />
 					</IconButton>
 					<IconButton
 						title="Vertical Align Center"
@@ -88,14 +88,19 @@ export const ContainerSettings = () => {
 						onClick={() => {
 							setProp((props) => (props.alignItems = 'flex-end'));
 						}}>
-						<KeyboardArrowRightIcon />
+						<VerticalAlignBottom />
 					</IconButton>
 				</React.Fragment>
 			)}
 
 			<IconButton
 				title="Fill Space"
-				onClick={() => setProp((props) => (props.fillSpace = 'yes'))}>
+				onClick={() =>
+					setProp(
+						(props) =>
+							(props.fillSpace = props.fillSpace === 'yes' ? 'unset' : 'yes')
+					)
+				}>
 				<SettingsEthernetIcon />
 			</IconButton>
 		</React.Fragment>

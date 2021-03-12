@@ -7,17 +7,27 @@ import ContentEditable, {ContentEditableEvent} from 'react-contenteditable';
 import {TextSettings} from './textSetting';
 
 const useStyles = makeStyles({
-	root: {},
+	root: {
+		width: '100%',
+		maxWidth: '100%',
+	},
 	text: {
 		display: 'block',
 		minHeight: '70px',
+		padding: '10px',
+		margin: '5px',
 	},
 	button: {
 		backgroundColor: 'black',
 	},
 });
 
-export const Text: UserComponent<TextProps> = ({text, textAlign, fontSize}) => {
+export const Text: UserComponent<TextProps> = ({
+	text,
+	textAlign,
+	fontSize,
+	lineSpacing,
+}) => {
 	const classes = useStyles();
 	const html = useRef<string>(text);
 	const inputRef = useRef<HTMLLinkElement>(null);
@@ -64,6 +74,7 @@ export const Text: UserComponent<TextProps> = ({text, textAlign, fontSize}) => {
 				onBlur={handleBlur}
 				disabled={!editable}
 				tagName={'p'}
+				style={{lineHeight: lineSpacing}}
 				className={classes.text}
 				// style={{fontSize: `${fontSize}px`, textAlign}}
 				title="Editable"
@@ -76,6 +87,7 @@ type TextProps = {
 	text: string;
 	fontSize?: string;
 	textAlign?: string;
+	lineSpacing?: number;
 };
 
 Text.craft = {
@@ -84,6 +96,7 @@ Text.craft = {
 		text: 'edit',
 		fontSize: '12',
 		textAlign: '',
+		lineSpacing: 1.5,
 	},
 	related: {
 		settings: TextSettings,
