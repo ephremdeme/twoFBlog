@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { User, UserRole } from "./types/index";
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from 'app/store';
+import fb from 'firebase';
 import firebase, { provider } from '../../firebase/firebase';
 
 
@@ -23,6 +24,9 @@ const authSlice = createSlice({
 	reducers: {
 		setLoginInProgress: (state: User, action: PayloadAction<boolean>) => {
 			state.authenticating = action.payload
+		},
+		setLoggedIn: (state: User, action: PayloadAction<boolean>) => {
+			state.authenticated = action.payload
 		},
 		setLogInSuccess: (state: User, action: PayloadAction<User>) => {
 			state.uid = action.payload.uid;
@@ -54,7 +58,7 @@ const authSlice = createSlice({
 	}
 });
 
-export const { setLoginInProgress, setLogInSuccess, setLogInFaliure, setLogoutSuccess, setLogoutFailure, setIsGuest } = authSlice.actions;
+export const { setLoginInProgress, setLogInSuccess, setLogInFaliure, setLogoutSuccess, setLogoutFailure, setIsGuest, setLoggedIn } = authSlice.actions;
 
 export const signupUser = (): AppThunk => async (dispatch) => {
 	try {
@@ -102,8 +106,8 @@ export const signupUser = (): AppThunk => async (dispatch) => {
 	}
 }
 
-export const logoutUser = (uid: string, isGuest: boolean): AppThunk =>{
-	
+export const logoutUser = (uid: string, isGuest: boolean): AppThunk => {
+
 	return async (dispatch) => {
 		const auth = firebase.getInstance().auth;
 		const db = firebase.getInstance().db;
@@ -113,34 +117,57 @@ export const logoutUser = (uid: string, isGuest: boolean): AppThunk =>{
 		// 		dispatch(setLogoutSuccess())
 		// 	}).catch(e => dispatch(setLogoutFailure(e.message)))
 		// }
-			const logout = db.collection("users").doc(uid).update({
-				isOnline: false
-			}).then(_ => {
-				auth.signOut().then(_ => {
-					localStorage.clear();
-					dispatch(setLogoutSuccess())
-					window.location.href = window.location.href;
-				})
-			}).catch(e => dispatch(setLogoutFailure(e.message)))
+		const logout = db.collection("users").doc(uid).update({
+			isOnline: false
+		}).then(_ => {
+			auth.signOut().then(_ => {
+				localStorage.clear();
+				dispatch(setLogoutSuccess())
+				window.location.href = window.location.href;
+			})
+		}).catch(e => dispatch(setLogoutFailure(e.message)))
 
-			return logout
-	
+		return logout
+
 	}
-} 
+}
 
 export const isLoggedIn = (): AppThunk => async (dispatch) => {
-	const user: any = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null
-	console.log('[User ?]', user)
-	if (user) {
-		dispatch(setLogInSuccess({ ...user, authenticating: false, authenticated: true, isGuest: false, error: "" }))
-	} else {
-		dispatch(setLogInFaliure("Log in"))
-	}
+	const auth = firebase.getInstance().auth;
+	auth.onAuthStateChanged((user: any) => {
+		if (user) {
+			const current_user: any = {
+				uid: user.uid,
+				role: UserRole.GUEST,
+				email: user.email,
+				photo: user.email,
+				user_name: user.displayName
+			}
+			dispatch(setLogInSuccess({ ...current_user, authenticating: false, authenticated: true, isGuest: false, error: "" }))
+		} else {
+			// No user is signed in.
+			console.log('[USER NOT FOUND]')
+			dispatch(setLogInFaliure("Log in"))
+		}
+	});
+}
+
+export const isPrivate = (): AppThunk => async (dispatch) => {
+	const auth = firebase.getInstance().auth;
+	dispatch(setLoginInProgress(true));
+	auth.onAuthStateChanged((user: any) => {
+		if (user) {
+			dispatch(setLoginInProgress(false));
+			dispatch(setLoggedIn(true));
+			
+		}
+		dispatch(setLoginInProgress(false));
+	});
 }
 
 export const signAsGuest = (): AppThunk => async (dispatch) => {
 	const auth = firebase.getInstance().auth;
-	const guest = await auth.signInAnonymously()
+	const guest = await auth.signInAnonymously();
 	const localUser = {
 		uid: guest.user?.uid
 	}

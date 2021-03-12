@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,7 +10,7 @@ import Container from '@material-ui/core/Container';
 import { ReactComponent as ReactLogo } from '../../public/icons/icons8_google_logo_1.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { signupUser, logoutUser, signAsGuest } from "../../features/auth/index";
+import { signupUser, isPrivate, signAsGuest } from "../../features/auth/index";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,18 +38,26 @@ export default function SignIn() {
 	const classes = useStyles();
 	const auth = useSelector((state: RootState) => state.auth.authenticated)
 	const uid = useSelector((state: RootState) => state.auth.uid)
+	const authenticating = useSelector((state: RootState) => state.auth.authenticating)
 
 	const sign = (e: any) => {
 		e.preventDefault();
 		dispatch(signupUser());
 	}
 
+	useEffect(() => {
+		dispatch(isPrivate())
+	}, [])
+
 	if (auth) {
 		return <Redirect to={"/dash"} />
 	}
 
 	return (
-		<Container component="main" maxWidth="xs">
+		<>
+		{
+			!authenticating ?
+			<Container component="main" maxWidth="xs">
 			<CssBaseline />
 			<div className={classes.paper}>
 				<Avatar className={classes.avatar}>
@@ -81,6 +89,8 @@ export default function SignIn() {
 				}}>
 				Guest (Currently Unavailable)
 			</Button>
-		</Container>
+		</Container>: <h1>Loading...</h1>
+		}
+		</>
 	);
 }
