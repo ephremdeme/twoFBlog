@@ -16,6 +16,7 @@ import { useSpring, animated } from 'react-spring'
 import Typography from '@material-ui/core/Typography';
 import {Link} from 'react-router-dom';
 import './styles.css'
+import ts from 'typescript';
 
 const useStyles = makeStyles({
 	cardIcons: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles({
 		paddingTop: '5%'
 	},
 });
-const calc = (x: number, y: number) => [-(y - window.innerHeight / 2) / 20, (x - window.innerWidth / 2) / 20, 1.1]
+const calc = (x: number, y: number) => [-(y - window.innerHeight / 4) / 200, (x - window.innerWidth / 4) / 200, 1.1]
 const trans = (x: number, y: number, s: number) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
 
 export const BlogCard: React.FC<{
@@ -49,7 +50,7 @@ export const BlogCard: React.FC<{
 }> = ({blog}) => {
 	const classes = useStyles();
     console.log(blog);
-    const [props, set] = useSpring(() => ({ xys: [0, 0, 1], config: { mass: 5, tension: 350, friction: 40 } }))
+    const [props, set] = useSpring(() => ({ xys: [0, 0, 1], config: { mass: 1, tension: 150, friction: 20 } }))
  
 
 	return (
@@ -57,8 +58,10 @@ export const BlogCard: React.FC<{
             <animated.div
                 className="card"
                 onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
-                onMouseLeave={() => set({ xys: [0, 0, 1] })}
-                // style={{ transform: props.xys.interpolate(trans) }}
+				onMouseLeave={() => set({ xys: [0, 1, 1] })}
+				// @ts-ignore
+                style={{ transform: props.xys.interpolate(trans) }}
+
             >
 		<Card className={classes.root}>
 			<CardHeader
