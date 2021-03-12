@@ -6,10 +6,12 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
-import {Avatar, Divider, Grid, Popover} from '@material-ui/core';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { Avatar, Button, Divider, Grid, Popover } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '../../features/auth';
+import { RootState } from '../../app/store';
 import firebase from '../../firebase/firebase';
-import {useDispatch, useSelector} from 'react-redux';
 import {setLogged, getLogged} from '../../features/user';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -24,7 +26,6 @@ import StarBorder from '@material-ui/icons/StarBorder';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
-import {RootState} from '../../app/store';
 import {toggleTheme} from 'features/app';
 
 const drawerWidth = 240;
@@ -71,9 +72,10 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-export default function Appbar(): JSX.Element {
+function Appbar({ history }: any): JSX.Element {
 	const classes = useStyles();
 	const dispatch = useDispatch();
+	const auth = useSelector((state: RootState) => state.auth)
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -81,17 +83,6 @@ export default function Appbar(): JSX.Element {
 		setMobileOpen(!mobileOpen);
 	};
 
-	const signOut = () => {
-		firebase
-			.getInstance()
-			.auth.signOut()
-			.then(() => {
-				dispatch(setLogged(false));
-			})
-			.catch((error) => {
-				// An error happened.
-			});
-	};
 
 	// user popover
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -111,6 +102,9 @@ export default function Appbar(): JSX.Element {
 	const handlePopMenuClick = () => {
 		setOpenPopMenu(!openPopMenu);
 	};
+	const signOut = () =>  {
+		dispatch(logoutUser(auth.uid, auth.isGuest))
+	}
 	// end of list popover
 
 	return (
@@ -139,10 +133,10 @@ export default function Appbar(): JSX.Element {
 							</IconButton>
 							<Typography variant="body1" className={classes.appBarTitlte}>
 								<b>DashBoard</b>
-								{appTheme ? 'xxx' : 'yyy'}
 							</Typography>
 						</Box>
 						<Box flexShrink={1} display="flex" flexDirection="row">
+
 							<Avatar
 								aria-describedby={id}
 								className={classes.smallAvatar}
@@ -170,8 +164,8 @@ export default function Appbar(): JSX.Element {
 												<Avatar alt="User" />
 											</Grid>
 											<Grid item>
-												<h3 style={{margin: '0'}}>Jean Doe</h3>
-												<p style={{margin: '0'}}>Online</p>
+												<h3 style={{ margin: '0' }}>Jean Doe</h3>
+												<p style={{ margin: '0' }}>Online</p>
 											</Grid>
 										</Grid>
 									</Box>
@@ -246,3 +240,5 @@ export default function Appbar(): JSX.Element {
 		</div>
 	);
 }
+
+export default Appbar
