@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,10 +11,11 @@ import { Avatar, Button, Divider, Grid, Popover } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../features/auth';
 import { RootState } from '../../app/store';
+import firebase from '../../firebase/firebase';
+import {setLogged, getLogged} from '../../features/user';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
@@ -23,6 +24,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import {toggleTheme} from 'features/app';
 
 const drawerWidth = 240;
 
@@ -31,7 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
 		appBar: {},
 		customizeToolbar: {
 			display: 'flex',
-			borderBottom: '1px solid #aaa',
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
@@ -65,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) =>
 		smallAvatar: {
 			width: theme.spacing(4),
 			height: theme.spacing(4),
-		}
+		},
 	})
 );
 
@@ -73,6 +76,7 @@ function Appbar({ history }: any): JSX.Element {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const auth = useSelector((state: RootState) => state.auth)
+	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
 	const handleDrawerToggle = () => {
@@ -98,13 +102,16 @@ function Appbar({ history }: any): JSX.Element {
 	const handlePopMenuClick = () => {
 		setOpenPopMenu(!openPopMenu);
 	};
+	const signOut = () =>  {
+		dispatch(logoutUser(auth.uid, auth.isGuest))
+	}
 	// end of list popover
 
 	return (
 		<div>
 			<CssBaseline />
 			<AppBar
-				elevation={1}
+				elevation={0}
 				position="fixed"
 				color="default"
 				className={classes.appBar}>
@@ -171,19 +178,25 @@ function Appbar({ history }: any): JSX.Element {
 											<ListItemIcon>
 												<SendIcon />
 											</ListItemIcon>
-											<ListItemText primary="Sent mail" />
+											<Box fontSize={14} fontWeight={500} onClick={signOut}>
+												Sent mail
+											</Box>
 										</ListItem>
 										<ListItem button>
 											<ListItemIcon>
 												<DraftsIcon />
 											</ListItemIcon>
-											<ListItemText primary="Drafts" />
+											<Box fontSize={14} fontWeight={500} onClick={signOut}>
+												Drafts
+											</Box>
 										</ListItem>
 										<ListItem button onClick={handlePopMenuClick}>
 											<ListItemIcon>
 												<InboxIcon />
 											</ListItemIcon>
-											<ListItemText primary="Inbox" />
+											<Box fontSize={14} fontWeight={500} onClick={signOut}>
+												Inbox
+											</Box>
 											{openPopMenu ? <ExpandLess /> : <ExpandMore />}
 										</ListItem>
 										<Collapse in={openPopMenu} timeout="auto" unmountOnExit>
@@ -192,7 +205,9 @@ function Appbar({ history }: any): JSX.Element {
 													<ListItemIcon>
 														<StarBorder />
 													</ListItemIcon>
-													<ListItemText primary="Starred" />
+													<Box fontSize={14} fontWeight={500} onClick={signOut}>
+														Starred
+													</Box>
 												</ListItem>
 											</List>
 										</Collapse>
@@ -200,9 +215,20 @@ function Appbar({ history }: any): JSX.Element {
 											<ListItemIcon>
 												<ExitToAppIcon />
 											</ListItemIcon>
-											<ListItemText primary="Logout" onClick={() => {
-												dispatch(logoutUser(auth.uid, auth.isGuest))
-											}} />
+											<Box fontSize={14} fontWeight={500} onClick={signOut}>
+												Logout
+											</Box>
+										</ListItem>
+										<ListItem button>
+											<ListItemIcon>
+												{appTheme ? <Brightness7Icon /> : <Brightness4Icon />}
+											</ListItemIcon>
+											<Box
+												fontSize={14}
+												fontWeight={500}
+												onClick={() => dispatch(toggleTheme(appTheme))}>
+												Switch Theme
+											</Box>
 										</ListItem>
 									</List>
 								</Box>

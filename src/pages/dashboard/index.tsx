@@ -1,24 +1,13 @@
 import React from 'react';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
 import {
 	makeStyles,
-	useTheme,
 	Theme,
 	createStyles,
 } from '@material-ui/core/styles';
 import {RootState} from '../../app/store';
-import {setTheme} from '../../features/app';
-import {Avatar, Grid} from '@material-ui/core';
 import {Cards} from './cards';
-import firebase, {fbase} from '../../firebase/firebase';
-import {useDispatch, useSelector} from 'react-redux';
+import firebase from '../../firebase/firebase';
+import {useSelector} from 'react-redux';
 
 const drawerWidth = 240;
 

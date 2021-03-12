@@ -8,26 +8,29 @@ import {
 import './App.css';
 import EditorPage from './pages/editor/editor';
 import DashboardPage from './pages/dashboard';
+import { setLogged, setRole, setEmail } from './features/user';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './app/store';
 import SignUp from './pages/signup/SignUp';
 import Chat from './pages/chat/ChatPage';
 import { isLoggedIn } from './features/auth';
+import firebase from './firebase/firebase';
 import ProductPage from './pages/product';
 import BlogsIndex from './pages/editor';
 import ShowBlog from './pages/editor/show';
 import AppNav from './layouts/appLayout/AppNav';
 import PrivateRoutes from "./pages/private/private_route";
+import { useSelector, useDispatch } from 'react-redux';
 
 function App() {
+	const appTheme = useSelector((state: RootState) => state.app.appTheme);
+	const auth = useSelector((state: RootState) => state.auth)
 	const [loading, setLoaing] = useState(true);
 	const dispatch = useDispatch();
-	const auth = useSelector((state: RootState) => state.auth)
 
 	const theme = createMuiTheme({
 		palette: {
-			// type: appTheme ? 'dark' : 'light',
+			type: appTheme ? 'dark' : 'light',
 		},
 	});
 
@@ -35,7 +38,7 @@ function App() {
 
 	useEffect(() => {
 		setLoaing(true)
-		if(!auth.authenticated){
+		if (!auth.authenticated) {
 			dispatch(isLoggedIn())
 			setLoaing(false);
 		}
