@@ -59,10 +59,10 @@ const useStyles = makeStyles((theme: Theme) =>
 		toolbar: theme.mixins.toolbar,
 		drawerPaper: {
 			width: drawerWidth,
+			marginTop: '65px'
 		},
 		content: {
 			flexGrow: 1,
-			padding: theme.spacing(3),
 		},
 		// list items
 		listItems: {
@@ -173,15 +173,6 @@ export default function AppNav(props: Props) {
 						}}
 						variant="permanent"
 						open>
-						<Grid container spacing={2} style={{margin: '0.5rem'}}>
-							<Grid item justify="center" alignItems="center">
-								<Avatar alt="Remy Sharp" />
-							</Grid>
-							<Grid item>
-								<h3 style={{margin: '0'}}>Jean Doe</h3>
-								<p style={{margin: '0'}}>Online</p>
-							</Grid>
-						</Grid>
 						{drawer}
 					</Drawer>
 				</Hidden>

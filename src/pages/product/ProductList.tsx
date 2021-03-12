@@ -11,6 +11,8 @@ import Page from '../../components/shared/Page';
 import Toolbar from './Toolbar';
 import ProductCard from './ProductCard';
 
+import data from './data';
+
 const useStyles = makeStyles((theme) => ({
 	root: {
 		minHeight: '100%',
@@ -26,7 +28,9 @@ const ProductList = () => {
 	const classes = useStyles();
 
 	const dispatch = useDispatch();
-	const products = useSelector(selectFilterableProducts);
+	// const products = useSelector(selectFilterableProducts);
+	// dummy data load
+	const products = data;
 	const loading = useSelector(selectLoading);
 
 	useEffect(() => {
@@ -39,21 +43,23 @@ const ProductList = () => {
 			{loading ? (
 				<h1>Loading prodcuts...</h1>
 			) : (
-				<Container maxWidth={false}>
+				<>
 					<Toolbar backbtn={false} />
-					<Box mt={3}>
-						<Grid container spacing={3}>
-							{products.map((product) => (
-								<Grid item key={product.id} lg={4} md={6} xs={12}>
-									<ProductCard
-										className={classes.productCard}
-										product={product}
-									/>
-								</Grid>
-							))}
-						</Grid>
-					</Box>
-				</Container>
+					<Container maxWidth={false}>
+						<Box mt={3}>
+							<Grid container spacing={3}>
+								{products.map((product) => (
+									<Grid item key={product.id} lg={3} md={4} xs={12}>
+										<ProductCard
+											className={classes.productCard}
+											product={product}
+										/>
+									</Grid>
+								))}
+							</Grid>
+						</Box>
+					</Container>
+				</>
 			)}
 		</Page>
 	);
