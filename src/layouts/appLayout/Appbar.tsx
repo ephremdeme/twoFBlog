@@ -11,8 +11,6 @@ import { Avatar, Button, Divider, Grid, Popover } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../features/auth';
 import { RootState } from '../../app/store';
-import firebase from '../../firebase/firebase';
-import {setLogged, getLogged} from '../../features/user';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';

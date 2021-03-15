@@ -77,9 +77,7 @@ export default function AppNav(props: Props) {
 	const dispatch = useDispatch();
 	const theme = useTheme();
 	const [mobileOpen, setMobileOpen] = React.useState(false);
-	const role = useSelector((state: RootState) => state.user.role);
 	const [navs, setNavs] = useState<INavRouter[]>([]);
-	const logged = useSelector((state: RootState) => state.user.logged);
 	const [photo, setPhoto] = React.useState<any>('');
 	const [name, setName] = React.useState<any>(null);
 	const [email, setEmail] = React.useState<any>(null);
@@ -97,14 +95,7 @@ export default function AppNav(props: Props) {
 			} else {
 			}
 		});
-
-		if (role === 'admin') {
-			setNavs(dashboardRoutes['admin']);
-		} else if (role === 'user') {
-			setNavs(dashboardRoutes['user']);
-		} else {
-			setNavs(dashboardRoutes['guest']);
-		}
+		setNavs(dashboardRoutes['guest']);
 	}, []);
 
 	const drawer = (

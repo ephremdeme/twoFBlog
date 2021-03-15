@@ -8,7 +8,6 @@ import {
 import './App.css';
 import EditorPage from './pages/editor/editor';
 import DashboardPage from './pages/dashboard';
-import { setLogged, setRole, setEmail } from './features/user';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { RootState } from './app/store';
 import SignUp from './pages/signup/SignUp';

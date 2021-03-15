@@ -15,4 +15,18 @@ export interface User {
 	photo: string;
 	user_name: string;
 	isOnline: boolean;
+	view: number;
+}
+
+export interface Conversation {
+	message: string,
+	user_uid_1: string,
+	user_uid_2: string,
+	isView: boolean,
+	createdAt: Date
+}
+
+export interface IUsers {
+	users: User[],
+	conversations: Conversation[]
 }
