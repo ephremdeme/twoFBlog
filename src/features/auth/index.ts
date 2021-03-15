@@ -65,11 +65,9 @@ export const signupUser = (): AppThunk => async (dispatch) => {
 		dispatch(setLoginInProgress(true));
 		const authenticate = firebase.getInstance().auth;
 		const db = firebase.getInstance().db;
-		console.log('Proceeding')
-		const responce = await authenticate.signInWithPopup(provider)
+		const responce: any = await authenticate.signInWithPopup(provider).catch(e=> dispatch(setLogInFaliure(e.message)))
 		const user: any = await db.collection("users").doc(responce.user?.uid).get();
 		if (user.exists) {
-			console.log('Proceeding2')
 			const localUser = {
 				email: user.data().email,
 				user_name: user.data().user_name,
@@ -77,8 +75,12 @@ export const signupUser = (): AppThunk => async (dispatch) => {
 				uid: user.data().uid,
 				role: user.data().role
 			}
+			db.collection("users").doc(responce.user?.uid).update({
+				isOnline: true
+			}).then(() => {
+				dispatch(setLogInSuccess({ ...localUser, authenticating: false, authenticated: true, isGuest: false, error: "" }))
+			})
 			localStorage.setItem('user', JSON.stringify(localUser))
-			dispatch(setLogInSuccess({ ...localUser, authenticating: false, authenticated: true, isGuest: false, error: "" }))
 		}
 		else {
 			await db.collection("users").doc(responce.user?.uid).set({
@@ -134,16 +136,22 @@ export const logoutUser = (uid: string, isGuest: boolean): AppThunk => {
 
 export const isLoggedIn = (): AppThunk => async (dispatch) => {
 	const auth = firebase.getInstance().auth;
+	const db = firebase.getInstance().db;
 	auth.onAuthStateChanged((user: any) => {
 		if (user) {
-			const current_user: any = {
-				uid: user.uid,
-				role: UserRole.GUEST,
-				email: user.email,
-				photo: user.email,
-				user_name: user.displayName
-			}
-			dispatch(setLogInSuccess({ ...current_user, authenticating: false, authenticated: true, isGuest: false, error: "" }))
+			db.collection("users").doc(user.uid).update({
+				isOnline: true
+			}).then(_ => {
+				const current_user: any = {
+					uid: user.uid,
+					role: UserRole.GUEST,
+					email: user.email,
+					photo: user.email,
+					user_name: user.displayName
+				}
+				dispatch(setLogInSuccess({ ...current_user, authenticating: false, authenticated: true, isGuest: false, error: "" }))
+			})
+
 		} else {
 			// No user is signed in.
 			console.log('[USER NOT FOUND]')
@@ -159,7 +167,6 @@ export const isPrivate = (): AppThunk => async (dispatch) => {
 		if (user) {
 			dispatch(setLoginInProgress(false));
 			dispatch(setLoggedIn(true));
-			
 		}
 		dispatch(setLoginInProgress(false));
 	});
