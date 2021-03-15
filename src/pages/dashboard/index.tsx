@@ -48,7 +48,6 @@ interface Props {
 
 export default function ResponsiveDrawer(props: Props) {
 	const classes = useStyles();
-	const logged = useSelector((state: RootState) => state.user.logged);
 	const [photo, setPhoto] = React.useState<any>('');
 	const [name, setName] = React.useState<any>(null);
 	const [email, setEmail] = React.useState<any>(null);
@@ -67,7 +66,7 @@ export default function ResponsiveDrawer(props: Props) {
 	return (
 		<div>
 			<div className={classes.toolbar} />
-			{logged && <Cards />}
+			<Cards />
 		</div>
 	);
 }
