@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {Ref, useEffect, useRef, useState} from 'react';
 import PropTypes, {ReactComponentLike} from 'prop-types';
 import {Button, makeStyles, Popper} from '@material-ui/core';
 import {useNode, UserComponent} from '@craftjs/core';
@@ -16,17 +16,20 @@ const useStyles = makeStyles({
 		minHeight: '70px',
 		padding: '10px',
 		margin: '5px',
+		maxWidth: '100%',
+		overflow: 'auto',
 	},
 	button: {
 		backgroundColor: 'black',
 	},
 });
 
-export const Text: UserComponent<TextProps> = ({
+export const TextEditAble: UserComponent<TextProps> = ({
 	text,
 	textAlign,
 	fontSize,
 	lineSpacing,
+	letterSpacing,
 }) => {
 	const classes = useStyles();
 	const html = useRef<string>(text);
@@ -47,7 +50,6 @@ export const Text: UserComponent<TextProps> = ({
 		if (selected) {
 			return;
 		}
-
 		setEditable(false);
 	}, [selected]);
 
@@ -57,9 +59,9 @@ export const Text: UserComponent<TextProps> = ({
 	};
 
 	const handleBlur = () => {
-		console.log(sanitizeHtml(html.current), 'Blur');
-		html.current = sanitizeHtml(html.current);
-		setProp((props) => (props.text = html.current), 500);
+		// console.log(sanitizeHtml(html.current), 'Blur');
+		// html.current = sanitizeHtml(html.current);
+		// setProp((props) => (props.text = html.current), 500);
 	};
 
 	return (
@@ -74,7 +76,10 @@ export const Text: UserComponent<TextProps> = ({
 				onBlur={handleBlur}
 				disabled={!editable}
 				tagName={'p'}
-				style={{lineHeight: lineSpacing}}
+				style={{
+					lineHeight: lineSpacing,
+					letterSpacing: `${letterSpacing}px`,
+				}}
 				className={classes.text}
 				// style={{fontSize: `${fontSize}px`, textAlign}}
 				title="Editable"
@@ -88,19 +93,22 @@ type TextProps = {
 	fontSize?: string;
 	textAlign?: string;
 	lineSpacing?: number;
+	textRef?: React.RefObject<HTMLLinkElement>;
+	letterSpacing?: number;
 };
 
-Text.craft = {
+TextEditAble.craft = {
 	displayName: 'Text',
 	props: {
 		text: 'edit',
 		fontSize: '12',
 		textAlign: '',
 		lineSpacing: 1.5,
+		letterSpacing: 0,
 	},
 	related: {
 		settings: TextSettings,
 	},
 };
 
-export default Text;
+export default TextEditAble;

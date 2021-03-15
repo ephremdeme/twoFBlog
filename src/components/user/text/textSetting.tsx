@@ -1,4 +1,10 @@
-import React, {MouseEvent, useState} from 'react';
+import React, {
+	MouseEvent,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import {
 	Button,
 	DialogActions,
@@ -11,6 +17,7 @@ import {
 	MenuItem,
 	Paper,
 	Popper,
+	Snackbar,
 	Typography,
 } from '@material-ui/core';
 import {
@@ -41,6 +48,7 @@ import {DialogTitle} from '@material-ui/core';
 import {Dialog} from '@material-ui/core';
 import {TextField} from '@material-ui/core';
 import {useNode} from '@craftjs/core';
+import {Alert} from '@material-ui/lab';
 
 const useStyles = makeStyles({
 	root: {},
@@ -67,9 +75,9 @@ const EditButton: React.FC<{name?: string; cmd: string; value?: string}> = (
 			className={active ? classes.button : ''}
 			onMouseDown={(evt) => {
 				evt.preventDefault(); // Avoids loosing focus from the editable area
-				setActive(!active);
 				console.log(document?.getSelection()?.toString());
-				document.execCommand(props.cmd, false, props.value); // Send the command to the browser
+				let resp = document.execCommand(props.cmd, false, props.value); // Send the command to the browser
+				if (resp) setActive(!active);
 			}}>
 			{props.children || props.name}
 		</Button>
@@ -106,12 +114,16 @@ const EditButtonMultiple: React.FC<{
 			onMouseDown={(evt) => {
 				evt.preventDefault(); // Avoids loosing focus from the editable area
 
-				Object.keys(props.active).forEach((key) => (props.active[key] = false));
-				props.setActive({
-					...props.active,
-					[props.cmd]: true,
-				});
-				document.execCommand(props.cmd, false, props.value); // Send the command to the browser
+				let resp = document.execCommand(props.cmd, false, props.value); // Send the command to the browser
+				if (resp) {
+					Object.keys(props.active).forEach(
+						(key) => (props.active[key] = false)
+					);
+					props.setActive({
+						...props.active,
+						[props.cmd]: true,
+					});
+				}
 			}}>
 			{props.children || props.name}
 		</Button>
@@ -362,20 +374,110 @@ const LineSpacing = () => {
 	);
 };
 
-const ListButtons = () => {
-	const [] = useState({
+const ListOrderButtons = () => {
+	const classes = useStyles();
+	const [open, setOpen] = React.useState(false);
+	const anchorRef = React.useRef<HTMLButtonElement>(null);
+	const [active, setActive] = useState({
 		insertorderedlist: false,
 		insertunorderedlist: false,
 	});
 
+	const {
+		actions: {setProp},
+	} = useNode((node) => ({
+		lineSpacing: node.data.props.lineSpacing,
+	}));
+
+	const handleToggle = () => {
+		setOpen((prevOpen) => !prevOpen);
+	};
+
+	const handleClose = (event: React.MouseEvent<EventTarget>) => {
+		if (
+			anchorRef.current &&
+			anchorRef.current.contains(event.target as HTMLElement)
+		) {
+			return;
+		}
+
+		setOpen(false);
+	};
+
+	function handleListKeyDown(event: React.KeyboardEvent) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+			setOpen(false);
+		}
+	}
+
+	// return focus to the button when we transitioned from !open -> open
+	const prevOpen = React.useRef(open);
+	React.useEffect(() => {
+		if (prevOpen.current === true && open === false) {
+			anchorRef.current!.focus();
+		}
+
+		prevOpen.current = open;
+	}, [open]);
+
 	return (
 		<>
-			<EditButton cmd="insertorderedlist" name={'Ordered List'}>
-				<FormatListNumbered />
-			</EditButton>
-			<EditButton cmd="insertunorderedlist" name={'UnOrdered List'}>
+			<IconButton
+				ref={anchorRef}
+				aria-controls={open ? 'menu-list-grow' : undefined}
+				aria-haspopup="true"
+				title="Align Text"
+				onClick={handleToggle}>
 				<FormatListBulleted />
-			</EditButton>
+			</IconButton>
+			<Popper
+				open={open}
+				anchorEl={anchorRef.current}
+				role={undefined}
+				transition
+				disablePortal>
+				{({TransitionProps, placement}) => (
+					<Grow
+						{...TransitionProps}
+						style={{
+							transformOrigin:
+								placement === 'bottom' ? 'center top' : 'center bottom',
+						}}>
+						<Paper>
+							<ClickAwayListener onClickAway={handleClose}>
+								<MenuList
+									autoFocusItem={open}
+									id="menu-list-grow"
+									onKeyDown={handleListKeyDown}>
+									<MenuItem
+										className={active.insertorderedlist ? classes.button : ''}
+										onClick={handleClose}>
+										<EditButtonMultiple
+											cmd="insertorderedlist"
+											name={'Ordered List'}
+											active={active}
+											setActive={setActive}>
+											<FormatListNumbered />
+										</EditButtonMultiple>
+									</MenuItem>
+									<MenuItem
+										className={active.insertunorderedlist ? classes.button : ''}
+										onClick={handleClose}>
+										<EditButtonMultiple
+											cmd="insertunorderedlist"
+											name={'UnOrdered List'}
+											active={active}
+											setActive={setActive}>
+											<FormatListBulleted />
+										</EditButtonMultiple>
+									</MenuItem>
+								</MenuList>
+							</ClickAwayListener>
+						</Paper>
+					</Grow>
+				)}
+			</Popper>
 		</>
 	);
 };
@@ -546,13 +648,15 @@ export const TextSettings = () => {
 				<EditButton cmd="formatblock" value="blockquote" name={'Blockquote'}>
 					<FormatQuote />
 				</EditButton>
-				<AlignButtons />
 
-				<ListButtons />
-				<LineSpacing />
 				<LinkButton cmd="createlink" name={'Link'}>
 					<InsertLink />
 				</LinkButton>
+				<AlignButtons />
+
+				<ListOrderButtons />
+				<LineSpacing />
+
 				<IconButton onClick={() => setActive(!active)}>
 					{active ? <ExpandLess /> : <ExpandMore />}
 				</IconButton>
@@ -568,70 +672,183 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 	cmd,
 }) => {
 	const classes = useStyles();
+	const [link, setLink] = React.useState<string>('');
+	const [hasNoText, setHasNoText] = useState<boolean>(false);
 
 	const [open, setOpen] = React.useState(false);
-	const [link, setLink] = React.useState<string>('');
 
-	const handleChange = (event: React.ChangeEvent<{value: string}>) => {
-		// setAge(Number(event.target.value) || '');
-		setLink(event.target.value);
+	const anchorRef = React.useRef<HTMLButtonElement>(null);
+	const [range, setRange] = useState(document.createRange());
+
+	const {
+		actions: {setProp},
+	} = useNode((node) => ({
+		orientation: node.data.props.orientation,
+		textRef: node.data.props.textRef,
+	}));
+
+	const [text, setText] = useState<string>();
+
+	// saved = [selection?.focusNode, selection?.focusOffset];
+
+	useEffect(() => {
+		document.addEventListener('selectionchange', handleSelectionChange);
+		return () =>
+			document.removeEventListener('selectionchange', handleSelectionChange);
+	}, []);
+
+	const handleSelectionChange = useCallback((event) => {
+		if (document.getSelection()?.toString() === '') return;
+		// setProp((props) => (props.selection = document.getSelection()), 5000);
+		setText(document?.getSelection()?.toString());
+		setRange(document.getSelection()?.getRangeAt(0) as Range);
+		console.log('Hello', document?.getSelection()?.toString(), range);
+	}, []);
+
+	// document.onselect = (event) => {
+	// 	console.log('onselect');
+
+	// 	if (document.getSelection()?.toString() === '') return;
+	// 	setProp((props) => (props.selection = document.getSelection()), 5000);
+	// 	setText(document?.getSelection()?.toString());
+	// 	setRange(document.getSelection()?.getRangeAt(0) as Range);
+	// 	console.log('Hello onselect', range);
+	// };
+
+	useEffect(() => {
+		console.log('Running');
+		if (document.getSelection()?.toString() === '') return;
+
+		setText(document.getSelection()?.toString());
+		setRange(document.getSelection()?.getRangeAt(0) as Range);
+		console.log('Range is', range);
+	}, []);
+
+	// console.log(document.getSelection()?.getRangeAt(0));
+
+	const handleChange = (e: any) => {
+		setLink(e.target.value);
+	};
+	const handleToggle = (event: React.MouseEvent<EventTarget>) => {
+		if (text === '' || text === undefined) setHasNoText(true);
+		else setOpen((prevOpen) => !prevOpen);
 	};
 
-	const handleClickOpen = (evt: MouseEvent) => {
-		evt.preventDefault(); // Avoids loosing focus from the editable area
-
-		if (document.getSelection()?.toString() === '') {
-			alert('Select text first!');
+	const handleClose = (event: React.MouseEvent<EventTarget>) => {
+		if (
+			anchorRef.current &&
+			anchorRef.current.contains(event.target as HTMLElement)
+		) {
 			return;
 		}
-		console.log(document.getSelection()?.toString());
-		setOpen(true);
-	};
 
-	const handleClose = () => {
 		setOpen(false);
 	};
 
-	const handleSubmit = () => {
-		console.log(link);
+	const handleSubmit = (event: React.MouseEvent<EventTarget>) => {
+		event.preventDefault();
+		console.log('Text', text);
 
-		document.execCommand(cmd, false, link); // Send the command to the browser
+		if (text === '') setHasNoText(true);
+		if (text) {
+			// textRef.current?.focus();
+			// selection?.collapse(saved[0], saved[1]);
+			document.getSelection()?.removeAllRanges();
+			document.getSelection()?.addRange(range);
+			console.log('Restored caret', document.getSelection()?.rangeCount);
+			console.log(document.execCommand('createlink', false, link), 'Links');
+		}
 
-		handleClose();
+		handleClose(event);
 	};
+
+	function handleListKeyDown(event: React.KeyboardEvent) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+			setOpen(false);
+		}
+	}
+
+	// return focus to the button when we transitioned from !open -> open
+	const prevOpen = React.useRef(open);
+	React.useEffect(() => {
+		if (prevOpen.current === true && open === false) {
+			anchorRef.current!.focus();
+		}
+
+		prevOpen.current = open;
+	}, [open]);
 	return (
 		<>
-			<Button
-				key={cmd}
-				style={{margin: '3px'}}
-				title={name}
-				className={open ? classes.button : ''}
-				onMouseDown={handleClickOpen}>
-				{children || name}
-			</Button>
-			<Dialog
-				disableBackdropClick
-				disableEscapeKeyDown
+			<IconButton
+				ref={anchorRef}
+				aria-controls={open ? 'menu-list-grow-link' : undefined}
+				aria-haspopup="true"
+				title="Create Link"
+				onClick={handleToggle}>
+				{children}
+			</IconButton>
+			<Popper
 				open={open}
-				onClose={handleClose}>
-				<DialogTitle>Fill the form</DialogTitle>
-				<DialogContent>
-					<TextField
-						id="filled-link"
-						label="Link"
-						value={link}
-						onChange={handleChange}
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose} color="primary">
-						Cancel
-					</Button>
-					<Button onClick={handleSubmit} color="primary">
-						Ok
-					</Button>
-				</DialogActions>
-			</Dialog>
+				anchorEl={anchorRef.current}
+				role={undefined}
+				transition
+				disablePortal>
+				{({TransitionProps, placement}) => (
+					<Grow
+						{...TransitionProps}
+						style={{
+							transformOrigin:
+								placement === 'bottom' ? 'center top' : 'center bottom',
+						}}>
+						<Paper>
+							<ClickAwayListener onClickAway={handleClose}>
+								<MenuList
+									autoFocusItem={open}
+									id="menu-list-grow-link"
+									onKeyDown={handleListKeyDown}>
+									<MenuItem>
+										<TextField
+											onChange={handleChange}
+											placeholder="www.example.com"
+										/>
+										<Button onClick={handleSubmit}>Submit</Button>
+									</MenuItem>
+								</MenuList>
+							</ClickAwayListener>
+						</Paper>
+					</Grow>
+				)}
+			</Popper>
+			<AlertLink open={hasNoText} setOpen={setHasNoText} />
 		</>
+	);
+};
+
+const AlertLink: React.FC<{
+	open: boolean;
+	setOpen: (data: boolean) => void;
+}> = ({open, setOpen, children}) => {
+	const handleClick = () => {
+		setOpen(true);
+	};
+
+	const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		setOpen(false);
+	};
+	return (
+		<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+			<Alert
+				elevation={6}
+				variant="filled"
+				onClose={handleClose}
+				severity="warning">
+				Select Text First!
+			</Alert>
+		</Snackbar>
 	);
 };
