@@ -6,11 +6,17 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { Avatar, Button, Divider, Grid, Popover } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../../features/auth';
-import { RootState } from '../../app/store';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
+import {
+	Avatar,
+	Divider,
+	Grid,
+	Hidden,
+	Popover,
+} from '@material-ui/core';
+import {useDispatch, useSelector} from 'react-redux';
+import {logoutUser} from '../../features/auth';
+import {RootState} from '../../app/store';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -25,6 +31,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import {toggleTheme} from 'features/app';
+import {Route, Switch} from 'react-router-dom';
+import routes, {IRoute} from 'router/config';
 
 const drawerWidth = 240;
 
@@ -70,17 +78,19 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-function Appbar({ history }: any): JSX.Element {
+function Appbar({history}: any): JSX.Element {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const auth = useSelector((state: RootState) => state.auth)
+	const auth = useSelector((state: RootState) => state.auth);
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const [mobileOpen, setMobileOpen] = React.useState(false);
+	const userName = useSelector((state: RootState) => state.auth.user_name);
+	const userAvatar = useSelector((state: RootState) => state.auth.photo);
+	const userStatus = useSelector((state: RootState) => state.auth.authenticated);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
 	};
-
 
 	// user popover
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -100,9 +110,9 @@ function Appbar({ history }: any): JSX.Element {
 	const handlePopMenuClick = () => {
 		setOpenPopMenu(!openPopMenu);
 	};
-	const signOut = () =>  {
-		dispatch(logoutUser(auth.uid, auth.isGuest))
-	}
+	const signOut = () => {
+		dispatch(logoutUser(auth.uid, auth.isGuest));
+	};
 	// end of list popover
 
 	return (
@@ -132,14 +142,29 @@ function Appbar({ history }: any): JSX.Element {
 							<Typography variant="body1" className={classes.appBarTitlte}>
 								<b>DashBoard</b>
 							</Typography>
+							<Hidden smDown implementation="css">
+								<Box mx={4} display="flex">
+									<Switch>
+										{routes.map((route: IRoute, index: number) => (
+											<Route
+												key={index}
+												path={route.path}
+												exact={route.exact}
+												children={route.appbar}
+											/>
+										))}
+									</Switch>
+								</Box>
+							</Hidden>
 						</Box>
-						<Box flexShrink={1} display="flex" flexDirection="row">
 
+						<Box flexShrink={1} display="flex" flexDirection="row">
 							<Avatar
 								aria-describedby={id}
 								className={classes.smallAvatar}
 								onClick={handleUserPopoverClick}
 								alt="Remy Sharp"
+								src={userAvatar}
 							/>
 							<Popover
 								id={id}
@@ -159,11 +184,11 @@ function Appbar({ history }: any): JSX.Element {
 									<Box m={2}>
 										<Grid container spacing={2}>
 											<Grid item justify="center" alignItems="center">
-												<Avatar alt="User" />
+												<Avatar alt="User" src={userAvatar} />
 											</Grid>
 											<Grid item>
-												<h3 style={{ margin: '0' }}>Jean Doe</h3>
-												<p style={{ margin: '0' }}>Online</p>
+												<h3 style={{margin: '0'}}>{userName}</h3>
+												<p style={{margin: '0'}}>{userStatus ? 'online' : 'offline'}</p>
 											</Grid>
 										</Grid>
 									</Box>
@@ -239,4 +264,4 @@ function Appbar({ history }: any): JSX.Element {
 	);
 }
 
-export default Appbar
+export default Appbar;
