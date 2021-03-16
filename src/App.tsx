@@ -1,29 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import {
-	BrowserRouter as Router,
-	Route,
-	Switch,
-	Redirect,
-} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
 import './App.css';
-import EditorPage from './pages/editor/editor';
-import DashboardPage from './pages/dashboard';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { RootState } from './app/store';
-import SignUp from './pages/signup/SignUp';
-import Chat from './pages/chat/ChatPage';
-import { isLoggedIn } from './features/auth';
-import firebase from './firebase/firebase';
-import ProductPage from './pages/product';
-import BlogsIndex from './pages/editor';
-import ShowBlog from './pages/editor/show';
-import AppNav from './layouts/appLayout/AppNav';
-import PrivateRoutes from "./pages/private/private_route";
-import { useSelector, useDispatch } from 'react-redux';
+import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
+import {RootState} from './app/store';
+import {isLoggedIn} from './features/auth';
+import {useSelector, useDispatch} from 'react-redux';
+import Router from './router/Router';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import routes, {IRoute} from './router/config';
+import {UserRole} from 'features/auth/types';
 
 function App() {
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
-	const auth = useSelector((state: RootState) => state.auth)
+	const auth = useSelector((state: RootState) => state.auth);
 	const [loading, setLoaing] = useState(true);
 	const dispatch = useDispatch();
 
@@ -33,65 +21,33 @@ function App() {
 		},
 	});
 
-	console.log(auth.authenticated)
-
 	useEffect(() => {
-		setLoaing(true)
+		setLoaing(true);
 		if (!auth.authenticated) {
-			dispatch(isLoggedIn())
+			dispatch(isLoggedIn());
 			setLoaing(false);
 		}
 		setLoaing(false);
 	}, []);
 
 	return (
-		<ThemeProvider theme={theme}>
-			{!loading ? (
-				<div>
-					<Router>
-						<Switch>
+		<div>
+			<ThemeProvider theme={theme}>
+				<BrowserRouter>
+					{/* <Switch>
+						{routes.map((route: IRoute, index) => (
 							<Route
-								exact
-								path="/"
-								component={SignUp}
+								key={index}
+								path={route.path}
+								exact={route.exact}
+								children={route.sidebar}
 							/>
-
-							<PrivateRoutes
-								path="/editor"
-								component={EditorPage}
-							/>
-							<PrivateRoutes
-								path="/blogs/:blogId"
-								component={ShowBlog}
-							/>
-							<PrivateRoutes
-								exact
-								path="/blogs"
-								component={BlogsIndex}
-							/>
-							<AppNav>
-								<PrivateRoutes
-									exact
-									path="/dash"
-									component={DashboardPage}
-								/>
-								<PrivateRoutes
-									path="/product"
-									component={ProductPage}
-								/>
-								<PrivateRoutes
-									path="/chat"
-									component={Chat}
-								/>
-							</AppNav>
-						</Switch>
-					</Router>
-					{/* {logged && roles !== 'guest' && <Chat />} */}
-				</div>
-			) : (
-				<h1>Loading page ...</h1>
-			)}
-		</ThemeProvider>
+						))}
+					</Switch> */}
+					<Router routes={routes} />
+				</BrowserRouter>
+			</ThemeProvider>
+		</div>
 	);
 }
 
