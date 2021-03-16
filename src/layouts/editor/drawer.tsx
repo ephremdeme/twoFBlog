@@ -139,7 +139,7 @@ export default function MiniDrawer() {
 							</ListItem>
 						</List>
 					</div>
-					<div className={classes.undo}>
+					{/* <div className={classes.undo}>
 						<List>
 							<ListItem>
 								<IconButton
@@ -164,6 +164,7 @@ export default function MiniDrawer() {
 							</ListItem>
 						</List>
 					</div>
+				 */}
 				</div>
 			</Drawer>
 		</div>
