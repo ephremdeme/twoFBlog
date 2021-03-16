@@ -157,11 +157,6 @@ export default function AppNav(props: Props) {
 					</Drawer>
 				</Hidden>
 			</nav>
-
-			<main className={classes.content}>
-				<div className={classes.toolbar}></div>
-				{props.children}
-			</main>
 		</div>
 	);
 }
