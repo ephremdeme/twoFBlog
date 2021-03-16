@@ -1,41 +1,30 @@
+import {ActionCreatorWithPayload} from '@reduxjs/toolkit';
+import {useAppDispatch, useCollection, useFirestore} from 'app/hooks';
 import {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import Firebase from '../firebase/firebase';
-import FB from '../firebase/firebase';
 
-const useFirestore = (collection: any) => {
-	const [docs, setDocs] = useState<any[]>([]);
-
-	useEffect(() => {
-		const unsub = FB.getInstance()
-			.db.collection(collection)
-			.orderBy('createdAt')
-			.onSnapshot((snap) => {
-				let documents: any[] = [];
-				snap.forEach((doc) => {
-					documents.push({...doc.data(), id: doc.id});
-				});
-				setDocs(documents);
-			});
-
-		return () => unsub();
-	}, [collection]);
-
-	return {docs};
-};
-
+/**
+ * Query a single document using document's {id}
+ * and return its data
+ * @template T
+ * @param {string} collection - collection's name / Path.
+ * @param {string} id - A slash-separated path to a document or Id.
+ * @param {ActionCreatorWithPayload<T, string>} action - A redux action to dispatch.
+ * @return { {loading: boolean, data: T| undefined}}
+ */
 export const useFireDoc = <T>(
 	collection: string,
 	id: string,
-	action?: (data: T) => void
-) => {
+	action?: ActionCreatorWithPayload<T, string>
+): {loading: boolean; data: T | undefined} => {
 	const [loading, setLoading] = useState(true);
 	const [data, setData] = useState<T>();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
+
+	const docRef = useFirestore().collection(collection).doc(id);
 
 	useEffect(() => {
 		const fetchDoc = async () => {
-			let docRef = FB.getInstance().db.collection(collection).doc(id);
 			let doc = await docRef.get();
 			setData(({...doc.data(), id: doc.id} as unknown) as T);
 			if (action)
@@ -44,13 +33,19 @@ export const useFireDoc = <T>(
 		};
 
 		fetchDoc();
-	}, []);
+	}, [action, dispatch, docRef, id]);
 	return {loading, data};
 };
-
+/**
+ * This function uses subscription to listen to changes from firestore
+ * @template T
+ * @param {string} collection - collection's name / Path
+ * @param {ActionCreatorWithPayload<T, string>} action - A redux action to dispatch.
+ * @return { {loading: boolean, data: T| undefined}}
+ */
 export const useFireCollection = <T>(
 	collection: string,
-	action: (data: T[]) => void,
+	action?: ActionCreatorWithPayload<T[], string>,
 	options?: {
 		orderBy?: {
 			field: string;
@@ -67,9 +62,9 @@ export const useFireCollection = <T>(
 ) => {
 	const [loading, setLoading] = useState(true);
 	const [data, setData] = useState<T[]>([]);
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
+	const dbRef = useFirestore().collection(collection);
 	useEffect(() => {
-		let dbRef = FB.getInstance().db.collection(collection);
 		let whereDbRef;
 		if (options) {
 			let {orderBy, where} = options;
@@ -87,7 +82,7 @@ export const useFireCollection = <T>(
 			snaphot.forEach((doc) =>
 				allData.push(({...doc.data(), id: doc.id} as unknown) as T)
 			);
-			dispatch(action(allData));
+			if (action) dispatch(action(allData));
 			setData(allData);
 			setLoading(false);
 		});
@@ -96,4 +91,85 @@ export const useFireCollection = <T>(
 	return {loading, data};
 };
 
-export default useFirestore;
+export const useFireCollectionRef = <T>(
+	collectionRef: firebase.default.firestore.CollectionReference<firebase.default.firestore.DocumentData>,
+	action?: ActionCreatorWithPayload<T[], string>
+) => {
+	const [loading, setLoading] = useState(true);
+	const [data, setData] = useState<T[]>([]);
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		collectionRef.get().then((querySnapshot) => {
+			let allData: T[] = [];
+			querySnapshot.forEach((doc) => {
+				allData.push(({...doc.data(), id: doc.id} as unknown) as T);
+			});
+			if (action) dispatch(action(allData));
+			setData(allData);
+			setLoading(false);
+		});
+	}, []);
+
+	return {loading, data};
+};
+
+export const useFireCollectionRefSub = <T>(
+	collectionRef: firebase.default.firestore.CollectionReference<firebase.default.firestore.DocumentData>,
+	action?: ActionCreatorWithPayload<T[], string>
+) => {
+	const [loading, setLoading] = useState(true);
+	const [data, setData] = useState<T[]>([]);
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		const unSubscribe = collectionRef.onSnapshot((snapshot) => {
+			let allData: T[] = [];
+			snapshot.forEach((doc) =>
+				allData.push(({...doc.data(), id: doc.id} as unknown) as T)
+			);
+			if (action) dispatch(action(allData));
+			setData(allData);
+			setLoading(false);
+		});
+
+		return () => unSubscribe();
+	}, []);
+
+	return {loading, data};
+};
+
+export const useFireMutation = async (
+	collection: string,
+	data: firebase.default.firestore.DocumentData,
+	id?: string
+) => {
+	const [loading, setLoading] = useState(true);
+	const dispatch = useDispatch();
+
+	const collRef = useCollection(collection);
+	if (id) {
+		await collRef.doc(id).update(data);
+		setLoading(false);
+	} else {
+		let doc = await (await collRef.add(data)).get();
+		let resp = {...doc.data(), id: doc.id};
+	}
+	return {loading};
+};
+
+export const useFireDelete = async (collection: string, id: string) => {
+	const [loading, setLoading] = useState(true);
+	const dispatch = useAppDispatch();
+
+	const docRef = useCollection(collection).doc(id);
+	try {
+		await docRef.delete();
+		setLoading(false);
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+
+	return {loading};
+};
