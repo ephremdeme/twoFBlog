@@ -52,22 +52,25 @@ const authSlice = createSlice({
 			state.authenticating = false
 			state.isGuest = false;
 		},
-		setIsGuest: (state: User, action: PayloadAction<string>) => {
-			state.isGuest = true;
+		setIsGuest: (state: User, action: PayloadAction<boolean>) => {
+			state.authenticating = false
+			state.authenticated = false
+			state.role = UserRole.GUEST
+			state.isGuest = action.payload;
 		}
 	}
 });
 
 export const { setLoginInProgress, setLogInSuccess, setLogInFaliure, setLogoutSuccess, setLogoutFailure, setIsGuest, setLoggedIn } = authSlice.actions;
 
-export const signupUser = (): AppThunk => async (dispatch) => {
+export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 	try {
-		dispatch(setLoginInProgress(true));
 		const authenticate = firebase.getInstance().auth;
 		const db = firebase.getInstance().db;
-		const responce: any = await authenticate.signInWithPopup(provider).catch(e=> dispatch(setLogInFaliure(e.message)))
+		const responce: any = await authenticate.signInWithPopup(provider).catch(e => dispatch(setLogInFaliure(e.message)))
 		const user: any = await db.collection("users").doc(responce.user?.uid).get();
 		if (user.exists) {
+			console.log('[SUSER]', user)
 			const localUser = {
 				email: user.data().email,
 				user_name: user.data().user_name,
@@ -80,7 +83,6 @@ export const signupUser = (): AppThunk => async (dispatch) => {
 			}).then(() => {
 				dispatch(setLogInSuccess({ ...localUser, authenticating: false, authenticated: true, isGuest: false, error: "" }))
 			})
-			localStorage.setItem('user', JSON.stringify(localUser))
 		}
 		else {
 			await db.collection("users").doc(responce.user?.uid).set({
@@ -99,12 +101,13 @@ export const signupUser = (): AppThunk => async (dispatch) => {
 					uid: new_user.data().uid,
 					role: new_user.data().role
 				}
-				localStorage.setItem('user', JSON.stringify({ localUser }))
 				dispatch(setLogInSuccess({ ...localUser, authenticating: false, authenticated: true, isGuest: false, error: "" }))
 			})
 		}
+		const current = authenticate.currentUser;
+		console.log(current)
 	} catch (e) {
-		setLogInFaliure(e.message)
+
 	}
 }
 
@@ -113,17 +116,10 @@ export const logoutUser = (uid: string, isGuest: boolean): AppThunk => {
 	return async (dispatch) => {
 		const auth = firebase.getInstance().auth;
 		const db = firebase.getInstance().db;
-		// if (isGuest) {
-		// 	return await auth.signOut().then(_ => {
-		// 		localStorage.clear();
-		// 		dispatch(setLogoutSuccess())
-		// 	}).catch(e => dispatch(setLogoutFailure(e.message)))
-		// }
 		const logout = db.collection("users").doc(uid).update({
 			isOnline: false
 		}).then(_ => {
 			auth.signOut().then(_ => {
-				localStorage.clear();
 				dispatch(setLogoutSuccess())
 				window.location.href = window.location.href;
 			})
@@ -139,23 +135,54 @@ export const isLoggedIn = (): AppThunk => async (dispatch) => {
 	const db = firebase.getInstance().db;
 	auth.onAuthStateChanged((user: any) => {
 		if (user) {
-			db.collection("users").doc(user.uid).update({
-				isOnline: true
-			}).then(_ => {
-				const current_user: any = {
+			if (user.isAnonymous === false) {
+				console.log('[HE]', user)
+				db.collection("users").doc(user.uid).update({
+					isOnline: true
+				}).then(_ => {
+					db.collection("users").doc(user.uid).get().then((_: any) => {
+						const current_user: any = {
+							uid: _.data().uid,
+							role: _.data().role,
+							email: _.data().email,
+							photo: _.data().photo,
+							user_name: _.data().user_name
+						}
+						dispatch(setLogInSuccess({ ...current_user, authenticating: false, authenticated: true, isGuest: false, error: "" }))
+					})
+				})
+			} else {
+				console.log('!NO USER')
+				const current_guest = {
 					uid: user.uid,
+					isGuest: true,
+					authenticating: false,
+					authenticated: false,
+					error: "",
 					role: UserRole.GUEST,
-					email: user.email,
-					photo: user.email,
-					user_name: user.displayName
+					photo: "",
+					user_name: 'Guest',
+					email: ""
 				}
-				dispatch(setLogInSuccess({ ...current_user, authenticating: false, authenticated: true, isGuest: false, error: "" }))
+				dispatch(setLogInSuccess({ ...current_guest }))
+			}
+		}
+		else {
+			console.log('No user')
+			auth.signInAnonymously().then((_:any) => {
+				const current_guest = {
+					uid: _.user?.uid,
+					isGuest: true,
+					authenticating: false,
+					authenticated: false,
+					error: "",
+					role: UserRole.GUEST,
+					photo: "",
+					user_name: 'Guest',
+					email: ""
+				}
+				dispatch(setLogInSuccess({ ...current_guest }))
 			})
-
-		} else {
-			// No user is signed in.
-			console.log('[USER NOT FOUND]')
-			dispatch(setLogInFaliure("Log in"))
 		}
 	});
 }
@@ -175,11 +202,6 @@ export const isPrivate = (): AppThunk => async (dispatch) => {
 export const signAsGuest = (): AppThunk => async (dispatch) => {
 	const auth = firebase.getInstance().auth;
 	const guest = await auth.signInAnonymously();
-	const localUser = {
-		uid: guest.user?.uid
-	}
-	localStorage.setItem('user', JSON.stringify(localUser))
-	dispatch(setIsGuest(guest.user?.uid || ''))
 }
 
 export default authSlice.reducer;
