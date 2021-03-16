@@ -162,8 +162,8 @@ function Appbar({ history }: any): JSX.Element {
 												<Avatar alt="User" />
 											</Grid>
 											<Grid item>
-												<h3 style={{ margin: '0' }}>Jean Doe</h3>
-												<p style={{ margin: '0' }}>Online</p>
+												<h3 style={{ margin: '0' }}>{auth.user_name}</h3>
+												<p style={{ margin: '0' }}>{auth.email}</p>
 											</Grid>
 										</Grid>
 									</Box>
