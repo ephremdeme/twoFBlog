@@ -1,96 +1,132 @@
-import React, {useEffect} from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import React, { useEffect, useState } from 'react';
 import { Redirect } from "react-router-dom";
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { ReactComponent as ReactLogo } from '../../public/icons/icons8_google_logo_1.svg';
+import {
+    Box,
+    Button,
+    Container,
+    Grid,
+    Link,
+    TextField,
+    Typography,
+    makeStyles
+} from '@material-ui/core';
+import { ReactComponent as FacebookIcon } from '../../public/icons/icons8_google_logo_1.svg';
+import { ReactComponent as GoogleIcon } from '../../public/icons/icons8_google_logo_1.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { isPrivate, signAsGuest } from "../../features/auth/index";
-
+import { singUpWithProvider, signAsGuest, isLoggedIn, createUserWithEmailPassword } from "../../features/auth/index";
 
 const useStyles = makeStyles((theme) => ({
-	paper: {
-		marginTop: theme.spacing(8),
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-	},
-	avatar: {
-		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main,
-	},
-	form: {
-		width: '100%', // Fix IE 11 issue.
-		marginTop: theme.spacing(1),
-	},
-	submit: {
-		margin: theme.spacing(3, 0, 2),
-	},
+    root: {
+        backgroundColor: theme.palette.background.default,
+        height: '100%',
+        paddingBottom: theme.spacing(3),
+        paddingTop: theme.spacing(3)
+    }
 }));
 
-export default function SignIn() {
-	const dispatch = useDispatch();
-	const classes = useStyles();
-	const auth = useSelector((state: RootState) => state.auth.authenticated)
-	const uid = useSelector((state: RootState) => state.auth.uid)
-	const authenticating = useSelector((state: RootState) => state.auth.authenticating)
+const LoginView = () => {
+    const classes = useStyles();
+    const dispatch = useDispatch();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
 
-	const sign = (e: any) => {
-		e.preventDefault();
-		// dispatch(signupUser());
-	}
+    const handleLogin = () => {
+        if (email && password && name) {
+            const user ={
+                email,
+                password,
+                name
+            }
+            dispatch(createUserWithEmailPassword(user))
+        }
+    }
 
-	useEffect(() => {
-		// dispatch(isPrivate())
-	}, [])
 
-	if (auth) {
-		return <Redirect to={"/dash"} />
-	}
 
-	return (
-		<>
-		{
-			!authenticating ?
-			<Container component="main" maxWidth="xs">
-			<CssBaseline />
-			<div className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<LockOutlinedIcon />
-				</Avatar>
-				<Typography component="h1" variant="h5">
-					Sign in
-				</Typography>
-				<form className={classes.form} onSubmit={sign}>
-					<Button
-						type="submit"
-						fullWidth
-						variant="contained"
-						color="primary"
-						size="large"
-						className={classes.submit}
-						startIcon={<ReactLogo />}>
-						Sign In with Google
-					</Button>
-				</form>
-			</div>
-			<Button
-				fullWidth
-				variant="contained"
-				color="primary"
-				size="large"
-				onClick={() => {
-					
-				}}>
-				Guest (Currently Unavailable)
-			</Button>
-		</Container>: <h1>Loading...</h1>
-		}
-		</>
-	);
-}
+    return (
+        <Box
+            display="flex"
+            flexDirection="column"
+            height="100%"
+            justifyContent="center"
+            className={classes.root}
+        >
+            <Container maxWidth="sm">
+                <form>
+                    <Box mb={3}>
+                        <Typography
+                            color="textPrimary"
+                            variant="h2"
+                        >
+                            Sign Up
+                      </Typography>
+                        <Typography
+                            color="textSecondary"
+                            gutterBottom
+                            variant="body2"
+                        >
+                        </Typography>
+                    </Box>
+                    <Box
+                        mt={3}
+                        mb={1}
+                    >
+                        <Typography
+                            align="center"
+                            color="textSecondary"
+                            variant="body1"
+                        >
+                            Signup with email address
+                      </Typography>
+                    </Box>
+                    <TextField
+                        fullWidth
+                        label="User Name"
+                        margin="normal"
+                        name="name"
+                        type="text"
+                        variant="outlined"
+                        value={name}
+                        onChange={(e) => { setName(e.target.value) }}
+                    />
+                    <TextField
+                        fullWidth
+                        label="Email Address"
+                        margin="normal"
+                        name="email"
+                        type="email"
+                        variant="outlined"
+                        value={email}
+                        onChange={(e) => { setEmail(e.target.value) }}
+                    />
+                    <TextField
+                        fullWidth
+                        label="Password"
+                        margin="normal"
+                        name="password"
+                        type="password"
+                        variant="outlined"
+                        value={password}
+                        onChange={(e) => { setPassword(e.target.value) }}
+                    />
+                    <Box my={2}>
+                        <Button
+                            color="primary"
+                            fullWidth
+                            size="large"
+                            // type="submit"
+                            variant="contained"
+                            onClick={() => { handleLogin() }}
+                        >
+                            Sign Up now
+                      </Button>
+                    </Box>
+                </form>
+            </Container>
+        </Box>
+    );
+};
+
+export default LoginView;

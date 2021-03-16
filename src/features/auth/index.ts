@@ -111,6 +111,46 @@ export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 	}
 }
 
+export const createUserWithEmailPassword = (user: any): AppThunk => async dispatch => {
+	const auth = firebase.getInstance().auth;
+	const db = firebase.getInstance().db;
+	auth.createUserWithEmailAndPassword(user.email, user.password).then(_ => {
+		db.collection("users").doc(_.user?.uid).set({
+			email: _.user?.email,
+			user_name: user.name,
+			photo: 'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
+			isOnline: true,
+			uid: _.user?.uid,
+			role: UserRole.USER
+		})
+		const current_user: any = {
+			uid: _.user?.uid,
+			role: UserRole.USER,
+			email: user.email,
+			photo: 'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
+			user_name: user.name
+		}
+		dispatch(setLogInSuccess({ ...current_user, authenticating: false, authenticated: true, isGuest: false, error: "" }))
+	})
+}
+
+export const signInWithEmailPassword = (user: any): AppThunk => async dispatch => {
+	const auth = firebase.getInstance().auth;
+	const db = firebase.getInstance().db;
+	auth.signInWithEmailAndPassword(user.email, user.password).then(_ => {
+		db.collection("users").doc(_.user?.uid).get().then((_: any) => {
+			const current_user: any = {
+				uid: _.data().uid,
+				role: _.data().role,
+				email: _.data().email,
+				photo: _.data().photo,
+				user_name: _.data().user_name
+			}
+			dispatch(setLogInSuccess({ ...current_user, authenticating: false, authenticated: true, isGuest: false, error: "" }))
+		})
+	})
+}
+
 export const logoutUser = (uid: string, isGuest: boolean): AppThunk => {
 
 	return async (dispatch) => {
@@ -169,7 +209,7 @@ export const isLoggedIn = (): AppThunk => async (dispatch) => {
 		}
 		else {
 			console.log('No user')
-			auth.signInAnonymously().then((_:any) => {
+			auth.signInAnonymously().then((_: any) => {
 				const current_guest = {
 					uid: _.user?.uid,
 					isGuest: true,
