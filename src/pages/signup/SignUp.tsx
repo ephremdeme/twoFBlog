@@ -10,7 +10,7 @@ import Container from '@material-ui/core/Container';
 import { ReactComponent as ReactLogo } from '../../public/icons/icons8_google_logo_1.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { signupUser, isPrivate, signAsGuest } from "../../features/auth/index";
+import { isPrivate, signAsGuest } from "../../features/auth/index";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,11 +42,11 @@ export default function SignIn() {
 
 	const sign = (e: any) => {
 		e.preventDefault();
-		dispatch(signupUser());
+		// dispatch(signupUser());
 	}
 
 	useEffect(() => {
-		dispatch(isPrivate())
+		// dispatch(isPrivate())
 	}, [])
 
 	if (auth) {
