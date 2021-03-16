@@ -21,7 +21,7 @@ const RouteWithSubRoutes = (route: IRoute) => {
 								return <route.component {...props} routes={route.routes} />;
 							}
 						} else {
-							return <Redirect to="/home/login" />;
+							return <Redirect to="/signup" />;
 						}
 					} else if (route.private) {
 						if (authenticated) {
@@ -29,7 +29,7 @@ const RouteWithSubRoutes = (route: IRoute) => {
 								return <route.component {...props} routes={route.routes} />;
 							}
 						} else {
-							return <Redirect to="/home/login" />;
+							return <Redirect to="/signup" />;
 						}
 					} else {
 						if (route.component) {

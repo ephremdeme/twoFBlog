@@ -1,13 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {
+	ClickAwayListener,
 	createStyles,
 	Divider as MuiDivider,
 	FormControl,
+	Grow,
 	IconButton,
 	InputLabel,
 	makeStyles,
 	MenuItem,
+	MenuList,
+	Paper,
+	Popper,
 	Select,
 	Theme,
 } from '@material-ui/core';
@@ -16,6 +21,7 @@ import {ReactComponent as DividerLgIcon} from '../../public/icons/large-divider.
 import {ReactComponent as DividerMdIcon} from '../../public/icons/medium-divider.svg';
 import {ReactComponent as DividerSmIcon} from '../../public/icons/small-divider.svg';
 import {UseScrollTriggerOptions} from '@material-ui/core/useScrollTrigger/useScrollTrigger';
+import {Height, Maximize, Remove} from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -28,6 +34,10 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		divide: {
 			margin: '5px',
+		},
+		button: {
+			backgroundColor: '#F5F5F5',
+			color: '#F5F5F5',
 		},
 	})
 );
@@ -87,6 +97,7 @@ const DividerSettings = () => {
 
 	return (
 		<div>
+			<SelectOrientation />
 			<IconButton
 				onClick={(e) => setProp((props) => (props.variant = 'fullWidth'))}>
 				<DividerLgIcon />
@@ -99,20 +110,111 @@ const DividerSettings = () => {
 				onClick={(e) => setProp((props) => (props.variant = 'inset'))}>
 				<DividerSmIcon />
 			</IconButton>
-			<FormControl className={classes.formControl}>
-				<InputLabel id="demo-simple-select-label">Orientation</InputLabel>
-				<Select
-					labelId="demo-simple-select-label"
-					id="demo-simple-select"
-					value={orientation}
-					onChange={(e) =>
-						setProp((props) => (props.orientation = e.target.value))
-					}>
-					<MenuItem value={'vertical'}>Vertical</MenuItem>
-					<MenuItem value={'horizontal'}>Horizontal</MenuItem>
-				</Select>
-			</FormControl>
 		</div>
+	);
+};
+
+const SelectOrientation = () => {
+	const classes = useStyles();
+	const [open, setOpen] = React.useState(false);
+	const anchorRef = React.useRef<HTMLButtonElement>(null);
+	const [selected, setSelected] = useState('horizontal');
+
+	const {
+		actions: {setProp},
+	} = useNode((node) => ({
+		orientation: node.data.props.orientation,
+	}));
+
+	const handleToggle = () => {
+		setOpen((prevOpen) => !prevOpen);
+	};
+
+	const handleClose = (
+		event: React.MouseEvent<EventTarget>,
+		orientation?: string
+	) => {
+		if (orientation) {
+			setProp((props) => (props.orientation = orientation));
+			setSelected(orientation);
+		}
+		if (
+			anchorRef.current &&
+			anchorRef.current.contains(event.target as HTMLElement)
+		) {
+			return;
+		}
+
+		setOpen(false);
+	};
+
+	function handleListKeyDown(event: React.KeyboardEvent) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+			setOpen(false);
+		}
+	}
+
+	// return focus to the button when we transitioned from !open -> open
+	const prevOpen = React.useRef(open);
+	React.useEffect(() => {
+		if (prevOpen.current === true && open === false) {
+			anchorRef.current!.focus();
+		}
+
+		prevOpen.current = open;
+	}, [open]);
+
+	return (
+		<>
+			<IconButton
+				ref={anchorRef}
+				aria-controls={open ? 'menu-list-grow' : undefined}
+				aria-haspopup="true"
+				title="Align Text"
+				onClick={handleToggle}>
+				<Remove />
+			</IconButton>
+			<Popper
+				open={open}
+				anchorEl={anchorRef.current}
+				role={undefined}
+				transition
+				disablePortal>
+				{({TransitionProps, placement}) => (
+					<Grow
+						{...TransitionProps}
+						style={{
+							transformOrigin:
+								placement === 'bottom' ? 'center top' : 'center bottom',
+						}}>
+						<Paper>
+							<ClickAwayListener onClickAway={handleClose}>
+								<MenuList
+									autoFocusItem={open}
+									id="menu-list-grow"
+									onKeyDown={handleListKeyDown}>
+									<MenuItem
+										className={selected === 'horizontal' ? classes.button : ''}
+										onClick={(e) => handleClose(e, 'horizontal')}>
+										<IconButton title="Horizontal Divider">
+											<Remove />
+										</IconButton>
+									</MenuItem>
+									<MenuItem
+										className={selected === 'vertical' ? classes.button : ''}
+										onClick={(e) => handleClose(e, 'vertical')}>
+										<IconButton title="Vertical Divider">
+											<Height />
+										</IconButton>
+									</MenuItem>
+								</MenuList>
+							</ClickAwayListener>
+						</Paper>
+					</Grow>
+				)}
+			</Popper>
+		</>
 	);
 };
 

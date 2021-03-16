@@ -5,9 +5,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import {Button} from '@material-ui/core';
+import {Button, List, ListItem} from '@material-ui/core';
 import {useEditor} from '@craftjs/core';
 import lz from 'lzutf8';
+import {Undo, Redo} from '@material-ui/icons';
 import {postBlog, updateBlog} from '../../features/editor';
 import {useAppDispatch} from '../../app/hooks';
 
@@ -21,6 +22,9 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		title: {
 			flexGrow: 1,
+		},
+		undo: {
+			marginRight: '20px',
 		},
 	})
 );
@@ -40,8 +44,16 @@ export const NavBar: React.FC<{
 }> = ({enabled, setEnable, handleChange, values}) => {
 	const classes = useStyles();
 
-	const {actions, query} = useEditor((state, query) => ({
+	const {
+		connectors: {create},
+		actions,
+		query,
+		canRedo,
+		canUndo,
+	} = useEditor((state, query) => ({
 		enabled: state.options.enabled,
+		canUndo: query.history.canUndo(),
+		canRedo: query.history.canRedo(),
 	}));
 	const dispatch = useAppDispatch();
 
@@ -60,6 +72,27 @@ export const NavBar: React.FC<{
 					<Typography variant="h6" noWrap className={classes.title}>
 						Blog Editor
 					</Typography>
+					<div className={classes.undo}>
+						<IconButton
+							className="copy-state-btn"
+							size="small"
+							disabled={!canUndo}
+							color="secondary"
+							onClick={() => actions.history.undo()}
+							style={{marginRight: '10px'}}>
+							<Undo />
+						</IconButton>
+						<IconButton
+							className="copy-state-btn"
+							size="small"
+							color="secondary"
+							disabled={!canRedo}
+							onClick={() => actions.history.redo()}
+							style={{marginRight: '10px'}}>
+							<Redo />
+						</IconButton>
+					</div>
+
 					<Button
 						color="inherit"
 						onClick={() => {
