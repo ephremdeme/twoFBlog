@@ -221,7 +221,7 @@ export const CoverImage: React.FC<{
 				/>
 			</MuiContainer>
 			{!isUploaded && (
-				<>
+				<div style={{margin: '20px'}}>
 					<input
 						accept="image/*"
 						className={classes.input + ' z-depth-2'}
@@ -236,7 +236,7 @@ export const CoverImage: React.FC<{
 							aria-label="upload picture"
 							component="span"
 							startIcon={<InsertPhotoIcon />}>
-							Add Cover Image
+							{src === 'null' ? ' Add Image' : 'Change Image'}
 						</Button>
 					</label>
 					{file && (
@@ -244,7 +244,7 @@ export const CoverImage: React.FC<{
 							Upload
 						</Button>
 					)}
-				</>
+				</div>
 			)}
 		</div>
 	);

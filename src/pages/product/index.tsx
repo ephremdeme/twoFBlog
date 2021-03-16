@@ -1,29 +1,20 @@
-import React from 'react'
-import { useRouteMatch, BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import React from 'react';
+import {Switch} from 'react-router-dom';
+import {IRoute} from 'router/config';
+import Router from '../../router/Router';
 
-import ProductListPage from './ProductList'
-import ProductDeatilPage from './ProductDetial'
-import UpdateProjectPage from './UpdateProduct'
-import CreateProductPage from './CreateProduct'
-import CreateProduct from './create'
-
-const Product = () => {
-
-  const { path } = useRouteMatch()
-
-  return (
-    <div>
-      <Router>
-        <Switch>
-          <Route exact path={`${path}`} component={ProductListPage} />
-          <Route path={`${path}/:id/detail`} component={ProductDeatilPage} />
-          <Route path={`${path}/:id/update`} component={UpdateProjectPage} />
-          <Route path={`${path}/create`} component={CreateProductPage} />
-          <Route path={`${path}/create2`} component={CreateProduct} />
-        </Switch>
-      </Router>
-    </div>
-  )
+interface IProps {
+	routes: IRoute[]
 }
 
-export default Product
+const Product: React.FC<IProps> = ({ routes }) => {
+	return (
+		<div>
+			<Switch>
+				<Router routes={routes} />
+			</Switch>
+		</div>
+	);
+};
+
+export default Product;

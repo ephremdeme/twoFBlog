@@ -56,9 +56,9 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 		coverImageUrl: blog?.coverImageUrl as string,
 		blogHash: blog?.blogHash as string,
 		authorId: 'jhjhejkhejwehewkhewe',
-		date:
-			new Date(blog?.date as string).toDateString() ||
-			new Date().toDateString(),
+		date: blog?.date
+			? new Date(blog?.date as string).toDateString()
+			: new Date().toDateString(),
 	});
 
 	const handleChange = (key: string, value: string) => {
@@ -82,14 +82,14 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 			<MiniDrawer />
 			<MuiContainer maxWidth={'lg'}>
 				<div className={classes.title}>
-					<Typography variant="h2" style={{fontWeight: 'bolder'}} align="left">
-						{enabled && (
-							<TitleInput value={values.title} handleChange={handleChange} />
-						)}
-					</Typography>
+					{enabled && (
+						<TitleInput value={values.title} handleChange={handleChange} />
+					)}
 					{!enabled && (
 						<>
-							<Typography variant="h2">{values.title}</Typography>
+							<Typography variant="h2" align="center">
+								{values.title}
+							</Typography>
 							<Typography
 								variant="body1"
 								align="center"

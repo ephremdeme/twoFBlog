@@ -4,6 +4,7 @@ import {
 	createStyles,
 	Divider as MuiDivider,
 	FormControl,
+	IconButton,
 	InputLabel,
 	makeStyles,
 	MenuItem,
@@ -11,7 +12,25 @@ import {
 	Theme,
 } from '@material-ui/core';
 import {useNode, UserComponent} from '@craftjs/core';
+import {ReactComponent as DividerLgIcon} from '../../public/icons/large-divider.svg';
+import {ReactComponent as DividerMdIcon} from '../../public/icons/medium-divider.svg';
+import {ReactComponent as DividerSmIcon} from '../../public/icons/small-divider.svg';
 import {UseScrollTriggerOptions} from '@material-ui/core/useScrollTrigger/useScrollTrigger';
+
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		formControl: {
+			margin: theme.spacing(1),
+			minWidth: 120,
+		},
+		selectEmpty: {
+			marginTop: theme.spacing(2),
+		},
+		divide: {
+			margin: '5px',
+		},
+	})
+);
 
 export const Divider: UserComponent<{
 	variant?: 'inset' | 'middle' | 'fullWidth' | undefined;
@@ -26,36 +45,34 @@ export const Divider: UserComponent<{
 		dragged: state.events.dragged,
 	}));
 	const classes = useStyles();
+	console.log(variant, orientation);
 
 	return (
-		<div ref={(ref) => connect(drag(ref))}>
-			<MuiDivider
+		<div
+			ref={(ref) => connect(drag(ref))}
+			style={{
+				padding: '20px',
+				height: orientation === 'vertical' ? '100%' : 'auto',
+				width: orientation === 'horizontal' ? '100%' : 'auto',
+			}}>
+			<div
 				className={classes.divide}
-				variant={variant}
-				orientation={orientation}
-				{...(orientation === 'vertical' ? 'flexItems' : null)}
-			/>
+				style={{
+					height: orientation === 'vertical' ? '100%' : 'auto',
+					width: orientation === 'horizontal' ? '100%' : 'auto',
+				}}>
+				<MuiDivider
+					variant={variant}
+					orientation={orientation}
+					{...(orientation === 'vertical' ? 'flexItem' : null)}
+				/>
+			</div>
 		</div>
 	);
 };
 
 export default Divider;
 
-const useStyles = makeStyles((theme: Theme) =>
-	createStyles({
-		formControl: {
-			margin: theme.spacing(1),
-			minWidth: 120,
-		},
-		selectEmpty: {
-			marginTop: theme.spacing(2),
-		},
-		divide: {
-			margin: '8px',
-			width: '20px',
-		},
-	})
-);
 const DividerSettings = () => {
 	const {
 		actions: {setProp},
@@ -70,20 +87,18 @@ const DividerSettings = () => {
 
 	return (
 		<div>
-			<FormControl className={classes.formControl}>
-				<InputLabel id="demo-simple-select-label">Variant</InputLabel>
-				<Select
-					labelId="demo-simple-select-label"
-					id="demo-simple-select"
-					value={variant}
-					onChange={(e) =>
-						setProp((props) => (props.variant = e.target.value))
-					}>
-					<MenuItem value={'fullWidth'}>fullWidth</MenuItem>
-					<MenuItem value={'inset'}>inset</MenuItem>
-					<MenuItem value={'middle'}>middle</MenuItem>
-				</Select>
-			</FormControl>
+			<IconButton
+				onClick={(e) => setProp((props) => (props.variant = 'fullWidth'))}>
+				<DividerLgIcon />
+			</IconButton>
+			<IconButton
+				onClick={(e) => setProp((props) => (props.variant = 'middle'))}>
+				<DividerMdIcon />
+			</IconButton>
+			<IconButton
+				onClick={(e) => setProp((props) => (props.variant = 'inset'))}>
+				<DividerSmIcon />
+			</IconButton>
 			<FormControl className={classes.formControl}>
 				<InputLabel id="demo-simple-select-label">Orientation</InputLabel>
 				<Select
@@ -103,6 +118,10 @@ const DividerSettings = () => {
 
 Divider.craft = {
 	displayName: 'Divider',
+	props: {
+		variant: 'fullWidth',
+		orientation: 'horizontal',
+	},
 	related: {
 		settings: DividerSettings,
 	},

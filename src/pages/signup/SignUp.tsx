@@ -1,30 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
+import { Redirect } from "react-router-dom";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {ReactComponent as ReactLogo} from '../../public/icons/icons8_google_logo_1.svg';
-import firebase, {provider} from '../../firebase/firebase';
-import {useDispatch, useSelector} from 'react-redux';
-import {setLogged, setRole, setEmail} from '../../features/user';
-import {RootState} from '../../app/store';
+import { ReactComponent as ReactLogo } from '../../public/icons/icons8_google_logo_1.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
+import { signupUser, isPrivate, signAsGuest } from "../../features/auth/index";
 
-function Copyright() {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{'Copyright © '}
-			<Link color="inherit" href="https://material-ui.com/">
-				Your Website
-			</Link>{' '}
-			{new Date().getFullYear()}
-			{'.'}
-		</Typography>
-	);
-}
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -49,54 +36,28 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
 	const dispatch = useDispatch();
 	const classes = useStyles();
+	const auth = useSelector((state: RootState) => state.auth.authenticated)
+	const uid = useSelector((state: RootState) => state.auth.uid)
+	const authenticating = useSelector((state: RootState) => state.auth.authenticating)
 
-	const onSubmit = (e: any) => {
+	const sign = (e: any) => {
 		e.preventDefault();
-		firebase
-			.getInstance()
-			.auth.signInWithPopup(provider)
-			.then((result) => {
-				firebase
-					.getInstance()
-					.db.collection('users')
-					.doc(result.user?.uid)
-					.get()
-					.then((data) => {
-						if (data.exists) {
-						} else {
-							firebase
-								.getInstance()
-								.db.collection('users')
-								.doc(result.user?.uid)
-								.set({
-									user_name: result.user?.displayName,
-									email: result.user?.email,
-									photo: result.user?.photoURL,
-									role: 'user',
-								});
-						}
-					});
-				firebase
-					.getInstance()
-					.db.collection('users')
-					.doc(result.user?.uid)
-					.get()
-					.then((userData: any) => {
-						if (userData.exists) {
-							console.log('userData: ', userData.data().role)
-							dispatch(setRole(userData.data().role));
-							dispatch(setLogged(true));
-							dispatch(setEmail(userData.data().email));
-						}
-					});
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
+		dispatch(signupUser());
+	}
+
+	useEffect(() => {
+		dispatch(isPrivate())
+	}, [])
+
+	if (auth) {
+		return <Redirect to={"/dash"} />
+	}
 
 	return (
-		<Container component="main" maxWidth="xs">
+		<>
+		{
+			!authenticating ?
+			<Container component="main" maxWidth="xs">
 			<CssBaseline />
 			<div className={classes.paper}>
 				<Avatar className={classes.avatar}>
@@ -105,7 +66,7 @@ export default function SignIn() {
 				<Typography component="h1" variant="h5">
 					Sign in
 				</Typography>
-				<form className={classes.form} onSubmit={onSubmit}>
+				<form className={classes.form} onSubmit={sign}>
 					<Button
 						type="submit"
 						fullWidth
@@ -124,18 +85,12 @@ export default function SignIn() {
 				color="primary"
 				size="large"
 				onClick={() => {
-					const user = firebase
-						.getInstance()
-						.auth.signInAnonymously()
-						.then((user) => {
-							console.log(user);
-							dispatch(setLogged(true));
-							dispatch(setRole('guest'));
-						});
-					// firebase.getInstance().auth.signOut();
+					
 				}}>
-				Continue as A guest
+				Guest (Currently Unavailable)
 			</Button>
-		</Container>
+		</Container>: <h1>Loading...</h1>
+		}
+		</>
 	);
 }
