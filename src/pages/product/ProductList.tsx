@@ -1,43 +1,34 @@
-import React, {useEffect} from 'react';
-import {
-	fetchProducts,
-	selectFilterableProducts,
-	selectLoading,
-} from '../../features/product';
-import Toolbar from './Toolbar';
-import {useSelector, useDispatch} from 'react-redux';
-import Page from '../../components/shared/Page';
-import ProductListAdmin from './admin/ProductListAdmin';
+import React from 'react';
+import {useFirestore} from 'app/hooks';
+import Page from 'components/shared/Page';
+import {selectFilteredProducts, setProducts} from 'features/product';
+import {IProduct} from 'features/product/types';
+import {useFireCollectionRef} from 'hooks/useFirestore';
+import {useSelector} from 'react-redux';
 import ProductListUser from './user/ProductListUser';
-import data from './data';
+import ProductCardLoading from './user/ProductCardLoading';
+import {Container} from '@material-ui/core';
+import OverlayLoading from '../../components/shared/OverlayLoading';
 
 const ProductList = () => {
-	const dispatch = useDispatch();
-	// const products = useSelector(selectFilterableProducts);
-	// dummy data load
-	const products = data;
-	const loading = useSelector(selectLoading);
-	const isAdmin = false;
+	const productData = useSelector(selectFilteredProducts);
+	const productsRef = useFirestore().collection('products');
+	const {data, loading} = useFireCollectionRef<IProduct>(productsRef);
 
-	useEffect(() => {
-		dispatch(fetchProducts());
-		return () => {};
-	}, []);
+	console.log('Data: ', data)
 
 	return (
 		<Page title="Products">
-			{loading ? (
-				<h1>Loading prodcuts...</h1>
-			) : (
-				<>
-					<Toolbar backbtn={false} />
-					{!isAdmin ? (
-						<ProductListUser products={products} />
-					) : (
-						<ProductListAdmin products={products} />
-					)}
-				</>
-			)}
+			<Container>
+				{loading ? (
+					<>
+						<OverlayLoading />
+						<ProductCardLoading loading={loading} items={15} />
+					</>
+				) : (
+					<ProductListUser products={data} />
+				)}
+			</Container>
 		</Page>
 	);
 };
