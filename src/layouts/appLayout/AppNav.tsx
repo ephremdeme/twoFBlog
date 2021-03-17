@@ -1,17 +1,11 @@
 import React, {useState} from 'react';
-import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import {
 	makeStyles,
 	useTheme,
@@ -19,16 +13,14 @@ import {
 	createStyles,
 } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../app/store';
-import {Avatar, Grid} from '@material-ui/core';
+import {Box} from '@material-ui/core';
 import {Link} from 'react-router-dom';
+import {RootState} from '../../app/store';
 import dashboardRoutes from './routes';
-import FB from '../../firebase/firebase';
 import {INavRouter} from './routes';
+import FB from '../../firebase/firebase';
 import Icon from '@material-ui/core/Icon';
-import {setTheme} from '../../features/app';
 import Appbar from './Appbar';
-import Dashboard from '@material-ui/icons/Dashboard';
 
 const drawerWidth = 240;
 
@@ -59,10 +51,10 @@ const useStyles = makeStyles((theme: Theme) =>
 		toolbar: theme.mixins.toolbar,
 		drawerPaper: {
 			width: drawerWidth,
+			marginTop: '65px',
 		},
 		content: {
 			flexGrow: 1,
-			padding: theme.spacing(3),
 		},
 		// list items
 		listItems: {
@@ -71,10 +63,6 @@ const useStyles = makeStyles((theme: Theme) =>
 			margin: '5px auto',
 			transition: 'all .4s',
 		},
-		dashboardText: {
-			fontSize: '.9rem',
-			fontWeight: 'bold'
-		}
 	})
 );
 
@@ -84,18 +72,15 @@ interface Props {
 }
 
 export default function AppNav(props: Props) {
-	const {window} = props;
 	const classes = useStyles();
+	const {window} = props;
+	const dispatch = useDispatch();
 	const theme = useTheme();
 	const [mobileOpen, setMobileOpen] = React.useState(false);
-	const appTheme = useSelector((state: RootState) => state.app.appTheme);
-	const dispatch = useDispatch();
-	const role = useSelector((state: RootState) => state.user.role);
-	const logged = useSelector((state: RootState) => state.user.logged);
+	const [navs, setNavs] = useState<INavRouter[]>([]);
 	const [photo, setPhoto] = React.useState<any>('');
 	const [name, setName] = React.useState<any>(null);
 	const [email, setEmail] = React.useState<any>(null);
-	const [navs, setNavs] = useState<INavRouter[]>([]);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -110,14 +95,7 @@ export default function AppNav(props: Props) {
 			} else {
 			}
 		});
-
-		if (role === 'admin') {
-			setNavs(dashboardRoutes['admin']);
-		} else if (role === 'user') {
-			setNavs(dashboardRoutes['user']);
-		} else {
-			setNavs(dashboardRoutes['guest']);
-		}
+		setNavs(dashboardRoutes['guest']);
 	}, []);
 
 	const drawer = (
@@ -132,9 +110,11 @@ export default function AppNav(props: Props) {
 						key={i}
 						className={classes.listItems}>
 						<ListItemIcon>
-							<Icon>{nav.icon}</Icon>
+							<Icon style={{ fontSize: 20 }}>{nav.icon}</Icon>
 						</ListItemIcon>
-						<ListItemText className={classes.dashboardText} primary={nav.name} />
+						<Box fontSize={14} fontWeight={500}>
+							{nav.name}
+						</Box>
 					</ListItem>
 				))}
 			</List>
@@ -173,24 +153,10 @@ export default function AppNav(props: Props) {
 						}}
 						variant="permanent"
 						open>
-						<Grid container spacing={2} style={{margin: '0.5rem'}}>
-							<Grid item justify="center" alignItems="center">
-								<Avatar alt="Remy Sharp" />
-							</Grid>
-							<Grid item>
-								<h3 style={{margin: '0'}}>Jean Doe</h3>
-								<p style={{margin: '0'}}>Online</p>
-							</Grid>
-						</Grid>
 						{drawer}
 					</Drawer>
 				</Hidden>
 			</nav>
-
-			<main className={classes.content}>
-				<div className={classes.toolbar}></div>
-				{props.children}
-			</main>
 		</div>
 	);
 }

@@ -1,3 +1,21 @@
+::-webkit-scrollbar{
+    width: 5px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: white;
+}
+
+::-webkit-scrollbar-thumb{
+    background-image: linear-gradient(rgb(207, 207, 207), rgb(255, 255, 255));
+    border-radius: 25px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background-image: linear-gradient(rgb(179, 179, 179), rgb(238, 238, 238));
+}
+
+/* ----Chat---- */
 @import 'https://fonts.googleapis.com/css?family=Montserrat|Roboto+Slab';
 
 :root {
@@ -8,6 +26,7 @@
   --chat-color-black: #222;
   --chat-color-primary: #06b7f1;
   --chat-default-shadow: 0 0 10px 5px rgba(112, 111, 102, 0.23);
+  --cgat-color-main: transparent
 }
 
 body {
@@ -59,6 +78,7 @@ body {
   font-weight: 400;
   font-size: 14px;
   line-height: 1.6;
+  background-color: transparent;
 }
 
 .chat-widget-toggle {
@@ -99,7 +119,7 @@ body {
   max-height: var(--chat-max-height);
   min-height: var(--chat-min-height);
   border-radius: 15px;
-  background: var(--chat-color-white);
+  background: var(--chat-color-main);
   box-shadow: var(--chat-default-shadow);
   opacity: 0;
   transform: translateX(100%);

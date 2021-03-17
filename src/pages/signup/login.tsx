@@ -14,7 +14,7 @@ import { ReactComponent as FacebookIcon } from '../../public/icons/icons8_google
 import { ReactComponent as GoogleIcon } from '../../public/icons/icons8_google_logo_1.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { singUpWithProvider, signAsGuest, isLoggedIn, createUserWithEmailPassword } from "../../features/auth/index";
+import { singUpWithProvider, signAsGuest, isLoggedIn, createUserWithEmailPassword, signInWithEmailPassword } from "../../features/auth/index";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,16 +30,19 @@ const LoginView = () => {
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [name, setName] = useState("");
+
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        dispatch(singUpWithProvider());
+    }
 
     const handleLogin = () => {
-        if (email && password && name) {
+        if (email && password) {
             const user ={
                 email,
-                password,
-                name
+                password
             }
-            dispatch(createUserWithEmailPassword(user))
+            dispatch(signInWithEmailPassword(user))
         }
     }
 
@@ -54,13 +57,13 @@ const LoginView = () => {
             className={classes.root}
         >
             <Container maxWidth="sm">
-                <form>
+                <form onSubmit={handleSubmit}>
                     <Box mb={3}>
                         <Typography
                             color="textPrimary"
                             variant="h2"
                         >
-                            Sign Up
+                            Sign in
                       </Typography>
                         <Typography
                             color="textSecondary"
@@ -69,6 +72,32 @@ const LoginView = () => {
                         >
                         </Typography>
                     </Box>
+                    <Grid
+                        container
+                        spacing={3}
+                    >
+                        <Grid
+                            item
+                            xs={12}
+                            md={6}
+                        >
+                        </Grid>
+                        <Grid
+                            item
+                            xs={12}
+                            md={6}
+                        >
+                            <Button
+                                fullWidth
+                                // startIcon={<GoogleIcon />}
+                                onClick={handleSubmit}
+                                size="large"
+                                variant="contained"
+                            >
+                                Login with Google
+                        </Button>
+                        </Grid>
+                    </Grid>
                     <Box
                         mt={3}
                         mb={1}
@@ -78,19 +107,9 @@ const LoginView = () => {
                             color="textSecondary"
                             variant="body1"
                         >
-                            Signup with email address
+                            login with email address
                       </Typography>
                     </Box>
-                    <TextField
-                        fullWidth
-                        label="User Name"
-                        margin="normal"
-                        name="name"
-                        type="text"
-                        variant="outlined"
-                        value={name}
-                        onChange={(e) => { setName(e.target.value) }}
-                    />
                     <TextField
                         fullWidth
                         label="Email Address"
@@ -120,7 +139,7 @@ const LoginView = () => {
                             variant="contained"
                             onClick={() => { handleLogin() }}
                         >
-                            Sign Up now
+                            Sign in now
                       </Button>
                     </Box>
                 </form>
