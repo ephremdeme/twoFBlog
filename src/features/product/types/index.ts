@@ -10,8 +10,14 @@ export interface IProduct {
 	images: string[];
 	qty: string;
 	price: string;
+	currency: string;
 	ratingReview: string;
 	catagory: string;
+	brand: string;
+	condition: 'new' | 'used';
+	likes: IProductLike[];
+	reviews: IProductReview[];
+	views: IProductView[];
 	createdAt?: string;
 	updatedAt?: string;
 }
@@ -22,41 +28,36 @@ export interface IProductChart {
 	total: number;
 }
 
-export interface IProductStore {
+export interface IProductLike {
 	id: string;
-	name: string;
-	adress: string;
-	employees: string[];
-	createdAt?: string;
-	updatedAt?: string;
+	uid: string;
+	liked: boolean;
 }
-
+export interface IProductView {
+	id: string;
+	uid: number[];
+}
 export interface IProductReview {
 	id: string;
 	uid: string;
 	rating: number;
-	createdAt?: string;
-	updatedAt?: string;
 }
-
 export interface IProductComment {
 	id: string;
 	uid: string;
 	pid: string;
 	comment: string;
+	edited: boolean;
 	createdAt?: string;
 	updatedAt?: string;
 }
 
-export interface IProductView {
-	id: string;
-	uis: string[];
-}
 
-export interface IProductLike {
+export interface IProductStore {
 	id: string;
-	uid: string;
-	liked: boolean;
+	name: string;
+	adress: string;
+	employees: string[];
 	createdAt?: string;
 	updatedAt?: string;
 }
