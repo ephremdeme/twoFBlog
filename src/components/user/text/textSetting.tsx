@@ -1,28 +1,20 @@
-import React, {
-	MouseEvent,
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
 	Button,
-	DialogActions,
-	DialogContent,
-	FormControl,
-	FormLabel,
 	IconButton,
 	makeStyles,
-	Menu,
 	MenuItem,
 	Paper,
 	Popper,
 	Snackbar,
+	SvgIconTypeMap,
 	Typography,
+	MenuList,
+	TextField,
+	ClickAwayListener,
+	Grow,
 } from '@material-ui/core';
 import {
-	Backspace,
-	Colorize,
 	ExpandLess,
 	ExpandMore,
 	FormatAlignCenter,
@@ -34,21 +26,16 @@ import {
 	FormatLineSpacing,
 	FormatListBulleted,
 	FormatListNumbered,
-	FormatPaintSharp,
 	FormatQuote,
 	FormatUnderlined,
 	InsertLink,
-	MoreHoriz,
 } from '@material-ui/icons';
-import MenuIcon from '@material-ui/icons/Menu';
-import {Grow} from '@material-ui/core';
-import {ClickAwayListener} from '@material-ui/core';
-import {MenuList} from '@material-ui/core';
-import {DialogTitle} from '@material-ui/core';
-import {Dialog} from '@material-ui/core';
-import {TextField} from '@material-ui/core';
 import {useNode} from '@craftjs/core';
 import {Alert} from '@material-ui/lab';
+import {ChromePicker, ColorResult} from 'react-color';
+import FormatLetterSpacing from '@material-ui/icons/TextFormatSharp';
+import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
+import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 
 const useStyles = makeStyles({
 	root: {},
@@ -129,6 +116,101 @@ const EditButtonMultiple: React.FC<{
 		</Button>
 	);
 };
+const GenericMenuList: React.FC<{
+	CIcon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+	title?: string;
+}> = ({children, CIcon, title}) => {
+	const classes = useStyles();
+	const [open, setOpen] = React.useState(false);
+	const anchorRef = React.useRef<HTMLButtonElement>(null);
+
+	const handleToggle = () => {
+		setOpen((prevOpen) => !prevOpen);
+	};
+
+	const {
+		actions: {setProp},
+		textRef,
+	} = useNode((node) => ({
+		textRef: node.data.props.textRef,
+	}));
+
+	const handleClose = (event: React.MouseEvent<EventTarget>) => {
+		if (
+			anchorRef.current &&
+			anchorRef.current.contains(event.target as HTMLElement)
+		) {
+			return;
+		}
+		setOpen(false);
+	};
+
+	function handleListKeyDown(event: React.KeyboardEvent) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+			setOpen(false);
+		}
+	}
+
+	// return focus to the button when we transitioned from !open -> open
+	const prevOpen = React.useRef(open);
+	React.useEffect(() => {
+		if (prevOpen.current === true && open === false) {
+			anchorRef.current!.focus();
+		}
+
+		prevOpen.current = open;
+	}, [open]);
+
+	const ChildrenWithProps = React.Children.map(children, (child) => {
+		if (React.isValidElement(child)) {
+			return React.cloneElement(child, {
+				open: open,
+				handleClose: handleClose,
+			});
+		}
+		return child;
+	});
+
+	return (
+		<>
+			<IconButton
+				ref={anchorRef}
+				aria-controls={open ? 'menu-list-grow' : undefined}
+				aria-haspopup="true"
+				title={title}
+				onClick={handleToggle}>
+				<CIcon />
+			</IconButton>
+			<Popper
+				open={open}
+				anchorEl={anchorRef.current}
+				role={undefined}
+				transition
+				disablePortal>
+				{({TransitionProps, placement}) => (
+					<Grow
+						{...TransitionProps}
+						style={{
+							transformOrigin:
+								placement === 'bottom' ? 'center top' : 'center bottom',
+						}}>
+						<Paper>
+							<ClickAwayListener onClickAway={handleClose}>
+								<MenuList
+									autoFocusItem={open}
+									id="menu-list-grow"
+									onKeyDown={handleListKeyDown}>
+									{ChildrenWithProps}
+								</MenuList>
+							</ClickAwayListener>
+						</Paper>
+					</Grow>
+				)}
+			</Popper>
+		</>
+	);
+};
 
 const AlignButtons = () => {
 	const [active, setActive] = useState({
@@ -138,131 +220,75 @@ const AlignButtons = () => {
 		justifyfull: false,
 	});
 
-	const classes = useStyles();
-	const [open, setOpen] = React.useState(false);
-	const anchorRef = React.useRef<HTMLButtonElement>(null);
-	const [selected, setSelected] = useState('');
-
-	const handleToggle = () => {
-		setOpen((prevOpen) => !prevOpen);
+	const MenuOptions: React.FC<{
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
+		open?: boolean;
+	}> = ({open, handleClose}) => {
+		return (
+			<>
+				<MenuItem onClick={handleClose}>
+					<EditButtonMultiple
+						cmd="justifyfull"
+						name={'Justify Full'}
+						active={active}
+						setActive={setActive}>
+						<FormatAlignJustify />
+					</EditButtonMultiple>
+				</MenuItem>
+				<MenuItem onClick={handleClose}>
+					<EditButtonMultiple
+						cmd="justifyleft"
+						name={'Align Left'}
+						active={active}
+						setActive={setActive}>
+						<FormatAlignLeft />
+					</EditButtonMultiple>
+				</MenuItem>
+				<MenuItem onClick={handleClose}>
+					<EditButtonMultiple
+						cmd="justifycenter"
+						name={'Align Center'}
+						active={active}
+						setActive={setActive}>
+						<FormatAlignCenter />
+					</EditButtonMultiple>
+				</MenuItem>
+				<MenuItem onClick={handleClose}>
+					<EditButtonMultiple
+						cmd="justifyright"
+						name={'Align Right'}
+						active={active}
+						setActive={setActive}>
+						<FormatAlignRight />
+					</EditButtonMultiple>
+				</MenuItem>
+			</>
+		);
 	};
-
-	const handleClose = (event: React.MouseEvent<EventTarget>) => {
-		if (
-			anchorRef.current &&
-			anchorRef.current.contains(event.target as HTMLElement)
-		) {
-			return;
-		}
-
-		setOpen(false);
-	};
-
-	function handleListKeyDown(event: React.KeyboardEvent) {
-		if (event.key === 'Tab') {
-			event.preventDefault();
-			setOpen(false);
-		}
-	}
-
-	// return focus to the button when we transitioned from !open -> open
-	const prevOpen = React.useRef(open);
-	React.useEffect(() => {
-		if (prevOpen.current === true && open === false) {
-			anchorRef.current!.focus();
-		}
-
-		prevOpen.current = open;
-	}, [open]);
 
 	return (
 		<>
-			<IconButton
-				ref={anchorRef}
-				aria-controls={open ? 'menu-list-grow' : undefined}
-				aria-haspopup="true"
-				title="Align Text"
-				onClick={handleToggle}>
-				{active.justifycenter ? (
-					<FormatAlignCenter />
-				) : active.justifyfull ? (
-					<FormatAlignJustify />
-				) : active.justifyleft ? (
-					<FormatAlignLeft />
-				) : active.justifyright ? (
-					<FormatAlignRight />
-				) : (
-					<FormatAlignLeft />
-				)}
-			</IconButton>
-			<Popper
-				open={open}
-				anchorEl={anchorRef.current}
-				role={undefined}
-				transition
-				disablePortal>
-				{({TransitionProps, placement}) => (
-					<Grow
-						{...TransitionProps}
-						style={{
-							transformOrigin:
-								placement === 'bottom' ? 'center top' : 'center bottom',
-						}}>
-						<Paper>
-							<ClickAwayListener onClickAway={handleClose}>
-								<MenuList
-									autoFocusItem={open}
-									id="menu-list-grow"
-									onKeyDown={handleListKeyDown}>
-									<MenuItem onClick={handleClose}>
-										<EditButtonMultiple
-											cmd="justifyfull"
-											name={'Justify Full'}
-											active={active}
-											setActive={setActive}>
-											<FormatAlignJustify />
-										</EditButtonMultiple>
-									</MenuItem>
-									<MenuItem onClick={handleClose}>
-										<EditButtonMultiple
-											cmd="justifyleft"
-											name={'Align Left'}
-											active={active}
-											setActive={setActive}>
-											<FormatAlignLeft />
-										</EditButtonMultiple>
-									</MenuItem>
-									<MenuItem onClick={handleClose}>
-										<EditButtonMultiple
-											cmd="justifycenter"
-											name={'Align Center'}
-											active={active}
-											setActive={setActive}>
-											<FormatAlignCenter />
-										</EditButtonMultiple>
-									</MenuItem>
-									<MenuItem onClick={handleClose}>
-										<EditButtonMultiple
-											cmd="justifyright"
-											name={'Align Right'}
-											active={active}
-											setActive={setActive}>
-											<FormatAlignRight />
-										</EditButtonMultiple>
-									</MenuItem>
-								</MenuList>
-							</ClickAwayListener>
-						</Paper>
-					</Grow>
-				)}
-			</Popper>
+			<GenericMenuList
+				CIcon={
+					active.justifycenter
+						? FormatAlignCenter
+						: active.justifyfull
+						? FormatAlignJustify
+						: active.justifyleft
+						? FormatAlignLeft
+						: active.justifyright
+						? FormatAlignRight
+						: FormatAlignLeft
+				}
+				title="Align Text">
+				<MenuOptions />
+			</GenericMenuList>
 		</>
 	);
 };
+
 const LineSpacing = () => {
 	const classes = useStyles();
-	const [open, setOpen] = React.useState(false);
-	const anchorRef = React.useRef<HTMLButtonElement>(null);
 	const [selected, setSelected] = useState(1.5);
 
 	const {
@@ -271,360 +297,243 @@ const LineSpacing = () => {
 		lineSpacing: node.data.props.lineSpacing,
 	}));
 
-	const handleToggle = () => {
-		setOpen((prevOpen) => !prevOpen);
-	};
-
-	const handleClose = (
+	const handleSubmit = (
 		event: React.MouseEvent<EventTarget>,
-		lineSpacing?: number
+		lineSpacing: number,
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void
 	) => {
 		if (lineSpacing) {
 			setProp((props) => (props.lineSpacing = lineSpacing));
 			setSelected(lineSpacing);
 		}
-		if (
-			anchorRef.current &&
-			anchorRef.current.contains(event.target as HTMLElement)
-		) {
-			return;
-		}
-
-		setOpen(false);
+		if (handleClose) handleClose(event);
 	};
 
-	function handleListKeyDown(event: React.KeyboardEvent) {
-		if (event.key === 'Tab') {
-			event.preventDefault();
-			setOpen(false);
-		}
-	}
-
-	// return focus to the button when we transitioned from !open -> open
-	const prevOpen = React.useRef(open);
-	React.useEffect(() => {
-		if (prevOpen.current === true && open === false) {
-			anchorRef.current!.focus();
-		}
-
-		prevOpen.current = open;
-	}, [open]);
+	const MenuOptions: React.FC<{
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
+		open?: boolean;
+	}> = ({open, handleClose}) => {
+		return (
+			<>
+				<MenuItem
+					className={selected === 1 ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 1, handleClose)}>
+					1
+				</MenuItem>
+				<MenuItem
+					className={selected === 1.5 ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 1.5, handleClose)}>
+					1.5
+				</MenuItem>
+				<MenuItem
+					className={selected === 2 ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 2, handleClose)}>
+					2
+				</MenuItem>
+				<MenuItem
+					className={selected === 2.5 ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 2.5, handleClose)}>
+					2.5
+				</MenuItem>
+				<MenuItem
+					className={selected === 3 ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 3, handleClose)}>
+					3
+				</MenuItem>
+			</>
+		);
+	};
 
 	return (
 		<>
-			<IconButton
-				ref={anchorRef}
-				aria-controls={open ? 'menu-list-grow' : undefined}
-				aria-haspopup="true"
-				title="Align Text"
-				onClick={handleToggle}>
-				<FormatLineSpacing />
-			</IconButton>
-			<Popper
-				open={open}
-				anchorEl={anchorRef.current}
-				role={undefined}
-				transition
-				disablePortal>
-				{({TransitionProps, placement}) => (
-					<Grow
-						{...TransitionProps}
-						style={{
-							transformOrigin:
-								placement === 'bottom' ? 'center top' : 'center bottom',
-						}}>
-						<Paper>
-							<ClickAwayListener onClickAway={handleClose}>
-								<MenuList
-									autoFocusItem={open}
-									id="menu-list-grow"
-									onKeyDown={handleListKeyDown}>
-									<MenuItem
-										className={selected === 1 ? classes.button : ''}
-										onClick={(e) => handleClose(e, 1)}>
-										1
-									</MenuItem>
-									<MenuItem
-										className={selected === 1.5 ? classes.button : ''}
-										onClick={(e) => handleClose(e, 1.5)}>
-										1.5
-									</MenuItem>
-									<MenuItem
-										className={selected === 2 ? classes.button : ''}
-										onClick={(e) => handleClose(e, 2)}>
-										2
-									</MenuItem>
-									<MenuItem
-										className={selected === 2.5 ? classes.button : ''}
-										onClick={(e) => handleClose(e, 2.5)}>
-										2.5
-									</MenuItem>
-									<MenuItem
-										className={selected === 3 ? classes.button : ''}
-										onClick={(e) => handleClose(e, 3)}>
-										3
-									</MenuItem>
-								</MenuList>
-							</ClickAwayListener>
-						</Paper>
-					</Grow>
-				)}
-			</Popper>
+			<GenericMenuList CIcon={FormatLineSpacing} title="Line Spacing">
+				<MenuOptions />
+			</GenericMenuList>
+		</>
+	);
+};
+
+const LetterSpacing = () => {
+	const {
+		actions: {setProp},
+		letterSpacing,
+	} = useNode((node) => ({
+		letterSpacing: node.data.props.letterSpacing,
+	}));
+
+	const MenuOptions: React.FC<{
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
+		open?: boolean;
+	}> = ({open, handleClose}) => {
+		return (
+			<MenuItem>
+				<TextField
+					type="number"
+					value={letterSpacing}
+					label="Letter Spacing"
+					onChange={(e) =>
+						setProp(
+							(props) =>
+								(props.letterSpacing =
+									parseInt(e.target.value) < 0 ? 0 : parseInt(e.target.value))
+						)
+					}
+				/>
+			</MenuItem>
+		);
+	};
+
+	return (
+		<>
+			<GenericMenuList CIcon={FormatLetterSpacing} title="Letter Spacing">
+				<MenuOptions />
+			</GenericMenuList>
 		</>
 	);
 };
 
 const ListOrderButtons = () => {
 	const classes = useStyles();
-	const [open, setOpen] = React.useState(false);
-	const anchorRef = React.useRef<HTMLButtonElement>(null);
 	const [active, setActive] = useState({
 		insertorderedlist: false,
 		insertunorderedlist: false,
 	});
 
-	const {
-		actions: {setProp},
-	} = useNode((node) => ({
-		lineSpacing: node.data.props.lineSpacing,
-	}));
-
-	const handleToggle = () => {
-		setOpen((prevOpen) => !prevOpen);
+	const MenuOptions: React.FC<{
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
+		open?: boolean;
+	}> = ({open, handleClose}) => {
+		return (
+			<>
+				<MenuItem
+					className={active.insertorderedlist ? classes.button : ''}
+					onClick={handleClose}>
+					<EditButtonMultiple
+						cmd="insertorderedlist"
+						name={'Ordered List'}
+						active={active}
+						setActive={setActive}>
+						<FormatListNumbered />
+					</EditButtonMultiple>
+				</MenuItem>
+				<MenuItem
+					className={active.insertunorderedlist ? classes.button : ''}
+					onClick={handleClose}>
+					<EditButtonMultiple
+						cmd="insertunorderedlist"
+						name={'UnOrdered List'}
+						active={active}
+						setActive={setActive}>
+						<FormatListBulleted />
+					</EditButtonMultiple>
+				</MenuItem>
+			</>
+		);
 	};
-
-	const handleClose = (event: React.MouseEvent<EventTarget>) => {
-		if (
-			anchorRef.current &&
-			anchorRef.current.contains(event.target as HTMLElement)
-		) {
-			return;
-		}
-
-		setOpen(false);
-	};
-
-	function handleListKeyDown(event: React.KeyboardEvent) {
-		if (event.key === 'Tab') {
-			event.preventDefault();
-			setOpen(false);
-		}
-	}
-
-	// return focus to the button when we transitioned from !open -> open
-	const prevOpen = React.useRef(open);
-	React.useEffect(() => {
-		if (prevOpen.current === true && open === false) {
-			anchorRef.current!.focus();
-		}
-
-		prevOpen.current = open;
-	}, [open]);
 
 	return (
 		<>
-			<IconButton
-				ref={anchorRef}
-				aria-controls={open ? 'menu-list-grow' : undefined}
-				aria-haspopup="true"
-				title="Align Text"
-				onClick={handleToggle}>
-				<FormatListBulleted />
-			</IconButton>
-			<Popper
-				open={open}
-				anchorEl={anchorRef.current}
-				role={undefined}
-				transition
-				disablePortal>
-				{({TransitionProps, placement}) => (
-					<Grow
-						{...TransitionProps}
-						style={{
-							transformOrigin:
-								placement === 'bottom' ? 'center top' : 'center bottom',
-						}}>
-						<Paper>
-							<ClickAwayListener onClickAway={handleClose}>
-								<MenuList
-									autoFocusItem={open}
-									id="menu-list-grow"
-									onKeyDown={handleListKeyDown}>
-									<MenuItem
-										className={active.insertorderedlist ? classes.button : ''}
-										onClick={handleClose}>
-										<EditButtonMultiple
-											cmd="insertorderedlist"
-											name={'Ordered List'}
-											active={active}
-											setActive={setActive}>
-											<FormatListNumbered />
-										</EditButtonMultiple>
-									</MenuItem>
-									<MenuItem
-										className={active.insertunorderedlist ? classes.button : ''}
-										onClick={handleClose}>
-										<EditButtonMultiple
-											cmd="insertunorderedlist"
-											name={'UnOrdered List'}
-											active={active}
-											setActive={setActive}>
-											<FormatListBulleted />
-										</EditButtonMultiple>
-									</MenuItem>
-								</MenuList>
-							</ClickAwayListener>
-						</Paper>
-					</Grow>
-				)}
-			</Popper>
+			<GenericMenuList CIcon={FormatListBulleted} title="Insert List">
+				<MenuOptions />
+			</GenericMenuList>
+		</>
+	);
+};
+export const TextColor = () => {
+	const [foreColor, setForeColor] = useState('#fff');
+
+	const handleChangeComplete = (color: ColorResult) => {
+		setForeColor(color.hex);
+		console.log(document.execCommand('forecolor', false, foreColor));
+		console.log(color);
+	};
+
+	const IconWithColor = () => {
+		return (
+			<div style={{color: foreColor}}>
+				<FormatColorTextIcon />
+			</div>
+		);
+	};
+
+	const MenuOption: React.FC<{
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
+		open?: boolean;
+	}> = ({open, handleClose}) => {
+		return (
+			<>
+				<MenuItem onClick={handleClose}>
+					{open && (
+						<ChromePicker
+							color={foreColor}
+							onChangeComplete={handleChangeComplete}
+						/>
+					)}
+				</MenuItem>
+			</>
+		);
+	};
+	return (
+		<>
+			<GenericMenuList CIcon={IconWithColor} title="Text Color Chooser">
+				<MenuOption />
+			</GenericMenuList>
 		</>
 	);
 };
 
-const MoreMenu: React.FC<{text?: string; Choose: typeof TextStyleMenu}> = ({
-	text,
-	Choose,
-}) => {
-	const [open, setOpen] = React.useState(false);
-	const anchorRef = React.useRef<HTMLButtonElement>(null);
-	const [selected, setSelected] = useState(text);
-
-	const handleToggle = () => {
-		setOpen((prevOpen) => !prevOpen);
+const TextStyleMenu = () => {
+	const [text, setText] = useState('Paragraph');
+	const [selected, setSelected] = useState(true);
+	const TextType = () => {
+		return (
+			<>
+				<Typography variant={'body1'}>{text}</Typography>
+				{selected ? <ExpandLess /> : <ExpandMore />}
+			</>
+		);
 	};
+	const MenuOptions: React.FC<{
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
+		open?: boolean;
+	}> = ({open, handleClose}) => {
+		if (open !== undefined) setSelected(open);
+		console.log('Open', open, selected);
 
-	const handleClose = (event: React.MouseEvent<EventTarget>) => {
-		if (
-			anchorRef.current &&
-			anchorRef.current.contains(event.target as HTMLElement)
-		) {
-			return;
-		}
+		const SingleMenu: React.FC<{
+			name: string;
+			cmd: string;
+			value?: string;
+		}> = ({name, cmd, value}) => {
+			const handleClick = (event: React.MouseEvent) => {
+				document.execCommand(cmd, false, value); // Send the command to the browser
+				setText(name);
 
-		setOpen(false);
+				if (handleClose) handleClose(event);
+			};
+			return (
+				<React.Fragment>
+					<MenuItem onClick={handleClick}>{name}</MenuItem>
+				</React.Fragment>
+			);
+		};
+		return (
+			<>
+				<SingleMenu name={'Paragraph'} cmd={'formatblock'} value={'p'} />
+				<SingleMenu name={'H1'} cmd={'formatblock'} value={'h1'} />
+				<SingleMenu name={'H2'} cmd={'formatblock'} value={'h2'} />
+				<SingleMenu name={'H3'} cmd={'formatblock'} value={'h3'} />
+				<SingleMenu name={'H4'} cmd={'formatblock'} value={'h4'} />
+				<SingleMenu name={'H5'} cmd={'formatblock'} value={'h5'} />
+				<SingleMenu name={'H6'} cmd={'formatblock'} value={'h6'} />
+			</>
+		);
 	};
-
-	function handleListKeyDown(event: React.KeyboardEvent) {
-		if (event.key === 'Tab') {
-			event.preventDefault();
-			setOpen(false);
-		}
-	}
-
-	// return focus to the button when we transitioned from !open -> open
-	const prevOpen = React.useRef(open);
-	React.useEffect(() => {
-		if (prevOpen.current === true && open === false) {
-			anchorRef.current!.focus();
-		}
-
-		prevOpen.current = open;
-	}, [open]);
 	return (
 		<>
-			<IconButton
-				aria-controls={open ? 'menu-list-grow' : undefined}
-				aria-haspopup="true"
-				innerRef={anchorRef}
-				onClick={handleToggle}
-				color="inherit">
-				<Typography variant={'body1'}>{selected}</Typography>
-				{open ? <ExpandLess /> : <ExpandMore />}
-			</IconButton>
-			<Popper
-				open={open}
-				anchorEl={anchorRef.current}
-				role={undefined}
-				transition
-				disablePortal>
-				{({TransitionProps, placement}) => (
-					<Grow
-						{...TransitionProps}
-						style={{
-							transformOrigin:
-								placement === 'bottom' ? 'center top' : 'center bottom',
-						}}>
-						<Paper>
-							<div>
-								<ClickAwayListener onClickAway={handleClose}>
-									<Choose
-										handleClose={handleClose}
-										open={open}
-										setText={setSelected}
-										handleListKeyDown={handleListKeyDown}
-									/>
-								</ClickAwayListener>
-							</div>
-						</Paper>
-					</Grow>
-				)}
-			</Popper>
-		</>
-	);
-};
-
-const SingleMenu: React.FC<{
-	name: string;
-	cmd: string;
-	value?: string;
-	setText: (text: string) => void;
-	handleClose: (event: React.MouseEvent) => void;
-}> = ({name, cmd, value, handleClose, setText}) => {
-	const handleClick = (event: React.MouseEvent) => {
-		document.execCommand(cmd, false, value); // Send the command to the browser
-		setText(name);
-
-		handleClose(event);
-	};
-	return (
-		<React.Fragment>
-			<MenuItem onClick={handleClick}>{name}</MenuItem>
-		</React.Fragment>
-	);
-};
-
-const TextStyleMenu: React.FC<{
-	open: boolean;
-	handleClose: (event: React.MouseEvent) => void;
-	setText: (text: string) => void;
-	handleListKeyDown: (event: React.KeyboardEvent) => void;
-}> = ({open, handleClose, handleListKeyDown, setText}) => {
-	return (
-		<>
-			<MenuList
-				autoFocusItem={open}
-				id="menu-list-grow"
-				onKeyDown={handleListKeyDown}>
-				<SingleMenu
-					name={'Paragraph'}
-					cmd={'formatblock'}
-					value={'p'}
-					setText={setText}
-					handleClose={handleClose}
-				/>
-				<SingleMenu
-					name={'H1'}
-					cmd={'formatblock'}
-					value={'h1'}
-					setText={setText}
-					handleClose={handleClose}
-				/>
-				<SingleMenu
-					name={'H2'}
-					cmd={'formatblock'}
-					value={'h2'}
-					setText={setText}
-					handleClose={handleClose}
-				/>
-				<SingleMenu
-					name={'H3'}
-					cmd={'formatblock'}
-					value={'h3'}
-					setText={setText}
-					handleClose={handleClose}
-				/>
-			</MenuList>
+			<GenericMenuList title="Text Type" CIcon={TextType}>
+				<MenuOptions />
+			</GenericMenuList>
 		</>
 	);
 };
@@ -635,7 +544,8 @@ export const TextSettings = () => {
 	return (
 		<div>
 			<div>
-				<MoreMenu Choose={TextStyleMenu} text="Paragraph" />
+				<TextStyleMenu />
+				<TextColor />
 				<EditButton cmd="bold" name="Bold">
 					<FormatBold />
 				</EditButton>
@@ -656,6 +566,7 @@ export const TextSettings = () => {
 
 				<ListOrderButtons />
 				<LineSpacing />
+				<LetterSpacing />
 
 				<IconButton onClick={() => setActive(!active)}>
 					{active ? <ExpandLess /> : <ExpandMore />}

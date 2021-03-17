@@ -91,6 +91,14 @@ export const useFireCollection = <T>(
 	return {loading, data};
 };
 
+/**
+ *
+ *A function that query collection using Ref and doesn't listens for changes using subscriber
+ * @template T
+ * @param {firebase.default.firestore.CollectionReference<firebase.default.firestore.DocumentData>} collectionRef
+ * @param {ActionCreatorWithPayload<T[], string>} [action]
+ * @return { {loading: boolean, data: T| undefined}} returns loading and data
+ */
 export const useFireCollectionRef = <T>(
 	collectionRef: firebase.default.firestore.CollectionReference<firebase.default.firestore.DocumentData>,
 	action?: ActionCreatorWithPayload<T[], string>
@@ -114,6 +122,14 @@ export const useFireCollectionRef = <T>(
 	return {loading, data};
 };
 
+/**
+ * A function that query collection using Ref and listens for change using subscriber
+ *
+ * @template T
+ * @param {firebase.default.firestore.CollectionReference<firebase.default.firestore.DocumentData>} collectionRef
+ * @param {ActionCreatorWithPayload<T[], string>} [action]
+ * @return { {loading: boolean, data: T| undefined}} returns loading and data
+ */
 export const useFireCollectionRefSub = <T>(
 	collectionRef: firebase.default.firestore.CollectionReference<firebase.default.firestore.DocumentData>,
 	action?: ActionCreatorWithPayload<T[], string>
@@ -139,6 +155,14 @@ export const useFireCollectionRefSub = <T>(
 	return {loading, data};
 };
 
+/**
+ * Performs adding of new docs or update of existing doc using it's id
+ *
+ * @param {string} collection - Collection name or path
+ * @param {firebase.default.firestore.DocumentData} data
+ * @param {string} [id] - document id
+ * @return {*}
+ */
 export const useFireMutation = async (
 	collection: string,
 	data: firebase.default.firestore.DocumentData,
@@ -158,6 +182,13 @@ export const useFireMutation = async (
 	return {loading};
 };
 
+/**
+ * Deletes a single doc from a given collection using id
+ *
+ * @param {string} collection -Collection name or path
+ * @param {string} id - document id
+ * @return {*}
+ */
 export const useFireDelete = async (collection: string, id: string) => {
 	const [loading, setLoading] = useState(true);
 	const dispatch = useAppDispatch();
