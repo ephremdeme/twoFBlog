@@ -236,7 +236,7 @@ export const CoverImage: React.FC<{
 							aria-label="upload picture"
 							component="span"
 							startIcon={<InsertPhotoIcon />}>
-							{src === 'null' ? ' Add Image' : 'Change Image'}
+							{!src ? ' Add Image' : 'Change Image'}
 						</Button>
 					</label>
 					{file && (

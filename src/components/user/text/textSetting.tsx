@@ -121,7 +121,7 @@ const EditButtonMultiple: React.FC<{
 		</Button>
 	);
 };
-const GenericMenuList: React.FC<{
+export const GenericMenuList: React.FC<{
 	CIcon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
 	title?: string;
 }> = ({children, CIcon, title}) => {
