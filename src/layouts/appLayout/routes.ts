@@ -14,7 +14,7 @@ const navs = {
 		},
 		{
 			name: 'Products',
-			path: '/product',
+			path: '/products/list',
 			icon: "scatter_plot",
 		},
 		{
@@ -31,7 +31,7 @@ const navs = {
 		},
 		{
 			name: 'Products',
-			path: '/product',
+			path: '/products/list',
 			icon: "scatter_plot",
 		},
 		{
@@ -48,7 +48,7 @@ const navs = {
 		},
 		{
 			name: 'Products',
-			path: '/product',
+			path: '/products/list',
 			icon: "scatter_plot",
 		},
 		{

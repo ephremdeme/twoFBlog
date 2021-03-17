@@ -10,7 +10,7 @@ interface IProps {
 
 const Product: React.FC<IProps> = ({ routes }) => {
 	return (
-		<div style={{margin: '10rem'}}>
+		<div>
 			<Router routes={routes} />
 		</div>
 	);

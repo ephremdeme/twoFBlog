@@ -13,7 +13,7 @@ import ClassIcon from '@material-ui/icons/Class';
 import SubjectIcon from '@material-ui/icons/Subject';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import ViewComfyIcon from '@material-ui/icons/ViewComfy';
-import {postProduct, selectLoading} from '../../features/product';
+// import {postProduct, selectLoading} from '../../features/product';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router';
 import Toolbar from './Toolbar';
@@ -31,7 +31,7 @@ const CreateProduct = () => {
 	const {handleSubmit, control, errors: fieldsErrors, reset} = useForm();
 	const [file, setFile] = useState<any>(null);
 	const dispatch = useDispatch();
-	const loading = useSelector(selectLoading);
+	// const loading = useSelector(selectLoading);
 	const history = useHistory();
 
 	const onSubmit = (data: any) => {
@@ -43,12 +43,12 @@ const CreateProduct = () => {
 			addistionalDescription: descriptions,
 		};
 
-		dispatch(
-			postProduct({
-				file: file,
-				data: dataUp,
-			})
-		);
+		// dispatch(
+		// 	postProduct({
+		// 		file: file,
+		// 		data: dataUp,
+		// 	})
+		// );
 
 		setTimeout(() => history.push('/product'), 1500);
 	};
@@ -92,8 +92,7 @@ const CreateProduct = () => {
 		<Page title="Create Product">
 			<Box ml={6} mr={6}>
 				<div>
-					{loading ? <h1>UpLoading...</h1> : ''}
-					<Toolbar backbtn={true} title="Add New Product Deatil" />
+					{/* {loading ? <h1>UpLoading...</h1> : ''} */}
 					<Box display="flex" justifyContent="center" width="100%">
 						<form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
 							<Grid container spacing={4} justify="center" alignItems="center">

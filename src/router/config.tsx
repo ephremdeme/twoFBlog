@@ -1,6 +1,8 @@
 import Loader from 'components/shared/Loader';
 import {UserRole} from 'features/auth/types';
+import Appbar from 'layouts/appLayout/Appbar';
 import AppNav from 'layouts/appLayout/AppNav';
+import ProductAppBar from 'layouts/appLayout/product';
 import React, {
 	ComponentType,
 	lazy,
@@ -18,6 +20,7 @@ export interface IRoute {
 	private?: boolean;
 	permissions?: UserRole[];
 	sidebar?: () => React.ReactNode;
+	appbar?: () => React.ReactNode;
 }
 
 const routes: IRoute[] = [
@@ -32,43 +35,52 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/dashboard')),
 		exact: false,
 		fallback: <Loader />,
-		sidebar: () => <AppNav />
+		sidebar: () => <AppNav />,
+		appbar: () => <div>Test</div>,
 	},
 	{
-		path: '/product',
+		path: '/products/',
 		exact: false,
-		redirect: '/product/list',
+		component: lazy(() => import('../pages/product/')),
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
+		appbar: () => <ProductAppBar />,
 		routes: [
 			{
-				path: '/product/list',
+				path: '/products/list',
 				component: lazy(() => import('../pages/product/ProductList')),
 				exact: false,
 				fallback: <Loader />,
 			},
 			{
-				path: '/product/product_detail',
+				path: '/products/:id/detail',
 				component: lazy(() => import('../pages/product/ProductDetial')),
 				exact: false,
 				fallback: <Loader />,
 			},
 			{
-				path: '/product/update_product',
+				path: '/products/:id/update',
 				component: lazy(() => import('../pages/product/UpdateProduct')),
 				exact: false,
 				fallback: <Loader />,
 			},
 			{
-				path: '/product/create_product',
+				path: '/products/create',
 				component: lazy(() => import('../pages/product/CreateProduct')),
 				exact: false,
 				fallback: <Loader />,
 			},
 			{
-				path: '/product/create_product2',
+				path: '/products/create_product2',
 				component: lazy(() => import('../pages/product/create')),
 				exact: false,
+				fallback: <Loader />,
+			},
+			{
+				path: '/products/*',
+				component: lazy(() => import('../pages/NotFound')),
+				exact: false,
+				private: true,
 				fallback: <Loader />,
 			},
 		],
@@ -78,7 +90,7 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/chat/ChatPage')),
 		exact: false,
 		fallback: <Loader />,
-		sidebar: () => <AppNav />
+		sidebar: () => <AppNav />,
 	},
 	{
 		path: '/editor',
