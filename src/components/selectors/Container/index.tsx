@@ -37,7 +37,12 @@ const defaultProps = {
 	padding: ['0', '0', '0', '0'],
 	margin: ['0', '0', '0', '0'],
 	background: {r: 255, g: 255, b: 255, a: 1},
-	color: {r: 0, g: 0, b: 0, a: 1},
+	color: {
+		r: 88,
+		g: 38,
+		b: 38,
+		a: 1,
+	},
 	shadow: 0,
 	radius: 0,
 	width: '100%',
@@ -63,7 +68,7 @@ export const Container = (props: Partial<Container>) => {
 		...defaultProps,
 		...props,
 	};
-	console.log(flexDirection, 'props');
+	console.log(background, 'props');
 
 	return (
 		<Resizer
@@ -75,8 +80,8 @@ export const Container = (props: Partial<Container>) => {
 				maxHeight: '100%',
 				flexDirection: flexDirection,
 				alignItems: alignItems,
-				// background: `rgba(${Object.values(background)})`,
-				// color: `rgba(${Object.values(color)})`,
+				background: `rgba(${Object.values(background)})`,
+				color: `rgba(${Object.values(color)})`,
 				padding: `${padding[0]}px ${padding[1]}px ${padding[2]}px ${padding[3]}px`,
 				margin: `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`,
 				boxShadow:
