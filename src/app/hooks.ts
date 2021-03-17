@@ -16,3 +16,9 @@ export const useCollection = (collectionPath: string) =>
 	firestore.collection(collectionPath);
 export const useStorage = () => storage;
 export const useDatabase = () => database;
+
+export const getFirestore = () => firestore;
+export const getCollection = (collectionPath: string) =>
+	firestore.collection(collectionPath);
+export const getStorage = () => storage;
+export const getDatabase = () => database;
