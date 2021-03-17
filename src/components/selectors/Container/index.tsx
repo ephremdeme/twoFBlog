@@ -1,3 +1,4 @@
+import {Box} from '@material-ui/core';
 import React from 'react';
 import {Resizer} from '../Resizer';
 import {ContainerSettings} from './ContainerSettings';
@@ -36,13 +37,6 @@ const defaultProps = {
 	fillSpace: 'no',
 	padding: ['0', '0', '0', '0'],
 	margin: ['0', '0', '0', '0'],
-	background: {r: 255, g: 255, b: 255, a: 1},
-	color: {
-		r: 88,
-		g: 38,
-		b: 38,
-		a: 1,
-	},
 	shadow: 0,
 	radius: 0,
 	width: '100%',
@@ -80,14 +74,15 @@ export const Container = (props: Partial<Container>) => {
 				maxHeight: '100%',
 				flexDirection: flexDirection,
 				alignItems: alignItems,
-				background: `rgba(${Object.values(background)})`,
-				color: `rgba(${Object.values(color)})`,
+				background: `rgba(${Object.values(background ? background : {})})`,
+				color: `rgba(${Object.values(color ? color : {})})`,
 				padding: `${padding[0]}px ${padding[1]}px ${padding[2]}px ${padding[3]}px`,
 				margin: `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`,
 				boxShadow:
 					shadow === 0
 						? 'none'
-						: `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
+						: `0px 4px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
+
 				borderRadius: `${radius}px`,
 				flexGrow: fillSpace === 'yes' ? 1 : 'unset',
 				display: 'flex',
