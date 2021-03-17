@@ -1,8 +1,11 @@
-import {Editor, Element, Frame} from '@craftjs/core';
+import {Editor, Element, Frame, useEditor} from '@craftjs/core';
 import {
 	Container as MuiContainer,
 	Typography,
 	makeStyles,
+	Theme,
+	createStyles,
+	CssBaseline,
 } from '@material-ui/core';
 import {Container} from '../../components/selectors/Container';
 import Divider from '../../components/selectors/Divider';
@@ -16,29 +19,35 @@ import RenderNode from '../../components/user/RenderNode';
 import {TextEditAble} from '../../components/user/text/Text';
 import lz from 'lzutf8';
 import {IBlog} from '../../features/editor';
+import Viewport from 'components/selectors/Viewport';
 
-const useStyles = makeStyles({
-	main: {
-		boxShadow:
-			'0 8px 60px 0 rgb(103 151 255 / 11%), 0 12px 90px 0 rgb(103 151 255 / 11%)',
-		marginBottom: '40vh',
-	},
-	title: {
-		marginTop: '50px',
-		marginBottom: '70px',
-		paddingTop: '10px',
-		paddingBottom: '10px',
-	},
-	author: {
-		fontSize: '1.1em',
-		maxWidth: '850px',
-		color: '#6d7c90',
-		marginTop: '40px',
-	},
-	coverImage: {
-		marginTop: '20px',
-	},
-});
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		main: {
+			boxShadow:
+				'0 8px 60px 0 rgb(103 151 255 / 11%), 0 12px 90px 0 rgb(103 151 255 / 11%)',
+			marginBottom: '40vh',
+		},
+		title: {
+			marginTop: '50px',
+			marginBottom: '70px',
+			paddingTop: '10px',
+			paddingBottom: '10px',
+		},
+		author: {
+			fontSize: '1.1em',
+			maxWidth: '850px',
+			color: '#6d7c90',
+			marginTop: '40px',
+		},
+		coverImage: {
+			marginTop: '20px',
+		},
+		Container: {
+			// background: theme.palette.,
+		},
+	})
+);
 
 const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 	const resolvers = {TextEditAble, Image, Video, Divider, Container};
@@ -73,6 +82,7 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 	const [enabled, setEnabled] = useState(edit === undefined ? true : edit);
 	return (
 		<Editor resolver={resolvers} onRender={RenderNode}>
+			<CssBaseline />
 			<NavBar
 				enabled={enabled}
 				setEnable={setEnabled}
@@ -108,16 +118,20 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 						imageUrl={blog?.coverImageUrl}
 					/>
 				</div>
-
-				<Frame data={json}>
-					<Element
-						canvas
-						is={Container}
-						width="100%"
-						height="auto"
-						flexDirection="column"
-						padding={['30', '30', '30', '30']}></Element>
-				</Frame>
+				<Viewport>
+					<Frame data={json}>
+						<Element
+							canvas
+							is={Container}
+							id="parent"
+							width="100%"
+							height="auto"
+							className={classes.Container}
+							flexDirection="column"
+							padding={['30', '30', '30', '30']}
+						/>
+					</Frame>
+				</Viewport>
 
 				{/* <Grid container spacing={5}>
 					<Grid item xs={12} md={12}>
