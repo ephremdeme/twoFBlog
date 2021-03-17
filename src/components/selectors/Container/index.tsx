@@ -75,8 +75,8 @@ export const Container = (props: Partial<Container>) => {
 				maxHeight: '100%',
 				flexDirection: flexDirection,
 				alignItems: alignItems,
-				background: `rgba(${Object.values(background)})`,
-				color: `rgba(${Object.values(color)})`,
+				// background: `rgba(${Object.values(background)})`,
+				// color: `rgba(${Object.values(color)})`,
 				padding: `${padding[0]}px ${padding[1]}px ${padding[2]}px ${padding[3]}px`,
 				margin: `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`,
 				boxShadow:
