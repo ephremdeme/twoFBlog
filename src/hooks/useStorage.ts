@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import FB from '../firebase/firebase'
 
 const useStorage = ({ file, data, collection }: any) => {
-	const storage = FB.getInstance().storage;
-	const firestore = FB.getInstance().db;
+	const storage = FB.storage();
+	const firestore = FB.firestore();
 
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<any>(null);

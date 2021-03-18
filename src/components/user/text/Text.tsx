@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 		padding: '10px',
 		margin: '5px',
 		maxWidth: '100%',
-		overflow: 'auto',
+		overflowWrap: 'break-word',
 	},
 	button: {
 		backgroundColor: 'black',
@@ -75,10 +75,11 @@ export const TextEditAble: UserComponent<TextProps> = ({
 				onChange={handleChange}
 				onBlur={handleBlur}
 				disabled={!editable}
-				tagName={'p'}
+				tagName={'div'}
 				style={{
 					lineHeight: lineSpacing,
 					letterSpacing: `${letterSpacing}px`,
+					overflowWrap: 'linebreak',
 				}}
 				className={classes.text}
 				// style={{fontSize: `${fontSize}px`, textAlign}}
