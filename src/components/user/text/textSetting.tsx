@@ -32,7 +32,7 @@ import {
 } from '@material-ui/icons';
 import {useNode} from '@craftjs/core';
 import {Alert} from '@material-ui/lab';
-import {ChromePicker, ColorResult} from 'react-color';
+// import {ChromePicker, ColorResult} from 'react-color';
 import FormatLetterSpacing from '@material-ui/icons/TextFormatSharp';
 import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
@@ -442,11 +442,11 @@ const ListOrderButtons = () => {
 export const TextColor = () => {
 	const [foreColor, setForeColor] = useState('#fff');
 
-	const handleChangeComplete = (color: ColorResult) => {
-		setForeColor(color.hex);
-		console.log(document.execCommand('forecolor', false, foreColor));
-		console.log(color);
-	};
+	// const handleChangeComplete = (color: ColorResult) => {
+	// 	setForeColor(color.hex);
+	// 	console.log(document.execCommand('forecolor', false, foreColor));
+	// 	console.log(color);
+	// };
 
 	const IconWithColor = () => {
 		return (
@@ -463,12 +463,12 @@ export const TextColor = () => {
 		return (
 			<>
 				<MenuItem onClick={handleClose}>
-					{open && (
+					{/* {open && (
 						<ChromePicker
 							color={foreColor}
 							onChangeComplete={handleChangeComplete}
 						/>
-					)}
+					)} */}
 				</MenuItem>
 			</>
 		);

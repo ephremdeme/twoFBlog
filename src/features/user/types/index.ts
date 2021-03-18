@@ -28,5 +28,8 @@ export interface Conversation {
 
 export interface IUsers {
 	users: User[],
-	conversations: Conversation[]
+	conversations: Conversation[],
+	users_admin: User[],
+	conversations_admin: Conversation[],
+	test: any
 }

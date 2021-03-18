@@ -87,7 +87,7 @@ export default function AppNav(props: Props) {
 	};
 
 	React.useEffect(() => {
-		FB.getInstance().auth.onAuthStateChanged((user): any => {
+		FB.auth().onAuthStateChanged((user): any => {
 			if (user) {
 				setPhoto(user.photoURL);
 				setName(user.displayName);

@@ -3,6 +3,7 @@ import {UserRole} from 'features/auth/types';
 import Appbar from 'layouts/appLayout/Appbar';
 import AppNav from 'layouts/appLayout/AppNav';
 import ProductAppBar from 'layouts/appLayout/product';
+import Chat from 'pages/chat/chatbox';
 import React, {
 	ComponentType,
 	lazy,
@@ -27,16 +28,17 @@ const routes: IRoute[] = [
 	{
 		path: '/',
 		exact: true,
-		redirect: '/dashboard',
+		redirect: '/guest_home',
 		fallback: <Loader />,
+		permissions: [UserRole.GUEST, UserRole.USER	],
 	},
-	{
+	{	
 		path: '/dashboard',
 		component: lazy(() => import('../pages/dashboard')),
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
-		appbar: () => <div>Test</div>,
+		permissions: [UserRole.ADMIN, UserRole.CUSTOMER_SERVICE]
 	},
 	{
 		path: '/products/',
@@ -91,6 +93,7 @@ const routes: IRoute[] = [
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
+		permissions: [UserRole.CUSTOMER_SERVICE, UserRole.ADMIN]
 	},
 	{
 		path: '/editor',
@@ -109,6 +112,13 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/signup/SignUp')),
 		exact: false,
 		fallback: <Loader />,
+	},
+	{
+		path: '/guest_home',
+		component: lazy(() => import('../pages/users/GuestsHomePage')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: ()=> <AppNav/>
 	},
 	{
 		path: '/blogs',

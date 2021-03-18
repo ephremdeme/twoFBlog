@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Card, CardHeader, Badge, IconButton, styled, Paper, ListItemText, Box, Typography } from '@material-ui/core';
 import { ReactComponent as MessageLogo } from '../../public/icons/icons8_message.svg';
 import { ReactComponent as CloseMessage } from '../../public/icons/icons8_delete_sign_4.svg';
@@ -9,7 +9,7 @@ import './Chat.css';
 import { RootState } from '../../app/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { SupervisedUserCircle } from "@material-ui/icons";
-// import { getRealTimeUser_Customer_Service, getRealTimeMessage_USER } from "../../features/user";
+import { getRealTimeUser_Customer_Service, getRealTimeMessage_USER, sendRealTimeUserMessage, getSupportUser } from "../../features/user";
 
 interface IItems {
     date: Date;
@@ -42,10 +42,40 @@ const Chatbox = (): JSX.Element => {
     const auth = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
 
+    console.log('[CON]', conversations)
+    console.log('[::]', auth.uid)
+
     useEffect(()=>{
-        // dispatch(getRealTimeUser_Customer_Service(auth.uid));
-        // dispatch(getRealTimeMessage_USER(auth.uid));
+        dispatch(getRealTimeUser_Customer_Service(auth.uid));
+        // dispatch(sendRealTimeUserMessage())
     },[])
+
+    const startChat = ()=>{
+        dispatch(getRealTimeMessage_USER(auth.uid));
+        // dispatch(getSupportUser(auth.uid));
+    }
+
+    const handleSendMessage = (e: any): void=>{
+        e.preventDefault()
+        if(message){
+            const messageContent = {
+                user_uid_1: auth.uid,
+                message,
+                isView: false,
+                createdAt: new Date()
+            }
+            console.log(messageContent)
+            dispatch(sendRealTimeUserMessage(messageContent))
+            setMessage("");
+        }
+    }
+
+    const AlwaysScrollToBottom = () => {
+        const elementRef: any = useRef<React.MutableRefObject<any>>();
+        useEffect(() => elementRef.current.scrollIntoView());
+        return <div ref={elementRef} />;
+    };
+
     return (
         <Container>
             <div className="message"></div>
@@ -56,6 +86,7 @@ const Chatbox = (): JSX.Element => {
                     id="chat-widget-toggle"
                     className="chat-widget-toggle"
                     type="checkbox"
+                    onClick={()=>{startChat()}}
                 />
 
                 {/* <!-- chat close button --> */}
@@ -92,20 +123,21 @@ const Chatbox = (): JSX.Element => {
                                 conversations && conversations.map((message, index) => {
                                     if (conversations.length - 1 === index)
                                         return <Box width="100%" display="flex" justifyContent="flex-end" flexDirection="column" mt={1} >
-                                                <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-start" : "flex-end"}>
+                                                <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"}>
                                                     <Box display="flex" flexDirection="row" pl={1}>
                                                         <ListItemText secondary={"jan 2 02"} />
                                                     </Box>
                                                 </Box>
-                                                <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-start" : "flex-end"} ><TextPaper>{message.message}</TextPaper></Box>
+                                                <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"} ><TextPaper>{message.message}</TextPaper></Box>
+                                                <AlwaysScrollToBottom />
                                             </Box>
                                     return <Box width="100%" display="flex" justifyContent="flex-end" flexDirection="column" mt={1}>
-                                        <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-start" : "flex-end"}>
+                                        <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"}>
                                             <Box display="flex" flexDirection="row" pl={1}>
                                                 <ListItemText secondary={"jan 2 02"} />
                                             </Box>
                                         </Box>
-                                        <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-start" : "flex-end"} ><TextPaper>{message.message}</TextPaper></Box>
+                                        <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"} ><TextPaper>{message.message}</TextPaper></Box>
                                     </Box>
                                 })
                             }
@@ -117,6 +149,7 @@ const Chatbox = (): JSX.Element => {
                                 className="chat-form"
                                 id="chat-form"
                                 name="chat-form"
+                                onSubmit={handleSendMessage}
                             >
                                 <input
                                     className="chat-form-input"
@@ -124,7 +157,7 @@ const Chatbox = (): JSX.Element => {
                                     placeholder="Type your message...."
                                     value={message}
                                     onChange={(e) => {
-                                        // setMessage(e.target.value);
+                                        setMessage(e.target.value);
                                     }}
                                 />
                                 <button

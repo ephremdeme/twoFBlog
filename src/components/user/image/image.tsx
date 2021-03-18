@@ -100,7 +100,7 @@ export const Image: UserComponent<ImageProp> = ({
 	console.log(imageUrl);
 
 	const handleUpload = async () => {
-		const storageRef = Firebase.getInstance().storage.ref();
+		const storageRef = Firebase.storage().ref();
 		const fileRef = storageRef.child('images/' + Date.now() + file.name);
 		await fileRef.put(file);
 		const url = await fileRef.getDownloadURL();
@@ -187,7 +187,7 @@ export const CoverImage: React.FC<{
 	const [isUploaded, setIsUploaded] = useState(false);
 
 	const handleUpload = async () => {
-		const storageRef = Firebase.getInstance().storage.ref();
+		const storageRef = Firebase.storage().ref();
 		const fileRef = storageRef.child('images/' + Date.now() + file.name);
 		await fileRef.put(file);
 		const url = await fileRef.getDownloadURL();

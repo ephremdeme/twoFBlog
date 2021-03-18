@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -31,7 +31,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import {toggleTheme} from 'features/app';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, withRouter} from 'react-router-dom';
 import routes, {IRoute} from 'router/config';
 
 const drawerWidth = 240;
@@ -234,14 +234,25 @@ function Appbar({history}: any): JSX.Element {
 												</ListItem>
 											</List>
 										</Collapse>
-										<ListItem button>
-											<ListItemIcon>
-												<ExitToAppIcon />
-											</ListItemIcon>
-											<Box fontSize={14} fontWeight={500} onClick={signOut}>
-												Logout
-											</Box>
-										</ListItem>
+										{
+											auth.isGuest ?
+												<ListItem button>
+													<ListItemIcon>
+														<ExitToAppIcon />
+													</ListItemIcon>
+													<Box fontSize={14} fontWeight={500} onClick={()=>{history.push('/login')}}>
+														Login
+													</Box>
+												</ListItem> :
+												<ListItem button>
+													<ListItemIcon>
+														<ExitToAppIcon />
+													</ListItemIcon>
+													<Box fontSize={14} fontWeight={500} onClick={signOut}>
+														Logout
+												</Box>
+												</ListItem>
+										}
 										<ListItem button>
 											<ListItemIcon>
 												{appTheme ? <Brightness7Icon /> : <Brightness4Icon />}
@@ -264,4 +275,4 @@ function Appbar({history}: any): JSX.Element {
 	);
 }
 
-export default Appbar;
+export default withRouter(Appbar)

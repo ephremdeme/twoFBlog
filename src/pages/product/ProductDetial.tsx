@@ -29,15 +29,15 @@ const useStyles = makeStyles({
 
 const ProductDetial = () => {
 	const classes = useStyles();
-	const {id} = useParams();
+	// const {id} = useParams();
 	const history = useHistory();
 
-	const {data: product, loading} = useFireDoc<IProduct>('products', id);
-	console.log('The F Data: ', data, loading);
+	// const {data: product, loading} = useFireDoc<IProduct>('products', id);
+	// console.log('The F Data: ', data, loading);
 
 	return (
 		<div>
-			{loading ? (
+			{/* {loading ? (
 				<OverlayLoading />
 			) : (
 					<Card className={classes.root}>
@@ -72,7 +72,7 @@ const ProductDetial = () => {
 							</CardActions>
 						</Box>
 					</Card>
-			)}
+			)} */}
 		</div>
 	);
 };
