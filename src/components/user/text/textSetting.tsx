@@ -13,8 +13,11 @@ import {
 	TextField,
 	ClickAwayListener,
 	Grow,
+	Theme,
+	createStyles,
 } from '@material-ui/core';
 import {
+	ArrowForwardIos,
 	ExpandLess,
 	ExpandMore,
 	FormatAlignCenter,
@@ -22,6 +25,7 @@ import {
 	FormatAlignLeft,
 	FormatAlignRight,
 	FormatBold,
+	FormatColorFill,
 	FormatItalic,
 	FormatLineSpacing,
 	FormatListBulleted,
@@ -30,29 +34,36 @@ import {
 	FormatUnderlined,
 	InsertLink,
 } from '@material-ui/icons';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {useNode} from '@craftjs/core';
 import {Alert} from '@material-ui/lab';
-// import {ChromePicker, ColorResult} from 'react-color';
+import {ChromePicker, Color, ColorResult} from 'react-color';
 import FormatLetterSpacing from '@material-ui/icons/TextFormatSharp';
 import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 
-const useStyles = makeStyles({
-	root: {},
-	text: {
-		display: 'block',
-		minHeight: '70px',
-	},
-	button: {
-		backgroundColor: 'black',
-		color: 'white',
-	},
-});
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		root: {},
+		text: {
+			display: 'block',
+			minHeight: '70px',
+		},
+		button: {
+			backgroundColor: theme.palette.text.secondary,
+			color: theme.palette.text.primary,
+		},
+		letterSpacing: {
+			marginTop: theme.spacing(2),
+		},
+	})
+);
 
 const EditButton: React.FC<{name?: string; cmd: string; value?: string}> = (
 	props
 ) => {
 	const classes = useStyles();
+
 	const [active, setActive] = useState(false);
 	return (
 		<Button
@@ -116,10 +127,11 @@ const EditButtonMultiple: React.FC<{
 		</Button>
 	);
 };
-const GenericMenuList: React.FC<{
+export const GenericMenuList: React.FC<{
 	CIcon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
 	title?: string;
-}> = ({children, CIcon, title}) => {
+	blockKeydown?: boolean;
+}> = ({children, CIcon, title, blockKeydown}) => {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
 	const anchorRef = React.useRef<HTMLButtonElement>(null);
@@ -146,6 +158,8 @@ const GenericMenuList: React.FC<{
 	};
 
 	function handleListKeyDown(event: React.KeyboardEvent) {
+		console.log('Keydown');
+
 		if (event.key === 'Tab') {
 			event.preventDefault();
 			setOpen(false);
@@ -200,7 +214,7 @@ const GenericMenuList: React.FC<{
 								<MenuList
 									autoFocusItem={open}
 									id="menu-list-grow"
-									onKeyDown={handleListKeyDown}>
+									onKeyDown={blockKeydown ? undefined : handleListKeyDown}>
 									{ChildrenWithProps}
 								</MenuList>
 							</ClickAwayListener>
@@ -353,45 +367,6 @@ const LineSpacing = () => {
 	);
 };
 
-const LetterSpacing = () => {
-	const {
-		actions: {setProp},
-		letterSpacing,
-	} = useNode((node) => ({
-		letterSpacing: node.data.props.letterSpacing,
-	}));
-
-	const MenuOptions: React.FC<{
-		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
-		open?: boolean;
-	}> = ({open, handleClose}) => {
-		return (
-			<MenuItem>
-				<TextField
-					type="number"
-					value={letterSpacing}
-					label="Letter Spacing"
-					onChange={(e) =>
-						setProp(
-							(props) =>
-								(props.letterSpacing =
-									parseInt(e.target.value) < 0 ? 0 : parseInt(e.target.value))
-						)
-					}
-				/>
-			</MenuItem>
-		);
-	};
-
-	return (
-		<>
-			<GenericMenuList CIcon={FormatLetterSpacing} title="Letter Spacing">
-				<MenuOptions />
-			</GenericMenuList>
-		</>
-	);
-};
-
 const ListOrderButtons = () => {
 	const classes = useStyles();
 	const [active, setActive] = useState({
@@ -440,7 +415,7 @@ const ListOrderButtons = () => {
 	);
 };
 export const TextColor = () => {
-	const [foreColor, setForeColor] = useState('#fff');
+	const [foreColor, setForeColor] = useState('inhert');
 
 	// const handleChangeComplete = (color: ColorResult) => {
 	// 	setForeColor(color.hex);
@@ -545,31 +520,43 @@ export const TextSettings = () => {
 		<div>
 			<div>
 				<TextStyleMenu />
-				<TextColor />
-				<EditButton cmd="bold" name="Bold">
-					<FormatBold />
-				</EditButton>
-				<EditButton cmd="italic" name={'Italic'}>
-					<FormatItalic />
-				</EditButton>
-				<EditButton cmd="underline" name={'Underline'}>
-					<FormatUnderlined />
-				</EditButton>
-				<EditButton cmd="formatblock" value="blockquote" name={'Blockquote'}>
-					<FormatQuote />
-				</EditButton>
 
-				<LinkButton cmd="createlink" name={'Link'}>
-					<InsertLink />
-				</LinkButton>
-				<AlignButtons />
+				{!active && (
+					<>
+						<EditButton cmd="bold" name="Bold">
+							<FormatBold />
+						</EditButton>
+						<EditButton cmd="italic" name={'Italic'}>
+							<FormatItalic />
+						</EditButton>
+						<EditButton cmd="underline" name={'Underline'}>
+							<FormatUnderlined />
+						</EditButton>
+						<EditButton
+							cmd="formatblock"
+							value="blockquote"
+							name={'Blockquote'}>
+							<FormatQuote />
+						</EditButton>
 
-				<ListOrderButtons />
-				<LineSpacing />
-				<LetterSpacing />
+						<LinkButton cmd="createlink" name={'Link'}>
+							<InsertLink />
+						</LinkButton>
+					</>
+				)}
+				{active && (
+					<>
+						<AlignButtons />
+
+						<ListOrderButtons />
+						<TextColor />
+						<LineSpacing />
+						<LetterSpacing />
+					</>
+				)}
 
 				<IconButton onClick={() => setActive(!active)}>
-					{active ? <ExpandLess /> : <ExpandMore />}
+					{!active ? <ArrowBackIosIcon /> : <ArrowForwardIos />}
 				</IconButton>
 			</div>
 		</div>
@@ -761,5 +748,60 @@ const AlertLink: React.FC<{
 				Select Text First!
 			</Alert>
 		</Snackbar>
+	);
+};
+
+const LetterSpacing = () => {
+	const classes = useStyles();
+
+	const {
+		actions: {setProp},
+		letterSpacing,
+	} = useNode((node) => ({
+		letterSpacing: node.data.props.letterSpacing,
+	}));
+
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(anchorEl ? null : event.currentTarget);
+	};
+
+	const handleClose = (event: React.MouseEvent<EventTarget>) => {
+		setAnchorEl(null);
+	};
+
+	const open = Boolean(anchorEl);
+	const id = open ? 'simple-popper' : undefined;
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setProp(
+			(props) =>
+				(props.letterSpacing =
+					parseInt(e.target.value) < 0 ? 0 : parseInt(e.target.value)),
+			500
+		);
+	};
+
+	return (
+		<>
+			<IconButton
+				onClick={handleClick}
+				aria-describedby={id}
+				title="Insert Letter Spacing">
+				<FormatLetterSpacing />
+			</IconButton>
+			<Popper id={id} open={open} anchorEl={anchorEl}>
+				<ClickAwayListener onClickAway={handleClose}>
+					<TextField
+						type="number"
+						className={classes.letterSpacing}
+						value={letterSpacing}
+						label="Letter Spacing"
+						onChange={handleChange}
+					/>
+				</ClickAwayListener>
+			</Popper>
+		</>
 	);
 };

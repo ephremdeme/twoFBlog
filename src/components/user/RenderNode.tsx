@@ -5,8 +5,20 @@ import {ROOT_NODE} from '@craftjs/utils';
 import ControlCameraIcon from '@material-ui/icons/ControlCamera';
 import {ArrowUpward, Delete, MoveToInbox} from '@material-ui/icons';
 import './RenderNode.css';
+import {createStyles} from '@material-ui/styles';
+import {makeStyles, Theme} from '@material-ui/core';
+
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		root: {
+			color: theme.palette.text.secondary,
+			backgroundColor: theme.palette.background.default,
+		},
+	})
+);
 
 const RenderNode = ({render}: any) => {
+	const classes = useStyles();
 	const {actions, query, selected, connectors} = useEditor((state, query) => {
 		let selected;
 
@@ -92,7 +104,7 @@ const RenderNode = ({render}: any) => {
 				? ReactDOM.createPortal(
 						<div
 							ref={currentRef}
-							className="indicator"
+							className={'indicator ' + classes.root}
 							style={{
 								left: getPos(dom).left,
 								top: getPos(dom).top,
