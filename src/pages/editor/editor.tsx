@@ -27,6 +27,10 @@ const useStyles = makeStyles((theme: Theme) =>
 			boxShadow:
 				'0 8px 60px 0 rgb(103 151 255 / 11%), 0 12px 90px 0 rgb(103 151 255 / 11%)',
 			marginBottom: '40vh',
+			[theme.breakpoints.down('lg')]: {
+				marginLeft: '95px',
+				maxWidth: '90%',
+			},
 		},
 		title: {
 			marginTop: '50px',
@@ -126,7 +130,6 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 							id="parent"
 							width="100%"
 							height="auto"
-							className={classes.Container}
 							flexDirection="column"
 							padding={['30', '30', '30', '30']}
 						/>

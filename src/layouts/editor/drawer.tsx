@@ -91,9 +91,9 @@ export default function MiniDrawer() {
 			<Drawer
 				variant="persistent"
 				anchor="left"
-				classes={{paper: classes.desktopDrawer}}
+				classes={{paper: classes.desktopDrawer + ' MuiAppBar-colorDefault'}}
 				open>
-				<div className={classes.side}>
+				<div className={classes.side + ' MuiAppBar-colorDefault'}>
 					<div className={classes.component}>
 						<List>
 							<ListItem
