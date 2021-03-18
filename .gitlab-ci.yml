@@ -7,5 +7,5 @@ test:
  script: 
     - echo "Start building App"
     - yarn install
-    - yarn run build
+    - CI=false yarn run build
     - echo "Build successfully!"
