@@ -13,6 +13,8 @@ import {
 	TextField,
 	ClickAwayListener,
 	Grow,
+	Theme,
+	createStyles,
 } from '@material-ui/core';
 import {
 	ExpandLess,
@@ -37,22 +39,25 @@ import FormatLetterSpacing from '@material-ui/icons/TextFormatSharp';
 import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 
-const useStyles = makeStyles({
-	root: {},
-	text: {
-		display: 'block',
-		minHeight: '70px',
-	},
-	button: {
-		backgroundColor: 'black',
-		color: 'white',
-	},
-});
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		root: {},
+		text: {
+			display: 'block',
+			minHeight: '70px',
+		},
+		button: {
+			backgroundColor: theme.palette.text.secondary,
+			color: theme.palette.text.primary,
+		},
+	})
+);
 
 const EditButton: React.FC<{name?: string; cmd: string; value?: string}> = (
 	props
 ) => {
 	const classes = useStyles();
+
 	const [active, setActive] = useState(false);
 	return (
 		<Button
@@ -116,7 +121,7 @@ const EditButtonMultiple: React.FC<{
 		</Button>
 	);
 };
-const GenericMenuList: React.FC<{
+export const GenericMenuList: React.FC<{
 	CIcon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
 	title?: string;
 }> = ({children, CIcon, title}) => {
