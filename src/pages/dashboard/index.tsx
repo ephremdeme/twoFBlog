@@ -53,7 +53,7 @@ export default function ResponsiveDrawer(props: Props) {
 	const [email, setEmail] = React.useState<any>(null);
 
 	React.useEffect(() => {
-		firebase.getInstance().auth.onAuthStateChanged((user): any => {
+		firebase.auth().onAuthStateChanged((user): any => {
 			if (user) {
 				setPhoto(user.photoURL);
 				setName(user.displayName);

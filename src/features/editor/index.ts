@@ -57,8 +57,7 @@ export const {setLoadingBlog, setBlogs, setBlog} = editorSlice.actions;
 
 export const fetchBlogs = (): AppThunk => async (dispatch) => {
 	dispatch(setLoadingBlog(true));
-	FB.getInstance()
-		.db.collection('blogs')
+	FB.firestore().collection('blogs')
 		.get()
 		.then((querySnapshot) => {
 			let blogs: IBlog[] = [];
@@ -80,7 +79,7 @@ export const fetchBlogs = (): AppThunk => async (dispatch) => {
 };
 
 export const fetchBlog = (blogId: string): AppThunk => async (dispatch) => {
-	const firestore = FB.getInstance().db;
+	const firestore = FB.firestore();FB.firestore()
 	let blog: any = await firestore.collection('blogs').doc(blogId).get();
 	console.log('FFFFF', blog);
 	setBlog({...blog.data(), authorId: 'Girma Kasu', id: blog.id} as IBlog);
@@ -90,7 +89,7 @@ export const useFetchBlog = (blogId: string) => {
 	const [blog, setBlog] = useState<IBlog>(initialState.blog);
 	const [loading, setLoading] = useState(true);
 	useEffect(() => {
-		const firestore = FB.getInstance().db;
+		const firestore = FB.firestore();FB.firestore()
 		const fetchBlog = async () => {
 			const data: any = await firestore.collection('blogs').doc(blogId).get();
 			setBlog({...data.data(), id: data.id});
@@ -103,7 +102,7 @@ export const useFetchBlog = (blogId: string) => {
 };
 
 export const postBlog = (blog: IBlog): AppThunk => async (dispatch) => {
-	const firestore = FB.getInstance().db;
+	const firestore = FB.firestore();
 	let {id, ...withoutId} = blog;
 	setLoadingBlog(true);
 	firestore.collection('blogs').add(withoutId);
@@ -111,7 +110,7 @@ export const postBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 };
 
 export const updateBlog = (blog: IBlog): AppThunk => async (dispatch) => {
-	const firestore = FB.getInstance().db;
+	const firestore = FB.firestore();
 	let {id, ...withoutId} = blog;
 	setLoadingBlog(true);
 	firestore.collection('blogs').doc(id).update(withoutId);

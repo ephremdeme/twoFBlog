@@ -417,11 +417,11 @@ const ListOrderButtons = () => {
 export const TextColor = () => {
 	const [foreColor, setForeColor] = useState('inhert');
 
-	const handleChangeComplete = (color: ColorResult) => {
-		setForeColor(color.hex);
-		console.log(document.execCommand('forecolor', false, foreColor));
-		console.log(color);
-	};
+	// const handleChangeComplete = (color: ColorResult) => {
+	// 	setForeColor(color.hex);
+	// 	console.log(document.execCommand('forecolor', false, foreColor));
+	// 	console.log(color);
+	// };
 
 	const IconWithColor = () => {
 		return (
@@ -438,12 +438,12 @@ export const TextColor = () => {
 		return (
 			<>
 				<MenuItem onClick={handleClose}>
-					{open && (
+					{/* {open && (
 						<ChromePicker
 							color={foreColor}
 							onChangeComplete={handleChangeComplete}
 						/>
-					)}
+					)} */}
 				</MenuItem>
 			</>
 		);
