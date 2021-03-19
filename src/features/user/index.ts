@@ -6,6 +6,7 @@ import { array } from 'prop-types';
 import { dispatch } from 'rxjs/internal/observable/pairs';
 import { object, list } from 'rxfire/database';
 import { map } from 'rxjs/operators';
+import Cookies from 'js-cookie';
 
 
 const initialState: IUsers = {
@@ -90,7 +91,6 @@ export const getRealTimeUser = (uid: string): AppThunk => async dispatch => {
 }
 
 export const getSupportUser = (uid: string): AppThunk => async dispatch => {
-	console.log('working....')
 	const realtime_db = firebase.database();
 	realtime_db.ref("convserations").on('value', (onSnapshot) => {
 		const user: any[] = [];
@@ -189,35 +189,54 @@ export const sendRealTimeUserMessage = (conversation: any): AppThunk => async di
 	db.collection("users").where("role", "==", UserRole.CUSTOMER_SERVICE).get()
 		.then(users => {
 			const onlineUsers: any = [];
+			const allUsers_id: string[] = [];
+			let counter = 0;
 			users.forEach(user => {
 				if (user.data().isOnline) {
 					onlineUsers.push(user.data().uid)
 				}
+				allUsers_id.push(user.data().uid)
+				counter++;
 			})
-			real_time.ref('convserations').push().set({
-				createdAt: Date(),
-				message: conversation.message,
-				user_uid_1: conversation.user_uid_1,
-				user_uid_2: onlineUsers[0],
-				isView: conversation.isView,
-				from: UserRole.USER
-			}).then(_ => console.log('[DONE]', _))
-				.catch(err => console.log(err.message))
+			let reciver;
+			if (Cookies.get('reciver')) {
+				reciver = Cookies.get('reciver')
+			}
+			else if (onlineUsers.length > 0 && (Cookies.get('reciver') === undefined)) {
+				const rand = Math.floor((Math.random() * onlineUsers.length) + 0)
+				reciver = onlineUsers[rand];
+				Cookies.set('reciver', reciver);
+			} else if ((onlineUsers.length === 0) && (Cookies.get('reciver') === undefined) && (allUsers_id.length > 0)) {
+				const rand = Math.floor((Math.random() * counter) + 0);
+				reciver = allUsers_id[rand];
+				Cookies.set('reciver', reciver);
+			}
+			if (allUsers_id.length > 0) {
+				real_time.ref('convserations').push().set({
+					createdAt: Date(),
+					message: conversation.message,
+					user_uid_1: conversation.user_uid_1,
+					user_uid_2: onlineUsers[0],
+					isView: conversation.isView,
+					from: UserRole.USER
+				}).then(_ => console.log('[DONE]', _))
+					.catch(err => console.log(err.message))
+			}
 
 		})
 }
 
-export const updateViewStatus = (users: any[], uid:string): AppThunk => async dispatch => {
+export const updateViewStatus = (users: any[], uid: string): AppThunk => async dispatch => {
 	const db = firebase.database();
-	const current = users.filter((item)=>{
+	const current = users.filter((item) => {
 		return item.user_uid_2 === uid
 	})
-	current.forEach((user)=>{
+	current.forEach((user) => {
 		db.ref("convserations").child(`${user._key}`).update({
 			isView: true
 		})
 	})
-	
+
 }
 
 export const getRealTimeMessageView = (uid: string): AppThunk => async (dispatch, getState) => {
@@ -228,7 +247,6 @@ export const getRealTimeMessageView = (uid: string): AppThunk => async (dispatch
 		let views = 0;
 		if (snapshot.exists()) {
 			u.map(user => {
-				console.log('1::')
 				snapshot.forEach((message) => {
 					if (message.val().user_uid_1 === user.uid && message.val().user_uid_2 === uid && message.val().isView === false) {
 						views++;
@@ -268,7 +286,7 @@ export const fetchMessage_user = (uid_1: string): AppThunk => async (dispatch) =
 				return { _key: c.snapshot.key, event: c.event, ...c.snapshot.val() }
 			})
 			))
-			.subscribe((data: any[]) => {
+		.subscribe((data: any[]) => {
 			const filtered = data.filter((item) => {
 				return (item.user_uid_1 === uid_1 || item.user_uid_2 === uid_1) &&
 					(item.from === UserRole.CUSTOMER_SERVICE || item.from === UserRole.USER)
