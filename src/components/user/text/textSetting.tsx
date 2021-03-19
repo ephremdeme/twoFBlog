@@ -33,6 +33,7 @@ import {
 	FormatQuote,
 	FormatUnderlined,
 	InsertLink,
+	TextFields,
 } from '@material-ui/icons';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {useNode} from '@craftjs/core';
@@ -366,6 +367,87 @@ const LineSpacing = () => {
 		</>
 	);
 };
+const TextVariant = () => {
+	const classes = useStyles();
+
+	const {
+		actions: {setProp},
+		variant,
+	} = useNode((node) => ({
+		variant: node.data.props.variant,
+	}));
+
+	const [selected, setSelected] = useState(variant);
+
+	const handleSubmit = (
+		event: React.MouseEvent<EventTarget>,
+		textVariant: string,
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void
+	) => {
+		if (textVariant) {
+			setSelected(textVariant);
+			setProp((props) => (props.variant = textVariant));
+		}
+		if (handleClose) handleClose(event);
+	};
+
+	const MenuOptions: React.FC<{
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
+		open?: boolean;
+	}> = ({open, handleClose}) => {
+		return (
+			<>
+				<MenuItem
+					className={selected === 'MuiTypography-h1' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'MuiTypography-h1', handleClose)}>
+					H1
+				</MenuItem>
+				<MenuItem
+					className={selected === 'MuiTypography-h2' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'MuiTypography-h2', handleClose)}>
+					H2
+				</MenuItem>
+				<MenuItem
+					className={selected === 'MuiTypography-h3' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'MuiTypography-h3', handleClose)}>
+					H3
+				</MenuItem>
+				<MenuItem
+					className={selected === 'MuiTypography-h4' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'MuiTypography-h4', handleClose)}>
+					H4
+				</MenuItem>
+				<MenuItem
+					className={
+						selected === 'MuiTypography-subtitle1' ? classes.button : ''
+					}
+					onClick={(e) =>
+						handleSubmit(e, 'MuiTypography-subtitle1', handleClose)
+					}>
+					Subtitle
+				</MenuItem>
+				{/* <MenuItem
+					className={selected === 'H6' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'H6', handleClose)}>
+					H6
+				</MenuItem> */}
+				<MenuItem
+					className={selected === 'MuiTypography-body1' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'MuiTypography-body1', handleClose)}>
+					Body
+				</MenuItem>
+			</>
+		);
+	};
+
+	return (
+		<>
+			<GenericMenuList CIcon={TextFields} title="Line Spacing">
+				<MenuOptions />
+			</GenericMenuList>
+		</>
+	);
+};
 
 const ListOrderButtons = () => {
 	const classes = useStyles();
@@ -552,6 +634,7 @@ export const TextSettings = () => {
 						<TextColor />
 						<LineSpacing />
 						<LetterSpacing />
+						<TextVariant />
 					</>
 				)}
 

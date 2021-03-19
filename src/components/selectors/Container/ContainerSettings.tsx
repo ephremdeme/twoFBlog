@@ -349,7 +349,7 @@ export const Shadow = () => {
 	};
 
 	return (
-		<GenericMenuList title="Radius" CIcon={ShopTwoIcon}>
+		<GenericMenuList title="Shadow" CIcon={ShopTwoIcon}>
 			<MenuOptions />
 		</GenericMenuList>
 	);
