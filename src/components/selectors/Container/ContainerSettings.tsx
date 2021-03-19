@@ -1,9 +1,15 @@
 import {useNode} from '@craftjs/core';
 import {
+	ClickAwayListener,
 	IconButton,
+	List,
+	ListItem,
 	makeStyles,
 	MenuItem,
+	Popper,
 	Slider,
+	SvgIconTypeMap,
+	TextField,
 	Typography,
 } from '@material-ui/core';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
@@ -24,6 +30,9 @@ import {ChromePicker, Color, ColorResult} from 'react-color';
 import CheckBoxOutlineBlankRoundedIcon from '@material-ui/icons/CheckBoxOutlineBlankRounded';
 import {GenericMenuList} from 'components/user/text/textSetting';
 import ShopTwoIcon from '@material-ui/icons/ShopTwo';
+import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
+import {OverridableComponent} from '@material-ui/core/OverridableComponent';
+import AllOutIcon from '@material-ui/icons/AllOut';
 
 const useStyles = makeStyles({
 	cover: {
@@ -40,6 +49,9 @@ const useStyles = makeStyles({
 	radius: {
 		width: 200,
 	},
+	letterSpacing: {
+		marginTop: '16px',
+	},
 });
 
 export const ContainerSettings = () => {
@@ -47,8 +59,6 @@ export const ContainerSettings = () => {
 	const {
 		actions: {setProp},
 		flexDirection,
-		alignItems,
-		justifyContent,
 		background,
 		color,
 	} = useNode((node) => ({
@@ -64,7 +74,7 @@ export const ContainerSettings = () => {
 		const [foreColor, setForeColor] = useState<Color>(color);
 
 		const [open, setOpen] = useState(false);
-		const handleClose = (event: React.MouseEvent<EventTarget>) => {
+		const handleClose = () => {
 			setOpen(false);
 			setProp((props) => (props.color = foreColor), 500);
 		};
@@ -82,7 +92,7 @@ export const ContainerSettings = () => {
 		return (
 			<>
 				<div>
-					<IconButton onClick={(e) => setOpen(true)} title="Insert Color">
+					<IconButton onClick={() => setOpen(true)} title="Insert Color">
 						<ColorLens />
 					</IconButton>
 					{open && (
@@ -104,7 +114,7 @@ export const ContainerSettings = () => {
 		const [foreColor, setForeColor] = useState<Color>(background);
 
 		const [open, setOpen] = useState(false);
-		const handleClose = (event: React.MouseEvent<EventTarget>) => {
+		const handleClose = () => {
 			setProp((props) => (props.background = foreColor), 500);
 
 			setOpen(false);
@@ -128,7 +138,7 @@ export const ContainerSettings = () => {
 			<>
 				<div>
 					<IconButton
-						onClick={(e) => setOpen(true)}
+						onClick={() => setOpen(true)}
 						title="Insert Background Color">
 						<FormatColorFill />
 					</IconButton>
@@ -228,6 +238,8 @@ export const ContainerSettings = () => {
 			<BackColor />
 			<Radius />
 			<Shadow />
+			<Margin />
+			<Padding />
 		</React.Fragment>
 	);
 };
@@ -244,7 +256,7 @@ export const Radius = () => {
 	const MenuOptions: React.FC<{
 		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
 		open?: boolean;
-	}> = ({open, handleClose}) => {
+	}> = () => {
 		const [value, setValue] = useState(radius);
 
 		const handleChange = (
@@ -299,7 +311,7 @@ export const Shadow = () => {
 	const MenuOptions: React.FC<{
 		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
 		open?: boolean;
-	}> = ({open, handleClose}) => {
+	}> = () => {
 		const [value, setValue] = useState(shadow);
 
 		const handleChange = (
@@ -340,5 +352,164 @@ export const Shadow = () => {
 		<GenericMenuList title="Radius" CIcon={ShopTwoIcon}>
 			<MenuOptions />
 		</GenericMenuList>
+	);
+};
+
+const Margin = () => {
+	const {
+		actions: {setProp},
+		margin,
+	} = useNode((node) => ({
+		margin: node.data.props.margin,
+	}));
+	const [marginValues, setMargin] = useState({
+		'0': parseInt(margin[0]),
+		'1': parseInt(margin[1]),
+		'2': parseInt(margin[2]),
+		'3': parseInt(margin[3]),
+	});
+	useEffect(() => {
+		let tempMargin = Object.values(marginValues);
+		setProp((props) => (props.margin = tempMargin), 500);
+		console.log(marginValues, tempMargin);
+	}, [marginValues, setProp]);
+
+	return (
+		<>
+			<GenericMargin
+				CIcon={SettingsOverscanIcon}
+				marginValues={marginValues}
+				setMargin={setMargin}
+				type="Margin"
+			/>
+		</>
+	);
+};
+const Padding = () => {
+	const {
+		actions: {setProp},
+		padding,
+	} = useNode((node) => ({
+		padding: node.data.props.padding,
+	}));
+	const [paddingValues, setPadding] = useState({
+		'0': parseInt(padding[0]),
+		'1': parseInt(padding[1]),
+		'2': parseInt(padding[2]),
+		'3': parseInt(padding[3]),
+	});
+	useEffect(() => {
+		let temppadding = Object.values(paddingValues);
+		setProp((props) => (props.padding = temppadding), 500);
+		console.log(paddingValues, temppadding);
+	}, [paddingValues, setProp]);
+
+	return (
+		<>
+			<GenericMargin
+				CIcon={AllOutIcon}
+				marginValues={paddingValues}
+				setMargin={setPadding}
+				type="Padding"
+			/>
+		</>
+	);
+};
+
+const GenericMargin: React.FC<{
+	type: string;
+	marginValues: {
+		'0': number;
+		'1': number;
+		'2': number;
+		'3': number;
+	};
+	setMargin: React.Dispatch<
+		React.SetStateAction<{
+			'0': number;
+			'1': number;
+			'2': number;
+			'3': number;
+		}>
+	>;
+	CIcon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+}> = ({marginValues, setMargin, type, CIcon}) => {
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(anchorEl ? null : event.currentTarget);
+	};
+
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+
+	const open = Boolean(anchorEl);
+	const id = open ? 'margin-setting' : undefined;
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setMargin({
+			...marginValues,
+			[e.target.name]: isNaN(parseInt(e.target.value))
+				? 0
+				: parseInt(e.target.value),
+		});
+	};
+
+	return (
+		<>
+			<IconButton
+				onClick={handleClick}
+				aria-describedby={id}
+				title={'Insert ' + type}>
+				<CIcon />
+			</IconButton>
+			<Popper id={id} open={open} anchorEl={anchorEl}>
+				<ClickAwayListener onClickAway={handleClose}>
+					<List>
+						<ListItem>
+							<TextField
+								type="number"
+								// className={classes.letterSpacing}
+								value={marginValues[0]}
+								name="0"
+								label={type + ' Top'}
+								onChange={handleChange}
+							/>
+						</ListItem>
+						<ListItem>
+							<TextField
+								type="number"
+								// className={classes.letterSpacing}
+								value={marginValues[1]}
+								name="1"
+								label={type + ' Right'}
+								onChange={handleChange}
+							/>
+						</ListItem>
+						<ListItem>
+							<TextField
+								type="number"
+								// className={classes.letterSpacing}
+								value={marginValues[2]}
+								name="2"
+								label={type + ' Bottom'}
+								onChange={handleChange}
+							/>
+						</ListItem>
+						<ListItem>
+							<TextField
+								type="number"
+								// className={classes.letterSpacing}
+								value={marginValues[3]}
+								name="3"
+								label={type + ' Left'}
+								onChange={handleChange}
+							/>
+						</ListItem>
+					</List>
+				</ClickAwayListener>
+			</Popper>
+		</>
 	);
 };
