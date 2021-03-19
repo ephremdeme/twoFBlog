@@ -12,7 +12,6 @@ import AppNav from 'layouts/appLayout/AppNav';
 import Loading from './components/loading/loading';
 import Error from 'components/error/error'
 import Chat from 'pages/chat/chatbox';
-import { getMeTheFire } from "features/user";
 
 const drawerWidth = 240;
 

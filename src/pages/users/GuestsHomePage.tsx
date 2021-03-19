@@ -1,5 +1,4 @@
 import { RootState } from 'app/store'
-import { getMeTheFire } from 'features/user'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector, connect } from 'react-redux'
 
