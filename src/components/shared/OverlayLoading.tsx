@@ -22,14 +22,13 @@ const useStylesLoader = makeStyles((theme: Theme) =>
 		},
 		card: {
       position: 'relative',
-			background: 'rgba(0,0,0,0.4)',
+			background: 'rgba(0,0,0,0.2)',
 			width: '200px',
 			height: '200px',
 			borderRadius: 20,
 			display: 'flex',
 			alignItems: 'center',
 			justifyContent: 'center',
-			boxShadow: '0 0 10px rgba(0,0,0,0.2)',
 			transform: 'translate(-120%, -50%)'
 		},
 		bottom: {
