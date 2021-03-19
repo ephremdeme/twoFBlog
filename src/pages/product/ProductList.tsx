@@ -1,33 +1,34 @@
-import React from 'react';
-import {useFirestore} from 'app/hooks';
+import React, {useEffect} from 'react';
 import Page from 'components/shared/Page';
-import {selectFilteredProducts, setProducts} from 'features/product';
-import {IProduct} from 'features/product/types';
-import {useFireCollectionRef} from 'hooks/useFirestore';
-import {useSelector} from 'react-redux';
+import {Container} from '@material-ui/core';
+import MiniLoader from '../../components/shared/MiniLoader';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+	fetchProducts,
+	selectLoadingProducts,
+	selectProdcutsLoaded,
+	selectProducts,
+} from 'features/product';
 import ProductListUser from './user/ProductListUser';
 import ProductCardLoading from './user/ProductCardLoading';
-import {Container} from '@material-ui/core';
-import OverlayLoading from '../../components/shared/OverlayLoading';
 
 const ProductList = () => {
-	const productData = useSelector(selectFilteredProducts);
-	const productsRef = useFirestore().collection('products');
-	const {data, loading} = useFireCollectionRef<IProduct>(productsRef);
+	const products = useSelector(selectProducts);
+	const productsLoaded = useSelector(selectProdcutsLoaded);
+	const loadingProducts = useSelector(selectLoadingProducts);
+	const dispatch = useDispatch();
 
-	console.log('Data: ', data)
+	useEffect(() => {
+		dispatch(fetchProducts());
+	}, []);
 
 	return (
 		<Page title="Products">
 			<Container>
-				{loading ? (
-					<>
-						<OverlayLoading />
-						<ProductCardLoading loading={loading} items={15} />
-					</>
-				) : (
-					<ProductListUser products={data} />
-				)}
+				{JSON.stringify(productsLoaded)}
+				{loadingProducts && <MiniLoader />}
+				{!productsLoaded && <ProductCardLoading loading={true} items={15} /> }
+				{products && <ProductListUser products={products} />}
 			</Container>
 		</Page>
 	);
