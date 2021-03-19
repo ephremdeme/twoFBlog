@@ -53,6 +53,7 @@
     "react-spring": "^8.0.27",
     "react-top-loading-bar": "^2.0.1",
     "react-youtube": "^7.13.1",
+    "recharts": "^2.0.8",
     "redux": "^4.0.5",
     "redux-firestore": "^0.15.0",
     "rxfire": "^4.0.0",
