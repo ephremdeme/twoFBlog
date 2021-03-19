@@ -55,6 +55,8 @@
     "react-youtube": "^7.13.1",
     "redux": "^4.0.5",
     "redux-firestore": "^0.15.0",
+    "rxfire": "^4.0.0",
+    "rxjs": "^6.6.6",
     "sanitize-html": "^2.3.2",
     "styled-components": "^5.2.1",
     "typescript": "~3.8.2",
