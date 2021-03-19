@@ -8,7 +8,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import {useRouteMatch} from 'react-router';
 import {Link} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import {setFilterableProducts} from '../../../features/product';
+// import {setFilterableProducts} from '../../../features/product';
 
 const useStyles = makeStyles((theme: Theme) => ({
 	root: {},
@@ -44,7 +44,7 @@ const ProductAppBar = (props: IProps) => {
 	const {url} = useRouteMatch();
 
 	const handleFilterProducts = (e: React.ChangeEvent<HTMLInputElement>) => {
-		dispatch(setFilterableProducts(e.target.value));
+		// dispatch(setFilterableProducts(e.target.value));
 	};
 
 	return (

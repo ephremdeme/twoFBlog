@@ -29,7 +29,7 @@ const useStyles = makeStyles({
 
 const ProductDetial = () => {
 	const classes = useStyles();
-	// const {id} = useParams();
+	const {id} = useParams();
 	const history = useHistory();
 
 	const {data: product, loading} = useFireDoc<IProduct>('products', id);

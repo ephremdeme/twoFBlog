@@ -1,5 +1,5 @@
-import { IAppState } from './index'
+import { RootState } from '../../app/store'
 
 export default {
-	getAppTheme: (state: IAppState): boolean => state.appTheme
+	getAppTheme: (state: RootState): boolean => state.app.appTheme
 }

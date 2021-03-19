@@ -8,6 +8,7 @@ import {
 import CircularProgress, {
 	CircularProgressProps,
 } from '@material-ui/core/CircularProgress';
+import { Box } from '@material-ui/core';
 
 const useStylesLoader = makeStyles((theme: Theme) =>
 	createStyles({
@@ -21,22 +22,22 @@ const useStylesLoader = makeStyles((theme: Theme) =>
 			zIndex: 500,
 		},
 		card: {
-      position: 'relative',
+      position: 'fixed',
+			bottom: '10px',
+			right: '10px',
 			background: 'rgba(0,0,0,0.2)',
-			width: '200px',
-			height: '200px',
-			borderRadius: 20,
+			padding: '.4rem 1rem',
+			borderRadius: 25,
 			display: 'flex',
 			alignItems: 'center',
 			justifyContent: 'center',
-			transform: 'translate(-120%, -50%)'
 		},
 		bottom: {
 			color: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
 		},
 		top: {
 			color: theme.palette.type === 'light' ? '#1a90dd' : '#1a92ff',
-			animationDuration: '280ms',
+			animationDuration: '240ms',
 			position: 'relative',
 			left: 0,
 		},
@@ -52,7 +53,7 @@ interface IProps {
 	props: CircularProgressProps;
 }
 
-const OverlayLoading = ({size=65, thickness=2, ...props}: CircularProgressProps) => {
+const MiniLoading = ({size=25, thickness=3, ...props}: CircularProgressProps) => {
 	const classes = useStylesLoader();
 
 	return (
@@ -69,9 +70,12 @@ const OverlayLoading = ({size=65, thickness=2, ...props}: CircularProgressProps)
 					thickness={thickness}
 					{...props}
 				/>
+				<Box ml={1} fontWeight={400} fontSize="0.8rem">
+					Refreshing...
+				</Box>
 			</div>
 		</div>
 	);
 };
 
-export default OverlayLoading;
+export default MiniLoading;
