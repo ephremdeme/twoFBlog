@@ -112,6 +112,7 @@ function Appbar({history}: any): JSX.Element {
 	};
 	const signOut = () => {
 		dispatch(logoutUser(auth.uid, auth.isGuest));
+		history.push('/login')
 	};
 	// end of list popover
 
@@ -235,7 +236,7 @@ function Appbar({history}: any): JSX.Element {
 											</List>
 										</Collapse>
 										{
-											auth.isGuest ?
+											!auth.isGuest ?
 												<ListItem button>
 													<ListItemIcon>
 														<ExitToAppIcon />
