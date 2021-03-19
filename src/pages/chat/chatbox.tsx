@@ -9,7 +9,7 @@ import './Chat.css';
 import { RootState } from '../../app/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { SupervisedUserCircle } from "@material-ui/icons";
-import { getRealTimeUser_Customer_Service, getRealTimeMessage_USER, sendRealTimeUserMessage, getSupportUser } from "../../features/user";
+import { getRealTimeUser_Customer_Service, getRealTimeMessage_USER, sendRealTimeUserMessage, getSupportUser, fetchMessage_user } from "../../features/user";
 
 interface IItems {
     date: Date;
@@ -51,8 +51,8 @@ const Chatbox = (): JSX.Element => {
     },[])
 
     const startChat = ()=>{
-        dispatch(getRealTimeMessage_USER(auth.uid));
-        // dispatch(getSupportUser(auth.uid));
+        // dispatch(getRealTimeMessage_USER(auth.uid));
+        dispatch(fetchMessage_user(auth.uid));
     }
 
     const handleSendMessage = (e: any): void=>{
