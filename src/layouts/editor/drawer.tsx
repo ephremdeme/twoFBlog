@@ -21,6 +21,7 @@ import {Video} from '../../components/user/video/video';
 import {Image as ImageComp} from '../../components/user/image/image';
 import {Container} from '../../components/selectors/Container';
 import Divider from '../../components/selectors/Divider';
+import {ListItemText} from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -37,11 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		icon: {
 			fontSize: '2rem',
-		},
-		drawer: {
-			width: drawerWidth,
-			flexShrink: 0,
-			whiteSpace: 'nowrap',
+			minWidth: '46px !important',
 		},
 		content: {
 			flexGrow: 1,
@@ -61,6 +58,8 @@ const useStyles = makeStyles((theme: Theme) =>
 			flex: '1 1 0%',
 			flexDirection: 'column',
 			alignItems: 'center',
+			paddingLeft: '20px',
+			paddingTop: '20px',
 		},
 		undo: {
 			display: 'flex',
@@ -95,8 +94,9 @@ export default function MiniDrawer() {
 				open>
 				<div className={classes.side + ' MuiAppBar-colorDefault'}>
 					<div className={classes.component}>
-						<List>
+						<List disablePadding>
 							<ListItem
+								disableGutters
 								innerRef={(ref: ReactElement) =>
 									create(ref, <Text text="edit text" />)
 								}>
@@ -105,13 +105,15 @@ export default function MiniDrawer() {
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
+								disableGutters
 								innerRef={(ref: ReactElement) =>
 									create(
 										ref,
 										<Element
 											canvas
 											is={Container}
-											height="300px"
+											height="30%"
+											margin={['10', '10', '10', '10']}
 											width="300px"></Element>
 									)
 								}>
@@ -120,18 +122,21 @@ export default function MiniDrawer() {
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
+								disableGutters
 								innerRef={(ref: ReactElement) => create(ref, <Video />)}>
 								<ListItemIcon className={classes.icon}>
 									<YouTube />
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
+								disableGutters
 								innerRef={(ref: ReactElement) => create(ref, <ImageComp />)}>
 								<ListItemIcon className={classes.icon}>
 									<ImageRounded />
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
+								disableGutters
 								innerRef={(ref: ReactElement) => create(ref, <Divider />)}>
 								<ListItemIcon className={classes.icon}>
 									<MaximizeIcon />
@@ -139,32 +144,6 @@ export default function MiniDrawer() {
 							</ListItem>
 						</List>
 					</div>
-					{/* <div className={classes.undo}>
-						<List>
-							<ListItem>
-								<IconButton
-									className="copy-state-btn"
-									size="small"
-									disabled={!canUndo}
-									onClick={() => actions.history.undo()}
-									style={{marginRight: '10px'}}>
-									<Undo />
-								</IconButton>
-							</ListItem>
-							<ListItem>
-								<IconButton
-									className="copy-state-btn"
-									size="small"
-									color="secondary"
-									disabled={!canRedo}
-									onClick={() => actions.history.redo()}
-									style={{marginRight: '10px'}}>
-									<Redo />
-								</IconButton>
-							</ListItem>
-						</List>
-					</div>
-				 */}
 				</div>
 			</Drawer>
 		</div>
