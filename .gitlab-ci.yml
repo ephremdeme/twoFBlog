@@ -1,0 +1,11 @@
+image: node:latest
+
+cache:
+  paths:
+    - node_modules/
+test:
+ script: 
+    - echo "Start building App"
+    - yarn install
+    - CI=false yarn run build
+    - echo "Build successfully!"

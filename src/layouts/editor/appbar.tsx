@@ -5,12 +5,18 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import {Button, List, ListItem} from '@material-ui/core';
+import {Button, CssBaseline, List, ListItem} from '@material-ui/core';
 import {useEditor} from '@craftjs/core';
 import lz from 'lzutf8';
 import {Undo, Redo} from '@material-ui/icons';
 import {postBlog, updateBlog} from '../../features/editor';
 import {useAppDispatch} from '../../app/hooks';
+import {useSelector} from 'react-redux';
+import {RootState} from 'app/store';
+
+import Brightness7Icon from '@material-ui/icons/Brightness7';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import {toggleTheme} from 'features/app';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -56,9 +62,11 @@ export const NavBar: React.FC<{
 		canRedo: query.history.canRedo(),
 	}));
 	const dispatch = useAppDispatch();
+	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 
 	return (
 		<div className={classes.root}>
+			<CssBaseline />
 			<AppBar elevation={0} position="fixed" color="default">
 				<Toolbar>
 					<IconButton
@@ -92,6 +100,10 @@ export const NavBar: React.FC<{
 							<Redo />
 						</IconButton>
 					</div>
+
+					<IconButton onClick={() => dispatch(toggleTheme(appTheme))}>
+						{appTheme ? <Brightness7Icon /> : <Brightness4Icon />}
+					</IconButton>
 
 					<Button
 						color="inherit"
