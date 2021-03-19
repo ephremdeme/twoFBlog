@@ -120,7 +120,7 @@ const Chatbox = (): JSX.Element => {
                             {
                                 conversations && conversations.map((message, index) => {
                                     if (conversations.length - 1 === index)
-                                        return <Box width="100%" display="flex" justifyContent="flex-end" flexDirection="column" mt={1} >
+                                        return <Box width="100%" display="flex" justifyContent="flex-end" flexDirection="column" mt={1} key={index}>
                                                 <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"}>
                                                     <Box display="flex" flexDirection="row" pl={1}>
                                                         <ListItemText secondary={"jan 2 02"} />
@@ -129,7 +129,7 @@ const Chatbox = (): JSX.Element => {
                                                 <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"} ><TextPaper>{message.message}</TextPaper></Box>
                                                 <AlwaysScrollToBottom />
                                             </Box>
-                                    return <Box width="100%" display="flex" justifyContent="flex-end" flexDirection="column" mt={1}>
+                                    return <Box width="100%" display="flex" justifyContent="flex-end" flexDirection="column" mt={1} key={index}>
                                         <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"}>
                                             <Box display="flex" flexDirection="row" pl={1}>
                                                 <ListItemText secondary={"jan 2 02"} />
