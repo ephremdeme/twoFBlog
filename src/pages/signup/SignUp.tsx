@@ -15,6 +15,7 @@ import { ReactComponent as GoogleIcon } from '../../public/icons/icons8_google_l
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { singUpWithProvider, signAsGuest, isLoggedIn, createUserWithEmailPassword } from "../../features/auth/index";
+import { UserRole } from 'features/user/types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,6 +32,7 @@ const LoginView = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
+    const auth = useSelector((state: RootState) => state.auth);
 
     const handleLogin = () => {
         if (email && password && name) {
@@ -42,8 +44,6 @@ const LoginView = () => {
             dispatch(createUserWithEmailPassword(user))
         }
     }
-
-
 
     return (
         <Box

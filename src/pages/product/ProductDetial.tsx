@@ -37,7 +37,7 @@ const ProductDetial = () => {
 
 	return (
 		<div>
-			{loading ? (
+			{ loading ? (
 				<OverlayLoading />
 			) : (
 				<Card className={classes.root}>

@@ -17,5 +17,5 @@ export interface User {
 	authenticating: boolean;
 	authenticated: boolean;
 	isGuest: boolean;
-	error: string
+	error: boolean
 }
