@@ -14,9 +14,12 @@ import {
 	ClickAwayListener,
 	Grow,
 	Theme,
-	createStyles,
+	createStyles
 } from '@material-ui/core';
-import {
+import { useSpring, animated as a } from 'react-spring'
+
+import { 
+	
 	ArrowForwardIos,
 	ExpandLess,
 	ExpandMore,
@@ -41,6 +44,7 @@ import {ChromePicker, Color, ColorResult} from 'react-color';
 import FormatLetterSpacing from '@material-ui/icons/TextFormatSharp';
 import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
+import classes from '*.module.css';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -56,6 +60,11 @@ const useStyles = makeStyles((theme: Theme) =>
 		letterSpacing: {
 			marginTop: theme.spacing(2),
 		},
+		arrow: {
+			justifyContent: 'center',
+			display: 'flex',
+			alignItems: 'center'
+		}
 	})
 );
 
@@ -185,7 +194,7 @@ export const GenericMenuList: React.FC<{
 		}
 		return child;
 	});
-
+	
 	return (
 		<>
 			<IconButton
@@ -514,7 +523,14 @@ const TextStyleMenu = () => {
 };
 
 export const TextSettings = () => {
+	const classes = useStyles();
 	const [active, setActive] = useState(false);
+	const [flipped, set] = useState(false)
+	const { transform, opacity } = useSpring({
+		opacity: flipped ? 1 : 0,
+		transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
+		config: { mass: 5, tension: 500, friction: 80 }
+	  })
 
 	return (
 		<div>
@@ -556,7 +572,30 @@ export const TextSettings = () => {
 				)}
 
 				<IconButton onClick={() => setActive(!active)}>
-					{!active ? <ArrowBackIosIcon /> : <ArrowForwardIos />}
+					{!active ?
+						 // @ts-ignore
+					 <div onClick={() => set(state => !state)} className={classes.arrow}>
+						<a.div style={{ transform }}  >
+								< ArrowBackIosIcon />
+							</a.div>
+							<a.div style={{  transform: transform.interpolate(t => 
+						`${t} rotateX(180deg)`) }} > 
+						    {/* < ArrowForwardIos /> */}
+						
+				</a.div>
+					</div>		
+					:
+					<div className={classes.arrow}>
+					<a.div style={{ transform }} >
+								{/* < ArrowBackIosIcon /> */}
+							</a.div>
+					<a.div style={{  transform: transform.interpolate(t => 
+						`${t} rotateX(180deg)`) }}  > 
+						    < ArrowForwardIos />
+						
+				</a.div>
+				</div>
+					}
 				</IconButton>
 			</div>
 		</div>
