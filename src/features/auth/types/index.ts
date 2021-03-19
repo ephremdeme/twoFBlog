@@ -1,11 +1,11 @@
 export enum UserRole {
 	ADMIN = 'ADMIN',
-	BLOGGER = "BLOGGER",
+	BLOGGER = 'BLOGGER',
 	CUSTOMER_SERVICE = 'CUSTOMER_SERVICE',
 	USER = 'USER',
 	GUEST = 'GUEST',
 	SHOPE_ADMIN = 'SHOPE_ADMIN',
-	SELLER = 'SELLER'
+	SELLER = 'SELLER',
 }
 
 export interface User {
@@ -17,5 +17,6 @@ export interface User {
 	authenticating: boolean;
 	authenticated: boolean;
 	isGuest: boolean;
-	error: boolean
+	error: boolean;
+	errorMessage?: string;
 }
