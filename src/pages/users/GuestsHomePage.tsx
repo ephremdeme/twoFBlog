@@ -10,7 +10,6 @@ export default function GuestsHomePage() {
     return (
         <div>
             <h3>GuestsHomePage</h3>
-            <button>get</button>
         </div>
     )
 }
