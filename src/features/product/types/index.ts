@@ -63,7 +63,6 @@ export interface IProductStore {
 }
 
 export interface IProductTransacion extends IProductChart {
-	id: string;
 	uid: string;
 	sid: string;
 	status: 'open' | 'pending' | 'done';

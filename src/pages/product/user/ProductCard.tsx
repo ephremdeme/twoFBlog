@@ -4,11 +4,13 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { IProduct } from 'features/product/types';
 import { Link } from 'react-router-dom';
+
 interface ProductCard {
 	product: IProduct
 }
 
 const ProductCard = ({ product }: ProductCard) => {
+	console.log("Prod", product.name)
 	return (
 		<Grid container>
 			<Box width={210} marginRight={0.87} my={5}>
