@@ -22,13 +22,15 @@ const ProductList = () => {
 		dispatch(fetchProducts());
 	}, []);
 
+	console.log('Products Loaing: ', productsLoaded)
+	console.log('loading: ', loadingProducts)
+
 	return (
 		<Page title="Products">
 			<Container>
-				{JSON.stringify(productsLoaded)}
 				{loadingProducts && <MiniLoader />}
 				{!productsLoaded && <ProductCardLoading loading={true} items={15} /> }
-				{products && <ProductListUser products={products} />}
+				<ProductListUser products={products} />
 			</Container>
 		</Page>
 	);

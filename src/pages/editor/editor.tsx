@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme: Theme) =>
 				'0 8px 60px 0 rgb(103 151 255 / 11%), 0 12px 90px 0 rgb(103 151 255 / 11%)',
 			marginBottom: '40vh',
 			[theme.breakpoints.down('lg')]: {
-				marginLeft: '95px',
-				maxWidth: '90%',
+				marginLeft: '25px',
+				maxWidth: '60%',
 			},
 		},
 		title: {

@@ -10,10 +10,7 @@ interface IProps {
 const ProductListUser:React.FC<IProps> = ({products}) => {
 	return (
 		<Container maxWidth={false}>
-			<pre>
-				{JSON.stringify(products, null, 2)}
-			</pre>
-			{/* <Box mt={3}>
+			<Box mt={3}>
 				<Grid container spacing={3}>
 					{products.map((product: any) => (
 						<Grid item key={product.id} lg={3} md={4} xs={12}>
@@ -21,7 +18,7 @@ const ProductListUser:React.FC<IProps> = ({products}) => {
 						</Grid>
 					))}
 				</Grid>
-			</Box> */}
+			</Box>
 		</Container>
 	);
 };

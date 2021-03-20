@@ -55,6 +55,12 @@ const routes: IRoute[] = [
 				fallback: <Loader />,
 			},
 			{
+				path: '/products/chart',
+				component: lazy(() => import('../pages/product/chart')),
+				exact: false,
+				fallback: <Loader />,
+			},
+			{
 				path: '/products/:id/detail',
 				component: lazy(() => import('../pages/product/ProductDetial')),
 				exact: false,
