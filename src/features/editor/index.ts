@@ -12,6 +12,13 @@ export interface IBlog {
 	date: string;
 	coverImageUrl: string;
 	authorId: string;
+	author?: IAuthor;
+}
+
+export interface IAuthor {
+	uid: string;
+	photo: string;
+	user_name: string;
 }
 
 interface IEditorState {
@@ -57,39 +64,85 @@ export const {setLoadingBlog, setBlogs, setBlog} = editorSlice.actions;
 
 export const fetchBlogs = (): AppThunk => async (dispatch) => {
 	dispatch(setLoadingBlog(true));
-	FB.firestore().collection('blogs')
+	FB.firestore()
+		.collection('blogs')
 		.get()
 		.then((querySnapshot) => {
 			let blogs: IBlog[] = [];
+			let authors: any[] = [];
 			querySnapshot.forEach((doc) => {
 				// doc.data() is never undefined for query doc snapshots
 				// let author =  doc.data().authorId.get().then();
 				// console.log(author);
+				let data = doc.data();
 
 				blogs.push({
 					id: doc.id,
 					...doc.data(),
-					authorId: 'Girma Kasu',
+					authorId: data.authorId.id,
 				} as IBlog);
-			});
-			dispatch(setBlogs(blogs));
-		});
+				let refData = data.authorId.get();
+				console.log(data.authorId);
 
-	// console.log(docs.data());
+				authors.push(refData);
+			});
+			Promise.all(authors).then((values: any) => {
+				interface IAuther {
+					[index: string]: {};
+				}
+
+				let authorArr: IAuther = {};
+				values.map((value: any) => {
+					authorArr[value.id] = {
+						uid: value.id,
+						user_name: value.data().user_name,
+						photo: value.data().photo,
+					};
+				});
+
+				blogs = blogs.map((blog, index) => ({
+					...blog,
+					author: authorArr[blog.authorId] as IAuthor,
+				}));
+
+				dispatch(setBlogs(blogs));
+				dispatch(setLoadingBlog(false));
+			});
+		});
 };
 
 export const fetchBlog = (blogId: string): AppThunk => async (dispatch) => {
-	const firestore = FB.firestore();FB.firestore()
+	const firestore = FB.firestore();
+
 	let blog: any = await firestore.collection('blogs').doc(blogId).get();
-	console.log('FFFFF', blog);
-	setBlog({...blog.data(), authorId: 'Girma Kasu', id: blog.id} as IBlog);
+	let data = blog.data();
+	let refData = await data.authorId.get();
+
+	dispatch(setLoadingBlog(true));
+
+	let blogData = {
+		id: blog.id,
+		...blog.data(),
+		authorId: data.authorId.id,
+		author: {
+			uid: refData.id,
+			user_name: refData.data().user_name,
+			photo: refData.data().photo,
+		},
+	} as IBlog;
+
+	console.log('FFFFF', blogData);
+	dispatch(setBlog(blogData));
+
+	dispatch(setLoadingBlog(false));
 };
 
 export const useFetchBlog = (blogId: string) => {
 	const [blog, setBlog] = useState<IBlog>(initialState.blog);
 	const [loading, setLoading] = useState(true);
 	useEffect(() => {
-		const firestore = FB.firestore();FB.firestore()
+		const firestore = FB.firestore();
+		FB.firestore();
 		const fetchBlog = async () => {
 			const data: any = await firestore.collection('blogs').doc(blogId).get();
 			setBlog({...data.data(), id: data.id});
