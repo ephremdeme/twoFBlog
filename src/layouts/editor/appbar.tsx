@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -64,6 +64,12 @@ export const NavBar: React.FC<{
 	const dispatch = useAppDispatch();
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 
+	useEffect(() => {
+		if (!enabled) {
+			actions.setOptions((options) => (options.enabled = false));
+			setEnable(enabled);
+		}
+	}, []);
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
@@ -126,7 +132,7 @@ export const NavBar: React.FC<{
 							handleChange('blogHash', hash);
 							if (values.id === '') dispatch(postBlog(values));
 							else {
-								dispatch(postBlog(values));
+								// dispatch(postBlog(values));
 								dispatch(updateBlog(values));
 							}
 							console.log(values);
@@ -135,7 +141,6 @@ export const NavBar: React.FC<{
 					</Button>
 				</Toolbar>
 			</AppBar>
-			;
 		</div>
 	);
 };
