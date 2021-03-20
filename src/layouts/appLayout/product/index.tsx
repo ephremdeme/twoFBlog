@@ -8,6 +8,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import {useRouteMatch} from 'react-router';
 import {Link} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 // import {setFilterableProducts} from '../../../features/product';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -49,7 +50,14 @@ const ProductAppBar = (props: IProps) => {
 
 	return (
 		<div className={clsx(classes.root, className)}>
-      product app bar
+			<Box display="flex" alignItems="center" justifyContent="space-between">
+				<Box></Box>
+				<Box flexGrow={1} alignSelf="flex-end">
+					<IconButton aria-label="chart" component={Link} to={'/products/chart'}>
+						<ShoppingCartIcon fontSize="small" />
+					</IconButton>
+				</Box>
+			</Box>
 			{/* <Box>
 				<Card elevation={0} color="default">
 					<Box m={2}>
@@ -94,7 +102,7 @@ const ProductAppBar = (props: IProps) => {
 				</Card>
 			</Box>
 		 */}
-    </div>
+		</div>
 	);
 };
 

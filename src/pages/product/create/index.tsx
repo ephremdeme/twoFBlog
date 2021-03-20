@@ -39,10 +39,8 @@ function getStepContent(step: number) {
 	switch (step) {
 		case 0:
 			return {
-				text: `For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.`,
-				form: <h1>some form here to desply</h1>,
+				text: `Product Info`,
+				form: <h1>Prodcut Ingo</h1>,
 			};
 		case 1:
 			return {
