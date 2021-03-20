@@ -10,11 +10,21 @@ const productSlice = createSlice({
 	reducers,
 });
 
-export const {setLoadingProducts, setProducts} = productSlice.actions;
+export const {
+	setLoadingProducts,
+	setProducts,
+	setChart,
+	removeProductsAll,
+	removeProductChart,
+	resetProductChart,
+	resetChart
+} = productSlice.actions;
+
 export const {
 	selectProducts,
 	selectLoadingProducts,
 	selectProdcutsLoaded,
+	selectChartTotal
 } = selectors;
 export const {fetchProducts} = thunks;
 
