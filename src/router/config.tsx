@@ -30,15 +30,15 @@ const routes: IRoute[] = [
 		exact: true,
 		redirect: '/guest_home',
 		fallback: <Loader />,
-		permissions: [UserRole.GUEST, UserRole.USER	],
+		permissions: [UserRole.GUEST, UserRole.USER],
 	},
-	{	
+	{
 		path: '/dashboard',
 		component: lazy(() => import('../pages/dashboard')),
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
-		permissions: [UserRole.ADMIN, UserRole.CUSTOMER_SERVICE]
+		permissions: [UserRole.ADMIN, UserRole.CUSTOMER_SERVICE],
 	},
 	{
 		path: '/products/',
@@ -93,13 +93,14 @@ const routes: IRoute[] = [
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
-		permissions: [UserRole.CUSTOMER_SERVICE, UserRole.ADMIN]
+		permissions: [UserRole.CUSTOMER_SERVICE, UserRole.ADMIN],
 	},
 	{
 		path: '/editor',
 		component: lazy(() => import('../pages/editor/editor')),
 		exact: false,
 		fallback: <Loader />,
+		permissions: [UserRole.BLOGGER, UserRole.ADMIN, UserRole.USER],
 	},
 	{
 		path: '/login',
@@ -118,13 +119,7 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/users/GuestsHomePage')),
 		exact: false,
 		fallback: <Loader />,
-		sidebar: ()=> <AppNav/>
-	},
-	{
-		path: '/blogs',
-		component: lazy(() => import('../pages/editor')),
-		exact: false,
-		fallback: <Loader />,
+		sidebar: () => <AppNav />,
 	},
 	{
 		path: '/blogs/:blogId',
@@ -132,6 +127,13 @@ const routes: IRoute[] = [
 		exact: false,
 		fallback: <Loader />,
 	},
+	{
+		path: '/blogs',
+		component: lazy(() => import('../pages/editor')),
+		exact: false,
+		fallback: <Loader />,
+	},
+
 	{
 		path: '*',
 		component: lazy(() => import('../pages/NotFound')),

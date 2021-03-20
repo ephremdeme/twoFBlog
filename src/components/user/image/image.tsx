@@ -220,7 +220,7 @@ export const CoverImage: React.FC<{
 					style={{maxWidth: '100%', height: 'auto', width: 'auto'}}
 				/>
 			</MuiContainer>
-			{!isUploaded && (
+			{(!isUploaded || !imageUrl) && (
 				<div style={{margin: '20px'}}>
 					<input
 						accept="image/*"
