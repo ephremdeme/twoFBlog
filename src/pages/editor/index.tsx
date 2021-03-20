@@ -1,18 +1,24 @@
 import {Container, Grid} from '@material-ui/core';
 import {useAppSelector, useFirestore} from 'app/hooks';
-import {IBlog, selectBlogs, setBlogs} from 'features/editor';
+import {fetchBlogs, IBlog, selectBlogs, setBlogs} from 'features/editor';
 import {
 	useFireCollection,
 	useFireCollectionRef,
 	useFireMutation,
 } from 'hooks/useFirestore';
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
 import {BlogCard} from './BlogCrad';
 
 function BlogsIndex() {
 	const blogs = useAppSelector(selectBlogs);
 	const blogCollRef = useFirestore().collection('blogs');
-	const {data: RefData} = useFireCollectionRef<IBlog>(blogCollRef, setBlogs);
+	const dispatch = useDispatch();
+	// const {data: RefData} = useFireCollectionRef<IBlog>(blogCollRef, setBlogs);
+
+	useEffect(() => {
+		dispatch(fetchBlogs());
+	}, []);
 	// useFireMutation('tests', {test: 'test 1'});
 	return (
 		<>
