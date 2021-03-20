@@ -21,6 +21,8 @@ import {INavRouter} from './routes';
 import FB from '../../firebase/firebase';
 import Icon from '@material-ui/core/Icon';
 import Appbar from './Appbar';
+import Cookies from 'js-cookie';
+import {UserRole} from 'features/user/types';
 
 const drawerWidth = 240;
 
@@ -81,6 +83,7 @@ export default function AppNav(props: Props) {
 	const [photo, setPhoto] = React.useState<any>('');
 	const [name, setName] = React.useState<any>(null);
 	const [email, setEmail] = React.useState<any>(null);
+	const role: UserRole = useSelector((state: RootState) => state.auth.role);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -95,7 +98,7 @@ export default function AppNav(props: Props) {
 			} else {
 			}
 		});
-		setNavs(dashboardRoutes['guest']);
+		setNavs(dashboardRoutes[role]);
 	}, []);
 
 	const drawer = (
@@ -110,7 +113,7 @@ export default function AppNav(props: Props) {
 						key={i}
 						className={classes.listItems}>
 						<ListItemIcon>
-							<Icon style={{ fontSize: 20 }}>{nav.icon}</Icon>
+							<Icon style={{fontSize: 20}}>{nav.icon}</Icon>
 						</ListItemIcon>
 						<Box fontSize={14} fontWeight={500}>
 							{nav.name}
