@@ -126,7 +126,7 @@ export const NavBar: React.FC<{
 							handleChange('blogHash', hash);
 							if (values.id === '') dispatch(postBlog(values));
 							else {
-								// dispatch(postBlog(values));
+								dispatch(postBlog(values));
 								dispatch(updateBlog(values));
 							}
 							console.log(values);

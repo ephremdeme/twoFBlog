@@ -97,7 +97,7 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 				handleChange={handleChange}
 				values={values}
 			/>
-			<MiniDrawer />
+			{enabled && <MiniDrawer />}
 			<MuiContainer maxWidth={'lg'}>
 				<div className={classes.title}>
 					{enabled && (

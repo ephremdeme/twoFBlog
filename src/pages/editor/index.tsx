@@ -18,7 +18,7 @@ function BlogsIndex() {
 		<>
 			<Container>
 				<Grid container spacing={5}>
-					{blogs.map((blog) => (
+					{blogs.map((blog: IBlog) => (
 						<Grid item md={4} key={blog.id}>
 							<BlogCard blog={blog} />
 						</Grid>
