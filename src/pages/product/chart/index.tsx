@@ -136,7 +136,7 @@ const Chart = () => {
 
 	return (
 		<Container>
-			{Object.keys(chart).length < 0 ? (
+			{Object.keys(chart).length ? (
 				<>
 					<Box display="flex" justifyContent="space-between" m={3}>
 						<Box fontWeight={600} fontSize="1.2rem">
