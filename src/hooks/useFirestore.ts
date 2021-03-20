@@ -33,7 +33,7 @@ export const useFireDoc = <T>(
 		};
 
 		fetchDoc();
-	}, [action, dispatch, docRef, id]);
+	}, [id]);
 	return {loading, data};
 };
 /**

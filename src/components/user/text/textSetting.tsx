@@ -14,12 +14,11 @@ import {
 	ClickAwayListener,
 	Grow,
 	Theme,
-	createStyles
+	createStyles,
 } from '@material-ui/core';
-import { useSpring, animated as a } from 'react-spring'
+import {useSpring, animated as a} from 'react-spring';
 
-import { 
-	
+import {
 	ArrowForwardIos,
 	ExpandLess,
 	ExpandMore,
@@ -64,8 +63,8 @@ const useStyles = makeStyles((theme: Theme) =>
 		arrow: {
 			justifyContent: 'center',
 			display: 'flex',
-			alignItems: 'center'
-		}
+			alignItems: 'center',
+		},
 	})
 );
 
@@ -195,7 +194,7 @@ export const GenericMenuList: React.FC<{
 		}
 		return child;
 	});
-	
+
 	return (
 		<>
 			<IconButton
@@ -451,7 +450,7 @@ const TextVariant = () => {
 
 	return (
 		<>
-			<GenericMenuList CIcon={TextFields} title="Line Spacing">
+			<GenericMenuList CIcon={TextFields} title="Change The Whole Text Variant">
 				<MenuOptions />
 			</GenericMenuList>
 		</>
@@ -508,11 +507,11 @@ const ListOrderButtons = () => {
 export const TextColor = () => {
 	const [foreColor, setForeColor] = useState('inhert');
 
-	// const handleChangeComplete = (color: ColorResult) => {
-	// 	setForeColor(color.hex);
-	// 	console.log(document.execCommand('forecolor', false, foreColor));
-	// 	console.log(color);
-	// };
+	const handleChangeComplete = (color: ColorResult) => {
+		setForeColor(color.hex);
+		console.log(document.execCommand('forecolor', false, foreColor));
+		console.log(color);
+	};
 
 	const IconWithColor = () => {
 		return (
@@ -529,12 +528,12 @@ export const TextColor = () => {
 		return (
 			<>
 				<MenuItem onClick={handleClose}>
-					{/* {open && (
+					{open && (
 						<ChromePicker
 							color={foreColor}
 							onChangeComplete={handleChangeComplete}
 						/>
-					)} */}
+					)}
 				</MenuItem>
 			</>
 		);
@@ -607,12 +606,12 @@ const TextStyleMenu = () => {
 export const TextSettings = () => {
 	const classes = useStyles();
 	const [active, setActive] = useState(false);
-	const [flipped, set] = useState(false)
-	const { transform, opacity } = useSpring({
+	const [flipped, set] = useState(false);
+	const {transform, opacity} = useSpring({
 		opacity: flipped ? 1 : 0,
 		transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
-		config: { mass: 5, tension: 500, friction: 80 }
-	  })
+		config: {mass: 5, tension: 500, friction: 80},
+	});
 
 	return (
 		<div>
@@ -655,30 +654,36 @@ export const TextSettings = () => {
 				)}
 
 				<IconButton onClick={() => setActive(!active)}>
-					{!active ?
-						 // @ts-ignore
-					 <div onClick={() => set(state => !state)} className={classes.arrow}>
-						<a.div style={{ transform }}  >
-								< ArrowBackIosIcon />
+					{!active ? (
+						// @ts-ignore
+						<div
+							onClick={() => set((state) => !state)}
+							className={classes.arrow}>
+							<a.div style={{transform}}>
+								<ArrowBackIosIcon />
 							</a.div>
-							<a.div style={{  transform: transform.interpolate(t => 
-						`${t} rotateX(180deg)`) }} > 
-						    {/* < ArrowForwardIos /> */}
-						
-				</a.div>
-					</div>		
-					:
-					<div className={classes.arrow}>
-					<a.div style={{ transform }} >
-								{/* < ArrowBackIosIcon /> */}
+							<a.div
+								style={{
+									transform: transform.interpolate(
+										(t) => `${t} rotateX(180deg)`
+									),
+								}}>
+								{/* < ArrowForwardIos /> */}
 							</a.div>
-					<a.div style={{  transform: transform.interpolate(t => 
-						`${t} rotateX(180deg)`) }}  > 
-						    < ArrowForwardIos />
-						
-				</a.div>
-				</div>
-					}
+						</div>
+					) : (
+						<div className={classes.arrow}>
+							<a.div style={{transform}}>{/* < ArrowBackIosIcon /> */}</a.div>
+							<a.div
+								style={{
+									transform: transform.interpolate(
+										(t) => `${t} rotateX(180deg)`
+									),
+								}}>
+								<ArrowForwardIos />
+							</a.div>
+						</div>
+					)}
 				</IconButton>
 			</div>
 		</div>
