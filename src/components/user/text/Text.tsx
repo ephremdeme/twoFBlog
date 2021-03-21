@@ -12,7 +12,7 @@ const useStyles = makeStyles({
 	},
 	text: {
 		display: 'block',
-		minHeight: '70px',
+		minHeight: 'auto',
 		minWidth: '120px',
 		padding: '10px',
 		margin: '5px',
