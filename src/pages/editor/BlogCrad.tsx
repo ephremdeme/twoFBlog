@@ -1,5 +1,5 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -20,26 +20,35 @@ import ts from 'typescript';
 import {IBlog, selectLoading} from 'features/editor';
 import {useSelector} from 'react-redux';
 import {useFireDelete} from 'hooks/useFirestore';
+import {Backdrop, CircularProgress} from '@material-ui/core';
+import EditorBackdrop from './EditorBackdrop';
 
-const useStyles = makeStyles({
-	cardIcons: {
-		float: 'right',
-		marginLeft: '60%',
-	},
-	root: {
-		maxWidth: 383,
-	},
-	media: {
-		height: 100,
-		paddingTop: '56.25%',
-	},
-	avatar: {
-		backgroundColor: red[500],
-	},
-	rootDiv: {
-		paddingTop: '5%',
-	},
-});
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		cardIcons: {
+			float: 'right',
+			marginLeft: '60%',
+		},
+		root: {
+			maxWidth: 383,
+		},
+		media: {
+			height: 100,
+			paddingTop: '56.25%',
+		},
+		avatar: {
+			backgroundColor: red[500],
+		},
+		rootDiv: {
+			paddingTop: '5%',
+		},
+		backdrop: {
+			zIndex: theme.zIndex.drawer + 1,
+			color: '#fff',
+		},
+	})
+);
+
 const calc = (x: number, y: number) => [
 	-(y - window.innerHeight / 4) / 200,
 	(x - window.innerWidth / 4) / 200,
@@ -97,13 +106,14 @@ export const BlogCard: React.FC<{
 							</IconButton>
 						</Link>
 						<IconButton
-							disabled={!loading}
+							disabled={loading}
 							onClick={(e) => {
 								console.log(blog.id, 'ONclick');
 
 								deleteDoc(blog.id);
 							}}>
 							<DeleteIcon style={{color: 'red'}} />
+							<EditorBackdrop loading={loading} />
 						</IconButton>
 					</CardActions>
 				</Card>

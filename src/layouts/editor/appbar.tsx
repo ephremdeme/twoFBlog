@@ -17,6 +17,7 @@ import {RootState} from 'app/store';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import {toggleTheme} from 'features/app';
+import EditorBackdrop from 'pages/editor/EditorBackdrop';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -65,6 +66,7 @@ export const NavBar: React.FC<{
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const user = useSelector((state: RootState) => state.auth);
 	const loading = useSelector(selectLoading);
+	console.log('ddd', loading);
 
 	useEffect(() => {
 		if (!enabled) {
@@ -146,18 +148,24 @@ export const NavBar: React.FC<{
 												})
 											);
 										else {
-											// dispatch(postBlog(values));
 											dispatch(
-												updateBlog({
+												postBlog({
 													...values,
 													blogHash: hash,
 												})
 											);
+											// dispatch(
+											// 	updateBlog({
+											// 		...values,
+											// 		blogHash: hash,
+											// 	})
+											// );
 										}
 										console.log(values);
 									}}>
 									Publish
 								</Button>
+								<EditorBackdrop loading={loading} />
 							</>
 						))}
 				</Toolbar>

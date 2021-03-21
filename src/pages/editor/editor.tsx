@@ -6,6 +6,7 @@ import {
 	Theme,
 	createStyles,
 	CssBaseline,
+	Grid,
 } from '@material-ui/core';
 import {Container} from '../../components/selectors/Container';
 import Divider from '../../components/selectors/Divider';
@@ -18,17 +19,18 @@ import React, {useState} from 'react';
 import RenderNode from '../../components/user/RenderNode';
 import {TextEditAble} from '../../components/user/text/Text';
 import lz from 'lzutf8';
-import {IBlog} from '../../features/editor';
+import {IBlog, selectBlogs} from '../../features/editor';
 import Viewport from 'components/selectors/Viewport';
 import {RootState} from 'app/store';
 import {useSelector} from 'react-redux';
+import {BlogCard} from './BlogCrad';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		main: {
 			boxShadow:
 				'0 8px 60px 0 rgb(103 151 255 / 11%), 0 12px 90px 0 rgb(103 151 255 / 11%)',
-			marginBottom: '40vh',
+			marginBottom: '4vh',
 			[theme.breakpoints.down('lg')]: {
 				// marginLeft: '95px',
 				maxWidth: '80%',
@@ -62,7 +64,7 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 
 	const user = useSelector((state: RootState) => state.auth);
 
-	console.log(user);
+	const blogs = useSelector(selectBlogs);
 
 	const [values, setValues] = useState<IBlog>({
 		id: blog?.id ? blog.id : '',
@@ -148,6 +150,21 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 					</Frame>
 				</Viewport>
 			</MuiContainer>
+			{!enabled && (
+				<MuiContainer>
+					<Typography align="center" variant="subtitle1">
+						
+						Related Blogs
+					</Typography>
+					<Grid container spacing={5}>
+						{blogs.slice(0, 3).map((blog: IBlog) => (
+							<Grid item md={4} key={blog.id}>
+								<BlogCard blog={blog} />
+							</Grid>
+						))}
+					</Grid>
+				</MuiContainer>
+			)}
 		</Editor>
 	);
 };
