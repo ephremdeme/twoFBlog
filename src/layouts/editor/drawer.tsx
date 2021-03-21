@@ -114,9 +114,9 @@ export default function MiniDrawer() {
 										<Element
 											canvas
 											is={Container}
-											height="30%"
+											height="auto"
 											margin={['10', '10', '10', '10']}
-											width="300px"></Element>
+											width="auto"></Element>
 									)
 								}>
 								<ListItemIcon className={classes.icon}>
