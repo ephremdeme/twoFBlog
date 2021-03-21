@@ -40,9 +40,10 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {useNode} from '@craftjs/core';
 import {Alert} from '@material-ui/lab';
 import {ChromePicker, ColorResult} from 'react-color';
-import FormatLetterSpacing from '@material-ui/icons/TextFormatSharp';
 import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
+
+import {ReactComponent as FormatLetterSpacing} from '../../../public/icons/editor/Letter_Spacing.svg';
 import validUrl from 'valid-url';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -165,7 +166,13 @@ const EditButtonMultiple: React.FC<{
 	);
 };
 export const GenericMenuList: React.FC<{
-	CIcon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+	CIcon:
+		| OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
+		| React.FunctionComponent<
+				React.SVGProps<SVGSVGElement> & {
+					title?: string | undefined;
+				}
+		  >;
 	title?: string;
 	blockKeydown?: boolean;
 }> = ({children, CIcon, title, blockKeydown}) => {
@@ -231,7 +238,7 @@ export const GenericMenuList: React.FC<{
 				aria-haspopup="true"
 				title={title}
 				onClick={handleToggle}>
-				<CIcon />
+				<CIcon className="MuiSvgIcon-root" />
 			</IconButton>
 			<Popper
 				open={open}
@@ -947,7 +954,7 @@ const LetterSpacing = () => {
 				onClick={handleClick}
 				aria-describedby={id}
 				title="Insert Letter Spacing">
-				<FormatLetterSpacing />
+				<FormatLetterSpacing className="MuiSvgIcon-root" />
 			</IconButton>
 			<Popper id={id} open={open} anchorEl={anchorEl}>
 				<ClickAwayListener onClickAway={handleClose}>

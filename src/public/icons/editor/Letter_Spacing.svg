@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="29.641" height="30" viewBox="0 0 29.641 30">
+  <g id="Letter_Spacing" data-name="Letter Spacing" transform="translate(-462.19 -804)">
+    <text id="AV" transform="translate(464 821)" font-size="19" font-family="Arial-BoldMT, Arial" font-weight="700" letter-spacing="0.04em"><tspan x="0" y="0">AV</tspan></text>
+    <g id="Group_10319" data-name="Group 10319" transform="translate(5.69)">
+      <rect id="Rectangle_2943" data-name="Rectangle 2943" width="15.641" height="2" rx="1" transform="translate(479.141 830.5) rotate(-180)"/>
+      <path id="Polygon_1" data-name="Polygon 1" d="M4.5,0,9,8H0Z" transform="translate(486.141 825) rotate(90)"/>
+      <path id="Polygon_2" data-name="Polygon 2" d="M4.5,0,9,8H0Z" transform="translate(456.5 834) rotate(-90)"/>
+    </g>
+  </g>
+</svg>

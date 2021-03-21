@@ -4,6 +4,7 @@ import {RootState, AppThunk} from './../../app/store';
 
 import FB from '../../firebase/firebase';
 import {useEffect, useState} from 'react';
+import {useCollection} from 'app/hooks';
 
 export interface IBlog {
 	id: string;
@@ -53,6 +54,9 @@ const editorSlice = createSlice({
 			// console.log('dispatched hook: ', action.payload);
 			state.blogs = action.payload;
 		},
+		deleteBlog: (state: IEditorState, action: PayloadAction<string>) => {
+			state.blogs = state.blogs.filter((blog) => blog.id !== action.payload);
+		},
 		setBlog: (state: IEditorState, action: PayloadAction<IBlog>) => {
 			state.blog = action.payload;
 		},
@@ -60,7 +64,12 @@ const editorSlice = createSlice({
 });
 
 // actions exported distructure here
-export const {setLoadingBlog, setBlogs, setBlog} = editorSlice.actions;
+export const {
+	setLoadingBlog,
+	deleteBlog,
+	setBlogs,
+	setBlog,
+} = editorSlice.actions;
 
 export const fetchBlogs = (): AppThunk => async (dispatch) => {
 	dispatch(setLoadingBlog(true));
@@ -156,17 +165,27 @@ export const useFetchBlog = (blogId: string) => {
 
 export const postBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 	const firestore = FB.firestore();
-	let {id, ...withoutId} = blog;
+	let {id, authorId, ...withoutId} = blog;
 	setLoadingBlog(true);
-	firestore.collection('blogs').add(withoutId);
+	const authorRef = useCollection('users').doc(authorId);
+	let updatedBlog = {
+		...withoutId,
+		authorId: authorRef,
+	};
+	firestore.collection('blogs').add(updatedBlog);
 	setLoadingBlog(false);
 };
 
 export const updateBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 	const firestore = FB.firestore();
-	let {id, ...withoutId} = blog;
+	let {id, authorId, ...withoutId} = blog;
 	setLoadingBlog(true);
-	firestore.collection('blogs').doc(id).update(withoutId);
+	const authorRef = useCollection('users').doc(authorId);
+	let updatedBlog = {
+		...withoutId,
+		authorId: authorRef,
+	};
+	await firestore.collection('blogs').doc(id).update(updatedBlog);
 	setLoadingBlog(false);
 };
 

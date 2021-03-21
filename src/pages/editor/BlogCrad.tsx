@@ -17,7 +17,9 @@ import Typography from '@material-ui/core/Typography';
 import {Link} from 'react-router-dom';
 import './styles.css';
 import ts from 'typescript';
-import {IBlog} from 'features/editor';
+import {IBlog, selectLoading} from 'features/editor';
+import {useSelector} from 'react-redux';
+import {useFireDelete} from 'hooks/useFirestore';
 
 const useStyles = makeStyles({
 	cardIcons: {
@@ -56,6 +58,8 @@ export const BlogCard: React.FC<{
 		config: {mass: 1, tension: 150, friction: 20},
 	}));
 
+	const {loading, deleteDoc} = useFireDelete('blogs');
+
 	return (
 		<div className={classes.rootDiv}>
 			<animated.div
@@ -92,7 +96,13 @@ export const BlogCard: React.FC<{
 								<VisibilityIcon style={{color: 'skyblue'}} />
 							</IconButton>
 						</Link>
-						<IconButton>
+						<IconButton
+							disabled={!loading}
+							onClick={(e) => {
+								console.log(blog.id, 'ONclick');
+
+								deleteDoc(blog.id);
+							}}>
 							<DeleteIcon style={{color: 'red'}} />
 						</IconButton>
 					</CardActions>

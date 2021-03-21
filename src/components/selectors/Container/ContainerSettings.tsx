@@ -8,6 +8,7 @@ import {
 	MenuItem,
 	Popper,
 	Slider,
+	SvgIcon,
 	SvgIconTypeMap,
 	TextField,
 	Typography,
@@ -33,6 +34,17 @@ import ShopTwoIcon from '@material-ui/icons/ShopTwo';
 import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 import AllOutIcon from '@material-ui/icons/AllOut';
+
+import {ReactComponent as AlignBottomVertical} from '../../../public/icons/editor/Align_Bottom_Vertically.svg';
+import {ReactComponent as AlignMiddleVertical} from '../../../public/icons/editor/Align_Middle_Vertically.svg';
+import {ReactComponent as AlignTopVertical} from '../../../public/icons/editor/Align_Top_Vertically.svg';
+import {ReactComponent as AlignLeftHorizontal} from '../../../public/icons/editor/Align_Left_Horizontally.svg';
+import {ReactComponent as AlignRightHorizontal} from '../../../public/icons/editor/Align_Right_Horizontally.svg';
+import {ReactComponent as AlignCenterHorizontal} from '../../../public/icons/editor/Align_Center_Horizontally.svg';
+
+import {ReactComponent as PaddingIcon} from '../../../public/icons/editor/Padding.svg';
+import {ReactComponent as RadiusIcon} from '../../../public/icons/editor/Radius.svg';
+import {ReactComponent as ShadowIcon} from '../../../public/icons/editor/Shadow_1.svg';
 
 const useStyles = makeStyles({
 	cover: {
@@ -140,7 +152,7 @@ export const ContainerSettings = () => {
 					<IconButton
 						onClick={() => setOpen(true)}
 						title="Insert Background Color">
-						<FormatColorFill />
+						<ColorLens />
 					</IconButton>
 					{open && (
 						<div className={classes.popover}>
@@ -179,46 +191,51 @@ export const ContainerSettings = () => {
 						onClick={() => {
 							setProp((props) => (props.justifyContent = 'flex-start'));
 						}}>
-						<FormatAlignLeft />
+						{/* <FormatAlignLeft /> */}
+						<AlignLeftHorizontal className="MuiSvgIcon-root" />
 					</IconButton>
 					<IconButton
 						title="Horizontal Align Items Center"
 						onClick={() =>
 							setProp((props) => (props.justifyContent = 'center'))
 						}>
-						<FormatAlignCenter />
+						{/* <FormatAlignCenter /> */}
+						<AlignCenterHorizontal className="MuiSvgIcon-root" />
 					</IconButton>
 					<IconButton
 						title="Horizontal Align Items Right"
 						onClick={() =>
 							setProp((props) => (props.justifyContent = 'flex-end'))
 						}>
-						<FormatAlignRight />
+						{/* <FormatAlignRight /> */}
+						<AlignRightHorizontal className="MuiSvgIcon-root" />
 					</IconButton>
 				</React.Fragment>
 			) : (
 				<React.Fragment>
 					<IconButton
-						title="Vertical Align Left"
+						title="Vertical Align Top"
 						onClick={() => {
 							setProp((props) => (props.alignItems = 'flex-start'));
 						}}>
+						<AlignTopVertical className="MuiSvgIcon-root" />
 						{/* <VerticalAlignTopIcon /> */}
-						<VerticalAlignTopIcon />
 					</IconButton>
 					<IconButton
 						title="Vertical Align Center"
 						onClick={() => {
 							setProp((props) => (props.alignItems = 'center'));
 						}}>
-						<VerticalAlignCenter />
+						<AlignMiddleVertical className="MuiSvgIcon-root" />
+						{/* <VerticalAlignCenter /> */}
 					</IconButton>
 					<IconButton
-						title="Vertical Align Right"
+						title="Vertical Align Bottom"
 						onClick={() => {
 							setProp((props) => (props.alignItems = 'flex-end'));
 						}}>
-						<VerticalAlignBottom />
+						{/* <VerticalAlignBottom /> */}
+						<AlignBottomVertical className="MuiSvgIcon-root" />
 					</IconButton>
 				</React.Fragment>
 			)}
@@ -234,7 +251,7 @@ export const ContainerSettings = () => {
 				<SettingsEthernetIcon />
 			</IconButton>
 
-			<ForeColor />
+			{/* <ForeColor /> */}
 			<BackColor />
 			<Radius />
 			<Shadow />
@@ -293,8 +310,14 @@ export const Radius = () => {
 		);
 	};
 
+	const RadiusICon2 = () => (
+		<>
+			<RadiusIcon className="MuiSvgIcon-root" />
+		</>
+	);
+
 	return (
-		<GenericMenuList title="Radius" CIcon={CheckBoxOutlineBlankRoundedIcon}>
+		<GenericMenuList title="Radius" CIcon={RadiusICon2}>
 			<MenuOptions />
 		</GenericMenuList>
 	);
@@ -349,7 +372,7 @@ export const Shadow = () => {
 	};
 
 	return (
-		<GenericMenuList title="Shadow" CIcon={ShopTwoIcon}>
+		<GenericMenuList title="Shadow" CIcon={ShadowIcon}>
 			<MenuOptions />
 		</GenericMenuList>
 	);
@@ -374,10 +397,16 @@ const Margin = () => {
 		console.log(marginValues, tempMargin);
 	}, [marginValues, setProp]);
 
+	const MarginICon = () => (
+		<>
+			<PaddingIcon className="MuiSvgIcon-root" />
+		</>
+	);
+
 	return (
 		<>
 			<GenericMargin
-				CIcon={SettingsOverscanIcon}
+				CIcon={MarginICon}
 				marginValues={marginValues}
 				setMargin={setMargin}
 				type="Margin"
@@ -407,7 +436,7 @@ const Padding = () => {
 	return (
 		<>
 			<GenericMargin
-				CIcon={AllOutIcon}
+				CIcon={SettingsOverscanIcon}
 				marginValues={paddingValues}
 				setMargin={setPadding}
 				type="Padding"
@@ -432,7 +461,13 @@ const GenericMargin: React.FC<{
 			'3': number;
 		}>
 	>;
-	CIcon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+	CIcon:
+		| OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
+		| React.FunctionComponent<
+				React.SVGProps<SVGSVGElement> & {
+					title?: string | undefined;
+				}
+		  >;
 }> = ({marginValues, setMargin, type, CIcon}) => {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -462,7 +497,7 @@ const GenericMargin: React.FC<{
 				onClick={handleClick}
 				aria-describedby={id}
 				title={'Insert ' + type}>
-				<CIcon />
+				<CIcon className="MuiSvgIcon-root" />
 			</IconButton>
 			<Popper id={id} open={open} anchorEl={anchorEl}>
 				<ClickAwayListener onClickAway={handleClose}>
