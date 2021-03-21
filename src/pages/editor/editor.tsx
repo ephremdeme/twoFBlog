@@ -62,12 +62,14 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 
 	const user = useSelector((state: RootState) => state.auth);
 
+	console.log(user);
+
 	const [values, setValues] = useState<IBlog>({
 		id: blog?.id ? blog.id : '',
 		title: blog?.title as string,
 		coverImageUrl: blog?.coverImageUrl as string,
-		blogHash: (blog?.blogHash as string) || '',
-		authorId: (blog?.authorId as string) || '/users/' + user.uid,
+		blogHash: blog?.blogHash ? (blog?.blogHash as string) : '',
+		authorId: blog?.authorId ? (blog?.authorId as string) : user.uid,
 		date: blog?.date
 			? new Date(blog?.date as string).toDateString()
 			: new Date().toDateString(),
@@ -93,10 +95,21 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 				values={values}
 			/>
 			{enabled && <MiniDrawer />}
-			<MuiContainer maxWidth={'lg'}>
+			<MuiContainer>
 				<div className={classes.title}>
 					{enabled && (
-						<TitleInput value={values.title} handleChange={handleChange} />
+						<>
+							<TitleInput
+								placeholder="Title ....."
+								value={values.title}
+								handleChange={handleChange}
+							/>
+							{/* <TitleInput
+								placeholder="Optional Sub Title......"
+								value={values.title}
+								handleChange={handleChange}
+							/> */}
+						</>
 					)}
 					{!enabled && (
 						<>

@@ -9,7 +9,7 @@ import {Button, CssBaseline, List, ListItem} from '@material-ui/core';
 import {useEditor} from '@craftjs/core';
 import lz from 'lzutf8';
 import {Undo, Redo} from '@material-ui/icons';
-import {postBlog, updateBlog} from '../../features/editor';
+import {postBlog, selectLoading, updateBlog} from '../../features/editor';
 import {useAppDispatch} from '../../app/hooks';
 import {useSelector} from 'react-redux';
 import {RootState} from 'app/store';
@@ -63,6 +63,8 @@ export const NavBar: React.FC<{
 	}));
 	const dispatch = useAppDispatch();
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
+	const user = useSelector((state: RootState) => state.auth);
+	const loading = useSelector(selectLoading);
 
 	useEffect(() => {
 		if (!enabled) {
@@ -110,35 +112,54 @@ export const NavBar: React.FC<{
 					<IconButton onClick={() => dispatch(toggleTheme(appTheme))}>
 						{appTheme ? <Brightness7Icon /> : <Brightness4Icon />}
 					</IconButton>
+					{user.role === 'BLOGGER' ||
+						(user.role === 'ADMIN' && (
+							<>
+								<Button
+									color="inherit"
+									onClick={() => {
+										actions.setOptions(
+											(options) => (options.enabled = !enabled)
+										);
+										setEnable(!enabled);
+										const json = query.serialize();
+										const hash = lz.encodeBase64(lz.compress(json));
+										handleChange('blogHash', hash);
+										console.log(values);
+									}}>
+									{enabled ? 'Preview' : 'Edit'}{' '}
+								</Button>
+								<Button
+									color="inherit"
+									disabled={loading}
+									onClick={() => {
+										const json = query.serialize();
+										const hash = lz.encodeBase64(lz.compress(json));
 
-					<Button
-						color="inherit"
-						onClick={() => {
-							actions.setOptions((options) => (options.enabled = !enabled));
-							setEnable(!enabled);
-							const json = query.serialize();
-							const hash = lz.encodeBase64(lz.compress(json));
-							handleChange('blogHash', hash);
-							console.log(values);
-						}}>
-						{enabled ? 'Preview' : 'Edit'}{' '}
-					</Button>
-					<Button
-						color="inherit"
-						onClick={() => {
-							const json = query.serialize();
-							const hash = lz.encodeBase64(lz.compress(json));
+										handleChange('blogHash', hash);
 
-							handleChange('blogHash', hash);
-							if (values.id === '') dispatch(postBlog(values));
-							else {
-								// dispatch(postBlog(values));
-								dispatch(updateBlog(values));
-							}
-							console.log(values);
-						}}>
-						Publish
-					</Button>
+										if (values.id === '')
+											dispatch(
+												postBlog({
+													...values,
+													blogHash: hash,
+												})
+											);
+										else {
+											// dispatch(postBlog(values));
+											dispatch(
+												updateBlog({
+													...values,
+													blogHash: hash,
+												})
+											);
+										}
+										console.log(values);
+									}}>
+									Publish
+								</Button>
+							</>
+						))}
 				</Toolbar>
 			</AppBar>
 		</div>
