@@ -14,6 +14,7 @@ import {
 	Paper,
 	Popper,
 	Select,
+	SvgIcon,
 	Theme,
 } from '@material-ui/core';
 import {useNode, UserComponent} from '@craftjs/core';
@@ -99,16 +100,19 @@ const DividerSettings = () => {
 		<div>
 			<SelectOrientation />
 			<IconButton
+				title="Full Width Divider"
 				onClick={(e) => setProp((props) => (props.variant = 'fullWidth'))}>
-				<DividerLgIcon />
+				<DividerLgIcon className="MuiSvgIcon-root" />
 			</IconButton>
 			<IconButton
+				title="Middle Divider"
 				onClick={(e) => setProp((props) => (props.variant = 'middle'))}>
-				<DividerMdIcon />
+				<DividerMdIcon className="MuiSvgIcon-root" />
 			</IconButton>
 			<IconButton
+				title="Inset Divider"
 				onClick={(e) => setProp((props) => (props.variant = 'inset'))}>
-				<DividerSmIcon />
+				<DividerSmIcon className="MuiSvgIcon-root" />
 			</IconButton>
 		</div>
 	);
