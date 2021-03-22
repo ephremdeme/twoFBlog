@@ -14,7 +14,8 @@ const initialState: IUsers = {
 	conversations: [],
 	users_admin: [],
 	conversations_admin: [],
-	test: []
+	test: [],
+	pageVisit: null
 };
 
 interface Iuser {
@@ -66,11 +67,14 @@ const userSlice = createSlice({
 				if (user.uid === action.payload.uid)
 					user.view = action.payload.view
 			})
-		}
+		},
+		setGetPageView: (state: IUsers, action: PayloadAction<number>) => {
+			state.pageVisit = action.payload
+		},
 	}
 });
 
-export const { setTest, setGetRealTimeUser, setGetRealTimeMessage, setRefreshUser, setClearRealTimeMessage, setGetRealTimeUser_admin, setGetRealTimeMessage_admin, setRefreshUser_admin, setClearRealTimeMessage_admin, setGetUser, setGetUser_admin } = userSlice.actions;
+export const { setTest, setGetRealTimeUser, setGetRealTimeMessage, setRefreshUser, setClearRealTimeMessage, setGetRealTimeUser_admin, setGetRealTimeMessage_admin, setRefreshUser_admin, setClearRealTimeMessage_admin, setGetUser, setGetUser_admin, setGetPageView } = userSlice.actions;
 
 export const getRealTimeUser = (uid: string): AppThunk => async dispatch => {
 	const db = firebase.firestore();
@@ -287,6 +291,30 @@ export const fetchMessage_user = (uid_1: string): AppThunk => async (dispatch) =
 			})
 			dispatch(setClearRealTimeMessage());
 			dispatch(setGetRealTimeMessage(filtered))
+			dispatch(setGetPageView(2))
+		})
+}
+
+export const savePageVisit = (): AppThunk => async dispatch =>{
+	return firebase.firestore().collection("page").doc('mywebpagevisit').get()
+	.then((value: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | any)=>{
+		if(value){
+			firebase.firestore().collection("page").doc('mywebpagevisit').update({
+				visit: value.data().visit + 1
+			})
+		}
+	})
+}
+
+export const getVisit = (): AppThunk => async (dispatch) =>{
+
+	firebase.firestore().collection("page").doc('mywebpagevisit').get()
+		.then((value: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | any)=>{
+			if(value){
+				const visits: number = value.data().visit;
+				dispatch(setGetPageView(visits))
+				
+			}
 		})
 }
 

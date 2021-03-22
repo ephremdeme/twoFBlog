@@ -9,7 +9,7 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import routes, { IRoute } from './router/config';
 import { UserRole } from 'features/auth/types';
 import AppNav from 'layouts/appLayout/AppNav';
-import Loading from './components/loading/loading';
+import Loading from './components/loading/Loading2';
 import Error from 'components/error/error'
 import Chat from 'pages/chat/chatbox';
 
@@ -94,12 +94,13 @@ function App() {
 	return (
 		<div>
 			{
-				auth.authenticating && !auth.error ?
-					<Loading /> :
+				// auth.authenticating && !auth.error ?
+				// 	<Loading /> :
 					!auth.authenticating && auth.error?
 					<Error/>:
 					<div className={classes.root}>
-						{
+						{auth.authenticating && !auth.error && <Loading/>}
+						{	
 							auth.loaded &&
 							<ThemeProvider theme={theme}>
 							<BrowserRouter>
