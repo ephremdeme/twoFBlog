@@ -62,6 +62,10 @@ const LoginView = () => {
 		}
 	};
 
+	if(auth.authenticated){
+		return <Redirect to="/dashboard"/>
+	}
+
 	return (
 		<Box
 			display="flex"

@@ -53,6 +53,10 @@ const LoginView = () => {
 			dispatch(signInWithEmailPassword(user));
 		}
 	};
+	
+	if(auth.authenticated){
+		return <Redirect to="/dashboard"/>
+	}
 
 	return (
 		<Box
