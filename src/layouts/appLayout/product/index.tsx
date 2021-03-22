@@ -8,6 +8,9 @@ import {
 	Theme,
 	Grid,
 	Tooltip,
+	Badge,
+	withStyles,
+	createStyles,
 } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
@@ -21,6 +24,7 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import AddIcon from '@material-ui/icons/Add';
 import {RootState} from 'app/store';
 import {UserRole} from 'features/user/types';
+import {selectChartProductQty} from 'features/product';
 // import {setFilterableProducts} from '../../../features/product';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -46,6 +50,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 	},
 }));
 
+const StyledBadge = withStyles((theme: Theme) =>
+  createStyles({
+    badge: {
+      right: -4,
+      top: 13,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: '0 4px',
+    },
+  }),
+)(Badge);
+
 type IProps = {
 	backbtn?: boolean;
 	title?: string;
@@ -58,6 +73,7 @@ const ProductAppBar = (props: IProps) => {
 	const {backbtn, title, className} = props;
 	const {url} = useRouteMatch();
 	const role = useSelector((state: RootState) => state.auth.role);
+	const chartQty = useSelector(selectChartProductQty);
 
 	const handleFilterProducts = (e: React.ChangeEvent<HTMLInputElement>) => {
 		// dispatch(setFilterableProducts(e.target.value));
@@ -68,16 +84,19 @@ const ProductAppBar = (props: IProps) => {
 			<Box display="flex" alignItems="center" justifyContent="space-between">
 				<Box flexGrow={1}></Box>
 				<Box alignSelf="flex-end">
-				{role === UserRole.USER || role === UserRole.GUEST  && (
-					<Tooltip title="checkout chart">
-						<IconButton
-							aria-label="chart"
-							component={Link}
-							to={'/products/chart'}>
-							<ShoppingCartIcon fontSize="small" />
-						</IconButton>
-					</Tooltip>
-				)}
+					{role === UserRole.USER ||
+						(role === UserRole.GUEST && (
+							<Tooltip title="checkout chart">
+								<IconButton
+									aria-label="cart"
+									component={Link}
+									to={'/products/chart'}>
+									<StyledBadge badgeContent={chartQty} color="secondary">
+										<ShoppingCartIcon />
+									</StyledBadge>
+								</IconButton>
+							</Tooltip>
+						))}
 					{role === UserRole.ADMIN && (
 						<>
 							<Tooltip title="checkout orders">
