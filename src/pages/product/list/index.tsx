@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import Page from 'components/shared/Page';
 import {Container} from '@material-ui/core';
-import MiniLoader from '../../components/shared/MiniLoader';
+import MiniLoader from '../../../components/shared/MiniLoader';
 import {useDispatch, useSelector} from 'react-redux';
 import {
 	fetchProducts,
@@ -9,8 +9,8 @@ import {
 	selectProdcutsLoaded,
 	selectProducts,
 } from 'features/product';
-import ProductListUser from './user/ProductListUser';
-import ProductCardLoading from './user/ProductCardLoading';
+import ProductListUser from '../user/ProductListUser';
+import ProductCardLoading from '../user/ProductCardLoading';
 
 const ProductList = () => {
 	const products = useSelector(selectProducts);

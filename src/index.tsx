@@ -9,6 +9,8 @@ import Loader from 'components/shared/Loader';
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import { createFirestoreInstance } from "redux-firestore";
 import firebase from "./firebase/firebase";
+import route from "./hooks/useRoutes";
+import { Router } from "react-router";
 
 const rrfConfig = {
 	userProfile: 'users',
@@ -27,7 +29,9 @@ ReactDOM.render(
 	<React.StrictMode>
 		<Provider store={store}>
 			<ReactReduxFirebaseProvider {...rrfProps}>
-			<App />
+			<Router history={route}>
+			<App/>
+			</Router>
 			</ReactReduxFirebaseProvider>
 		</Provider>
 	</React.StrictMode>,

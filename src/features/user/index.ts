@@ -30,7 +30,6 @@ const userSlice = createSlice({
 			state.test = action.payload;
 		},
 		setRefreshUser: (state: IUsers) => {
-			console.log('Dispatched...')
 			state.users = initialState.users;
 		},
 		setGetRealTimeUser: (state: IUsers, action: PayloadAction<User[]>) => {
@@ -44,7 +43,6 @@ const userSlice = createSlice({
 		},
 		// ------------------------------------------------
 		setRefreshUser_admin: (state: IUsers) => {
-			console.log('Dispatched...')
 			state.users_admin = initialState.users_admin;
 		},
 		setGetRealTimeUser_admin: (state: IUsers, action: PayloadAction<User[]>) => {
@@ -112,13 +110,11 @@ export const getUserFromCloud = (allUser: any[], current_uid: string): AppThunk 
 	const db = firebase.firestore();
 	const users_list: any = [];
 	let done = false;
-	console.log('go', allUser)
 	allUser.forEach((uid: any, index: number) => {
 		db.collection("users").doc(uid).get().then(user => {
 			if (user.exists) {
 				users_list.push({ ...user.data(), view: 0 });
 			} else {
-				console.log('!Exsist')
 				const guest_user = {
 					uid: uid,
 					role: UserRole.GUEST,
@@ -132,7 +128,6 @@ export const getUserFromCloud = (allUser: any[], current_uid: string): AppThunk 
 			}
 		}).then(_ => {
 			if (index === allUser.length - 1) {
-				console.log(users_list);
 				dispatch(setRefreshUser_admin())
 				dispatch(setGetRealTimeUser_admin(users_list))
 				dispatch(getRealTimeMessageView(current_uid));
@@ -161,7 +156,6 @@ export const getRealTimeUser_Customer_Service = (uid: string): AppThunk => async
 
 export const sendRealTimeMessage = (conversation: Conversation): AppThunk => async dispatch => {
 	const db = firebase.database();
-	console.log(conversation.createdAt)
 	const message = {
 		createdAt: Date(),
 		message: conversation.message,

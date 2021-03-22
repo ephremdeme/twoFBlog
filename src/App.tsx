@@ -89,6 +89,7 @@ function App() {
 
 
 	console.log('?', auth.authenticating)
+	console.log('???', auth.loaded)
 
 	return (
 		<div>
@@ -99,7 +100,7 @@ function App() {
 					<Error/>:
 					<div className={classes.root}>
 						{
-							auth.isGuest &&
+							auth.loaded &&
 							<ThemeProvider theme={theme}>
 							<BrowserRouter>
 								<Switch>
