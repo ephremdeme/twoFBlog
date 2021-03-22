@@ -124,6 +124,9 @@ export const NavBar: React.FC<{
 											(options) => (options.enabled = !enabled)
 										);
 										setEnable(!enabled);
+										// let a = document.getElementById("parent")
+										// for (let child = a.firstElementChild; child; child = a.nextElementSibling){
+										// 	for (let child1 = child.firstElementChild; child1; child = child.nextElementSibling){ console.log(child1)}}
 										const json = query.serialize();
 										const hash = lz.encodeBase64(lz.compress(json));
 										handleChange('blogHash', hash);
@@ -148,18 +151,18 @@ export const NavBar: React.FC<{
 												})
 											);
 										else {
-											dispatch(
-												postBlog({
-													...values,
-													blogHash: hash,
-												})
-											);
 											// dispatch(
-											// 	updateBlog({
+											// 	postBlog({
 											// 		...values,
 											// 		blogHash: hash,
 											// 	})
 											// );
+											dispatch(
+												updateBlog({
+													...values,
+													blogHash: hash,
+												})
+											);
 										}
 										console.log(values);
 									}}>
