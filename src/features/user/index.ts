@@ -285,8 +285,7 @@ export const fetchMessage = (uid_1: string, uid_2: string): AppThunk => async (d
 				return (item.user_uid_1 === uid_1 && item.user_uid_2 === uid_2 && item.from === UserRole.CUSTOMER_SERVICE) ||
 					(item.user_uid_1 === uid_2 && item.user_uid_2 === uid_1 && item.from === UserRole.USER)
 			})
-			// dispatch(updateViewStatus(filtered, uid_1))
-			console.log('...!!', filtered)
+			dispatch(updateViewStatus(filtered, uid_1))
 			dispatch(setClearRealTimeMessage_admin());
 			dispatch(setGetRealTimeMessage_admin(filtered))
 			dispatch(setFetchStat(false))

@@ -405,7 +405,7 @@ const ChatPage: React.FC<{}> = () => {
 							</PaperList>
 
 							<PaperBox display="flex" flexDirection="row" width="100%" p={1}>
-								<form onSubmit={handleSendMessage}>
+								{/* <form onSubmit={handleSendMessage}> */}
 									<Box flexGrow={1}>
 										<MessageText
 											size="small"
@@ -419,7 +419,7 @@ const ChatPage: React.FC<{}> = () => {
 										/>
 									</Box>
 									<Box flexShrink={1} display="flex" justifyContent="center">
-										{/* <form > */}
+										<form onSubmit={handleSendMessage}>
 										<SendButton
 											variant="contained"
 											// type="submit"
@@ -427,9 +427,9 @@ const ChatPage: React.FC<{}> = () => {
 											endIcon={<Send />}
 											type="submit"
 											></SendButton>
-										{/* </form> */}
+										</form>
 									</Box>
-								</form>
+								{/* </form> */}
 							</PaperBox>
 						</div>
 					}
