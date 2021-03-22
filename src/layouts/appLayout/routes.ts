@@ -10,7 +10,7 @@ const navs = {
 	[UserRole.ADMIN]: [
 		{
 			name: 'Admin Dashboard',
-			path: '/',
+			path: '/dashboard',
 			icon: 'dashboard',
 		},
 		{
@@ -23,11 +23,16 @@ const navs = {
 			path: '/editor',
 			icon: 'format_color_text',
 		},
+		// {
+		// 	name: 'Chat',
+		// 	path: '/chat',
+		// 	icon: 'format_color_text',
+		// },
 	],
 	[UserRole.SHOPE_ADMIN]: [
 		{
 			name: 'Admin Dashboard',
-			path: '/',
+			path: '/dashboard',
 			icon: 'dashboard',
 		},
 		{
@@ -39,7 +44,7 @@ const navs = {
 	[UserRole.SELLER]: [
 		{
 			name: 'Admin Dashboard',
-			path: '/',
+			path: '/dashboard',
 			icon: 'dashboard',
 		},
 		{
@@ -52,7 +57,7 @@ const navs = {
 	[UserRole.CUSTOMER_SERVICE]: [
 		{
 			name: 'Admin Dashboard',
-			path: '/',
+			path: '/dashboard',
 			icon: 'dashboard',
 		},
 		{
@@ -60,9 +65,14 @@ const navs = {
 			path: '/products/list',
 			icon: 'scatter_plot',
 		},
+		// {
+		// 	name: 'Blog',
+		// 	path: '/editor',
+		// 	icon: 'format_color_text',
+		// },
 		{
-			name: 'Blog',
-			path: '/editor',
+			name: 'Chat',
+			path: '/chat',
 			icon: 'format_color_text',
 		},
 	],
