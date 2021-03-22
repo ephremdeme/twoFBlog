@@ -15,13 +15,8 @@ const navs = {
 		},
 		{
 			name: 'Products',
-<<<<<<< HEAD
 			path: '/products/list/admin',
 			icon: "scatter_plot",
-=======
-			path: '/products/list',
-			icon: 'scatter_plot',
->>>>>>> 778d6eaae7a0ab87f2c754d8db20436a8f85a946
 		},
 		{
 			name: 'Blog',
