@@ -1,18 +1,32 @@
 import React from 'react';
 import clsx from 'clsx';
-import {Box, Button, Card, makeStyles, Theme, Grid} from '@material-ui/core';
+import {
+	Box,
+	Button,
+	Card,
+	makeStyles,
+	Theme,
+	Grid,
+	Tooltip,
+} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import {useRouteMatch} from 'react-router';
 import {Link} from 'react-router-dom';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import AddIcon from '@material-ui/icons/Add';
+import {RootState} from 'app/store';
+import {UserRole} from 'features/user/types';
 // import {setFilterableProducts} from '../../../features/product';
 
 const useStyles = makeStyles((theme: Theme) => ({
-	root: {},
+	root: {
+		width: '100%',
+	},
 	importButton: {
 		marginRight: theme.spacing(1),
 	},
@@ -43,6 +57,7 @@ const ProductAppBar = (props: IProps) => {
 	const dispatch = useDispatch();
 	const {backbtn, title, className} = props;
 	const {url} = useRouteMatch();
+	const role = useSelector((state: RootState) => state.auth.role);
 
 	const handleFilterProducts = (e: React.ChangeEvent<HTMLInputElement>) => {
 		// dispatch(setFilterableProducts(e.target.value));
@@ -51,11 +66,38 @@ const ProductAppBar = (props: IProps) => {
 	return (
 		<div className={clsx(classes.root, className)}>
 			<Box display="flex" alignItems="center" justifyContent="space-between">
-				<Box></Box>
-				<Box flexGrow={1} alignSelf="flex-end">
-					<IconButton aria-label="chart" component={Link} to={'/products/chart'}>
-						<ShoppingCartIcon fontSize="small" />
-					</IconButton>
+				<Box flexGrow={1}></Box>
+				<Box alignSelf="flex-end">
+				{role === UserRole.USER || role === UserRole.GUEST  && (
+					<Tooltip title="checkout chart">
+						<IconButton
+							aria-label="chart"
+							component={Link}
+							to={'/products/chart'}>
+							<ShoppingCartIcon fontSize="small" />
+						</IconButton>
+					</Tooltip>
+				)}
+					{role === UserRole.ADMIN && (
+						<>
+							<Tooltip title="checkout orders">
+								<IconButton
+									aria-label="checkout orders"
+									component={Link}
+									to={'/products/orders'}>
+									<ListAltIcon fontSize="small" />
+								</IconButton>
+							</Tooltip>
+							<Tooltip title="add a prodcut">
+								<IconButton
+									aria-label="chart"
+									component={Link}
+									to={'/products/create'}>
+									<AddIcon fontSize="small" />
+								</IconButton>
+							</Tooltip>
+						</>
+					)}
 				</Box>
 			</Box>
 			{/* <Box>
