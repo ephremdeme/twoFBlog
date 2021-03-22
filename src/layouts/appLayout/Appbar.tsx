@@ -7,7 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { Avatar, Divider, Grid, Hidden, Popover } from '@material-ui/core';
+import { Avatar, Button, Divider, Grid, Hidden, Popover } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../features/auth';
 import { RootState } from '../../app/store';
@@ -25,7 +25,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import { toggleTheme } from 'features/app';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import routes, { IRoute } from 'router/config';
 
 const drawerWidth = 240;
@@ -161,6 +161,14 @@ function Appbar({ history }: any): JSX.Element {
 										</Switch>
 									</Box>
 								</Hidden>
+							</Box>
+
+							<Box mx={3}>
+							{
+							auth.isGuest && <Button variant="outlined" size="small" component={Link} to='/login'>
+								Login
+							</Button>
+							}
 							</Box>
 						</Box>
 
