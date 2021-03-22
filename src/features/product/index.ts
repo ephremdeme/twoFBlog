@@ -24,7 +24,8 @@ export const {
 	selectProducts,
 	selectLoadingProducts,
 	selectProdcutsLoaded,
-	selectChartTotal
+	selectChartTotal,
+	selectChartProductQty
 } = selectors;
 export const {fetchProducts} = thunks;
 
