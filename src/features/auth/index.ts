@@ -368,8 +368,6 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 						dispatch(setLoginInProgress(false));
 					});
 			} else {
-				console.log('[NHE]', user);
-				console.log('!NO USER');
 				const current_guest = {
 					uid: user.uid,
 					isGuest: true,
@@ -382,15 +380,12 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 					email: '',
 					loaded: true
 				};
-				console.log('Done...');
 				dispatch(setLoginInProgress(false));
 				dispatch(setLogInSuccess({ ...current_guest }));
 				Cookies.set('user', { ...current_guest });
-				// dispatch(setFaliure(false))
 				history.push('/guest_home')
 			}
 		} else {
-			console.log('No user');
 			dispatch(signAsGuest());
 			history.push('/guest_home')
 		}
