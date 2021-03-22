@@ -1,62 +1,127 @@
+import {UserRole} from 'features/user/types';
 import React from 'react';
 export interface INavRouter {
-  name: string;
-  path: string;
-  icon: string;
+	name: string;
+	path: string;
+	icon: string;
 }
 
 const navs = {
-  'admin': [
+	[UserRole.ADMIN]: [
 		{
 			name: 'Admin Dashboard',
 			path: '/',
-			icon: "dashboard",
+			icon: 'dashboard',
 		},
 		{
 			name: 'Products',
+<<<<<<< HEAD
 			path: '/products/list/admin',
 			icon: "scatter_plot",
+=======
+			path: '/products/list',
+			icon: 'scatter_plot',
+>>>>>>> 778d6eaae7a0ab87f2c754d8db20436a8f85a946
 		},
 		{
 			name: 'Blog',
 			path: '/editor',
-			icon: "format_color_text",
+			icon: 'format_color_text',
 		},
 	],
-	'user': [
+	[UserRole.SHOPE_ADMIN]: [
+		{
+			name: 'Admin Dashboard',
+			path: '/',
+			icon: 'dashboard',
+		},
+		{
+			name: 'Products',
+			path: '/products/list',
+			icon: 'scatter_plot',
+		},
+	],
+	[UserRole.SELLER]: [
+		{
+			name: 'Admin Dashboard',
+			path: '/',
+			icon: 'dashboard',
+		},
+		{
+			name: 'Products',
+			path: '/products/list',
+			icon: 'scatter_plot',
+		},
+	],
+
+	[UserRole.CUSTOMER_SERVICE]: [
+		{
+			name: 'Admin Dashboard',
+			path: '/',
+			icon: 'dashboard',
+		},
+		{
+			name: 'Products',
+			path: '/products/list',
+			icon: 'scatter_plot',
+		},
+		{
+			name: 'Blog',
+			path: '/editor',
+			icon: 'format_color_text',
+		},
+	],
+	[UserRole.BLOGGER]: [
 		{
 			name: 'User Dashboard',
 			path: '/',
-			icon: "dashboard",
+			icon: 'dashboard',
 		},
 		{
 			name: 'Products',
 			path: '/products/list',
-			icon: "scatter_plot",
+			icon: 'scatter_plot',
 		},
 		{
 			name: 'Blog',
 			path: '/editor',
-			icon: "format_color_text",
+			icon: 'format_color_text',
 		},
 	],
-	'guest': [
+	[UserRole.GUEST]: [
 		{
 			name: 'Guest Dashboard',
 			path: '/',
-			icon: "dashboard",
+			icon: 'dashboard',
 		},
 		{
 			name: 'Products',
 			path: '/products/list',
-			icon: "scatter_plot",
+			icon: 'scatter_plot',
 		},
 		{
 			name: 'Blog',
 			path: '/editor',
-			icon: "format_color_text",
+			icon: 'format_color_text',
 		},
-	]
-}
+	],
+	[UserRole.USER]: [
+		{
+			name: 'User Dashboard',
+			path: '/',
+			icon: 'dashboard',
+		},
+		{
+			name: 'Products',
+			path: '/products/list',
+			icon: 'scatter_plot',
+		},
+		{
+			name: 'Blog',
+			path: '/editor',
+			icon: 'format_color_text',
+		},
+	],
+};
 
-export default navs
+export default navs;

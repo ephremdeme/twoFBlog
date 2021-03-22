@@ -19,4 +19,5 @@ export interface User {
 	isGuest: boolean;
 	error: boolean;
 	errorMessage?: string;
+	loaded: boolean;
 }

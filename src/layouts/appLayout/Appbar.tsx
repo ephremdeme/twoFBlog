@@ -88,6 +88,8 @@ function Appbar({history}: any): JSX.Element {
 		setMobileOpen(!mobileOpen);
 	};
 
+	console.log('confirm',auth.isGuest)
+
 	// user popover
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const handleUserPopoverClick = (event: any) => {
@@ -107,8 +109,10 @@ function Appbar({history}: any): JSX.Element {
 		setOpenPopMenu(!openPopMenu);
 	};
 	const signOut = () => {
-		dispatch(logoutUser(auth.uid, auth.isGuest));
-		history.push('/login');
+
+		dispatch(logoutUser(auth.uid));
+		history.push('/login')
+
 	};
 	// end of list popover
 
@@ -238,18 +242,22 @@ function Appbar({history}: any): JSX.Element {
 												</ListItem>
 											</List>
 										</Collapse>
-										{!auth.isGuest ? (
-											<ListItem button>
-												<ListItemIcon>
-													<ExitToAppIcon />
-												</ListItemIcon>
-												<Box
-													fontSize={14}
-													fontWeight={500}
-													onClick={() => {
-														history.push('/login');
-													}}>
-													Login
+											auth.isGuest ?
+												<ListItem button>
+													<ListItemIcon>
+														<ExitToAppIcon />
+													</ListItemIcon>
+													<Box fontSize={14} fontWeight={500} onClick={()=>{history.push('/login')}}>
+														Login
+													</Box>
+												</ListItem> :
+												<ListItem button>
+													<ListItemIcon>
+														<ExitToAppIcon />
+													</ListItemIcon>
+													<Box fontSize={14} fontWeight={500} onClick={signOut}>
+														Logout
+
 												</Box>
 											</ListItem>
 										) : (

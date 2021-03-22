@@ -1,4 +1,4 @@
-import {useNode, UserComponent} from '@craftjs/core';
+import {useEditor, useNode, UserComponent} from '@craftjs/core';
 import {Button, makeStyles, Container as MuiContainer} from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
@@ -77,9 +77,15 @@ export const Image: UserComponent<ImageProp> = ({
 		file: null,
 	});
 
+	const {enabled} = useEditor((state, query) => ({
+		enabled: state.options.enabled,
+	}));
 	const [imageId, setImageId] = useState(Date.now());
 
 	useEffect(() => setImageId(Date.now()), []);
+
+	const [loading, setLoading] = useState(false);
+	console.log('Image Url', imageUrl);
 
 	const [isUploaded, setIsUploaded] = useState(false);
 
@@ -97,9 +103,10 @@ export const Image: UserComponent<ImageProp> = ({
 		}
 	};
 
-	console.log(imageUrl);
+	console.log('enabled', enabled);
 
 	const handleUpload = async () => {
+		setLoading(true);
 		const storageRef = Firebase.storage().ref();
 		const fileRef = storageRef.child('images/' + Date.now() + file.name);
 		await fileRef.put(file);
@@ -110,6 +117,7 @@ export const Image: UserComponent<ImageProp> = ({
 		}));
 		setProp((props) => (props.imageUrl = url), 500);
 		setIsUploaded(true);
+		setLoading(false);
 	};
 	return (
 		<div ref={(ref) => connect(drag(ref))}>
@@ -128,7 +136,7 @@ export const Image: UserComponent<ImageProp> = ({
 				</div>
 			</Container>
 
-			{!isUploaded && (
+			{enabled && !isUploaded && (
 				<>
 					<input
 						accept="image/*"
@@ -148,7 +156,10 @@ export const Image: UserComponent<ImageProp> = ({
 						</Button>
 					</label>
 					{file && (
-						<Button onClick={handleUpload} startIcon={<CloudUpload />}>
+						<Button
+							disabled={loading}
+							onClick={handleUpload}
+							startIcon={<CloudUpload />}>
 							Upload
 						</Button>
 					)}
@@ -175,8 +186,6 @@ export const CoverImage: React.FC<{
 	handleChange: (key: string, value: string) => void;
 	imageUrl: string | undefined;
 }> = ({handleChange, imageUrl}) => {
-	console.log('Cover', imageUrl);
-
 	const classes = useStyles();
 	const [{alt, src, file}, setImg] = useState<any>({
 		src: imageUrl || null,
@@ -186,7 +195,10 @@ export const CoverImage: React.FC<{
 
 	const [isUploaded, setIsUploaded] = useState(false);
 
+	const [loading, setLoading] = useState(false);
+
 	const handleUpload = async () => {
+		setLoading(true);
 		const storageRef = Firebase.storage().ref();
 		const fileRef = storageRef.child('images/' + Date.now() + file.name);
 		await fileRef.put(file);
@@ -194,10 +206,11 @@ export const CoverImage: React.FC<{
 		setImg((prevProp: any) => ({
 			...prevProp,
 			src: url,
+			file: null,
 		}));
-
 		handleChange('coverImageUrl', url);
 		setIsUploaded(true);
+		setLoading(false);
 	};
 
 	const handleFileChange = (e: any) => {
@@ -210,9 +223,11 @@ export const CoverImage: React.FC<{
 		}
 	};
 
+	console.log(!isUploaded, !imageUrl);
+
 	return (
 		<div className={classes.root}>
-			<MuiContainer className={classes.fill}>
+			<MuiContainer maxWidth={'xl'} className={classes.fill}>
 				<img
 					src={src || imageUrl}
 					alt={alt}
@@ -220,7 +235,7 @@ export const CoverImage: React.FC<{
 					style={{maxWidth: '100%', height: 'auto', width: 'auto'}}
 				/>
 			</MuiContainer>
-			{(!isUploaded || !imageUrl) && (
+			{!imageUrl && (
 				<div style={{margin: '20px'}}>
 					<input
 						accept="image/*"

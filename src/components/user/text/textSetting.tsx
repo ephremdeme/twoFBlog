@@ -27,7 +27,6 @@ import {
 	FormatAlignLeft,
 	FormatAlignRight,
 	FormatBold,
-	FormatColorFill,
 	FormatItalic,
 	FormatLineSpacing,
 	FormatListBulleted,
@@ -40,11 +39,12 @@ import {
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {useNode} from '@craftjs/core';
 import {Alert} from '@material-ui/lab';
-import {ChromePicker, Color, ColorResult} from 'react-color';
-import FormatLetterSpacing from '@material-ui/icons/TextFormatSharp';
+import {ChromePicker, ColorResult} from 'react-color';
 import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
-import classes from '*.module.css';
+
+import {ReactComponent as FormatLetterSpacing} from '../../../public/icons/editor/Letter_Spacing.svg';
+import validUrl from 'valid-url';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -88,6 +88,35 @@ const EditButton: React.FC<{name?: string; cmd: string; value?: string}> = (
 			}}>
 			{props.children || props.name}
 		</Button>
+	);
+};
+
+const Blockquote = () => {
+	const classes = useStyles();
+
+	const [active, setActive] = useState(false);
+
+	return (
+		<>
+			<Button
+				key={'formatblock'}
+				style={{margin: '3px'}}
+				title={'Blockquote'}
+				className={active ? classes.button : ''}
+				onMouseDown={(evt) => {
+					evt.preventDefault(); // Avoids loosing focus from the editable area
+					console.log(document?.getSelection()?.toString());
+					if (!active) {
+						let resp = document.execCommand('formatblock', false, 'blockquote'); // Send the command to the browser
+						if (resp) setActive(true);
+					} else {
+						let resp = document.execCommand('formatblock', false, 'p'); // Send the command to the browser
+						if (resp) setActive(false);
+					}
+				}}>
+				<FormatQuote />
+			</Button>
+		</>
 	);
 };
 
@@ -137,7 +166,13 @@ const EditButtonMultiple: React.FC<{
 	);
 };
 export const GenericMenuList: React.FC<{
-	CIcon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+	CIcon:
+		| OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
+		| React.FunctionComponent<
+				React.SVGProps<SVGSVGElement> & {
+					title?: string | undefined;
+				}
+		  >;
 	title?: string;
 	blockKeydown?: boolean;
 }> = ({children, CIcon, title, blockKeydown}) => {
@@ -203,7 +238,7 @@ export const GenericMenuList: React.FC<{
 				aria-haspopup="true"
 				title={title}
 				onClick={handleToggle}>
-				<CIcon />
+				<CIcon className="MuiSvgIcon-root" />
 			</IconButton>
 			<Popper
 				open={open}
@@ -629,12 +664,7 @@ export const TextSettings = () => {
 						<EditButton cmd="underline" name={'Underline'}>
 							<FormatUnderlined />
 						</EditButton>
-						<EditButton
-							cmd="formatblock"
-							value="blockquote"
-							name={'Blockquote'}>
-							<FormatQuote />
-						</EditButton>
+						<Blockquote />
 
 						<LinkButton cmd="createlink" name={'Link'}>
 							<InsertLink />
@@ -704,6 +734,7 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 
 	const anchorRef = React.useRef<HTMLButtonElement>(null);
 	const [range, setRange] = useState(document.createRange());
+	const [message, setMessage] = useState('');
 
 	const {
 		actions: {setProp},
@@ -755,8 +786,10 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 		setLink(e.target.value);
 	};
 	const handleToggle = (event: React.MouseEvent<EventTarget>) => {
-		if (text === '' || text === undefined) setHasNoText(true);
-		else setOpen((prevOpen) => !prevOpen);
+		if (text === '' || text === undefined) {
+			setMessage('Select Text First!');
+			setHasNoText(true);
+		} else setOpen((prevOpen) => !prevOpen);
 	};
 
 	const handleClose = (event: React.MouseEvent<EventTarget>) => {
@@ -774,13 +807,17 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 		event.preventDefault();
 		console.log('Text', text);
 
-		if (text === '') setHasNoText(true);
+		if (text === '') {
+			setMessage('Select Text First!');
+			setHasNoText(true);
+		}
 		if (text) {
 			// textRef.current?.focus();
 			// selection?.collapse(saved[0], saved[1]);
 			document.getSelection()?.removeAllRanges();
 			document.getSelection()?.addRange(range);
-			console.log('Restored caret', document.getSelection()?.rangeCount);
+			if (!validUrl.isWebUri(link))
+				console.log('Restored caret', document.getSelection()?.rangeCount);
 			console.log(document.execCommand('createlink', false, link), 'Links');
 		}
 
@@ -845,15 +882,16 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 					</Grow>
 				)}
 			</Popper>
-			<AlertLink open={hasNoText} setOpen={setHasNoText} />
+			<AlertLink open={hasNoText} message={message} setOpen={setHasNoText} />
 		</>
 	);
 };
 
 const AlertLink: React.FC<{
 	open: boolean;
+	message: string;
 	setOpen: (data: boolean) => void;
-}> = ({open, setOpen, children}) => {
+}> = ({open, setOpen, message, children}) => {
 	const handleClick = () => {
 		setOpen(true);
 	};
@@ -872,7 +910,7 @@ const AlertLink: React.FC<{
 				variant="filled"
 				onClose={handleClose}
 				severity="warning">
-				Select Text First!
+				{message}
 			</Alert>
 		</Snackbar>
 	);
@@ -916,7 +954,7 @@ const LetterSpacing = () => {
 				onClick={handleClick}
 				aria-describedby={id}
 				title="Insert Letter Spacing">
-				<FormatLetterSpacing />
+				<FormatLetterSpacing className="MuiSvgIcon-root" />
 			</IconButton>
 			<Popper id={id} open={open} anchorEl={anchorEl}>
 				<ClickAwayListener onClickAway={handleClose}>

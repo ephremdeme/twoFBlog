@@ -42,9 +42,6 @@ const Chatbox = (): JSX.Element => {
     const auth = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
 
-    console.log('[CON]', conversations)
-    console.log('[::]', auth.uid)
-
     useEffect(()=>{
         dispatch(getRealTimeUser_Customer_Service(auth.uid));
     },[])
@@ -62,7 +59,6 @@ const Chatbox = (): JSX.Element => {
                 isView: false,
                 createdAt: new Date()
             }
-            console.log(messageContent)
             dispatch(sendRealTimeUserMessage(messageContent))
             setMessage("");
         }
@@ -103,7 +99,7 @@ const Chatbox = (): JSX.Element => {
                         <Card>
                             <CardHeader
                                 title="Customer support service"
-                                subheader="September 14, 2016"
+                                // subheader="September 14, 2016"
                                 action={
                                     <IconButton>
                                         {user && <Badge badgeContent={user.length} color="secondary">
@@ -123,7 +119,7 @@ const Chatbox = (): JSX.Element => {
                                         return <Box width="100%" display="flex" justifyContent="flex-end" flexDirection="column" mt={1} key={index}>
                                                 <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"}>
                                                     <Box display="flex" flexDirection="row" pl={1}>
-                                                        <ListItemText secondary={"jan 2 02"} />
+                                                        <ListItemText />
                                                     </Box>
                                                 </Box>
                                                 <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"} ><TextPaper>{message.message}</TextPaper></Box>
@@ -132,7 +128,7 @@ const Chatbox = (): JSX.Element => {
                                     return <Box width="100%" display="flex" justifyContent="flex-end" flexDirection="column" mt={1} key={index}>
                                         <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"}>
                                             <Box display="flex" flexDirection="row" pl={1}>
-                                                <ListItemText secondary={"jan 2 02"} />
+                                                <ListItemText />
                                             </Box>
                                         </Box>
                                         <Box display="flex" flexDirection="row" justifyContent={message.user_uid_1 === auth.uid ? "flex-end" : "flex-start"} ><TextPaper>{message.message}</TextPaper></Box>

@@ -21,7 +21,7 @@ import {Video} from '../../components/user/video/video';
 import {Image as ImageComp} from '../../components/user/image/image';
 import {Container} from '../../components/selectors/Container';
 import Divider from '../../components/selectors/Divider';
-import {ListItemText} from '@material-ui/core';
+import {ListItemText, Tooltip} from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -101,7 +101,9 @@ export default function MiniDrawer() {
 									create(ref, <Text text="edit text" />)
 								}>
 								<ListItemIcon className={classes.icon}>
-									<TextFieldsRounded />
+									<Tooltip title="Insert Text" placement="right">
+										<TextFieldsRounded />
+									</Tooltip>
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
@@ -112,34 +114,42 @@ export default function MiniDrawer() {
 										<Element
 											canvas
 											is={Container}
-											height="30%"
+											height="auto"
 											margin={['10', '10', '10', '10']}
-											width="300px"></Element>
+											width="auto"></Element>
 									)
 								}>
 								<ListItemIcon className={classes.icon}>
-									<CheckBoxOutlineBlankRounded />
+									<Tooltip title="Insert Container" placement="right">
+										<CheckBoxOutlineBlankRounded />
+									</Tooltip>
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
 								disableGutters
 								innerRef={(ref: ReactElement) => create(ref, <Video />)}>
 								<ListItemIcon className={classes.icon}>
-									<YouTube />
+									<Tooltip title="Insert Youtube Video" placement="right">
+										<YouTube />
+									</Tooltip>
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
 								disableGutters
 								innerRef={(ref: ReactElement) => create(ref, <ImageComp />)}>
 								<ListItemIcon className={classes.icon}>
-									<ImageRounded />
+									<Tooltip title="Insert Image" placement="right">
+										<ImageRounded />
+									</Tooltip>
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
 								disableGutters
 								innerRef={(ref: ReactElement) => create(ref, <Divider />)}>
 								<ListItemIcon className={classes.icon}>
-									<MaximizeIcon />
+									<Tooltip title="Insert Divider" placement="right">
+										<MaximizeIcon />
+									</Tooltip>
 								</ListItemIcon>
 							</ListItem>
 						</List>

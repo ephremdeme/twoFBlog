@@ -30,8 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
 				'0 8px 60px 0 rgb(103 151 255 / 11%), 0 12px 90px 0 rgb(103 151 255 / 11%)',
 			marginBottom: '40vh',
 			[theme.breakpoints.down('lg')]: {
-				marginLeft: '25px',
-				maxWidth: '60%',
+				// marginLeft: '95px',
+				maxWidth: '80%',
+				// margin: '20px',
 			},
 		},
 		title: {
@@ -49,9 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
 		coverImage: {
 			marginTop: '20px',
 		},
-		Container: {
-			// background: theme.palette.,
-		},
 	})
 );
 
@@ -64,13 +62,14 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 
 	const user = useSelector((state: RootState) => state.auth);
 
+	console.log(user);
+
 	const [values, setValues] = useState<IBlog>({
 		id: blog?.id ? blog.id : '',
-		title:
-			(blog?.title as string) || 'Here is all the features being tested out',
+		title: blog?.title as string,
 		coverImageUrl: blog?.coverImageUrl as string,
-		blogHash: (blog?.blogHash as string) || '',
-		authorId: (blog?.authorId as string) || 'jkjkjkjkjkjkjkjkj',
+		blogHash: blog?.blogHash ? (blog?.blogHash as string) : '',
+		authorId: blog?.authorId ? (blog?.authorId as string) : user.uid,
 		date: blog?.date
 			? new Date(blog?.date as string).toDateString()
 			: new Date().toDateString(),
@@ -85,8 +84,6 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 		});
 	};
 
-	console.log('Editor', blog, edit);
-
 	const [enabled, setEnabled] = useState(edit === undefined ? true : edit);
 	return (
 		<Editor resolver={resolvers} onRender={RenderNode}>
@@ -97,11 +94,22 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 				handleChange={handleChange}
 				values={values}
 			/>
-			<MiniDrawer />
-			<MuiContainer maxWidth={'lg'}>
+			{enabled && <MiniDrawer />}
+			<MuiContainer>
 				<div className={classes.title}>
 					{enabled && (
-						<TitleInput value={values.title} handleChange={handleChange} />
+						<>
+							<TitleInput
+								placeholder="Title ....."
+								value={values.title}
+								handleChange={handleChange}
+							/>
+							{/* <TitleInput
+								placeholder="Optional Sub Title......"
+								value={values.title}
+								handleChange={handleChange}
+							/> */}
+						</>
 					)}
 					{!enabled && (
 						<>
@@ -112,7 +120,7 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 								variant="body1"
 								align="center"
 								className={classes.author}>
-								Posted on Posted on {values.date} by {user.user_name}
+								Posted on Posted on {values.date} by {blog?.author?.user_name}
 							</Typography>
 						</>
 					)}
@@ -139,14 +147,6 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 						/>
 					</Frame>
 				</Viewport>
-
-				{/* <Grid container spacing={5}>
-					<Grid item xs={12} md={12}>
-						</Grid>
-					<Grid item xs={12} md={2}>
-						<Layers expandRootOnLoad={true} />
-					</Grid>
-				</Grid> */}
 			</MuiContainer>
 		</Editor>
 	);

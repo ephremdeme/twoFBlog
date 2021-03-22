@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27">
+  <g id="Padding" transform="translate(-413.5 -803.5)">
+    <g id="Path_3421" data-name="Path 3421" transform="translate(413.5 830.5) rotate(-90)" fill="none">
+      <path d="M2,0H25a2,2,0,0,1,2,2V25a2,2,0,0,1-2,2H2a2,2,0,0,1-2-2V2A2,2,0,0,1,2,0Z" stroke="none"/>
+      <path d="M 2 1.5 C 1.724300384521484 1.5 1.5 1.724300384521484 1.5 2 L 1.5 25 C 1.5 25.27569961547852 1.724300384521484 25.5 2 25.5 L 25 25.5 C 25.27569961547852 25.5 25.5 25.27569961547852 25.5 25 L 25.5 2 C 25.5 1.724300384521484 25.27569961547852 1.5 25 1.5 L 2 1.5 M 2 0 L 25 0 C 26.10457038879395 0 27 0.8954296112060547 27 2 L 27 25 C 27 26.10457038879395 26.10457038879395 27 25 27 L 2 27 C 0.8954296112060547 27 0 26.10457038879395 0 25 L 0 2 C 0 0.8954296112060547 0.8954296112060547 0 2 0 Z" stroke="none" fill="#000"/>
+    </g>
+    <g id="Rectangle_2941" data-name="Rectangle 2941" transform="translate(418.5 830.5) rotate(-90)" fill="none" stroke="#000" stroke-width="1.5">
+      <rect width="27" height="17" stroke="none"/>
+      <rect x="0.75" y="0.75" width="25.5" height="15.5" fill="none"/>
+    </g>
+    <g id="Rectangle_2942" data-name="Rectangle 2942" transform="translate(413.5 825.5) rotate(-90)" fill="none" stroke="#000" stroke-width="1.5">
+      <rect width="17" height="27" stroke="none"/>
+      <rect x="0.75" y="0.75" width="15.5" height="25.5" fill="none"/>
+    </g>
+  </g>
+</svg>
