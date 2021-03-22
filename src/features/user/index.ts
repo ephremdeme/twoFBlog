@@ -1,11 +1,9 @@
-import { createSlice, getDefaultMiddleware, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Conversation, IUsers, User, UserRole } from "./types/index";
 import { AppThunk } from 'app/store';
 import firebase, { provider } from '../../firebase/firebase';
-import { array } from 'prop-types';
-import { dispatch } from 'rxjs/internal/observable/pairs';
-import { object, list } from 'rxfire/database';
-import { map } from 'rxjs/operators';
+import {  list } from 'rxfire/database';
+import { map, filter } from 'rxjs/operators';
 import Cookies from 'js-cookie';
 
 
@@ -15,7 +13,8 @@ const initialState: IUsers = {
 	users_admin: [],
 	conversations_admin: [],
 	test: [],
-	pageVisit: null
+	pageVisit: null,
+	fetching: false
 };
 
 interface Iuser {
@@ -71,10 +70,13 @@ const userSlice = createSlice({
 		setGetPageView: (state: IUsers, action: PayloadAction<number>) => {
 			state.pageVisit = action.payload
 		},
+		setFetchStat: (state: IUsers, action: PayloadAction<boolean>) => {
+			state.fetching = action.payload;
+		}
 	}
 });
 
-export const { setTest, setGetRealTimeUser, setGetRealTimeMessage, setRefreshUser, setClearRealTimeMessage, setGetRealTimeUser_admin, setGetRealTimeMessage_admin, setRefreshUser_admin, setClearRealTimeMessage_admin, setGetUser, setGetUser_admin, setGetPageView } = userSlice.actions;
+export const { setTest, setGetRealTimeUser, setGetRealTimeMessage, setRefreshUser, setClearRealTimeMessage, setGetRealTimeUser_admin, setGetRealTimeMessage_admin, setRefreshUser_admin, setClearRealTimeMessage_admin, setGetUser, setGetUser_admin, setGetPageView, setFetchStat } = userSlice.actions;
 
 export const getRealTimeUser = (uid: string): AppThunk => async dispatch => {
 	const db = firebase.firestore();
@@ -146,7 +148,7 @@ export const getRealTimeUser_Customer_Service = (uid: string): AppThunk => async
 	const unsubscribe = db.collection("users").onSnapshot((querySnapshot) => {
 		const user: User[] | any = [];
 		querySnapshot.forEach((doc) => {
-			if (doc.data().uid !== uid && doc.data().role === UserRole.CUSTOMER_SERVICE && doc.data().isOnline === true) {
+			if (doc.data().uid !== uid && (doc.data().role === UserRole.CUSTOMER_SERVICE) && doc.data().isOnline === true) {
 				user.push({ ...doc.data(), view: 0 })
 			}
 		})
@@ -184,6 +186,7 @@ export const sendRealTimeMessage = (conversation: Conversation): AppThunk => asy
 export const sendRealTimeUserMessage = (conversation: any): AppThunk => async dispatch => {
 	const real_time = firebase.database();
 	const db = firebase.firestore();
+	Cookies.remove('reciver')
 	db.collection("users").where("role", "==", UserRole.CUSTOMER_SERVICE).get()
 		.then(users => {
 			const onlineUsers: any = [];
@@ -198,23 +201,27 @@ export const sendRealTimeUserMessage = (conversation: any): AppThunk => async di
 			})
 			let reciver;
 			if (Cookies.get('reciver')) {
+				console.log('...3')
 				reciver = Cookies.get('reciver')
 			}
 			else if (onlineUsers.length > 0 && (Cookies.get('reciver') === undefined)) {
+				console.log('...1')
 				const rand = Math.floor((Math.random() * onlineUsers.length) + 0)
 				reciver = onlineUsers[rand];
 				Cookies.set('reciver', reciver);
 			} else if ((onlineUsers.length === 0) && (Cookies.get('reciver') === undefined) && (allUsers_id.length > 0)) {
+				console.log('...2')
 				const rand = Math.floor((Math.random() * counter) + 0);
 				reciver = allUsers_id[rand];
 				Cookies.set('reciver', reciver);
 			}
+			console.log('object', Cookies.get('reciver'))
 			if (allUsers_id.length > 0) {
 				real_time.ref('convserations').push().set({
 					createdAt: Date(),
 					message: conversation.message,
 					user_uid_1: conversation.user_uid_1,
-					user_uid_2: onlineUsers[0],
+					user_uid_2: Cookies.get('reciver'),
 					isView: conversation.isView,
 					from: UserRole.USER
 				}).then(_ => console.log('[DONE]', _))
@@ -258,25 +265,37 @@ export const getRealTimeMessageView = (uid: string): AppThunk => async (dispatch
 }
 
 export const fetchMessage = (uid_1: string, uid_2: string): AppThunk => async (dispatch) => {
+	console.log(uid_1)
+	console.log(uid_2)
+	dispatch(setFetchStat(true))
+	dispatch(setClearRealTimeMessage_admin());
 	const ref = firebase.database().ref("convserations");
 	list(ref)
 		.pipe(
 			map((changes: any) => changes.map((c: any) => {
 				return { _key: c.snapshot.key, event: c.event, ...c.snapshot.val() }
-			})
+			}),
+			filter((item: any) => (item.user_uid_1 === uid_1 && item.user_uid_2 === uid_2 && item.from === UserRole.CUSTOMER_SERVICE) ||
+					(item.user_uid_1 === uid_2 && item.user_uid_2 === uid_1 && item.from === UserRole.USER))
 			))
 		.subscribe((data: any[]) => {
+			console.log('NEW', data.length)
+			dispatch(setFetchStat(true))
 			const filtered = data.filter((item) => {
-				return item.user_uid_1 === uid_1 && item.user_uid_2 === uid_2 && item.from === UserRole.CUSTOMER_SERVICE ||
-					item.user_uid_1 === uid_2 && item.user_uid_2 === uid_1 && item.from === UserRole.USER
+				return (item.user_uid_1 === uid_1 && item.user_uid_2 === uid_2 && item.from === UserRole.CUSTOMER_SERVICE) ||
+					(item.user_uid_1 === uid_2 && item.user_uid_2 === uid_1 && item.from === UserRole.USER)
 			})
-			dispatch(updateViewStatus(filtered, uid_1))
+			// dispatch(updateViewStatus(filtered, uid_1))
+			console.log('...!!', filtered)
 			dispatch(setClearRealTimeMessage_admin());
 			dispatch(setGetRealTimeMessage_admin(filtered))
+			dispatch(setFetchStat(false))
+
 		})
 }
 
 export const fetchMessage_user = (uid_1: string): AppThunk => async (dispatch) => {
+	dispatch(setClearRealTimeMessage());
 	const ref = firebase.database().ref("convserations");
 	list(ref)
 		.pipe(
@@ -285,35 +304,36 @@ export const fetchMessage_user = (uid_1: string): AppThunk => async (dispatch) =
 			})
 			))
 		.subscribe((data: any[]) => {
+			console.log('nul', data.length)
 			const filtered = data.filter((item) => {
 				return (item.user_uid_1 === uid_1 || item.user_uid_2 === uid_1) &&
 					(item.from === UserRole.CUSTOMER_SERVICE || item.from === UserRole.USER)
 			})
 			dispatch(setClearRealTimeMessage());
 			dispatch(setGetRealTimeMessage(filtered))
-			dispatch(setGetPageView(2))
+			// dispatch(setGetPageView(2))
 		})
 }
 
-export const savePageVisit = (): AppThunk => async dispatch =>{
+export const savePageVisit = (): AppThunk => async dispatch => {
 	return firebase.firestore().collection("page").doc('mywebpagevisit').get()
-	.then((value: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | any)=>{
-		if(value){
-			firebase.firestore().collection("page").doc('mywebpagevisit').update({
-				visit: value.data().visit + 1
-			})
-		}
-	})
+		.then((value: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | any) => {
+			if (value) {
+				firebase.firestore().collection("page").doc('mywebpagevisit').update({
+					visit: value.data().visit + 1
+				})
+			}
+		})
 }
 
-export const getVisit = (): AppThunk => async (dispatch) =>{
+export const getVisit = (): AppThunk => async (dispatch) => {
 
 	firebase.firestore().collection("page").doc('mywebpagevisit').get()
-		.then((value: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | any)=>{
-			if(value){
+		.then((value: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | any) => {
+			if (value) {
 				const visits: number = value.data().visit;
 				dispatch(setGetPageView(visits))
-				
+
 			}
 		})
 }

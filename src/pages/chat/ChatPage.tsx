@@ -6,15 +6,15 @@ import React, {
 	useCallback,
 	useMemo,
 } from 'react';
-import {Container, Grid, Box} from '@material-ui/core';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../app/store';
+import { Container, Grid, Box } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 import {
 	sendRealTimeMessage,
 	getSupportUser,
 	fetchMessage,
 } from '../../features/user';
-import {User, Conversation} from '../../features/user/types';
+import { User, Conversation } from '../../features/user/types';
 import {
 	Paper,
 	styled,
@@ -33,8 +33,8 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import ImageIcon from '@material-ui/icons/Image';
-import {Send} from '@material-ui/icons';
-import {UserRole} from 'features/auth/types';
+import { Send } from '@material-ui/icons';
+import { UserRole } from 'features/auth/types';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -48,7 +48,7 @@ export interface ICUser {
 
 const PaperList = styled(Paper)({
 	height: 'calc(100vh - 180px)',
-	overflowY: 'auto',
+	overflowY: 'scroll',
 	borderRadius: 'none',
 });
 
@@ -142,6 +142,7 @@ const ChatPage: React.FC<{}> = () => {
 	}, []);
 
 	const init_selected_user = (user: User) => {
+		setchatStart(false);
 		setCurrentUser({
 			...currentUser,
 			user_name: user.user_name,
@@ -153,7 +154,9 @@ const ChatPage: React.FC<{}> = () => {
 		dispatch(fetchMessage(uid, user.uid));
 	};
 
-	const handleSendMessage = (): void => {
+
+	const handleSendMessage = (e: any): void => {
+		e.preventDefault()
 		if (message) {
 			const messageContent: Conversation = {
 				user_uid_1: uid,
@@ -213,10 +216,10 @@ const ChatPage: React.FC<{}> = () => {
 										<ImageIcon />
 									</Avatar>
 								) : (
-									<Avatar src={currentUser.photo}>
-										<ImageIcon />
-									</Avatar>
-								)}
+										<Avatar src={currentUser.photo}>
+											<ImageIcon />
+										</Avatar>
+									)}
 							</Box>
 							<Box display="flex" flexDirection="row">
 								{chatStart ? (
@@ -225,8 +228,8 @@ const ChatPage: React.FC<{}> = () => {
 										secondary={currentUser.email}
 									/>
 								) : (
-									<ListItemText primary="User name" secondary="user email" />
-								)}
+										<ListItemText primary="User name" secondary="user email" />
+									)}
 							</Box>
 						</Box>
 					</Grid>
@@ -239,55 +242,57 @@ const ChatPage: React.FC<{}> = () => {
 					showChatMobile
 						? classes.showMobileChatMenu
 						: classes.hideMobileChatMenu
-				}`}
-				style={{overflow: 'auto'}}>
+					}`}
+			>
 				<PaperList elevation={0}>
-					{state.users_admin &&
-						state.users_admin.map((user: User, index) => {
-							return (
-								<Card
-									className={classes.root}
-									onClick={() => {
-										init_selected_user(user);
-									}}
-									key={index}
-									elevation={0}>
-									<CardHeader
-										avatar={
-											<Avatar
-												aria-label="recipe"
-												className={classes.avatar}
-												src={user.photo}
-											/>
-										}
-										action={
-											<IconButton>
-												<Badge badgeContent={user.view} color="secondary">
-													{user.role === UserRole.GUEST ? (
-														<Guest />
-													) : user.isOnline ? (
-														<Online />
-													) : (
-														<Offline />
-													)}
-												</Badge>
-											</IconButton>
-										}
-										title={user.user_name}
-										subheader={user.email}
-									/>
-								</Card>
-							);
-						})}
+					<Box style={{ overflow: 'hidden', height: 'calc(100vh - 90px)' }}>
+						{state.users_admin &&
+							state.users_admin.map((user: User, index) => {
+								return (
+									<Card
+										className={classes.root}
+										onClick={() => {
+											init_selected_user(user);
+										}}
+										key={index}
+										elevation={0}>
+										<CardHeader
+											avatar={
+												<Avatar
+													aria-label="recipe"
+													className={classes.avatar}
+													src={user.photo}
+												/>
+											}
+											action={
+												<IconButton>
+													<Badge badgeContent={user.view} color="secondary">
+														{user.role === UserRole.GUEST ? (
+															<Guest />
+														) : user.isOnline ? (
+															<Online />
+														) : (
+																	<Offline />
+																)}
+													</Badge>
+												</IconButton>
+											}
+											title={user.user_name}
+											subheader={user.email}
+										/>
+									</Card>
+								);
+							})}
+					</Box>
 				</PaperList>
 			</Box>
 
 			<Grid container>
 				<Grid item md={4} xs={1}>
 					<Hidden smDown implementation="css">
-						<Box className={classes.chatUsers}>
-							{state.users_admin &&
-								state.users_admin.map((user: User, index) => {
+						<Box className={classes.chatUsers} style={{ overflowY: 'scroll', height: 'calc(100vh - 180px)' }}>
+							{state.users_admin && state.users_admin
+								.map((user: User, index) => {
 									return (
 										<Card
 											className={classes.root}
@@ -311,8 +316,8 @@ const ChatPage: React.FC<{}> = () => {
 															) : user.isOnline ? (
 																<Online />
 															) : (
-																<Offline />
-															)}
+																		<Offline />
+																	)}
 														</Badge>
 													</IconButton>
 												}
@@ -400,30 +405,31 @@ const ChatPage: React.FC<{}> = () => {
 							</PaperList>
 
 							<PaperBox display="flex" flexDirection="row" width="100%" p={1}>
-								<Box flexGrow={1}>
-									<MessageText
-										size="small"
-										label="Type Message..."
-										variant="outlined"
-										value={message}
-										fullWidth
-										onChange={(e) => {
-											setmessage(e.target.value);
-										}}
-									/>
-								</Box>
-								<Box flexShrink={1} display="flex" justifyContent="center">
-									{/* <form > */}
-									<SendButton
-										variant="contained"
-										// type="submit"
-										color="primary"
-										endIcon={<Send />}
-										onClick={() => {
-											handleSendMessage();
-										}}></SendButton>
-									{/* </form> */}
-								</Box>
+								<form onSubmit={handleSendMessage}>
+									<Box flexGrow={1}>
+										<MessageText
+											size="small"
+											label="Type Message..."
+											variant="outlined"
+											value={message}
+											fullWidth
+											onChange={(e) => {
+												setmessage(e.target.value);
+											}}
+										/>
+									</Box>
+									<Box flexShrink={1} display="flex" justifyContent="center">
+										{/* <form > */}
+										<SendButton
+											variant="contained"
+											// type="submit"
+											color="primary"
+											endIcon={<Send />}
+											type="submit"
+											></SendButton>
+										{/* </form> */}
+									</Box>
+								</form>
 							</PaperBox>
 						</div>
 					}

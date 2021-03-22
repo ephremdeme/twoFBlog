@@ -32,5 +32,6 @@ export interface IUsers {
 	users_admin: User[],
 	conversations_admin: Conversation[],
 	test: any,
-	pageVisit: number | null
+	pageVisit: number | null;
+	fetching: boolean
 }
