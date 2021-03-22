@@ -14,7 +14,8 @@ const useStyles = makeStyles((theme) => ({
 const TitleInput: React.FC<{
 	handleChange: (title: string, value: string) => void;
 	value: string;
-}> = ({handleChange, value}) => {
+	placeholder: string;
+}> = ({handleChange, placeholder, value}) => {
 	const classes = useStyles();
 
 	return (
@@ -26,7 +27,7 @@ const TitleInput: React.FC<{
 					fullWidth
 					defaultValue={value}
 					onChange={(e) => handleChange('title', e.target.value)}
-					placeholder="Title..."
+					placeholder={placeholder}
 				/>
 			</Box>
 		</>

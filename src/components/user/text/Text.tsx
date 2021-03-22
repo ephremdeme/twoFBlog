@@ -8,12 +8,12 @@ import {TextSettings} from './textSetting';
 
 const useStyles = makeStyles({
 	root: {
-		width: '100%',
 		maxWidth: '100%',
 	},
 	text: {
 		display: 'block',
-		minHeight: '70px',
+		minHeight: 'auto',
+		minWidth: '120px',
 		padding: '10px',
 		margin: '5px',
 		maxWidth: '100%',
@@ -30,6 +30,7 @@ export const TextEditAble: UserComponent<TextProps> = ({
 	fontSize,
 	lineSpacing,
 	letterSpacing,
+	variant,
 }) => {
 	const classes = useStyles();
 	const html = useRef<string>(text);
@@ -81,7 +82,7 @@ export const TextEditAble: UserComponent<TextProps> = ({
 					letterSpacing: `${letterSpacing}px`,
 					overflowWrap: 'linebreak',
 				}}
-				className={classes.text}
+				className={classes.text + ' ' + variant}
 				// style={{fontSize: `${fontSize}px`, textAlign}}
 				title="Editable"
 			/>
@@ -96,6 +97,7 @@ type TextProps = {
 	lineSpacing?: number;
 	textRef?: React.RefObject<HTMLLinkElement>;
 	letterSpacing?: number;
+	variant?: string;
 };
 
 TextEditAble.craft = {
@@ -104,8 +106,7 @@ TextEditAble.craft = {
 		text: 'edit',
 		fontSize: '12',
 		textAlign: '',
-		lineSpacing: 1.5,
-		letterSpacing: 0,
+		variant: 'MuiTypography-body1',
 	},
 	related: {
 		settings: TextSettings,

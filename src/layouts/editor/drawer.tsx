@@ -21,6 +21,7 @@ import {Video} from '../../components/user/video/video';
 import {Image as ImageComp} from '../../components/user/image/image';
 import {Container} from '../../components/selectors/Container';
 import Divider from '../../components/selectors/Divider';
+import {ListItemText, Tooltip} from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -37,11 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		icon: {
 			fontSize: '2rem',
-		},
-		drawer: {
-			width: drawerWidth,
-			flexShrink: 0,
-			whiteSpace: 'nowrap',
+			minWidth: '46px !important',
 		},
 		content: {
 			flexGrow: 1,
@@ -61,6 +58,8 @@ const useStyles = makeStyles((theme: Theme) =>
 			flex: '1 1 0%',
 			flexDirection: 'column',
 			alignItems: 'center',
+			paddingLeft: '20px',
+			paddingTop: '20px',
 		},
 		undo: {
 			display: 'flex',
@@ -95,76 +94,66 @@ export default function MiniDrawer() {
 				open>
 				<div className={classes.side + ' MuiAppBar-colorDefault'}>
 					<div className={classes.component}>
-						<List>
+						<List disablePadding>
 							<ListItem
+								disableGutters
 								innerRef={(ref: ReactElement) =>
 									create(ref, <Text text="edit text" />)
 								}>
 								<ListItemIcon className={classes.icon}>
-									<TextFieldsRounded />
+									<Tooltip title="Insert Text" placement="right">
+										<TextFieldsRounded />
+									</Tooltip>
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
+								disableGutters
 								innerRef={(ref: ReactElement) =>
 									create(
 										ref,
 										<Element
 											canvas
 											is={Container}
-											height="300px"
-											width="300px"></Element>
+											height="auto"
+											margin={['10', '10', '10', '10']}
+											width="auto"></Element>
 									)
 								}>
 								<ListItemIcon className={classes.icon}>
-									<CheckBoxOutlineBlankRounded />
+									<Tooltip title="Insert Container" placement="right">
+										<CheckBoxOutlineBlankRounded />
+									</Tooltip>
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
+								disableGutters
 								innerRef={(ref: ReactElement) => create(ref, <Video />)}>
 								<ListItemIcon className={classes.icon}>
-									<YouTube />
+									<Tooltip title="Insert Youtube Video" placement="right">
+										<YouTube />
+									</Tooltip>
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
+								disableGutters
 								innerRef={(ref: ReactElement) => create(ref, <ImageComp />)}>
 								<ListItemIcon className={classes.icon}>
-									<ImageRounded />
+									<Tooltip title="Insert Image" placement="right">
+										<ImageRounded />
+									</Tooltip>
 								</ListItemIcon>
 							</ListItem>
 							<ListItem
+								disableGutters
 								innerRef={(ref: ReactElement) => create(ref, <Divider />)}>
 								<ListItemIcon className={classes.icon}>
-									<MaximizeIcon />
+									<Tooltip title="Insert Divider" placement="right">
+										<MaximizeIcon />
+									</Tooltip>
 								</ListItemIcon>
 							</ListItem>
 						</List>
 					</div>
-					{/* <div className={classes.undo}>
-						<List>
-							<ListItem>
-								<IconButton
-									className="copy-state-btn"
-									size="small"
-									disabled={!canUndo}
-									onClick={() => actions.history.undo()}
-									style={{marginRight: '10px'}}>
-									<Undo />
-								</IconButton>
-							</ListItem>
-							<ListItem>
-								<IconButton
-									className="copy-state-btn"
-									size="small"
-									color="secondary"
-									disabled={!canRedo}
-									onClick={() => actions.history.redo()}
-									style={{marginRight: '10px'}}>
-									<Redo />
-								</IconButton>
-							</ListItem>
-						</List>
-					</div>
-				 */}
 				</div>
 			</Drawer>
 		</div>

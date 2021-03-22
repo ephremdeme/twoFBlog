@@ -14,12 +14,11 @@ import {
 	ClickAwayListener,
 	Grow,
 	Theme,
-	createStyles
+	createStyles,
 } from '@material-ui/core';
-import { useSpring, animated as a } from 'react-spring'
+import {useSpring, animated as a} from 'react-spring';
 
-import { 
-	
+import {
 	ArrowForwardIos,
 	ExpandLess,
 	ExpandMore,
@@ -28,7 +27,6 @@ import {
 	FormatAlignLeft,
 	FormatAlignRight,
 	FormatBold,
-	FormatColorFill,
 	FormatItalic,
 	FormatLineSpacing,
 	FormatListBulleted,
@@ -36,15 +34,17 @@ import {
 	FormatQuote,
 	FormatUnderlined,
 	InsertLink,
+	TextFields,
 } from '@material-ui/icons';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {useNode} from '@craftjs/core';
 import {Alert} from '@material-ui/lab';
-import {ChromePicker, Color, ColorResult} from 'react-color';
-import FormatLetterSpacing from '@material-ui/icons/TextFormatSharp';
+import {ChromePicker, ColorResult} from 'react-color';
 import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
-import classes from '*.module.css';
+
+import {ReactComponent as FormatLetterSpacing} from '../../../public/icons/editor/Letter_Spacing.svg';
+import validUrl from 'valid-url';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -63,8 +63,8 @@ const useStyles = makeStyles((theme: Theme) =>
 		arrow: {
 			justifyContent: 'center',
 			display: 'flex',
-			alignItems: 'center'
-		}
+			alignItems: 'center',
+		},
 	})
 );
 
@@ -88,6 +88,35 @@ const EditButton: React.FC<{name?: string; cmd: string; value?: string}> = (
 			}}>
 			{props.children || props.name}
 		</Button>
+	);
+};
+
+const Blockquote = () => {
+	const classes = useStyles();
+
+	const [active, setActive] = useState(false);
+
+	return (
+		<>
+			<Button
+				key={'formatblock'}
+				style={{margin: '3px'}}
+				title={'Blockquote'}
+				className={active ? classes.button : ''}
+				onMouseDown={(evt) => {
+					evt.preventDefault(); // Avoids loosing focus from the editable area
+					console.log(document?.getSelection()?.toString());
+					if (!active) {
+						let resp = document.execCommand('formatblock', false, 'blockquote'); // Send the command to the browser
+						if (resp) setActive(true);
+					} else {
+						let resp = document.execCommand('formatblock', false, 'p'); // Send the command to the browser
+						if (resp) setActive(false);
+					}
+				}}>
+				<FormatQuote />
+			</Button>
+		</>
 	);
 };
 
@@ -137,7 +166,13 @@ const EditButtonMultiple: React.FC<{
 	);
 };
 export const GenericMenuList: React.FC<{
-	CIcon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+	CIcon:
+		| OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
+		| React.FunctionComponent<
+				React.SVGProps<SVGSVGElement> & {
+					title?: string | undefined;
+				}
+		  >;
 	title?: string;
 	blockKeydown?: boolean;
 }> = ({children, CIcon, title, blockKeydown}) => {
@@ -194,7 +229,7 @@ export const GenericMenuList: React.FC<{
 		}
 		return child;
 	});
-	
+
 	return (
 		<>
 			<IconButton
@@ -203,7 +238,7 @@ export const GenericMenuList: React.FC<{
 				aria-haspopup="true"
 				title={title}
 				onClick={handleToggle}>
-				<CIcon />
+				<CIcon className="MuiSvgIcon-root" />
 			</IconButton>
 			<Popper
 				open={open}
@@ -375,6 +410,87 @@ const LineSpacing = () => {
 		</>
 	);
 };
+const TextVariant = () => {
+	const classes = useStyles();
+
+	const {
+		actions: {setProp},
+		variant,
+	} = useNode((node) => ({
+		variant: node.data.props.variant,
+	}));
+
+	const [selected, setSelected] = useState(variant);
+
+	const handleSubmit = (
+		event: React.MouseEvent<EventTarget>,
+		textVariant: string,
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void
+	) => {
+		if (textVariant) {
+			setSelected(textVariant);
+			setProp((props) => (props.variant = textVariant));
+		}
+		if (handleClose) handleClose(event);
+	};
+
+	const MenuOptions: React.FC<{
+		handleClose?: (event: React.MouseEvent<EventTarget>) => void;
+		open?: boolean;
+	}> = ({open, handleClose}) => {
+		return (
+			<>
+				<MenuItem
+					className={selected === 'MuiTypography-h1' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'MuiTypography-h1', handleClose)}>
+					H1
+				</MenuItem>
+				<MenuItem
+					className={selected === 'MuiTypography-h2' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'MuiTypography-h2', handleClose)}>
+					H2
+				</MenuItem>
+				<MenuItem
+					className={selected === 'MuiTypography-h3' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'MuiTypography-h3', handleClose)}>
+					H3
+				</MenuItem>
+				<MenuItem
+					className={selected === 'MuiTypography-h4' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'MuiTypography-h4', handleClose)}>
+					H4
+				</MenuItem>
+				<MenuItem
+					className={
+						selected === 'MuiTypography-subtitle1' ? classes.button : ''
+					}
+					onClick={(e) =>
+						handleSubmit(e, 'MuiTypography-subtitle1', handleClose)
+					}>
+					Subtitle
+				</MenuItem>
+				{/* <MenuItem
+					className={selected === 'H6' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'H6', handleClose)}>
+					H6
+				</MenuItem> */}
+				<MenuItem
+					className={selected === 'MuiTypography-body1' ? classes.button : ''}
+					onClick={(e) => handleSubmit(e, 'MuiTypography-body1', handleClose)}>
+					Body
+				</MenuItem>
+			</>
+		);
+	};
+
+	return (
+		<>
+			<GenericMenuList CIcon={TextFields} title="Change The Whole Text Variant">
+				<MenuOptions />
+			</GenericMenuList>
+		</>
+	);
+};
 
 const ListOrderButtons = () => {
 	const classes = useStyles();
@@ -426,11 +542,11 @@ const ListOrderButtons = () => {
 export const TextColor = () => {
 	const [foreColor, setForeColor] = useState('inhert');
 
-	// const handleChangeComplete = (color: ColorResult) => {
-	// 	setForeColor(color.hex);
-	// 	console.log(document.execCommand('forecolor', false, foreColor));
-	// 	console.log(color);
-	// };
+	const handleChangeComplete = (color: ColorResult) => {
+		setForeColor(color.hex);
+		console.log(document.execCommand('forecolor', false, foreColor));
+		console.log(color);
+	};
 
 	const IconWithColor = () => {
 		return (
@@ -447,12 +563,12 @@ export const TextColor = () => {
 		return (
 			<>
 				<MenuItem onClick={handleClose}>
-					{/* {open && (
+					{open && (
 						<ChromePicker
 							color={foreColor}
 							onChangeComplete={handleChangeComplete}
 						/>
-					)} */}
+					)}
 				</MenuItem>
 			</>
 		);
@@ -525,12 +641,12 @@ const TextStyleMenu = () => {
 export const TextSettings = () => {
 	const classes = useStyles();
 	const [active, setActive] = useState(false);
-	const [flipped, set] = useState(false)
-	const { transform, opacity } = useSpring({
+	const [flipped, set] = useState(false);
+	const {transform, opacity} = useSpring({
 		opacity: flipped ? 1 : 0,
 		transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
-		config: { mass: 5, tension: 500, friction: 80 }
-	  })
+		config: {mass: 5, tension: 500, friction: 80},
+	});
 
 	return (
 		<div>
@@ -548,12 +664,7 @@ export const TextSettings = () => {
 						<EditButton cmd="underline" name={'Underline'}>
 							<FormatUnderlined />
 						</EditButton>
-						<EditButton
-							cmd="formatblock"
-							value="blockquote"
-							name={'Blockquote'}>
-							<FormatQuote />
-						</EditButton>
+						<Blockquote />
 
 						<LinkButton cmd="createlink" name={'Link'}>
 							<InsertLink />
@@ -568,34 +679,41 @@ export const TextSettings = () => {
 						<TextColor />
 						<LineSpacing />
 						<LetterSpacing />
+						<TextVariant />
 					</>
 				)}
 
 				<IconButton onClick={() => setActive(!active)}>
-					{!active ?
-						 // @ts-ignore
-					 <div onClick={() => set(state => !state)} className={classes.arrow}>
-						<a.div style={{ transform }}  >
-								< ArrowBackIosIcon />
+					{!active ? (
+						// @ts-ignore
+						<div
+							onClick={() => set((state) => !state)}
+							className={classes.arrow}>
+							<a.div style={{transform}}>
+								<ArrowBackIosIcon />
 							</a.div>
-							<a.div style={{  transform: transform.interpolate(t => 
-						`${t} rotateX(180deg)`) }} > 
-						    {/* < ArrowForwardIos /> */}
-						
-				</a.div>
-					</div>		
-					:
-					<div className={classes.arrow}>
-					<a.div style={{ transform }} >
-								{/* < ArrowBackIosIcon /> */}
+							<a.div
+								style={{
+									transform: transform.interpolate(
+										(t) => `${t} rotateX(180deg)`
+									),
+								}}>
+								{/* < ArrowForwardIos /> */}
 							</a.div>
-					<a.div style={{  transform: transform.interpolate(t => 
-						`${t} rotateX(180deg)`) }}  > 
-						    < ArrowForwardIos />
-						
-				</a.div>
-				</div>
-					}
+						</div>
+					) : (
+						<div className={classes.arrow}>
+							<a.div style={{transform}}>{/* < ArrowBackIosIcon /> */}</a.div>
+							<a.div
+								style={{
+									transform: transform.interpolate(
+										(t) => `${t} rotateX(180deg)`
+									),
+								}}>
+								<ArrowForwardIos />
+							</a.div>
+						</div>
+					)}
 				</IconButton>
 			</div>
 		</div>
@@ -616,6 +734,7 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 
 	const anchorRef = React.useRef<HTMLButtonElement>(null);
 	const [range, setRange] = useState(document.createRange());
+	const [message, setMessage] = useState('');
 
 	const {
 		actions: {setProp},
@@ -667,8 +786,10 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 		setLink(e.target.value);
 	};
 	const handleToggle = (event: React.MouseEvent<EventTarget>) => {
-		if (text === '' || text === undefined) setHasNoText(true);
-		else setOpen((prevOpen) => !prevOpen);
+		if (text === '' || text === undefined) {
+			setMessage('Select Text First!');
+			setHasNoText(true);
+		} else setOpen((prevOpen) => !prevOpen);
 	};
 
 	const handleClose = (event: React.MouseEvent<EventTarget>) => {
@@ -686,13 +807,17 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 		event.preventDefault();
 		console.log('Text', text);
 
-		if (text === '') setHasNoText(true);
+		if (text === '') {
+			setMessage('Select Text First!');
+			setHasNoText(true);
+		}
 		if (text) {
 			// textRef.current?.focus();
 			// selection?.collapse(saved[0], saved[1]);
 			document.getSelection()?.removeAllRanges();
 			document.getSelection()?.addRange(range);
-			console.log('Restored caret', document.getSelection()?.rangeCount);
+			if (!validUrl.isWebUri(link))
+				console.log('Restored caret', document.getSelection()?.rangeCount);
 			console.log(document.execCommand('createlink', false, link), 'Links');
 		}
 
@@ -757,15 +882,16 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 					</Grow>
 				)}
 			</Popper>
-			<AlertLink open={hasNoText} setOpen={setHasNoText} />
+			<AlertLink open={hasNoText} message={message} setOpen={setHasNoText} />
 		</>
 	);
 };
 
 const AlertLink: React.FC<{
 	open: boolean;
+	message: string;
 	setOpen: (data: boolean) => void;
-}> = ({open, setOpen, children}) => {
+}> = ({open, setOpen, message, children}) => {
 	const handleClick = () => {
 		setOpen(true);
 	};
@@ -784,7 +910,7 @@ const AlertLink: React.FC<{
 				variant="filled"
 				onClose={handleClose}
 				severity="warning">
-				Select Text First!
+				{message}
 			</Alert>
 		</Snackbar>
 	);
@@ -828,7 +954,7 @@ const LetterSpacing = () => {
 				onClick={handleClick}
 				aria-describedby={id}
 				title="Insert Letter Spacing">
-				<FormatLetterSpacing />
+				<FormatLetterSpacing className="MuiSvgIcon-root" />
 			</IconButton>
 			<Popper id={id} open={open} anchorEl={anchorEl}>
 				<ClickAwayListener onClickAway={handleClose}>

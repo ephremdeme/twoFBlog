@@ -2,6 +2,8 @@ import {useNode} from '@craftjs/core';
 import {FormControl, TextField} from '@material-ui/core';
 import React from 'react';
 
+import getYoutubeId from 'get-youtube-id';
+
 function VideoSetting() {
 	const {
 		actions: {setProp},
@@ -14,10 +16,13 @@ function VideoSetting() {
 		<>
 			<FormControl size="small" component="fieldset">
 				<TextField
-					label="Video ID"
+					label="Youtube Video Url/Link"
 					value={videoId}
 					onChange={(e) =>
-						setProp((props) => (props.videoId = e.target.value))
+						setProp(
+							(props) =>
+								(props.videoId = getYoutubeId(e.target.value, {fuzzy: false}))
+						)
 					}></TextField>
 			</FormControl>
 		</>

@@ -20,6 +20,8 @@ import {TextEditAble} from '../../components/user/text/Text';
 import lz from 'lzutf8';
 import {IBlog} from '../../features/editor';
 import Viewport from 'components/selectors/Viewport';
+import {RootState} from 'app/store';
+import {useSelector} from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -28,8 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
 				'0 8px 60px 0 rgb(103 151 255 / 11%), 0 12px 90px 0 rgb(103 151 255 / 11%)',
 			marginBottom: '40vh',
 			[theme.breakpoints.down('lg')]: {
-				marginLeft: '95px',
-				maxWidth: '90%',
+				// marginLeft: '95px',
+				maxWidth: '80%',
+				// margin: '20px',
 			},
 		},
 		title: {
@@ -47,9 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
 		coverImage: {
 			marginTop: '20px',
 		},
-		Container: {
-			// background: theme.palette.,
-		},
 	})
 );
 
@@ -57,22 +57,25 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 	const resolvers = {TextEditAble, Image, Video, Divider, Container};
 	const classes = useStyles();
 
-	const hashed = `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
-`;
-	console.log(blog?.blogHash === hashed);
+	// const hashed = `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`;
+	// console.log('Equal', blog?.blogHash === hashed);
 
-	const json = lz.decompress(lz.decodeBase64(blog?.blogHash as string));
+	const user = useSelector((state: RootState) => state.auth);
+
+	console.log(user);
 
 	const [values, setValues] = useState<IBlog>({
 		id: blog?.id ? blog.id : '',
 		title: blog?.title as string,
 		coverImageUrl: blog?.coverImageUrl as string,
-		blogHash: blog?.blogHash as string,
-		authorId: 'jhjhejkhejwehewkhewe',
+		blogHash: blog?.blogHash ? (blog?.blogHash as string) : '',
+		authorId: blog?.authorId ? (blog?.authorId as string) : user.uid,
 		date: blog?.date
 			? new Date(blog?.date as string).toDateString()
 			: new Date().toDateString(),
 	});
+
+	const json = lz.decompress(lz.decodeBase64(blog?.blogHash as string));
 
 	const handleChange = (key: string, value: string) => {
 		setValues({
@@ -80,8 +83,6 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 			[key]: value,
 		});
 	};
-
-	console.log('Editor', blog, edit);
 
 	const [enabled, setEnabled] = useState(edit === undefined ? true : edit);
 	return (
@@ -93,11 +94,22 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 				handleChange={handleChange}
 				values={values}
 			/>
-			<MiniDrawer />
-			<MuiContainer maxWidth={'lg'}>
+			{enabled && <MiniDrawer />}
+			<MuiContainer>
 				<div className={classes.title}>
 					{enabled && (
-						<TitleInput value={values.title} handleChange={handleChange} />
+						<>
+							<TitleInput
+								placeholder="Title ....."
+								value={values.title}
+								handleChange={handleChange}
+							/>
+							{/* <TitleInput
+								placeholder="Optional Sub Title......"
+								value={values.title}
+								handleChange={handleChange}
+							/> */}
+						</>
 					)}
 					{!enabled && (
 						<>
@@ -108,7 +120,7 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 								variant="body1"
 								align="center"
 								className={classes.author}>
-								Posted on Posted on {values.date} by B.J. Keeton
+								Posted on Posted on {values.date} by {blog?.author?.user_name}
 							</Typography>
 						</>
 					)}
@@ -135,14 +147,6 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 						/>
 					</Frame>
 				</Viewport>
-
-				{/* <Grid container spacing={5}>
-					<Grid item xs={12} md={12}>
-						</Grid>
-					<Grid item xs={12} md={2}>
-						<Layers expandRootOnLoad={true} />
-					</Grid>
-				</Grid> */}
 			</MuiContainer>
 		</Editor>
 	);

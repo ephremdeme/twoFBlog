@@ -1,5 +1,6 @@
 import {ActionCreatorWithPayload} from '@reduxjs/toolkit';
 import {useAppDispatch, useCollection, useFirestore} from 'app/hooks';
+import {deleteBlog} from 'features/editor';
 import {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
@@ -33,7 +34,7 @@ export const useFireDoc = <T>(
 		};
 
 		fetchDoc();
-	}, [action, dispatch, docRef, id]);
+	}, [id]);
 	return {loading, data};
 };
 /**
@@ -189,18 +190,20 @@ export const useFireMutation = async (
  * @param {string} id - document id
  * @return {*}
  */
-export const useFireDelete = async (collection: string, id: string) => {
+export const useFireDelete = (collection: string) => {
 	const [loading, setLoading] = useState(true);
-	const dispatch = useAppDispatch();
+	const dispatch = useDispatch();
+	const docRef = useCollection(collection);
+	const deleteDoc = async (id: string) => {
+		try {
+			await docRef.doc(id).delete();
+			setLoading(false);
+			dispatch(deleteBlog(id));
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	};
 
-	const docRef = useCollection(collection).doc(id);
-	try {
-		await docRef.delete();
-		setLoading(false);
-	} catch (error) {
-		console.log(error);
-		throw error;
-	}
-
-	return {loading};
+	return {loading, deleteDoc};
 };
