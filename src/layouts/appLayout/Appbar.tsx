@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -6,11 +6,11 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
-import {Avatar, Divider, Grid, Hidden, Popover} from '@material-ui/core';
-import {useDispatch, useSelector} from 'react-redux';
-import {logoutUser} from '../../features/auth';
-import {RootState} from '../../app/store';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { Avatar, Divider, Grid, Hidden, Popover } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '../../features/auth';
+import { RootState } from '../../app/store';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -24,9 +24,9 @@ import StarBorder from '@material-ui/icons/StarBorder';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
-import {toggleTheme} from 'features/app';
-import {Route, Switch, withRouter} from 'react-router-dom';
-import routes, {IRoute} from 'router/config';
+import { toggleTheme } from 'features/app';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import routes, { IRoute } from 'router/config';
 
 const drawerWidth = 240;
 
@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-function Appbar({history}: any): JSX.Element {
+function Appbar({ history }: any): JSX.Element {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const auth = useSelector((state: RootState) => state.auth);
@@ -88,7 +88,7 @@ function Appbar({history}: any): JSX.Element {
 		setMobileOpen(!mobileOpen);
 	};
 
-	console.log('confirm',auth.isGuest)
+	console.log('confirm', auth.isGuest)
 
 	// user popover
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -193,8 +193,8 @@ function Appbar({history}: any): JSX.Element {
 												<Avatar alt="User" src={userAvatar} />
 											</Grid>
 											<Grid item>
-												<h3 style={{margin: '0'}}>{userName}</h3>
-												<p style={{margin: '0'}}>
+												<h3 style={{ margin: '0' }}>{userName}</h3>
+												<p style={{ margin: '0' }}>
 													{userStatus ? 'online' : 'offline'}
 												</p>
 											</Grid>
@@ -242,33 +242,23 @@ function Appbar({history}: any): JSX.Element {
 												</ListItem>
 											</List>
 										</Collapse>
-											auth.isGuest ?
+										{auth.isGuest ?
 												<ListItem button>
-													<ListItemIcon>
-														<ExitToAppIcon />
-													</ListItemIcon>
-													<Box fontSize={14} fontWeight={500} onClick={()=>{history.push('/login')}}>
-														Login
+											<ListItemIcon>
+												<ExitToAppIcon />
+											</ListItemIcon>
+											<Box fontSize={14} fontWeight={500} onClick={() => { history.push('/login') }}>
+												Login
 													</Box>
-												</ListItem> :
-												<ListItem button>
-													<ListItemIcon>
-														<ExitToAppIcon />
-													</ListItemIcon>
-													<Box fontSize={14} fontWeight={500} onClick={signOut}>
-														Logout
-
-												</Box>
-											</ListItem>
-										) : (
+										</ListItem> : (
 											<ListItem button>
-												<ListItemIcon>
-													<ExitToAppIcon />
-												</ListItemIcon>
-												<Box fontSize={14} fontWeight={500} onClick={signOut}>
-													Logout
+											<ListItemIcon>
+												<ExitToAppIcon />
+											</ListItemIcon>
+											<Box fontSize={14} fontWeight={500} onClick={signOut}>
+												Logout
 												</Box>
-											</ListItem>
+										</ListItem>
 										)}
 										<ListItem button>
 											<ListItemIcon>
