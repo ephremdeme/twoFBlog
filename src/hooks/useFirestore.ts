@@ -191,11 +191,12 @@ export const useFireMutation = async (
  * @return {*}
  */
 export const useFireDelete = (collection: string) => {
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const dispatch = useDispatch();
 	const docRef = useCollection(collection);
 	const deleteDoc = async (id: string) => {
 		try {
+			setLoading(true);
 			await docRef.doc(id).delete();
 			setLoading(false);
 			dispatch(deleteBlog(id));

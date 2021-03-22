@@ -17,6 +17,7 @@ import {RootState} from 'app/store';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import {toggleTheme} from 'features/app';
+import EditorBackdrop from 'pages/editor/EditorBackdrop';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -65,6 +66,7 @@ export const NavBar: React.FC<{
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const user = useSelector((state: RootState) => state.auth);
 	const loading = useSelector(selectLoading);
+	console.log('ddd', loading);
 
 	useEffect(() => {
 		if (!enabled) {
@@ -122,6 +124,9 @@ export const NavBar: React.FC<{
 											(options) => (options.enabled = !enabled)
 										);
 										setEnable(!enabled);
+										// let a = document.getElementById("parent")
+										// for (let child = a.firstElementChild; child; child = a.nextElementSibling){
+										// 	for (let child1 = child.firstElementChild; child1; child = child.nextElementSibling){ console.log(child1)}}
 										const json = query.serialize();
 										const hash = lz.encodeBase64(lz.compress(json));
 										handleChange('blogHash', hash);
@@ -146,7 +151,12 @@ export const NavBar: React.FC<{
 												})
 											);
 										else {
-											// dispatch(postBlog(values));
+											// dispatch(
+											// 	postBlog({
+											// 		...values,
+											// 		blogHash: hash,
+											// 	})
+											// );
 											dispatch(
 												updateBlog({
 													...values,
@@ -158,6 +168,7 @@ export const NavBar: React.FC<{
 									}}>
 									Publish
 								</Button>
+								<EditorBackdrop loading={loading} />
 							</>
 						))}
 				</Toolbar>

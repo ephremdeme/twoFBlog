@@ -131,11 +131,6 @@ export const ContainerSettings = () => {
 
 			setOpen(false);
 		};
-
-		useEffect(() => {
-			console.log('users', open);
-		});
-
 		const handleChangeComplete = (color: ColorResult) => {
 			if (color.rgb.a) setForeColor(color.rgb);
 			setForeColor(color.rgb);
@@ -394,7 +389,6 @@ const Margin = () => {
 	useEffect(() => {
 		let tempMargin = Object.values(marginValues);
 		setProp((props) => (props.margin = tempMargin), 500);
-		console.log(marginValues, tempMargin);
 	}, [marginValues, setProp]);
 
 	const MarginICon = () => (
@@ -430,7 +424,6 @@ const Padding = () => {
 	useEffect(() => {
 		let temppadding = Object.values(paddingValues);
 		setProp((props) => (props.padding = temppadding), 500);
-		console.log(paddingValues, temppadding);
 	}, [paddingValues, setProp]);
 
 	return (

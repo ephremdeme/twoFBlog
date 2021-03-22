@@ -1,5 +1,5 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -20,26 +20,36 @@ import ts from 'typescript';
 import {IBlog, selectLoading} from 'features/editor';
 import {useSelector} from 'react-redux';
 import {useFireDelete} from 'hooks/useFirestore';
+import {Backdrop, CircularProgress} from '@material-ui/core';
+import EditorBackdrop from './EditorBackdrop';
+import {RootState} from 'app/store';
 
-const useStyles = makeStyles({
-	cardIcons: {
-		float: 'right',
-		marginLeft: '60%',
-	},
-	root: {
-		maxWidth: 383,
-	},
-	media: {
-		height: 100,
-		paddingTop: '56.25%',
-	},
-	avatar: {
-		backgroundColor: red[500],
-	},
-	rootDiv: {
-		paddingTop: '5%',
-	},
-});
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		cardIcons: {
+			float: 'right',
+			marginLeft: '60%',
+		},
+		root: {
+			maxWidth: 383,
+		},
+		media: {
+			height: 100,
+			paddingTop: '56.25%',
+		},
+		avatar: {
+			backgroundColor: red[500],
+		},
+		rootDiv: {
+			paddingTop: '5%',
+		},
+		backdrop: {
+			zIndex: theme.zIndex.drawer + 1,
+			color: '#fff',
+		},
+	})
+);
+
 const calc = (x: number, y: number) => [
 	-(y - window.innerHeight / 4) / 200,
 	(x - window.innerWidth / 4) / 200,
@@ -60,6 +70,8 @@ export const BlogCard: React.FC<{
 
 	const {loading, deleteDoc} = useFireDelete('blogs');
 
+	const user = useSelector((state: RootState) => state.auth);
+
 	return (
 		<div className={classes.rootDiv}>
 			<animated.div
@@ -76,18 +88,20 @@ export const BlogCard: React.FC<{
 						// 	</Avatar>
 						// }
 						title={blog.title}
-						subheader={blog.authorId}></CardHeader>
+						subheader={'By ' + blog.author?.user_name}></CardHeader>
 					<CardMedia
 						className={classes.media}
 						image={blog.coverImageUrl}
 						title="Contemplative Reptile"
+						to={'/blogs/' + blog.id}
+						component={Link}
 					/>
 					<CardContent>
-						<Typography variant="body1" color="textSecondary" component="p">
+						{/* <Typography variant="body1" color="textSecondary" component="p">
 							By <strong>{blog.author?.user_name}</strong>
-						</Typography>
-						<Typography style={{float: 'right'}} variant="body2">
-							{blog.date}
+						</Typography> */}
+						<Typography variant="body2">
+							Published on <strong>{blog.date}</strong>
 						</Typography>
 					</CardContent>
 					<CardActions className={classes.cardIcons}>
@@ -96,15 +110,16 @@ export const BlogCard: React.FC<{
 								<VisibilityIcon style={{color: 'skyblue'}} />
 							</IconButton>
 						</Link>
-						<IconButton
-							disabled={!loading}
-							onClick={(e) => {
-								console.log(blog.id, 'ONclick');
-
-								deleteDoc(blog.id);
-							}}>
-							<DeleteIcon style={{color: 'red'}} />
-						</IconButton>
+						{(user.role === 'BLOGGER' || user.role === 'ADMIN') && (
+							<IconButton
+								disabled={loading}
+								onClick={(e) => {
+									deleteDoc(blog.id);
+								}}>
+								<DeleteIcon style={{color: 'red'}} />
+								<EditorBackdrop loading={loading} />
+							</IconButton>
+						)}
 					</CardActions>
 				</Card>
 			</animated.div>

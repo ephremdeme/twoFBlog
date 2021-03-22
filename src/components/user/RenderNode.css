@@ -45,6 +45,16 @@ svg {
 	cursor: pointer;
 }
 
+#parent {
+	min-height: fit-content;
+	height: auto !important;
+}
+
+.container-tag {
+	min-height: fit-content;
+	min-width: fit-content;
+}
+
 .controled-width {
 	max-width: 100%;
 	min-width: 100px;

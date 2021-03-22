@@ -28,6 +28,7 @@ export type Container = {
 	children: React.ReactNode;
 	radius: number;
 	float: string | null;
+	id?: string;
 };
 
 const defaultProps = {
@@ -41,7 +42,7 @@ const defaultProps = {
 	radius: 0,
 	width: '100%',
 	height: 'max-content',
-	className: 'controled-width',
+	className: 'controled-width container-tag',
 };
 
 export const Container = (props: Partial<Container>) => {
@@ -58,16 +59,18 @@ export const Container = (props: Partial<Container>) => {
 		radius,
 		className,
 		children,
+		id,
 	} = {
 		...defaultProps,
 		...props,
 	};
-	console.log(background, 'props');
+	console.log('IDDD', id);
 
 	return (
 		<Resizer
 			propKey={{width: 'width', height: 'height'}}
 			className={className}
+			id={id}
 			style={{
 				justifyContent,
 				minHeight: 'max-content',

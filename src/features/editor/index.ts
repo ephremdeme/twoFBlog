@@ -166,27 +166,27 @@ export const useFetchBlog = (blogId: string) => {
 export const postBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 	const firestore = FB.firestore();
 	let {id, authorId, ...withoutId} = blog;
-	setLoadingBlog(true);
+	dispatch(setLoadingBlog(true));
 	const authorRef = useCollection('users').doc(authorId);
 	let updatedBlog = {
 		...withoutId,
 		authorId: authorRef,
 	};
 	firestore.collection('blogs').add(updatedBlog);
-	setLoadingBlog(false);
+	dispatch(setLoadingBlog(false));
 };
 
 export const updateBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 	const firestore = FB.firestore();
 	let {id, authorId, ...withoutId} = blog;
-	setLoadingBlog(true);
+	dispatch(setLoadingBlog(true));
 	const authorRef = useCollection('users').doc(authorId);
 	let updatedBlog = {
 		...withoutId,
 		authorId: authorRef,
 	};
 	await firestore.collection('blogs').doc(id).update(updatedBlog);
-	setLoadingBlog(false);
+	dispatch(setLoadingBlog(false));
 };
 
 export const selectLoading = (state: RootState) => state.editor.loading;

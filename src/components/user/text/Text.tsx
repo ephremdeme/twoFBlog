@@ -6,6 +6,8 @@ import sanitizeHtml from 'sanitize-html';
 import ContentEditable, {ContentEditableEvent} from 'react-contenteditable';
 import {TextSettings} from './textSetting';
 
+import WebFontLoader from 'webfontloader';
+
 const useStyles = makeStyles({
 	root: {
 		maxWidth: '100%',
@@ -31,6 +33,7 @@ export const TextEditAble: UserComponent<TextProps> = ({
 	lineSpacing,
 	letterSpacing,
 	variant,
+	fontFamily,
 }) => {
 	const classes = useStyles();
 	const html = useRef<string>(text);
@@ -44,6 +47,8 @@ export const TextEditAble: UserComponent<TextProps> = ({
 		selected: state.events.selected,
 		dragged: state.events.dragged,
 	}));
+
+	console.log('font family', fontFamily);
 
 	const [editable, setEditable] = useState(false);
 
@@ -64,7 +69,12 @@ export const TextEditAble: UserComponent<TextProps> = ({
 		// html.current = sanitizeHtml(html.current);
 		// setProp((props) => (props.text = html.current), 500);
 	};
-
+	if (fontFamily)
+		WebFontLoader.load({
+			google: {
+				families: [fontFamily as string],
+			},
+		});
 	return (
 		<div
 			className={classes.root}
@@ -81,8 +91,9 @@ export const TextEditAble: UserComponent<TextProps> = ({
 					lineHeight: lineSpacing,
 					letterSpacing: `${letterSpacing}px`,
 					overflowWrap: 'linebreak',
+					fontFamily: fontFamily,
 				}}
-				className={classes.text + ' ' + variant}
+				className={classes.text + ' ' + variant + ' apply-font'}
 				// style={{fontSize: `${fontSize}px`, textAlign}}
 				title="Editable"
 			/>
@@ -98,6 +109,7 @@ type TextProps = {
 	textRef?: React.RefObject<HTMLLinkElement>;
 	letterSpacing?: number;
 	variant?: string;
+	fontFamily?: string;
 };
 
 TextEditAble.craft = {
