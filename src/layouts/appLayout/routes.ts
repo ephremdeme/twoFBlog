@@ -15,8 +15,8 @@ const navs = {
 		},
 		{
 			name: 'Products',
-			path: '/products/list',
-			icon: 'scatter_plot',
+			path: '/products/list/admin',
+			icon: "scatter_plot",
 		},
 		{
 			name: 'Blog',
