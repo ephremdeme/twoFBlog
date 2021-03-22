@@ -22,6 +22,7 @@ import {
 	ArrowForwardIos,
 	ExpandLess,
 	ExpandMore,
+	FontDownload,
 	FormatAlignCenter,
 	FormatAlignJustify,
 	FormatAlignLeft,
@@ -45,6 +46,9 @@ import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 
 import {ReactComponent as FormatLetterSpacing} from '../../../public/icons/editor/Letter_Spacing.svg';
 import validUrl from 'valid-url';
+import {Font} from '@samuelmeuli/font-manager';
+
+import FontPicker from 'font-picker-react';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -64,6 +68,22 @@ const useStyles = makeStyles((theme: Theme) =>
 			justifyContent: 'center',
 			display: 'flex',
 			alignItems: 'center',
+		},
+		fontPicker: {
+			color: theme.palette.text.secondary + ' !important',
+			backgroundColor: theme.palette.background.default + ' !important',
+			'& div': {
+				color: theme.palette.text.secondary + ' !important',
+				backgroundColor: theme.palette.background.default + ' !important',
+				'& ul': {
+					color: theme.palette.text.secondary + ' !important',
+					backgroundColor: theme.palette.background.default + ' !important',
+				},
+				'& button': {
+					color: theme.palette.text.secondary + ' !important',
+					backgroundColor: theme.palette.background.default + ' !important',
+				},
+			},
 		},
 	})
 );
@@ -669,6 +689,7 @@ export const TextSettings = () => {
 						<LinkButton cmd="createlink" name={'Link'}>
 							<InsertLink />
 						</LinkButton>
+						<FontChooser />
 					</>
 				)}
 				{active && (
@@ -963,6 +984,61 @@ const LetterSpacing = () => {
 						className={classes.letterSpacing}
 						value={letterSpacing}
 						label="Letter Spacing"
+						onChange={handleChange}
+					/>
+				</ClickAwayListener>
+			</Popper>
+		</>
+	);
+};
+// AIzaSyBDdhhmoIgu0dsZnQGUgyKqllK5gdq6tNE
+const FontChooser = () => {
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+	const {
+		actions: {setProp},
+		fontFamily,
+	} = useNode((node) => ({
+		fontFamily: node.data.props.fontFamily,
+	}));
+
+	const classes = useStyles();
+
+	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(anchorEl ? null : event.currentTarget);
+	};
+
+	const handleClose = (event: React.MouseEvent<EventTarget>) => {
+		setAnchorEl(null);
+	};
+
+	const open = Boolean(anchorEl);
+	const id = open ? 'simple-popper-font' : undefined;
+
+	const handleChange = (nextFont: Font) => {
+		console.log(nextFont.files);
+		console.log(nextFont.id);
+
+		setProp((props) => (props.fontFamily = nextFont.family), 500);
+	};
+
+	return (
+		<>
+			<IconButton
+				onClick={handleClick}
+				aria-describedby={id}
+				title="Choose Font">
+				<FontDownload />
+			</IconButton>
+			<Popper
+				id={id}
+				open={open}
+				anchorEl={anchorEl}
+				className={classes.fontPicker}>
+				<ClickAwayListener onClickAway={handleClose}>
+					<FontPicker
+						apiKey="AIzaSyBDdhhmoIgu0dsZnQGUgyKqllK5gdq6tNE "
+						activeFontFamily={fontFamily}
 						onChange={handleChange}
 					/>
 				</ClickAwayListener>
