@@ -20,35 +20,34 @@ export default {
 	) => {
 		if (action.payload) {
 			const id = action.payload.id;
-			
+
 			if (state.chart[id]) {
 				state.chart[id].total += action.payload.price;
 				state.chart[id].products = [
 					...state.chart[id].products,
-					action.payload
+					action.payload,
 				];
-			}
-			else {
+			} else {
 				state.chart[id] = {
 					total: action.payload.price,
-					products: [action.payload]
-				}
+					products: [action.payload],
+				};
 			}
-
 		}
 	},
 	removeProductChart: (state: IProductState, action: PayloadAction<string>) => {
 		const id = action.payload;
 		if (state.chart[id]) {
-			const deltedItem = state.chart[id].products.pop()
+			const deltedItem = state.chart[id].products.pop();
 			state.chart[id].total -= deltedItem.price;
-			state.chart[id].products.pop()
+			if (state.chart[id].products.length === 0) state.chart[id].total = 0;
+			state.chart[id].products.pop();
 		}
 	},
-	removeProductsAll:  (state: IProductState, action: PayloadAction<string>) => {
+	removeProductsAll: (state: IProductState, action: PayloadAction<string>) => {
 		const id = action.payload;
 		if (state.chart[id]) {
-			state.chart[id].products = []
+			state.chart[id].products = [];
 		}
 	},
 	resetProductChart: (state: IProductState, action: PayloadAction<string>) => {
@@ -56,13 +55,13 @@ export default {
 		if (state.chart[id]) {
 			state.chart[id] = {
 				products: [],
-				total: 0
-			}
+				total: 0,
+			};
 		}
 	},
 	resetChart: (state: IProductState, action: PayloadAction<any>) => {
-		state.chart = {}
-	}
+		state.chart = {};
+	},
 
 	// setFilterableProducts: (
 	// 	state: IProductState,
