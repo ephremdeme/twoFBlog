@@ -90,7 +90,7 @@ const ProductAppBar = (props: IProps) => {
 								<IconButton
 									aria-label="cart"
 									component={Link}
-									to={'/products/chart'}>
+									to={'/products/chart'}> 
 									<StyledBadge badgeContent={chartQty} color="secondary">
 										<ShoppingCartIcon />
 									</StyledBadge>
