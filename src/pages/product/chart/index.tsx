@@ -59,11 +59,7 @@ const Chart = () => {
 	};
 
 	const resetProdcutChart = (id: string) => {
-		dispatch(removeProductsAll(id));
-	};
-
-	const resetChartData = () => {
-		dispatch(resetChart);
+		dispatch(resetProductChart(id));
 	};
 
 	const renderProdcutList = () => {
