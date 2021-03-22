@@ -17,7 +17,10 @@ export interface IRoute {
 	fallback: NonNullable<ReactNode> | null;
 	component?: LazyExoticComponent<ComponentType<any>>;
 	routes?: IRoute[];
-	redirect?: string;
+	redirect?: {
+		page: string,
+		permissions?: UserRole[]
+	};
 	private?: boolean;
 	permissions?: UserRole[];
 	sidebar?: () => React.ReactNode;
@@ -28,7 +31,9 @@ const routes: IRoute[] = [
 	{
 		path: '/',
 		exact: true,
-		redirect: '/guest_home',
+		redirect: {
+			page: '/guest_home'
+		},
 		fallback: <Loader />,
 		permissions: [UserRole.GUEST, UserRole.USER],
 	},
@@ -53,6 +58,16 @@ const routes: IRoute[] = [
 				component: lazy(() => import('../pages/product/list')),
 				exact: false,
 				fallback: <Loader />,
+			},
+			{
+				path: '/products/list/admin',
+				component: lazy(() => import('../pages/product/list/AdminList')),
+				exact: false,
+				fallback: <Loader />,
+				permissions: [
+					UserRole.ADMIN,
+					UserRole.SHOPE_ADMIN
+				]
 			},
 			{
 				path: '/products/chart',
