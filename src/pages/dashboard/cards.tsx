@@ -1,6 +1,6 @@
-import React from 'react';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../app/store';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../app/store';
 import {
 	Paper,
 	Grid,
@@ -12,10 +12,10 @@ import {
 	makeStyles,
 } from '@material-ui/core';
 import firebase from '../../firebase/firebase';
-import {ReactComponent as Dashboard_Icon_Web_Visit} from 'public/icons/dashboard/icons8_web_visit.svg';
-import {ReactComponent as Dashboard_Icon_Web_Blog} from 'public/icons/dashboard/icons8_blog.svg';
-import {ReactComponent as Dashboard_Icon_Web_Shooping} from 'public/icons/dashboard/icons8_shopping_cart.svg';
-import {ReactComponent as Dashboard_Icon_Web_Users} from 'public/icons/dashboard/icons8_users.svg';
+import { ReactComponent as Dashboard_Icon_Web_Visit } from 'public/icons/dashboard/icons8_web_visit.svg';
+import { ReactComponent as Dashboard_Icon_Web_Blog } from 'public/icons/dashboard/icons8_blog.svg';
+import { ReactComponent as Dashboard_Icon_Web_Shooping } from 'public/icons/dashboard/icons8_shopping_cart.svg';
+import { ReactComponent as Dashboard_Icon_Web_Users } from 'public/icons/dashboard/icons8_users.svg';
 import {
 	LineChart,
 	Line,
@@ -27,6 +27,12 @@ import {
 	ResponsiveContainer,
 } from 'recharts';
 import PiechartDashboard from './PiechartDashboard';
+import { selectProducts, setProducts } from 'features/product';
+import { getVisit } from 'features/user';
+import { getDatabase, useAppSelector, useFirestore } from 'app/hooks';
+import { PDB } from 'features/product/init';
+import { useFireCollectionRef, useFireCollection } from 'hooks/useFirestore';
+import { IProduct } from 'features/product/types';
 
 const useStyles = makeStyles((theme) => ({
 	title: {
@@ -40,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 export const Cards = (): JSX.Element => {
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	React.useEffect(() => {
-		return () => {};
+		return () => { };
 	}, []);
 
 	const MyPaper = styled(Paper)({
@@ -74,8 +80,8 @@ export const Cards = (): JSX.Element => {
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-        boxShadow: '0 1px 15px rgba(0,0,0,0.3)',
-        borderRadius: '10px',
+		boxShadow: '0 1px 15px rgba(0,0,0,0.3)',
+		borderRadius: '10px',
 		backgroundColor: appTheme ? 'white' : 'white',
 		cursor: 'pointer',
 		transition: 'all 0.4s',
@@ -132,13 +138,30 @@ export const Cards = (): JSX.Element => {
 		},
 	];
 
+	const page = useSelector((state: RootState) => state.user.pageVisit)
+	const dispatch = useDispatch();
+	const blogs = useAppSelector(selectProducts);
+	const blogCollRef = useFirestore().collection(PDB.PRODCUTS);
+	const {data: RefData} = useFireCollectionRef<IProduct>(
+    blogCollRef,
+		setProducts
+  );
+  interface IVisit {
+	  visit: number;
+	  id?: string;
+  }
+  const {loading: loaingUsers, data: users} = useFireCollection('users');
+  const {loading: loaingBlogs, data: blog} = useFireCollection('blogs');
+  useEffect(() => {
+	  dispatch(getVisit());
+  }, [])
 	return (
 		<Container>
 			<Box height={20} />
 			<Grid container spacing={4} justify="center">
 				<Grid item lg={3} xs={10}>
 					<MyPaper elevation={0}>
-						<HoverPaper style={{backgroundColor: '#88B'}} elevation={10}>
+						<HoverPaper style={{ backgroundColor: '#88B' }} elevation={10}>
 							<Dashboard_Icon_Web_Users />
 						</HoverPaper>
 						<Box width="45%" py={2}>
@@ -146,55 +169,55 @@ export const Cards = (): JSX.Element => {
 								Total Users
 							</Box>
 							<Box fontWeight={700} fontSize="2.3rem">
-								2.6%
+								{users && users.length}
 							</Box>
 						</Box>
 					</MyPaper>
 				</Grid>
 				<Grid item lg={3} xs={10}>
 					<MyPaper elevation={0}>
-						<HoverPaper style={{backgroundColor: '#7B6'}} elevation={10}>
+						<HoverPaper style={{ backgroundColor: '#7B6' }} elevation={10}>
 							<Dashboard_Icon_Web_Shooping />
 						</HoverPaper>
 
 						<Box width="45%" py={2}>
 							<Box fontWeight={600} fontSize="1rem">
-								Total Users
+								Total Products
 							</Box>
 							<Box fontWeight={700} fontSize="2.3rem">
-								2.6%
+								{blogs && blogs.length}
 							</Box>
 						</Box>
 					</MyPaper>
 				</Grid>
 				<Grid item lg={3} xs={10}>
 					<MyPaper elevation={0}>
-						<HoverPaper style={{backgroundColor: '#5AAF5E'}} elevation={10}>
+						<HoverPaper style={{ backgroundColor: '#5AAF5E' }} elevation={10}>
 							<Dashboard_Icon_Web_Blog />
 						</HoverPaper>
 
 						<Box width="45%" py={2}>
 							<Box fontWeight={600} fontSize="1rem">
-								Total Users
+								Total Blogs
 							</Box>
 							<Box fontWeight={700} fontSize="2.3rem">
-								2.6%
+								{blog && blog.length}
 							</Box>
 						</Box>
 					</MyPaper>
 				</Grid>
 				<Grid item lg={3} xs={10}>
 					<MyPaper elevation={0}>
-						<HoverPaper style={{backgroundColor: '#2CBECF'}} elevation={10}>
+						<HoverPaper style={{ backgroundColor: '#2CBECF' }} elevation={10}>
 							<Dashboard_Icon_Web_Visit />
 						</HoverPaper>
 
 						<Box width="45%" py={2}>
 							<Box fontWeight={600} fontSize="1rem">
-								Total Users
+								Page Visits
 							</Box>
 							<Box fontWeight={700} fontSize="2.3rem">
-								2.6%
+								{page && page}
 							</Box>
 						</Box>
 					</MyPaper>
