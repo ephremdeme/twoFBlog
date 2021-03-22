@@ -1,9 +1,11 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {User, UserRole} from './types/index';
-import {PayloadAction} from '@reduxjs/toolkit';
-import {AppThunk} from 'app/store';
-import firebase, {provider} from '../../firebase/firebase';
+import { createSlice } from '@reduxjs/toolkit';
+import { User, UserRole } from './types/index';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { AppThunk } from 'app/store';
+import firebase, { provider } from '../../firebase/firebase';
 import Cookies from 'js-cookie';
+import history from "../../hooks/useRoutes";
+
 
 const initialState: User = {
 	uid: '',
@@ -17,6 +19,7 @@ const initialState: User = {
 	authenticated: false,
 	isGuest: false,
 	error: false,
+	loaded: false
 };
 
 const authSlice = createSlice({
@@ -39,6 +42,7 @@ const authSlice = createSlice({
 			state.authenticated = action.payload.authenticated;
 			state.isGuest = action.payload.isGuest;
 			state.error = action.payload.error;
+			state.loaded = action.payload.loaded;
 		},
 		setLogInFaliure: (state: User, action: PayloadAction<string>) => {
 			state.authenticating = false;
@@ -100,7 +104,6 @@ export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 			.doc(responce.user?.uid)
 			.get();
 		if (user.exists) {
-			console.log('[SUSER]', user);
 			const localUser = {
 				email: user.data().email,
 				user_name: user.data().user_name,
@@ -119,17 +122,21 @@ export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 							...localUser,
 							authenticating: false,
 							authenticated: true,
-							isGuest: true,
+							isGuest: false,
 							error: false,
+							loaded: true
 						})
 					);
 					Cookies.set('user', {
 						...localUser,
 						authenticating: false,
 						authenticated: true,
-						isGuest: true,
+						isGuest: false,
 						error: false,
+						loaded: true
 					});
+					history.push('/dashboard')
+					window.location.href = window.location.href;
 				});
 		} else {
 			await db
@@ -161,10 +168,13 @@ export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 								...localUser,
 								authenticating: false,
 								authenticated: true,
-								isGuest: true,
+								isGuest: false,
 								error: false,
+								loaded: true,
 							})
 						);
+						history.push('/dashboard')
+						window.location.href = window.location.href;
 					},
 					(err) => {
 						console.log('here is error', err.t, err.message);
@@ -175,7 +185,7 @@ export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 		}
 		const current = authenticate.currentUser;
 		console.log(current);
-	} catch (e) {}
+	} catch (e) { }
 };
 
 export const createUserWithEmailPassword = (user: any): AppThunk => async (
@@ -207,13 +217,18 @@ export const createUserWithEmailPassword = (user: any): AppThunk => async (
 					...current_user,
 					authenticating: false,
 					authenticated: true,
-					isGuest: true,
+					isGuest: false,
 					error: false,
+					loaded: true
 				})
 			);
+			history.push('/guest_home')
+			window.location.href = window.location.href;
 		},
 		(err) => {
 			console.log('here is error', err.t, err.message);
+			dispatch(setFaliure(true));
+			dispatch(setLoginInProgress(false))
 			dispatch(setAuthFailure(err.message));
 			return;
 		}
@@ -243,8 +258,9 @@ export const signInWithEmailPassword = (user: any): AppThunk => async (
 							...current_user,
 							authenticating: false,
 							authenticated: true,
-							isGuest: true,
+							isGuest: false,
 							error: false,
+							loaded: true
 						})
 					);
 					Cookies.set('user', {
@@ -254,10 +270,13 @@ export const signInWithEmailPassword = (user: any): AppThunk => async (
 						isGuest: true,
 						error: false,
 					});
+					history.push('/guest_home')
 					window.location.href = window.location.href;
 				},
 				(err) => {
 					console.log('here is error', err.t, err.message);
+					dispatch(setFaliure(true));
+					dispatch(setLoginInProgress(false))
 					dispatch(setAuthFailure(err.message));
 					return;
 				}
@@ -265,40 +284,35 @@ export const signInWithEmailPassword = (user: any): AppThunk => async (
 	});
 };
 
-export const logoutUser = (uid: string, isGuest: boolean): AppThunk => {
+export const logoutUser = (uid: string): AppThunk => {
 	return async (dispatch, getState) => {
 		const auth = firebase.auth();
 		const db = firebase.firestore();
 		dispatch(setLoginInProgress(true));
-		if (getState().auth.isGuest) {
-			auth.signOut().then((_) => {
-				dispatch(setLoginInProgress(false));
-				dispatch(setLogoutSuccess());
-				window.location.href = window.location.href;
-			});
-		} else {
-			const logout = db
-				.collection('users')
-				.doc(uid)
-				.update({
-					isOnline: false,
-				})
-				.then(
-					(_) => {
-						auth.signOut().then((_) => {
-							dispatch(setLoginInProgress(false));
-							dispatch(setLogoutSuccess());
-							window.location.href = window.location.href;
-						});
-					},
-					(err) => {
-						console.log('here is error', err.t, err.message);
-						dispatch(setAuthFailure(err.message));
-						return;
-					}
-				)
-				.catch((e) => dispatch(setLogoutFailure(e.message)));
-		}
+		const logout = db
+			.collection('users')
+			.doc(uid)
+			.update({
+				isOnline: false,
+			})
+			.then(
+				(_) => {
+					auth.signOut().then((_) => {
+						dispatch(setLoginInProgress(false));
+						dispatch(setLogoutSuccess());
+						history.push('/guest_home')
+						window.location.href = window.location.href;
+					});
+				},
+				(err) => {
+					console.log('here is error', err.t, err.message);
+					dispatch(setFaliure(true));
+					dispatch(setLoginInProgress(false))
+					dispatch(setAuthFailure(err.message));
+					return;
+				}
+			)
+			.catch((e) => dispatch(setLogoutFailure(e.message)));
 	};
 };
 
@@ -307,7 +321,6 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 	dispatch(setFaliure(false));
 	const auth = firebase.auth();
 	const db = firebase.firestore();
-	console.log('..here');
 	auth.onAuthStateChanged((user: any) => {
 		if (user) {
 			if (user.isAnonymous === false) {
@@ -335,20 +348,27 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 										...current_user,
 										authenticating: false,
 										authenticated: true,
-										isGuest: true,
+										isGuest: false,
 										error: false,
+										loaded: true
 									})
 								);
 								Cookies.set('user', {
 									...current_user,
 									authenticating: false,
 									authenticated: true,
-									isGuest: true,
+									isGuest: false,
 									error: false,
+									loaded: true
 								});
+								console.log(getState().auth);
 							});
+					}).catch(err => {
+						dispatch(setFaliure(true))
+						dispatch(setLoginInProgress(false));
 					});
 			} else {
+				console.log('[NHE]', user);
 				console.log('!NO USER');
 				const current_guest = {
 					uid: user.uid,
@@ -360,16 +380,19 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 					photo: '',
 					user_name: 'Guest',
 					email: '',
+					loaded: true
 				};
 				console.log('Done...');
 				dispatch(setLoginInProgress(false));
-				dispatch(setLogInSuccess({...current_guest}));
-				Cookies.set('user', {...current_guest});
+				dispatch(setLogInSuccess({ ...current_guest }));
+				Cookies.set('user', { ...current_guest });
 				// dispatch(setFaliure(false))
+				history.push('/guest_home')
 			}
 		} else {
 			console.log('No user');
 			dispatch(signAsGuest());
+			history.push('/guest_home')
 		}
 	});
 };
@@ -402,10 +425,11 @@ export const signAsGuest = (): AppThunk => async (dispatch) => {
 					photo: '',
 					user_name: 'Guest',
 					email: '',
+					loaded: true
 				};
 				dispatch(setLoginInProgress(false));
-				dispatch(setLogInSuccess({...current_guest}));
-				Cookies.set('user', {...current_guest});
+				dispatch(setLogInSuccess({ ...current_guest }));
+				Cookies.set('user', { ...current_guest });
 			})
 			.catch((e) => {
 				console.log('ERROR...');
