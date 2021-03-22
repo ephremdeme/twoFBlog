@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,13 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
-import {
-	Avatar,
-	Divider,
-	Grid,
-	Hidden,
-	Popover,
-} from '@material-ui/core';
+import {Avatar, Divider, Grid, Hidden, Popover} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {logoutUser} from '../../features/auth';
 import {RootState} from '../../app/store';
@@ -86,7 +80,9 @@ function Appbar({history}: any): JSX.Element {
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 	const userName = useSelector((state: RootState) => state.auth.user_name);
 	const userAvatar = useSelector((state: RootState) => state.auth.photo);
-	const userStatus = useSelector((state: RootState) => state.auth.authenticated);
+	const userStatus = useSelector(
+		(state: RootState) => state.auth.authenticated
+	);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -113,8 +109,10 @@ function Appbar({history}: any): JSX.Element {
 		setOpenPopMenu(!openPopMenu);
 	};
 	const signOut = () => {
+
 		dispatch(logoutUser(auth.uid));
 		history.push('/login')
+
 	};
 	// end of list popover
 
@@ -133,35 +131,40 @@ function Appbar({history}: any): JSX.Element {
 							display="flex"
 							flexDirection="row"
 							alignItems="center">
-							<IconButton
-								color="inherit"
-								aria-label="open drawer"
-								edge="start"
-								onClick={handleDrawerToggle}
-								className={classes.menuButton}
-								size="small">
-								<MenuIcon />
-							</IconButton>
-							<Typography variant="body1" className={classes.appBarTitlte}>
-								<b>DashBoard</b>
-							</Typography>
-							<Hidden smDown implementation="css">
-								<Box mx={4} display="flex">
-									<Switch>
-										{routes.map((route: IRoute, index: number) => (
-											<Route
-												key={index}
-												path={route.path}
-												exact={route.exact}
-												children={route.appbar}
-											/>
-										))}
-									</Switch>
-								</Box>
-							</Hidden>
+							<Box>
+								<IconButton
+									color="inherit"
+									aria-label="open drawer"
+									edge="start"
+									onClick={handleDrawerToggle}
+									className={classes.menuButton}
+									size="small">
+									<MenuIcon />
+								</IconButton>
+								<Typography variant="body1" className={classes.appBarTitlte}>
+									<b>DashBoard</b>
+								</Typography>
+							</Box>
+
+							<Box ml="auto">
+								<Hidden smDown implementation="css">
+									<Box mx={4} display="flex" justifySelf="felx-end">
+										<Switch>
+											{routes.map((route: IRoute, index: number) => (
+												<Route
+													key={index}
+													path={route.path}
+													exact={route.exact}
+													children={route.appbar}
+												/>
+											))}
+										</Switch>
+									</Box>
+								</Hidden>
+							</Box>
 						</Box>
 
-						<Box flexShrink={1} display="flex" flexDirection="row">
+						<Box flexShrink={1} display="flex" alignItems="center" flexDirection="row">
 							<Avatar
 								aria-describedby={id}
 								className={classes.smallAvatar}
@@ -191,7 +194,9 @@ function Appbar({history}: any): JSX.Element {
 											</Grid>
 											<Grid item>
 												<h3 style={{margin: '0'}}>{userName}</h3>
-												<p style={{margin: '0'}}>{userStatus ? 'online' : 'offline'}</p>
+												<p style={{margin: '0'}}>
+													{userStatus ? 'online' : 'offline'}
+												</p>
 											</Grid>
 										</Grid>
 									</Box>
@@ -237,7 +242,6 @@ function Appbar({history}: any): JSX.Element {
 												</ListItem>
 											</List>
 										</Collapse>
-										{
 											auth.isGuest ?
 												<ListItem button>
 													<ListItemIcon>
@@ -253,9 +257,19 @@ function Appbar({history}: any): JSX.Element {
 													</ListItemIcon>
 													<Box fontSize={14} fontWeight={500} onClick={signOut}>
 														Logout
+
 												</Box>
-												</ListItem>
-										}
+											</ListItem>
+										) : (
+											<ListItem button>
+												<ListItemIcon>
+													<ExitToAppIcon />
+												</ListItemIcon>
+												<Box fontSize={14} fontWeight={500} onClick={signOut}>
+													Logout
+												</Box>
+											</ListItem>
+										)}
 										<ListItem button>
 											<ListItemIcon>
 												{appTheme ? <Brightness7Icon /> : <Brightness4Icon />}
@@ -278,4 +292,4 @@ function Appbar({history}: any): JSX.Element {
 	);
 }
 
-export default withRouter(Appbar)
+export default withRouter(Appbar);
