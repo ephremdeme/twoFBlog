@@ -14,7 +14,17 @@ const RouteWithSubRoutes = (route: IRoute) => {
 				path={route.path}
 				render={(props) => {
 					if (route.redirect) {
-						return <Redirect to={route.redirect} />;
+						if (route.redirect.page) {
+							if (route.redirect.permissions) {
+								if (route.redirect.permissions.includes(role)) {
+									return <Redirect to={route.redirect.page} />;
+								} else {
+									return <Redirect to="/signup" />;
+								}
+							} else {
+								return <Redirect to={route.redirect.page} />;
+							}
+						}
 					} else if (route.permissions) {
 						if (route.permissions.includes(role)) {
 							if (route.component) {
