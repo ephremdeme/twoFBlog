@@ -50,7 +50,7 @@ const routes: IRoute[] = [
 		routes: [
 			{
 				path: '/products/list',
-				component: lazy(() => import('../pages/product/ProductList')),
+				component: lazy(() => import('../pages/product/list')),
 				exact: false,
 				fallback: <Loader />,
 			},
@@ -61,8 +61,14 @@ const routes: IRoute[] = [
 				fallback: <Loader />,
 			},
 			{
+				path: '/products/orders',
+				component: lazy(() => import('../pages/product/orders')),
+				exact: false,
+				fallback: <Loader />,
+			},
+			{
 				path: '/products/:id/detail',
-				component: lazy(() => import('../pages/product/ProductDetial')),
+				component: lazy(() => import('../pages/product/detail')),
 				exact: false,
 				fallback: <Loader />,
 			},
@@ -74,7 +80,7 @@ const routes: IRoute[] = [
 			},
 			{
 				path: '/products/create',
-				component: lazy(() => import('../pages/product/CreateProduct')),
+				component: lazy(() => import('../pages/product/create')),
 				exact: false,
 				fallback: <Loader />,
 			},
@@ -102,13 +108,6 @@ const routes: IRoute[] = [
 		permissions: [UserRole.CUSTOMER_SERVICE, UserRole.ADMIN],
 	},
 	{
-		path: '/editor',
-		component: lazy(() => import('../pages/editor/editor')),
-		exact: false,
-		fallback: <Loader />,
-		permissions: [UserRole.BLOGGER, UserRole.ADMIN, UserRole.USER],
-	},
-	{
 		path: '/login',
 		component: lazy(() => import('../pages/signup/login')),
 		exact: false,
@@ -128,18 +127,26 @@ const routes: IRoute[] = [
 		sidebar: () => <AppNav />,
 	},
 	{
-		path: '/blogs/:blogId',
-		component: lazy(() => import('../pages/editor/show')),
+		path: '/editor',
+		component: lazy(() => import('../pages/editor/editor')),
 		exact: false,
 		fallback: <Loader />,
+		permissions: [UserRole.BLOGGER, UserRole.ADMIN],
 	},
 	{
 		path: '/blogs',
 		component: lazy(() => import('../pages/editor')),
 		exact: false,
 		fallback: <Loader />,
+		routes: [
+			{
+				path: '/blogs/:id',
+				component: lazy(() => import('../pages/editor/editor')),
+				exact: false,
+				fallback: <Loader />
+			},
+		],
 	},
-
 	{
 		path: '*',
 		component: lazy(() => import('../pages/NotFound')),
