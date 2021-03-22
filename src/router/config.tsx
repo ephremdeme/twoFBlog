@@ -50,7 +50,7 @@ const routes: IRoute[] = [
 		routes: [
 			{
 				path: '/products/list',
-				component: lazy(() => import('../pages/product/list')),
+				component: lazy(() => import('../pages/product/ProductList')),
 				exact: false,
 				fallback: <Loader />,
 			},
@@ -62,13 +62,13 @@ const routes: IRoute[] = [
 			},
 			{
 				path: '/products/orders',
-				component: lazy(() => import('../pages/product/orders')),
+				component: lazy(() => import('../pages/product/ProductDetial')),
 				exact: false,
 				fallback: <Loader />,
 			},
 			{
 				path: '/products/:id/detail',
-				component: lazy(() => import('../pages/product/detail')),
+				component: lazy(() => import('../pages/product/ProductDetial')),
 				exact: false,
 				fallback: <Loader />,
 			},
@@ -134,19 +134,18 @@ const routes: IRoute[] = [
 		permissions: [UserRole.BLOGGER, UserRole.ADMIN],
 	},
 	{
-		path: '/blogs',
-		component: lazy(() => import('../pages/editor')),
+		path: '/blogs/:blogId',
+		component: lazy(() => import('../pages/editor/show')),
 		exact: false,
 		fallback: <Loader />,
-		routes: [
-			{
-				path: '/blogs/:id',
-				component: lazy(() => import('../pages/editor/editor')),
-				exact: false,
-				fallback: <Loader />
-			},
-		],
 	},
+	{
+		path: '/blogs',
+		component: lazy(() => import('../pages/editor')),
+		exact: true,
+		fallback: <Loader />,
+	},
+
 	{
 		path: '*',
 		component: lazy(() => import('../pages/NotFound')),
