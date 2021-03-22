@@ -217,7 +217,7 @@ const ProductDetial = () => {
 									{product?.description}
 								</Box>
 								<Box>
-									<ButtonGroup
+									{/* <ButtonGroup
 										size="small"
 										aria-label="small outlined button group">
 										<Button startIcon={<VisibilityIcon />}>{view}</Button>
@@ -225,7 +225,7 @@ const ProductDetial = () => {
 											{like}
 										</Button>
 										<Button startIcon={<ChatRoundedIcon />}>34</Button>
-									</ButtonGroup>
+									</ButtonGroup> */}
 								</Box>
 							</Box>
 						</Grid>
