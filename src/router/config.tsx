@@ -18,8 +18,8 @@ export interface IRoute {
 	component?: LazyExoticComponent<ComponentType<any>>;
 	routes?: IRoute[];
 	redirect?: {
-		page: string,
-		permissions?: UserRole[]
+		page: string;
+		permissions?: UserRole[];
 	};
 	private?: boolean;
 	permissions?: UserRole[];
@@ -32,7 +32,7 @@ const routes: IRoute[] = [
 		path: '/',
 		exact: true,
 		redirect: {
-			page: '/guest_home'
+			page: '/guest_home',
 		},
 		fallback: <Loader />,
 		permissions: [UserRole.GUEST, UserRole.USER],
@@ -54,20 +54,17 @@ const routes: IRoute[] = [
 		appbar: () => <ProductAppBar />,
 		routes: [
 			{
-				path: '/products/list',
-				component: lazy(() => import('../pages/product/list')),
-				exact: false,
-				fallback: <Loader />,
-			},
-			{
 				path: '/products/list/admin',
 				component: lazy(() => import('../pages/product/list/AdminList')),
 				exact: false,
 				fallback: <Loader />,
-				permissions: [
-					UserRole.ADMIN,
-					UserRole.SHOPE_ADMIN
-				]
+				permissions: [UserRole.ADMIN, UserRole.SHOPE_ADMIN],
+			},
+			{
+				path: '/products/list',
+				component: lazy(() => import('../pages/product/list')),
+				exact: false,
+				fallback: <Loader />,
 			},
 			{
 				path: '/products/chart',
@@ -158,7 +155,7 @@ const routes: IRoute[] = [
 				path: '/blogs/:id',
 				component: lazy(() => import('../pages/editor/editor')),
 				exact: false,
-				fallback: <Loader />
+				fallback: <Loader />,
 			},
 		],
 	},

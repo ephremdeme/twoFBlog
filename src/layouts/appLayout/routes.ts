@@ -14,7 +14,7 @@ const navs = {
 		},
 		{
 			name: 'Products',
-			path: '/products/list',
+			path: '/products/list/admin',
 			icon: "scatter_plot",
 		},
 		{
