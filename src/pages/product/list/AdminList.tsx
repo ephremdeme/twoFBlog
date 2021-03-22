@@ -44,7 +44,7 @@ const AdminList = () => {
 		setProducts
   );
 
-  const t = firebase.firestore.Timestamp;
+  console.log()
   
   const getData = (blogs: any) => {
     if(blogs) {
@@ -59,8 +59,8 @@ const AdminList = () => {
         catagory: blog.catagory,
         brand: blog.brand,
         condition: blog.condition,
-        createdAt: firebase.firestore.Timestamp.fromDate(blog.createdAt).toDate(),
-        updatedAt: firebase.firestore.Timestamp.fromDate(blog.updatedAt).toDate()
+        // createdAt: firebase.firestore.Timestamp.fromDate(blog.createdAt).toDate(),
+        // updatedAt: firebase.firestore.Timestamp.fromDate(blog.updatedAt).toDate()
       }))
     } else {
       return []
