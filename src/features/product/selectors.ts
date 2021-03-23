@@ -26,6 +26,7 @@ export default {
       catagorySet.add(product.catagory);
     })
     const catagorys: string[] = Array.from(catagorySet);
-    return catagorys
+    catagorys.unshift('');
+    return catagorys;
   } 
 }

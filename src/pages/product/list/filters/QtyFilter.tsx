@@ -83,19 +83,28 @@ const QtyFilter = () => {
 				<ButtonGroup
 					variant="outlined"
 					ref={anchorRef}
+					style={{
+						width: '100%',
+					}}
 					aria-label="split button">
-					<Button size="small" onClick={handleClick}>{options[selectedIndex]}</Button>
+					<Button
+						size="small"
+						style={{fontSize: '.6rem', width: '100%'}}
+						onClick={handleClick}>
+						{options ? options[selectedIndex] : 'None'}
+					</Button>
 					<Button
 						variant="outlined"
 						size="small"
 						aria-controls={open ? 'split-button-menu' : undefined}
 						aria-expanded={open ? 'true' : undefined}
-						aria-label="select quantity"
+						aria-label="select merge strategy"
 						aria-haspopup="menu"
 						onClick={handleToggle}>
 						<ArrowDropDownIcon />
 					</Button>
 				</ButtonGroup>
+
 				<Popper
 					className={classes.paperBg}
 					open={open}

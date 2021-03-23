@@ -17,9 +17,9 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core';
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		paperBg: {
-      background: theme.palette.background.default,
-			zIndex: 400
-    },
+			background: theme.palette.background.default,
+			zIndex: 400,
+		},
 	})
 );
 
@@ -81,8 +81,16 @@ const PriceTagFilter = () => {
 				<ButtonGroup
 					variant="outlined"
 					ref={anchorRef}
+					style={{
+						width: '100%',
+					}}
 					aria-label="split button">
-					<Button size="small" onClick={handleClick}>{options[selectedIndex]}</Button>
+					<Button
+						size="small"
+						style={{fontSize: '.6rem', width: '100%'}}
+						onClick={handleClick}>
+						{options ? options[selectedIndex] : 'None'}
+					</Button>
 					<Button
 						variant="outlined"
 						size="small"
@@ -97,7 +105,7 @@ const PriceTagFilter = () => {
 				<Popper
 					open={open}
 					anchorEl={anchorRef.current}
-          className={classes.paperBg}
+					className={classes.paperBg}
 					role={undefined}
 					transition
 					disablePortal>

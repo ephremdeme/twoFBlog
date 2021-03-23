@@ -66,8 +66,8 @@ const ProductCard = ({product}: ProductCard) => {
 				<Box
 					minWidth={210}
 					marginRight={0.47}
-					my={1}
-					p={1}
+					// my={1}
+					px={1}
 					className={classes.productCard}>
 					<Box className={classes.prodImage}>
 						<img
