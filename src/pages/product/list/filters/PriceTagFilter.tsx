@@ -82,7 +82,7 @@ const PriceTagFilter = () => {
 					variant="outlined"
 					ref={anchorRef}
 					aria-label="split button">
-					<Button onClick={handleClick}>{options[selectedIndex]}</Button>
+					<Button size="small" onClick={handleClick}>{options[selectedIndex]}</Button>
 					<Button
 						variant="outlined"
 						size="small"
