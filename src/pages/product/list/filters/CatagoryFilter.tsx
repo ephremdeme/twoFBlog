@@ -9,10 +9,14 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import {setFilterableProductsByField} from 'features/product';
+import {
+	selectDistinctProductCatagorys,
+	setFilterableProductsByField,
+} from 'features/product';
 import {IFieldQuery} from 'features/product/mutations';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {createStyles, makeStyles, Theme} from '@material-ui/core';
+import LoadingOnly from 'components/shared/LoadingOnly';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -23,26 +27,16 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-const options = [
-	'< 2 peaces',
-	'< 5 peaces',
-	'< 10 peaces',
-	'< 20 peaces',
-	'< 50 peaces',
-	'< 100 peaces',
-	'< 200 peaces',
-	'< 500 peaces',
-];
-
-const QtyFilter = () => {
+const CatagoryFilter = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
+	const options = useSelector(selectDistinctProductCatagorys);
 	const [open, setOpen] = React.useState(false);
 	const anchorRef = React.useRef<HTMLDivElement>(null);
 	const [selectedIndex, setSelectedIndex] = React.useState(1);
 
 	const handleClick = () => {
-		console.info(`You clicked ${options[selectedIndex]}`);
+		// console.info(`You clicked ${options[selectedIndex]}`);
 	};
 
 	const handleMenuItemClick = (
@@ -51,12 +45,11 @@ const QtyFilter = () => {
 	) => {
 		setSelectedIndex(index);
 		setOpen(false);
-		const value = options[index].split(' ');
 
 		const query$: IFieldQuery = {
-			compare: value[0],
-			field: 'qty',
-			intValue: +value[1],
+			compare: '==',
+			field: 'catagory',
+			strValue: options[index]
 		};
 
 		dispatch(setFilterableProductsByField(query$));
@@ -84,22 +77,25 @@ const QtyFilter = () => {
 					variant="outlined"
 					ref={anchorRef}
 					aria-label="split button">
-					<Button size="small" onClick={handleClick}>{options[selectedIndex]}</Button>
+					<Button size="small" onClick={handleClick}>
+						{options ? options[selectedIndex] : 'None'}
+					</Button>
 					<Button
 						variant="outlined"
 						size="small"
 						aria-controls={open ? 'split-button-menu' : undefined}
 						aria-expanded={open ? 'true' : undefined}
-						aria-label="select quantity"
+						aria-label="select merge strategy"
 						aria-haspopup="menu"
 						onClick={handleToggle}>
 						<ArrowDropDownIcon />
 					</Button>
 				</ButtonGroup>
+
 				<Popper
-					className={classes.paperBg}
 					open={open}
 					anchorEl={anchorRef.current}
+					className={classes.paperBg}
 					role={undefined}
 					transition
 					disablePortal>
@@ -113,14 +109,20 @@ const QtyFilter = () => {
 							<Paper elevation={0}>
 								<ClickAwayListener onClickAway={handleClose}>
 									<MenuList id="split-button-menu">
-										{options.map((option, index) => (
-											<MenuItem
-												key={option}
-												selected={index === selectedIndex}
-												onClick={(event) => handleMenuItemClick(event, index)}>
-												{option}
-											</MenuItem>
-										))}
+										{options ? (
+											options.map((option, index) => (
+												<MenuItem
+													key={option}
+													selected={index === selectedIndex}
+													onClick={(event) =>
+														handleMenuItemClick(event, index)
+													}>
+													{option}
+												</MenuItem>
+											))
+										) : (
+											<LoadingOnly />
+										)}
 									</MenuList>
 								</ClickAwayListener>
 							</Paper>
@@ -132,4 +134,4 @@ const QtyFilter = () => {
 	);
 };
 
-export default QtyFilter;
+export default CatagoryFilter;
