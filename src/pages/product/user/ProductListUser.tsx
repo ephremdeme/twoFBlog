@@ -11,7 +11,7 @@ const ProductListUser:React.FC<IProps> = ({products}) => {
 	return (
 		<Container maxWidth={false}>
 			<Box mt={3}>
-				<Grid container spacing={3}>
+				<Grid container spacing={6}>
 					{products.map((product: any) => (
 						<Grid item key={product.id} lg={3} md={4} xs={12}>
 							<ProductCard product={product} />

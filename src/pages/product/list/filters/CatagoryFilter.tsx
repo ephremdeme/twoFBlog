@@ -49,7 +49,7 @@ const CatagoryFilter = () => {
 		const query$: IFieldQuery = {
 			compare: '==',
 			field: 'catagory',
-			strValue: options[index]
+			strValue: options[index],
 		};
 
 		dispatch(setFilterableProductsByField(query$));
@@ -76,9 +76,19 @@ const CatagoryFilter = () => {
 				<ButtonGroup
 					variant="outlined"
 					ref={anchorRef}
+					style={{
+						width: '100%',
+					}}
 					aria-label="split button">
-					<Button size="small" onClick={handleClick}>
-						{options ? options[selectedIndex] : 'None'}
+					<Button
+						size="small"
+						style={{fontSize: '.6rem', width: '100%'}}
+						onClick={handleClick}>
+						{options
+							? options[selectedIndex] == ''
+								? 'All'
+								: options[selectedIndex]
+							: 'None'}
 					</Button>
 					<Button
 						variant="outlined"
@@ -117,7 +127,7 @@ const CatagoryFilter = () => {
 													onClick={(event) =>
 														handleMenuItemClick(event, index)
 													}>
-													{option}
+													{option === '' ? 'All' : option}
 												</MenuItem>
 											))
 										) : (
