@@ -2,6 +2,7 @@ import { RootState } from 'app/store';
 
 export default {
   selectProducts: (state: RootState) => state.product.products,
+  selectFilterableProducts: (state: RootState) => state.product.filterableProducts,
   selectLoadingProducts: (state: RootState) => state.product.loadingProducts,
   selectProdcutsLoaded: (state: RootState) => state.product.prodcutsLoaded,
   selectChartTotal: (state: RootState) => {

@@ -17,7 +17,8 @@ export const {
 	removeProductsAll,
 	removeProductChart,
 	resetProductChart,
-	resetChart
+	resetChart,
+	setFilterableProducts
 } = productSlice.actions;
 
 export const {
@@ -25,7 +26,8 @@ export const {
 	selectLoadingProducts,
 	selectProdcutsLoaded,
 	selectChartTotal,
-	selectChartProductQty
+	selectChartProductQty,
+	selectFilterableProducts
 } = selectors;
 export const {fetchProducts} = thunks;
 

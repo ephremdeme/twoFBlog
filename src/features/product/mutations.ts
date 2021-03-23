@@ -13,6 +13,7 @@ export default {
 	},
 	setProducts: (state: IProductState, action: PayloadAction<IProduct[]>) => {
 		state.products = action.payload;
+		state.filterableProducts = action.payload;
 	},
 	setChart: (
 		state: IProductState,
@@ -40,7 +41,8 @@ export default {
 		if (state.chart[id]) {
 			const deltedItem = state.chart[id].products.pop();
 			state.chart[id].total -= deltedItem.price;
-			if (state.chart[id].products.length === 0) state.chart[id].total = 0;
+			if (state.chart[id].products.length === 1)
+				delete state.chart[id]
 			state.chart[id].products.pop();
 		}
 	},
@@ -63,14 +65,14 @@ export default {
 		state.chart = {};
 	},
 
-	// setFilterableProducts: (
-	// 	state: IProductState,
-	// 	action: PayloadAction<string>
-	// ) => {
-	// 	const filteredData = state.products.filter((prod) =>
-	// 		prod.name.toLowerCase().includes(action.payload.toLowerCase())
-	// 	);
-	// 	console.log(filteredData);
-	// 	state.filterableProducts = filteredData;
-	// },
+	setFilterableProducts: (
+		state: IProductState,
+		action: PayloadAction<string>
+	) => {
+		const filteredData = state.products.filter((prod) =>
+			prod.name.toLowerCase().includes(action.payload.toLowerCase())
+		);
+		console.log(filteredData);
+		state.filterableProducts = filteredData;
+	},
 };
