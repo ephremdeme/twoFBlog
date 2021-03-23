@@ -18,7 +18,8 @@ export const {
 	removeProductChart,
 	resetProductChart,
 	resetChart,
-	setFilterableProducts
+	setFilterableProducts,
+	setFilterableProductsByField
 } = productSlice.actions;
 
 export const {
