@@ -46,7 +46,7 @@ import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 
 import {ReactComponent as FormatLetterSpacing} from '../../../public/icons/editor/Letter_Spacing.svg';
 import validUrl from 'valid-url';
-import {Font} from '@samuelmeuli/font-manager';
+import {Font, FontManager} from '@samuelmeuli/font-manager';
 
 import FontPicker from 'font-picker-react';
 
@@ -430,7 +430,8 @@ const LineSpacing = () => {
 		</>
 	);
 };
-const TextVariant = () => {
+
+export const TextVariant = () => {
 	const classes = useStyles();
 
 	const {
@@ -559,6 +560,7 @@ const ListOrderButtons = () => {
 		</>
 	);
 };
+
 export const TextColor = () => {
 	const [foreColor, setForeColor] = useState('inhert');
 
@@ -764,6 +766,32 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 		textRef: node.data.props.textRef,
 	}));
 
+	const generateUrl = (url: string) => {
+		if (validUrl.isWebUri(url)) {
+			return url;
+		} else {
+			if (url.includes('http') || url.includes('https')) {
+				if (validUrl.isWebUri(url)) {
+					try {
+						let uri = new URL(url);
+						return uri.href;
+					} catch (error) {
+						return '';
+					}
+				}
+			} else {
+				let newUrl = `http://${url}`;
+				try {
+					let uri = new URL(newUrl);
+					return uri.href;
+				} catch (error) {
+					return '';
+				}
+			}
+		}
+		return '';
+	};
+
 	const [text, setText] = useState<string>();
 
 	// saved = [selection?.focusNode, selection?.focusOffset];
@@ -837,12 +865,20 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 			// selection?.collapse(saved[0], saved[1]);
 			document.getSelection()?.removeAllRanges();
 			document.getSelection()?.addRange(range);
-			if (!validUrl.isWebUri(link))
+			let newLink = validUrl.isWebUri(generateUrl(link));
+			console.log(newLink);
+			if (newLink) {
 				console.log('Restored caret', document.getSelection()?.rangeCount);
-			console.log(document.execCommand('createlink', false, link), 'Links');
+				console.log(
+					document.execCommand('createlink', false, newLink),
+					'Links'
+				);
+				handleClose(event);
+			} else {
+				setMessage('Invalid URL! Please insert again.');
+				setHasNoText(true);
+			}
 		}
-
-		handleClose(event);
 	};
 
 	function handleListKeyDown(event: React.KeyboardEvent) {
@@ -893,7 +929,7 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 									<MenuItem>
 										<TextField
 											onChange={handleChange}
-											placeholder="www.example.com"
+											placeholder="https://www.example.com"
 										/>
 										<Button onClick={handleSubmit}>Submit</Button>
 									</MenuItem>
@@ -992,7 +1028,7 @@ const LetterSpacing = () => {
 	);
 };
 // AIzaSyBDdhhmoIgu0dsZnQGUgyKqllK5gdq6tNE
-const FontChooser = () => {
+export const FontChooser = () => {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
 	const {
@@ -1022,6 +1058,33 @@ const FontChooser = () => {
 		setProp((props) => (props.fontFamily = nextFont.family), 500);
 	};
 
+	// private addFontLi(font: Font, listIndex?: number): void {
+	// 	const fontId = getFontId(font.family);
+	// 	const li = document.createElement("li");
+	// 	li.classList.add("font-list-item");
+	// 	const fontButton = document.createElement("button");
+	// 	fontButton.type = "button";
+	// 	fontButton.id = `font-button-${fontId}${this.fontManager.selectorSuffix}`;
+	// 	fontButton.classList.add("font-button");
+	// 	fontButton.textContent = font.family;
+
+	// 	// Update active font when font button is clicked
+	// 	const onActivate = (): void => {
+	// 		this.toggleExpanded();
+	// 		this.setActiveFont(font.family);
+	// 	};
+	// 	fontButton.onclick = onActivate;
+	// 	fontButton.onkeypress = onActivate;
+	// 	li.appendChild(fontButton);
+
+	// 	// Insert font button at the specified index. If not specified, append to the end of the list
+	// 	if (listIndex) {
+	// 		this.ul.insertBefore(li, this.ul.children[listIndex]);
+	// 	} else {
+	// 		this.ul.appendChild(li);
+	// 	}
+	// }
+
 	return (
 		<>
 			<IconButton
@@ -1038,6 +1101,7 @@ const FontChooser = () => {
 				<ClickAwayListener onClickAway={handleClose}>
 					<FontPicker
 						apiKey="AIzaSyBDdhhmoIgu0dsZnQGUgyKqllK5gdq6tNE "
+						limit={100}
 						activeFontFamily={fontFamily}
 						onChange={handleChange}
 					/>
