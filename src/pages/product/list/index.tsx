@@ -8,7 +8,6 @@ import {
 	selectFilterableProducts,
 	selectLoadingProducts,
 	selectProdcutsLoaded,
-	selectProducts,
 } from 'features/product';
 import ProductListUser from '../user/ProductListUser';
 import ProductCardLoading from '../user/ProductCardLoading';

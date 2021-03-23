@@ -2,6 +2,7 @@ import React from 'react';
 import {Box} from '@material-ui/core';
 import PriceTagFilter from './filters/PriceTagFilter';
 import QtyFilter from './filters/QtyFilter';
+import CatagoryFilter from './filters/CatagoryFilter';
 
 const ProductFilters = () => {
 	return (
@@ -11,6 +12,9 @@ const ProductFilters = () => {
 			</Box>
 			<Box my={1}>
 				<QtyFilter />
+			</Box>
+			<Box my={1}>
+				<CatagoryFilter />
 			</Box>
 		</Box>
 	);

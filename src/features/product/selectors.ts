@@ -1,4 +1,5 @@
 import { RootState } from 'app/store';
+import { IProduct } from './types';
 
 export default {
   selectProducts: (state: RootState) => state.product.products,
@@ -18,5 +19,13 @@ export default {
       total += state.product.chart[chart].products.length
     }
     return total
-  }
+  },
+  selectDistinctProductCatagorys: (state: RootState): string[] => {
+    const catagorySet: Set<string> = new Set();
+    state.product.filterableProducts.forEach((product:IProduct) => {
+      catagorySet.add(product.catagory);
+    })
+    const catagorys: string[] = Array.from(catagorySet);
+    return catagorys
+  } 
 }

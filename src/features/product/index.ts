@@ -28,7 +28,8 @@ export const {
 	selectProdcutsLoaded,
 	selectChartTotal,
 	selectChartProductQty,
-	selectFilterableProducts
+	selectFilterableProducts,
+	selectDistinctProductCatagorys
 } = selectors;
 export const {fetchProducts} = thunks;
 

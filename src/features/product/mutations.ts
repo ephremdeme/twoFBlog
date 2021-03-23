@@ -121,7 +121,6 @@ export default {
 								return fieldValid;
 							}
 						);
-						console.log('++++++++++++++++', filteredData);
 						state.filterableProducts = filteredData;
 					} else if (strValue) {
 						const filteredData = state.products.filter(
