@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
 		productCard: {
 			position: 'relative',
 			transition: 'all .4s',
+			zIndex: 1,
 			'&:hover': {
 				// transform: 'scale(1.14)',
 				boxShadow: '0 0 10px rgba(0,0,0,0.3)',

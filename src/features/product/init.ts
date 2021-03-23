@@ -14,6 +14,7 @@ export interface IProductState {
 	loadingProducts: boolean;
 	prodcutsLoaded: boolean;
 	products: IProduct[];
+	filterableProducts: IProduct[],
 	chart: any;
 }
 
@@ -21,5 +22,6 @@ export const initialState: IProductState = {
 	loadingProducts: false,
 	prodcutsLoaded: false,
 	products: [],
+	filterableProducts: [],
 	chart: {}
 };
