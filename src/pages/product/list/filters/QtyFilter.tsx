@@ -9,14 +9,34 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import { setFilterableProductsByField } from 'features/product';
-import {IFieldQuery} from 'features/product/mutations'
-import { useDispatch } from 'react-redux';
+import {setFilterableProductsByField} from 'features/product';
+import {IFieldQuery} from 'features/product/mutations';
+import {useDispatch} from 'react-redux';
+import {createStyles, makeStyles, Theme} from '@material-ui/core';
 
-const options = ['< 2 peaces', '< 5 peaces', '< 10 peaces', '< 20 peaces', '< 50 peaces', '< 100 peaces', '< 200 peaces', '< 500 peaces'];
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		paperBg: {
+			background: theme.palette.background.default,
+			zIndex: 400,
+		},
+	})
+);
+
+const options = [
+	'< 2 peaces',
+	'< 5 peaces',
+	'< 10 peaces',
+	'< 20 peaces',
+	'< 50 peaces',
+	'< 100 peaces',
+	'< 200 peaces',
+	'< 500 peaces',
+];
 
 const QtyFilter = () => {
-  const dispatch = useDispatch();
+	const classes = useStyles();
+	const dispatch = useDispatch();
 	const [open, setOpen] = React.useState(false);
 	const anchorRef = React.useRef<HTMLDivElement>(null);
 	const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -31,15 +51,15 @@ const QtyFilter = () => {
 	) => {
 		setSelectedIndex(index);
 		setOpen(false);
-    const value = options[index].split(' ');
+		const value = options[index].split(' ');
 
-    const query$: IFieldQuery = {
-      compare: value[0],
-      field: 'qty',
-      intValue: +value[1]
-    }
+		const query$: IFieldQuery = {
+			compare: value[0],
+			field: 'qty',
+			intValue: +value[1],
+		};
 
-    dispatch(setFilterableProductsByField(query$))
+		dispatch(setFilterableProductsByField(query$));
 	};
 
 	const handleToggle = () => {
@@ -64,19 +84,20 @@ const QtyFilter = () => {
 					variant="outlined"
 					ref={anchorRef}
 					aria-label="split button">
-					<Button onClick={handleClick}>{options[selectedIndex]}</Button>
+					<Button  onClick={handleClick}>{options[selectedIndex]}</Button>
 					<Button
 						variant="outlined"
 						size="small"
 						aria-controls={open ? 'split-button-menu' : undefined}
 						aria-expanded={open ? 'true' : undefined}
-						aria-label="select merge strategy"
+						aria-label="select quantity"
 						aria-haspopup="menu"
 						onClick={handleToggle}>
 						<ArrowDropDownIcon />
 					</Button>
 				</ButtonGroup>
 				<Popper
+					className={classes.paperBg}
 					open={open}
 					anchorEl={anchorRef.current}
 					role={undefined}
