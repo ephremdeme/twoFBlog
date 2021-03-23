@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,7 +9,12 @@ import {Button, CssBaseline, List, ListItem} from '@material-ui/core';
 import {useEditor} from '@craftjs/core';
 import lz from 'lzutf8';
 import {Undo, Redo} from '@material-ui/icons';
-import {postBlog, selectLoading, updateBlog} from '../../features/editor';
+import {
+	IBlog,
+	postBlog,
+	selectLoading,
+	updateBlog,
+} from '../../features/editor';
 import {useAppDispatch} from '../../app/hooks';
 import {useSelector} from 'react-redux';
 import {RootState} from 'app/store';
@@ -18,6 +23,7 @@ import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import {toggleTheme} from 'features/app';
 import EditorBackdrop from 'pages/editor/EditorBackdrop';
+import {ErrorAlert} from 'components/helper';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -35,19 +41,19 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 	})
 );
-
+// {
+// 	id: string;
+// 	title: string;
+// 	coverImageUrl: string;
+// 	blogHash: string;
+// 	date: string;
+// 	authorId: string;
+// }
 export const NavBar: React.FC<{
 	enabled: boolean;
 	setEnable: (enabled: boolean) => void;
 	handleChange: (title: string, value: string) => void;
-	values: {
-		id: string;
-		title: string;
-		coverImageUrl: string;
-		blogHash: string;
-		date: string;
-		authorId: string;
-	};
+	values: IBlog;
 }> = ({enabled, setEnable, handleChange, values}) => {
 	const classes = useStyles();
 
@@ -68,15 +74,36 @@ export const NavBar: React.FC<{
 	const loading = useSelector(selectLoading);
 	console.log('ddd', loading);
 
+	const [message, setmessage] = useState('');
+
+	const [open, setopen] = useState(false);
+
 	useEffect(() => {
 		if (!enabled) {
 			actions.setOptions((options) => (options.enabled = false));
 			setEnable(enabled);
 		}
 	}, []);
+
+	const validateBlog = (blog: IBlog) => {
+		const {coverImageUrl, title} = blog;
+		if (title === '' || title === undefined) {
+			setmessage('Insert Title First!');
+			setopen(true);
+			return false;
+		}
+		if (coverImageUrl === '' || coverImageUrl === undefined) {
+			setmessage('Uplaod Cover Image First!');
+			setopen(true);
+			return false;
+		}
+		return true;
+	};
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
+			<ErrorAlert open={open} setOpen={setopen} message={message} />
+
 			<AppBar elevation={0} position="fixed" color="default">
 				<Toolbar>
 					<IconButton
@@ -114,63 +141,66 @@ export const NavBar: React.FC<{
 					<IconButton onClick={() => dispatch(toggleTheme(appTheme))}>
 						{appTheme ? <Brightness7Icon /> : <Brightness4Icon />}
 					</IconButton>
-					{user.role === 'BLOGGER' ||
-						(user.role === 'ADMIN' && (
-							<>
-								<Button
-									color="inherit"
-									onClick={() => {
-										actions.setOptions(
-											(options) => (options.enabled = !enabled)
+					{(user.role === 'BLOGGER' || user.role === 'ADMIN') && (
+						<>
+							<Button
+								color="inherit"
+								onClick={() => {
+									actions.setOptions((options) => (options.enabled = !enabled));
+									setEnable(!enabled);
+									// let a = document.getElementById("parent")
+									// for (let child = a.firstElementChild; child; child = a.nextElementSibling){
+									// 	for (let child1 = child.firstElementChild; child1; child = child.nextElementSibling){ console.log(child1)}}
+									const json = query.serialize();
+									const hash = lz.encodeBase64(lz.compress(json));
+									handleChange('blogHash', hash);
+									console.log(values);
+								}}>
+								{enabled ? 'Preview' : 'Edit'}{' '}
+							</Button>
+							<Button
+								color="inherit"
+								disabled={loading}
+								onClick={() => {
+									const json = query.serialize();
+									const hash = lz.encodeBase64(lz.compress(json));
+
+									handleChange('blogHash', hash);
+									if (
+										!validateBlog({
+											...values,
+											blogHash: hash,
+										})
+									)
+										return;
+									if (values.id === '')
+										dispatch(
+											postBlog({
+												...values,
+												blogHash: hash,
+											})
 										);
-										setEnable(!enabled);
-										// let a = document.getElementById("parent")
-										// for (let child = a.firstElementChild; child; child = a.nextElementSibling){
-										// 	for (let child1 = child.firstElementChild; child1; child = child.nextElementSibling){ console.log(child1)}}
-										const json = query.serialize();
-										const hash = lz.encodeBase64(lz.compress(json));
-										handleChange('blogHash', hash);
-										console.log(values);
-									}}>
-									{enabled ? 'Preview' : 'Edit'}{' '}
-								</Button>
-								<Button
-									color="inherit"
-									disabled={loading}
-									onClick={() => {
-										const json = query.serialize();
-										const hash = lz.encodeBase64(lz.compress(json));
-
-										handleChange('blogHash', hash);
-
-										if (values.id === '')
-											dispatch(
-												postBlog({
-													...values,
-													blogHash: hash,
-												})
-											);
-										else {
-											// dispatch(
-											// 	postBlog({
-											// 		...values,
-											// 		blogHash: hash,
-											// 	})
-											// );
-											dispatch(
-												updateBlog({
-													...values,
-													blogHash: hash,
-												})
-											);
-										}
-										console.log(values);
-									}}>
-									Publish
-								</Button>
-								<EditorBackdrop loading={loading} />
-							</>
-						))}
+									else {
+										// dispatch(
+										// 	postBlog({
+										// 		...values,
+										// 		blogHash: hash,
+										// 	})
+										// );
+										dispatch(
+											updateBlog({
+												...values,
+												blogHash: hash,
+											})
+										);
+									}
+									console.log(values);
+								}}>
+								Publish
+							</Button>
+							<EditorBackdrop loading={loading} />
+						</>
+					)}
 				</Toolbar>
 			</AppBar>
 		</div>
