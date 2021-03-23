@@ -22,7 +22,7 @@ export default {
   },
   selectDistinctProductCatagorys: (state: RootState): string[] => {
     const catagorySet: Set<string> = new Set();
-    state.product.filterableProducts.forEach((product:IProduct) => {
+    state.product.products.forEach((product:IProduct) => {
       catagorySet.add(product.catagory);
     })
     const catagorys: string[] = Array.from(catagorySet);
