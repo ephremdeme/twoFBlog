@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
 			margin: '5px',
 		},
 		button: {
-			backgroundColor: '#F5F5F5',
-			color: '#F5F5F5',
+			backgroundColor: theme.palette.text.secondary,
+			color: theme.palette.text.primary,
 		},
 	})
 );
@@ -64,17 +64,22 @@ export const Divider: UserComponent<{
 			style={{
 				padding: '20px',
 				height: orientation === 'vertical' ? '100%' : 'auto',
+				minHeight: orientation === 'vertical' ? 'inherit' : 'auto',
 				width: orientation === 'horizontal' ? '100%' : 'auto',
 			}}>
 			<div
 				className={classes.divide}
 				style={{
 					height: orientation === 'vertical' ? '100%' : 'auto',
+					minHeight: orientation === 'vertical' ? 'inherit' : 'auto',
 					width: orientation === 'horizontal' ? '100%' : 'auto',
 				}}>
 				<MuiDivider
 					variant={variant}
 					orientation={orientation}
+					style={{
+						minHeight: orientation === 'vertical' ? 'inherit' : 'auto',
+					}}
 					{...(orientation === 'vertical' ? 'flexItem' : null)}
 				/>
 			</div>
@@ -100,17 +105,20 @@ const DividerSettings = () => {
 		<div>
 			<SelectOrientation />
 			<IconButton
+				className={variant === 'fullWidth' ? classes.button : ''}
 				title="Full Width Divider"
-				onClick={(e) => setProp((props) => (props.variant = 'fullWidth'))}>
+				onClick={() => setProp((props) => (props.variant = 'fullWidth'))}>
 				<DividerLgIcon className="MuiSvgIcon-root" />
 			</IconButton>
 			<IconButton
 				title="Middle Divider"
+				className={variant === 'middle' ? classes.button : ''}
 				onClick={(e) => setProp((props) => (props.variant = 'middle'))}>
 				<DividerMdIcon className="MuiSvgIcon-root" />
 			</IconButton>
 			<IconButton
 				title="Inset Divider"
+				className={variant === 'inset' ? classes.button : ''}
 				onClick={(e) => setProp((props) => (props.variant = 'inset'))}>
 				<DividerSmIcon className="MuiSvgIcon-root" />
 			</IconButton>
@@ -126,6 +134,7 @@ const SelectOrientation = () => {
 
 	const {
 		actions: {setProp},
+		orientation,
 	} = useNode((node) => ({
 		orientation: node.data.props.orientation,
 	}));
@@ -175,9 +184,9 @@ const SelectOrientation = () => {
 				ref={anchorRef}
 				aria-controls={open ? 'menu-list-grow' : undefined}
 				aria-haspopup="true"
-				title="Align Text"
+				title="Insert Divider"
 				onClick={handleToggle}>
-				<Remove />
+				{selected === 'horizontal' ? <Remove /> : <Height />}
 			</IconButton>
 			<Popper
 				open={open}
