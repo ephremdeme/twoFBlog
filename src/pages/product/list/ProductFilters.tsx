@@ -33,8 +33,6 @@ const ProductFilters = () => {
 
 	const handleClearFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFiltered(e.target.checked);
-		if(filtered)
-			dispatch(setFilteredNull)
 	};
 
 	return (

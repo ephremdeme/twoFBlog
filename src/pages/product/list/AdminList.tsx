@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {DataGrid, GridColDef, ValueGetterParams} from '@material-ui/data-grid';
+import {DataGrid, GridColDef} from '@material-ui/data-grid';
 import {useFireCollection, useFireCollectionRef} from 'hooks/useFirestore';
 import {PDB} from 'features/product/init';
 import {selectProducts, setProducts} from 'features/product';
@@ -10,8 +10,6 @@ import {Box, Button} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import OverlayLoading from 'components/shared/OverlayLoading';
 
-// { field: 'uid', headername: 'Uid', width: 80 },
-// { field: 'sid', headername: 'sid', width: 80 },
 
 const columns: GridColDef[] = [
 	{field: 'id', headerName: 'Id', width: 80},
@@ -26,16 +24,6 @@ const columns: GridColDef[] = [
 	{field: 'condition', headerName: 'condition', width: 180},
 	{field: 'createdAt', headerName: 'createdAt', width: 180},
 	{field: 'updatedAt', headerName: 'updatedAt', width: 180},
-
-	// {
-	//   field: 'fullName',
-	//   headerName: 'Full name',
-	//   description: 'This column has a value getter and is not sortable.',
-	//   sortable: false,
-	//   width: 160,
-	//   valueGetter: (params: ValueGetterParams) =>
-	//     `${params.getValue('firstName') || ''} ${params.getValue('lastName') || ''}`,
-	// },
 ];
 
 const AdminList = () => {
