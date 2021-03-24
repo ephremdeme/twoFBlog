@@ -142,4 +142,7 @@ export default {
 			}
 		}
 	},
+	clearProductsFilter: (state: IProductState) => {
+		state.filterableProducts = state.products;
+	}
 };
