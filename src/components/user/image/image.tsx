@@ -6,6 +6,8 @@ import {ImageSettings} from './imageSettings';
 import Firebase from '../../../firebase/firebase';
 import {CloudUpload, TapAndPlayOutlined} from '@material-ui/icons';
 import {Container} from '../../selectors/Container';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectBlog, setEditBlog} from 'features/editor';
 
 const useStyles = makeStyles({
 	root: {
@@ -103,8 +105,6 @@ export const Image: UserComponent<ImageProp> = ({
 		}
 	};
 
-	console.log('enabled', enabled);
-
 	const handleUpload = async () => {
 		setLoading(true);
 		const storageRef = Firebase.storage().ref();
@@ -182,16 +182,41 @@ Image.craft = {
 	},
 };
 
-export const CoverImage: React.FC<{
+interface ICoverImage {
 	handleChange: (key: string, value: string) => void;
 	imageUrl: string | undefined;
-}> = ({handleChange, imageUrl}) => {
+	bestFit?: boolean;
+	small?: boolean;
+	fullWidth?: boolean;
+}
+export const CoverImage: UserComponent<ICoverImage> = ({
+	handleChange,
+	imageUrl,
+	small,
+	bestFit,
+	fullWidth,
+}) => {
+	const {
+		connectors: {connect, drag},
+		actions: {setProp},
+	} = useNode();
+
+	const {enabled} = useEditor((state, query) => ({
+		enabled: state.options.enabled,
+	}));
+
 	const classes = useStyles();
 	const [{alt, src, file}, setImg] = useState<any>({
 		src: imageUrl || null,
 		alt: '',
 		file: null,
 	});
+
+	console.log('Image URL', imageUrl);
+
+	const dispatch = useDispatch();
+
+	const coverImageUrl = useSelector(selectBlog).coverImageUrl;
 
 	const [isUploaded, setIsUploaded] = useState(false);
 
@@ -209,6 +234,12 @@ export const CoverImage: React.FC<{
 			file: null,
 		}));
 		handleChange('coverImageUrl', url);
+		dispatch(
+			setEditBlog({
+				key: 'coverImageUrl',
+				value: url,
+			})
+		);
 		setIsUploaded(true);
 		setLoading(false);
 	};
@@ -220,22 +251,42 @@ export const CoverImage: React.FC<{
 				alt: e.target.files[0].name,
 				file: e.target.files[0],
 			});
+
+			handleChange('coverImageUrl', URL.createObjectURL(e.target.files[0]));
+			dispatch(
+				setEditBlog({
+					key: 'coverImageUrl',
+					value: URL.createObjectURL(e.target.files[0]),
+				})
+			);
 		}
 	};
 
-	console.log(!isUploaded, !imageUrl);
+	// console.log(small, bestFit, fullWidth);
 
 	return (
-		<div className={classes.root}>
-			<MuiContainer maxWidth={'xl'} className={classes.fill}>
+		<div ref={(ref) => connect(drag(ref))}>
+			<MuiContainer
+				maxWidth={'xl'}
+				className={
+					classes.fill +
+					' ' +
+					(small
+						? classes.small
+						: bestFit
+						? classes.bestFit
+						: fullWidth
+						? classes.fullWidth
+						: undefined)
+				}>
 				<img
-					src={src || imageUrl}
+					src={coverImageUrl}
 					alt={alt}
 					className={classes.img}
 					style={{maxWidth: '100%', height: 'auto', width: 'auto'}}
 				/>
 			</MuiContainer>
-			{!imageUrl && (
+			{!imageUrl && enabled && !isUploaded && (
 				<div style={{margin: '20px'}}>
 					<input
 						accept="image/*"
@@ -251,7 +302,7 @@ export const CoverImage: React.FC<{
 							aria-label="upload picture"
 							component="span"
 							startIcon={<InsertPhotoIcon />}>
-							{!src ? ' Add Image' : 'Change Image'}
+							{!src ? ' Add Cover Image' : 'Change Image'}
 						</Button>
 					</label>
 					{file && (
@@ -263,4 +314,17 @@ export const CoverImage: React.FC<{
 			)}
 		</div>
 	);
+};
+
+CoverImage.craft = {
+	displayName: 'CoverImage',
+
+	props: {
+		small: false,
+		bestFit: false,
+		fullWidth: false,
+	},
+	related: {
+		settings: ImageSettings,
+	},
 };
