@@ -13,7 +13,7 @@ const ProductListUser:React.FC<IProps> = ({products}) => {
 			<Box mt={3}>
 				<Grid container spacing={6}>
 					{products.map((product: any) => (
-						<Grid item key={product.id} lg={3} md={4} xs={12}>
+						<Grid item key={product.id} lg={4} md={4} xs={12}>
 							<ProductCard product={product} />
 						</Grid>
 					))}
