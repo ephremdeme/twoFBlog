@@ -19,7 +19,8 @@ export const {
 	resetProductChart,
 	resetChart,
 	setFilterableProducts,
-	setFilterableProductsByField
+	setFilterableProductsByField,
+	clearProductsFilter
 } = productSlice.actions;
 
 export const {

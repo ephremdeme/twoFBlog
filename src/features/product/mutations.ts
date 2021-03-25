@@ -1,6 +1,6 @@
-import {PayloadAction} from '@reduxjs/toolkit';
-import {IProductState} from './init';
-import {IProduct} from './types';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { IProductState } from './init';
+import { IProduct } from './types';
 
 export interface IFieldQuery {
 	strValue?: string;
@@ -48,8 +48,11 @@ export default {
 		if (state.chart[id]) {
 			const deltedItem = state.chart[id].products.pop();
 			state.chart[id].total -= deltedItem.price;
-			if (state.chart[id].products.length === 1) delete state.chart[id];
-			state.chart[id].products.pop();
+			if (!state.chart[id].products.length)
+				state.chart[id] = {
+					total: 0,
+					products: [],
+				};
 		}
 	},
 	removeProductsAll: (state: IProductState, action: PayloadAction<string>) => {
@@ -139,4 +142,7 @@ export default {
 			}
 		}
 	},
+	clearProductsFilter: (state: IProductState) => {
+		state.filterableProducts = state.products;
+	}
 };

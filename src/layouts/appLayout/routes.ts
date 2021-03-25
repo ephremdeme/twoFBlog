@@ -35,6 +35,11 @@ const navs = {
 			path: '/products/list',
 			icon: 'scatter_plot',
 		},
+		{
+			name: 'Users',
+			path: '/users',
+			icon: 'scatter_plot',
+		},
 	],
 	[UserRole.SELLER]: [
 		{
@@ -85,19 +90,19 @@ const navs = {
 	],
 	[UserRole.GUEST]: [
 		{
-			name: 'Guest Dashboard',
-			path: '/',
-			icon: 'dashboard',
-		},
-		{
 			name: 'Products',
 			path: '/products/list',
-			icon: 'scatter_plot',
+			icon: 'category',
 		},
 		{
-			name: 'Blog',
-			path: '/editor',
+			name: 'Blogs',
+			path: '/blogs',
 			icon: 'format_color_text',
+		},
+		{
+			name: 'About',
+			path: '/about',
+			icon: 'live_help',
 		},
 	],
 	[UserRole.USER]: [

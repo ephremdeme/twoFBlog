@@ -52,8 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
 		// necessary for content to be below app bar
 		toolbar: theme.mixins.toolbar,
 		drawerPaper: {
+			background: theme.palette.background.default,
 			width: drawerWidth,
-			marginTop: '65px',
+			border: 'none',
+			borderTop: 'none',
+			boxShadow: "0 15px 5px rgba(0,0,0,0.2)",
+			marginTop: '63px',
 		},
 		content: {
 			flexGrow: 1,
@@ -61,9 +65,14 @@ const useStyles = makeStyles((theme: Theme) =>
 		// list items
 		listItems: {
 			width: '90%',
+			padding: '.5rem auto',
 			borderRadius: '4px',
 			margin: '5px auto',
 			transition: 'all .4s',
+			'&:hover': {
+				background: '#1113',
+				transition: 'scale(1.1)'
+			},
 		},
 	})
 );
@@ -115,7 +124,7 @@ export default function AppNav(props: Props) {
 						<ListItemIcon>
 							<Icon style={{fontSize: 20}}>{nav.icon}</Icon>
 						</ListItemIcon>
-						<Box fontSize={14} fontWeight={500}>
+						<Box fontSize={14} fontWeight={600}>
 							{nav.name}
 						</Box>
 					</ListItem>

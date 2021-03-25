@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -14,49 +14,55 @@ import CatagoryFilter from './filters/CatagoryFilter';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
-import {Box, Checkbox, FormControlLabel} from '@material-ui/core';
+import { Box, Button, Checkbox, FormControlLabel } from '@material-ui/core';
+import { clearProductsFilter } from 'features/product'
+import { useDispatch } from 'react-redux';
+import MiniLoading from 'components/shared/MiniLoader';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
 			margin: 'auto',
-			maxWidth: 240,
+			maxWidth: 230,
 			borderRadius: '10px',
 			backgroundColor: theme.palette.background.paper,
 		},
+		hoverIcon: {
+			transition: 'all .3s',
+			'&:hover': {
+				background: '#67B'
+			}
+		}
 	})
 );
 
 const ProductFilters = () => {
 	const classes = useStyles();
-	const [filtered, setFiltered] = useState<boolean>(false);
+	const dispatch = useDispatch();
+	const [clearFilter, setClearFilter] = useState(false)
 
-	const handleClearFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFiltered(e.target.checked);
-		if(filtered)
-			dispatch(setFilteredNull)
+	const handleClearFilterChange = () => {
+		setClearFilter(true);
+		dispatch(clearProductsFilter())
+		setTimeout(() => setClearFilter(false), 500)
 	};
 
 	return (
+		<>
 		<List className={classes.root}>
 			<Box fontSize=".8rem" fontWeight={600} mx={3} my={1}>
 				Filter products
 			</Box>
-			<FormControlLabel
-				control={
-					<Checkbox
-						checked={filtered}
-						onChange={handleClearFilterChange}
-						color="primary"
-					/>
-				}
-				style={{fontSize: '.76rem', fontWeight: 500}}
-				label="clear filters"
-				labelPlacement="start"
-			/>
+			<Box ml={3}>
+				<Button variant="outlined" size="small" style={{ fontSize: '.8rem' }}
+					onClick={handleClearFilterChange}
+				>
+					clear filters
+			</Button>
+			</Box>
 			<ListItem>
 				<ListItemAvatar>
-					<Avatar>
+					<Avatar className={classes.hoverIcon}>
 						<AccountTreeIcon />
 					</Avatar>
 				</ListItemAvatar>
@@ -66,7 +72,7 @@ const ProductFilters = () => {
 			</ListItem>
 			<ListItem>
 				<ListItemAvatar>
-					<Avatar>
+					<Avatar className={classes.hoverIcon}>
 						<LocalOfferIcon />
 					</Avatar>
 				</ListItemAvatar>
@@ -76,7 +82,7 @@ const ProductFilters = () => {
 			</ListItem>
 			<ListItem>
 				<ListItemAvatar>
-					<Avatar>
+					<Avatar className={classes.hoverIcon}>
 						<DonutLargeIcon />
 					</Avatar>
 				</ListItemAvatar>
@@ -85,6 +91,8 @@ const ProductFilters = () => {
 				</Box>
 			</ListItem>
 		</List>
+		{clearFilter && <MiniLoading title="clearing filters..." />}
+		</>
 	);
 };
 
