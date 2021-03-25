@@ -13,6 +13,7 @@ import {
 	IBlog,
 	postBlog,
 	selectLoading,
+	setEditBlog,
 	updateBlog,
 } from '../../features/editor';
 import {useAppDispatch} from '../../app/hooks';
@@ -153,7 +154,8 @@ export const NavBar: React.FC<{
 									// 	for (let child1 = child.firstElementChild; child1; child = child.nextElementSibling){ console.log(child1)}}
 									const json = query.serialize();
 									const hash = lz.encodeBase64(lz.compress(json));
-									handleChange('blogHash', hash);
+									dispatch(setEditBlog({key: 'blogHash', value: hash}));
+									// handleChange('blogHash', hash);
 									console.log(values);
 								}}>
 								{enabled ? 'Preview' : 'Edit'}{' '}
@@ -165,7 +167,8 @@ export const NavBar: React.FC<{
 									const json = query.serialize();
 									const hash = lz.encodeBase64(lz.compress(json));
 
-									handleChange('blogHash', hash);
+									// handleChange('blogHash', hash);
+									dispatch(setEditBlog({key: 'blogHash', value: hash}));
 									if (
 										!validateBlog({
 											...values,

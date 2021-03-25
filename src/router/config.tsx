@@ -32,7 +32,7 @@ const routes: IRoute[] = [
 		path: '/',
 		exact: true,
 		redirect: {
-			page: '/guest_home',
+			page: '/dashboard',
 		},
 		fallback: <Loader />,
 		permissions: [UserRole.GUEST, UserRole.USER],

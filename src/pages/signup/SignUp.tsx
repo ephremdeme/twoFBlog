@@ -10,6 +10,7 @@ import {
 	Typography,
 	makeStyles,
 	Collapse,
+	CssBaseline,
 } from '@material-ui/core';
 import {ReactComponent as FacebookIcon} from '../../public/icons/icons8_google_logo_1.svg';
 import {ReactComponent as GoogleIcon} from '../../public/icons/icons8_google_logo_1.svg';
@@ -62,89 +63,92 @@ const LoginView = () => {
 		}
 	};
 
-	if(auth.authenticated){
-		return <Redirect to="/dashboard"/>
+	if (auth.authenticated) {
+		return <Redirect to="/dashboard" />;
 	}
 
 	return (
-		<Box
-			display="flex"
-			flexDirection="column"
-			height="100%"
-			justifyContent="center"
-			className={classes.root}>
-			<Container maxWidth="sm">
-				<form>
-					<Box mb={3}>
-						<AuthAlert />
-						<Typography color="textPrimary" variant="h2">
-							Sign Up
-						</Typography>
-						<Typography
-							color="textSecondary"
-							gutterBottom
-							variant="body2"></Typography>
-					</Box>
-					<Box mt={3} mb={1}>
-						<Typography align="center" color="textSecondary" variant="body1">
-							Signup with email address
-						</Typography>
-					</Box>
-					<TextField
-						fullWidth
-						label="User Name"
-						margin="normal"
-						name="name"
-						type="text"
-						variant="outlined"
-						error={auth.errorMessage !== undefined && name === ''}
-						value={name}
-						onChange={(e) => {
-							setName(e.target.value);
-						}}
-					/>
-					<TextField
-						fullWidth
-						label="Email Address"
-						margin="normal"
-						name="email"
-						type="email"
-						variant="outlined"
-						error={auth.errorMessage !== undefined && email === ''}
-						value={email}
-						onChange={(e) => {
-							setEmail(e.target.value);
-						}}
-					/>
-					<TextField
-						fullWidth
-						label="Password"
-						margin="normal"
-						name="password"
-						type="password"
-						variant="outlined"
-						error={auth.errorMessage !== undefined && password === ''}
-						value={password}
-						onChange={(e) => {
-							setPassword(e.target.value);
-						}}
-					/>
-					<Box my={2}>
-						<Button
-							color="primary"
+		<>
+			<CssBaseline />
+			<Box
+				display="flex"
+				flexDirection="column"
+				height="100%"
+				justifyContent="center"
+				className={classes.root}>
+				<Container maxWidth="sm">
+					<form>
+						<Box mb={3}>
+							<AuthAlert />
+							<Typography color="textPrimary" variant="h2">
+								Sign Up
+							</Typography>
+							<Typography
+								color="textSecondary"
+								gutterBottom
+								variant="body2"></Typography>
+						</Box>
+						<Box mt={3} mb={1}>
+							<Typography align="center" color="textSecondary" variant="body1">
+								Signup with email address
+							</Typography>
+						</Box>
+						<TextField
 							fullWidth
-							size="large"
-							// type="submit"
-							variant="contained"
-							onClick={() => {
-								handleLogin();
-							}}>
-							Sign Up now
-						</Button>
-					</Box>
-				</form>
-			</Container>
-		</Box>
+							label="User Name"
+							margin="normal"
+							name="name"
+							type="text"
+							variant="outlined"
+							error={auth.errorMessage !== undefined && name === ''}
+							value={name}
+							onChange={(e) => {
+								setName(e.target.value);
+							}}
+						/>
+						<TextField
+							fullWidth
+							label="Email Address"
+							margin="normal"
+							name="email"
+							type="email"
+							variant="outlined"
+							error={auth.errorMessage !== undefined && email === ''}
+							value={email}
+							onChange={(e) => {
+								setEmail(e.target.value);
+							}}
+						/>
+						<TextField
+							fullWidth
+							label="Password"
+							margin="normal"
+							name="password"
+							type="password"
+							variant="outlined"
+							error={auth.errorMessage !== undefined && password === ''}
+							value={password}
+							onChange={(e) => {
+								setPassword(e.target.value);
+							}}
+						/>
+						<Box my={2}>
+							<Button
+								color="primary"
+								fullWidth
+								size="large"
+								// type="submit"
+								variant="contained"
+								onClick={() => {
+									handleLogin();
+								}}>
+								Sign Up now
+							</Button>
+						</Box>
+					</form>
+				</Container>
+			</Box>
+		</>
 	);
 };
 
