@@ -25,6 +25,7 @@ import Brightness4Icon from '@material-ui/icons/Brightness4';
 import {toggleTheme} from 'features/app';
 import EditorBackdrop from 'pages/editor/EditorBackdrop';
 import {ErrorAlert} from 'components/helper';
+import {Link} from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -35,7 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
 			marginRight: theme.spacing(2),
 		},
 		title: {
+			flexGrow: 2,
+		},
+		blogs: {
 			flexGrow: 1,
+			textAlign: 'center',
+			color: theme.palette.text.primary,
 		},
 		undo: {
 			marginRight: '20px',
@@ -118,6 +124,16 @@ export const NavBar: React.FC<{
 					<Typography variant="h6" noWrap className={classes.title}>
 						Blog Editor
 					</Typography>
+
+					<Typography
+						component={Link}
+						variant="h6"
+						to={'/blogs'}
+						noWrap
+						className={classes.blogs}>
+						Blogs
+					</Typography>
+
 					<div className={classes.undo}>
 						<IconButton
 							className="copy-state-btn"

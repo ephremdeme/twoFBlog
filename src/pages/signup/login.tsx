@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
 	signup: {
 		textDecoration: 'none',
 		paddingLeft: '5px',
+		fontWeight: 700,
+		fontSize: '1.15em',
+		color: theme.palette.text.secondary,
 	},
 }));
 
@@ -132,15 +135,13 @@ const LoginView = () => {
 					</form>
 					<Typography style={{textAlign: 'end'}} variant="body1">
 						Don't have an account?
-						<Button
-							variant="text"
+						<Typography
+							variant="body1"
 							component={Link}
 							to="/signup"
-							color="primary"
-							autoCapitalize="No"
 							className={classes.signup}>
 							Sign Up
-						</Button>
+						</Typography>
 					</Typography>
 					<div>
 						<Box my={3}>

@@ -145,9 +145,7 @@ const routes: IRoute[] = [
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
-		permissions: [
-			UserRole.GUEST
-		]
+		permissions: [UserRole.GUEST],
 	},
 	{
 		path: '/guest_home',
@@ -174,6 +172,7 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/editor')),
 		exact: true,
 		fallback: <Loader />,
+		sidebar: () => <AppNav />,
 	},
 	{
 		path: '*',

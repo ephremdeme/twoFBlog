@@ -31,9 +31,18 @@ const useStyles = makeStyles((theme) => ({
 		paddingBottom: theme.spacing(3),
 		paddingTop: theme.spacing(3),
 	},
+	signup: {
+		textDecoration: 'none',
+		paddingLeft: '5px',
+		...theme.typography.button,
+		backgroundColor: theme.palette.background.paper,
+	},
 	login: {
 		textDecoration: 'none',
 		paddingLeft: '5px',
+		fontWeight: 700,
+		fontSize: '1.15em',
+		color: theme.palette.text.secondary,
 	},
 }));
 
@@ -149,14 +158,13 @@ const LoginView = () => {
 					</form>
 					<Typography style={{float: 'right'}} variant="body1">
 						Already a member?
-						<Button
-							variant="text"
+						<Typography
+							variant="body1"
 							component={Link}
-							color="primary"
 							to="/login"
 							className={classes.login}>
 							Login
-						</Button>
+						</Typography>
 					</Typography>
 				</Container>
 			</Box>
