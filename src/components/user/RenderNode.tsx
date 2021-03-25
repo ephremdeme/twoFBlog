@@ -130,7 +130,10 @@ const RenderNode = ({render}: any) => {
 								selected.settings &&
 								React.createElement(selected.settings)}
 
-							{deletable ? (
+							{deletable &&
+							selected?.name !== 'TitleInput' &&
+							selected?.name !== 'CoverImage' &&
+							isActive ? (
 								<button
 									className="btn-cursor"
 									onMouseDown={(e: React.MouseEvent) => {
