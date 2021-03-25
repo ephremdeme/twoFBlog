@@ -13,21 +13,15 @@ import { Box } from '@material-ui/core';
 const useStylesLoader = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
-			position: 'fixed',
-			width: '100vw',
-			height: '100vh',
 			display: 'flex',
 			alignItems: 'center',
 			justifyContent: 'center',
 			zIndex: 500,
 		},
 		card: {
-			position: 'fixed',
-			bottom: '10px',
-			right: '10px',
 			background: 'rgba(0,0,0,0.2)',
-			padding: '.4rem 1rem',
-			borderRadius: 25,
+			padding: '.4rem',
+			borderRadius: 50,
 			display: 'flex',
 			alignItems: 'center',
 			justifyContent: 'center',
@@ -48,13 +42,12 @@ const useStylesLoader = makeStyles((theme: Theme) =>
 );
 
 interface IProps {
-	title?: string;
 	size?: number;
 	thickness?: number;
 	props: CircularProgressProps;
 }
 
-const MiniLoading = ({ title = "Refreshing...", size = 25, thickness = 3, ...props }: CircularProgressProps) => {
+const LoadingOnly = ({size=20, thickness=3, ...props}: CircularProgressProps) => {
 	const classes = useStylesLoader();
 
 	return (
@@ -71,12 +64,9 @@ const MiniLoading = ({ title = "Refreshing...", size = 25, thickness = 3, ...pro
 					thickness={thickness}
 					{...props}
 				/>
-				<Box ml={1} fontWeight={400} fontSize="0.8rem">
-					{title}
-				</Box>
 			</div>
 		</div>
 	);
 };
 
-export default MiniLoading;
+export default LoadingOnly;

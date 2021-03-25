@@ -31,5 +31,6 @@ export interface IUsers {
 	conversations: Conversation[],
 	users_admin: User[],
 	conversations_admin: Conversation[],
-	test: any
+	test: any,
+	pageVisit: number | null
 }

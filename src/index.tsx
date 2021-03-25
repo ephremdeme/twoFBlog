@@ -2,8 +2,8 @@ import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {store} from './app/store';
-import {Provider} from 'react-redux';
+import { store } from './app/store';
+import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import Loader from 'components/shared/Loader';
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
@@ -11,6 +11,7 @@ import { createFirestoreInstance } from "redux-firestore";
 import firebase from "./firebase/firebase";
 import route from "./hooks/useRoutes";
 import { Router } from "react-router";
+import Main from 'hoc/main';
 
 const rrfConfig = {
 	userProfile: 'users',
@@ -29,9 +30,11 @@ ReactDOM.render(
 	<React.StrictMode>
 		<Provider store={store}>
 			<ReactReduxFirebaseProvider {...rrfProps}>
-			<Router history={route}>
-			<App/>
-			</Router>
+				<Router history={route}>
+					<Main>
+						<App />
+					</Main>
+				</Router>
 			</ReactReduxFirebaseProvider>
 		</Provider>
 	</React.StrictMode>,
