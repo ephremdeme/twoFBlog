@@ -22,7 +22,7 @@ const useStylesLoader = makeStyles((theme: Theme) =>
 			zIndex: 500,
 		},
 		card: {
-      position: 'fixed',
+			position: 'fixed',
 			bottom: '10px',
 			right: '10px',
 			background: 'rgba(0,0,0,0.2)',
@@ -48,12 +48,13 @@ const useStylesLoader = makeStyles((theme: Theme) =>
 );
 
 interface IProps {
+	title?: string;
 	size?: number;
 	thickness?: number;
 	props: CircularProgressProps;
 }
 
-const MiniLoading = ({size=25, thickness=3, ...props}: CircularProgressProps) => {
+const MiniLoading = ({ title = "Refreshing...", size = 25, thickness = 3, ...props }: CircularProgressProps) => {
 	const classes = useStylesLoader();
 
 	return (
@@ -71,7 +72,7 @@ const MiniLoading = ({size=25, thickness=3, ...props}: CircularProgressProps) =>
 					{...props}
 				/>
 				<Box ml={1} fontWeight={400} fontSize="0.8rem">
-					Refreshing...
+					{title}
 				</Box>
 			</div>
 		</div>

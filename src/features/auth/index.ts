@@ -4,7 +4,6 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from 'app/store';
 import firebase, { provider } from '../../firebase/firebase';
 import Cookies from 'js-cookie';
-import history from "../../hooks/useRoutes";
 
 
 const initialState: User = {
@@ -135,8 +134,6 @@ export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 						error: false,
 						loaded: true
 					});
-					history.push('/dashboard')
-					window.location.href = window.location.href;
 				});
 		} else {
 			await db
@@ -173,8 +170,6 @@ export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 								loaded: true,
 							})
 						);
-						history.push('/dashboard')
-						window.location.href = window.location.href;
 					},
 					(err) => {
 						console.log('here is error', err.t, err.message);
@@ -222,8 +217,6 @@ export const createUserWithEmailPassword = (user: any): AppThunk => async (
 					loaded: true
 				})
 			);
-			history.push('/guest_home')
-			window.location.href = window.location.href;
 		},
 		(err) => {
 			console.log('here is error', err.t, err.message);
@@ -270,8 +263,6 @@ export const signInWithEmailPassword = (user: any): AppThunk => async (
 						isGuest: true,
 						error: false,
 					});
-					history.push('/guest_home')
-					window.location.href = window.location.href;
 				},
 				(err) => {
 					console.log('here is error', err.t, err.message);
@@ -300,8 +291,6 @@ export const logoutUser = (uid: string): AppThunk => {
 					auth.signOut().then((_) => {
 						dispatch(setLoginInProgress(false));
 						dispatch(setLogoutSuccess());
-						history.push('/guest_home')
-						window.location.href = window.location.href;
 					});
 				},
 				(err) => {
@@ -383,11 +372,9 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 				dispatch(setLoginInProgress(false));
 				dispatch(setLogInSuccess({ ...current_guest }));
 				Cookies.set('user', { ...current_guest });
-				history.push('/guest_home')
 			}
 		} else {
 			dispatch(signAsGuest());
-			history.push('/guest_home')
 		}
 	});
 };

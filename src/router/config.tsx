@@ -104,12 +104,20 @@ const routes: IRoute[] = [
 			},
 			{
 				path: '/products/*',
-				component: lazy(() => import('../pages/NotFound')),
+				component: lazy(() => import('../pages/util/NotFound')),
 				exact: false,
 				private: true,
 				fallback: <Loader />,
 			},
 		],
+	},
+	{
+		path: '/users',
+		component: lazy(() => import('../pages/admin')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: () => <AppNav />,
+		permissions: [UserRole.ADMIN],
 	},
 	{
 		path: '/chat',
@@ -130,6 +138,16 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/signup/SignUp')),
 		exact: false,
 		fallback: <Loader />,
+	},
+	{
+		path: '/about',
+		component: lazy(() => import('../pages/util/About')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: () => <AppNav />,
+		permissions: [
+			UserRole.GUEST
+		]
 	},
 	{
 		path: '/guest_home',
@@ -157,10 +175,9 @@ const routes: IRoute[] = [
 		exact: true,
 		fallback: <Loader />,
 	},
-
 	{
 		path: '*',
-		component: lazy(() => import('../pages/NotFound')),
+		component: lazy(() => import('../pages/util/NotFound')),
 		exact: false,
 		private: true,
 		fallback: <Loader />,

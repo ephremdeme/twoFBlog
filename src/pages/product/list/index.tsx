@@ -28,7 +28,7 @@ const ProductList = () => {
 			<Container>
 				{loadingProducts && <MiniLoader />}
 				{!productsLoaded && <ProductCardLoading loading={true} items={15} />}
-				<Grid container>
+				<Grid container spacing={2}>
 					<Grid item xs={12} md={9}>
 						<ProductListUser products={products} />
 					</Grid>
