@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
-import { createMuiTheme, ThemeProvider, makeStyles, Theme, createStyles, Container, Box } from '@material-ui/core';
-import { RootState } from './app/store';
-import { isLoggedIn } from './features/auth';
-import { useSelector, useDispatch } from 'react-redux';
+import {
+	createMuiTheme,
+	ThemeProvider,
+	makeStyles,
+	Theme,
+	createStyles,
+	Container,
+	Box,
+} from '@material-ui/core';
+import {RootState} from './app/store';
+import {isLoggedIn} from './features/auth';
+import {useSelector, useDispatch} from 'react-redux';
 import Router from './router/Router';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import routes, { IRoute } from './router/config';
-import { UserRole } from 'features/auth/types';
+import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
+import routes, {IRoute} from './router/config';
+import {UserRole} from 'features/auth/types';
 import AppNav from 'layouts/appLayout/AppNav';
 import Loading from './components/loading/Loading2';
-import Error from 'components/error/error'
+import Error from 'components/error/error';
 import Chat from 'pages/chat/chatbox';
 
 const drawerWidth = 240;
@@ -57,7 +65,6 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-
 function App() {
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const auth = useSelector((state: RootState) => state.auth);
@@ -71,38 +78,32 @@ function App() {
 	});
 
 	theme.overrides = {
-		MuiCardHeader:{
-			title:{
-				fontSize: '16px'
+		MuiCardHeader: {
+			title: {
+				fontSize: '16px',
 			},
-			subheader:{
-				fontSize: '15px'
-			}
-		}
-	}
+			subheader: {
+				fontSize: '15px',
+			},
+		},
+	};
 
 	useEffect(() => {
 		if (!auth.authenticated) {
-			dispatch(isLoggedIn())
+			dispatch(isLoggedIn());
 		}
 	}, []);
 
-
-	console.log('?', auth.authenticating)
-	console.log('???', auth.loaded)
+	console.log('?', auth.authenticating);
+	console.log('???', auth.loaded);
 
 	return (
 		<div>
 			{
-				// auth.authenticating && !auth.error ?
-				// 	<Loading /> :
-					!auth.authenticating && auth.error?
-					<Error/>:
-					<div className={classes.root}>
-						{auth.authenticating && !auth.error && <Loading/>}
-						{	
-							auth.loaded &&
-							<ThemeProvider theme={theme}>
+				<div className={classes.root}>
+					{auth.authenticating && !auth.error && <Loading />}
+					{auth.loaded && (
+						<ThemeProvider theme={theme}>
 							<BrowserRouter>
 								<Switch>
 									{routes.map((route: IRoute, index) => (
@@ -117,12 +118,15 @@ function App() {
 								<main className={classes.content}>
 									<div className={classes.toolbar}></div>
 									<Router routes={routes} />
-									{auth.role === UserRole.GUEST || auth.role === UserRole.USER && !auth.authenticating ? <Chat/> : null}
+									{auth.role === UserRole.GUEST ||
+									(auth.role === UserRole.USER && !auth.authenticating) ? (
+										<Chat />
+									) : null}
 								</main>
 							</BrowserRouter>
 						</ThemeProvider>
-						}
-					</div>
+					)}
+				</div>
 			}
 		</div>
 	);

@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 import {
 	Box,
 	Button,
 	Container,
 	Grid,
-	Link,
 	TextField,
 	Typography,
 	makeStyles,
@@ -23,8 +22,6 @@ import {
 	createUserWithEmailPassword,
 	setAuthFailure,
 } from '../../features/auth/index';
-import {UserRole} from 'features/user/types';
-import {Alert, AlertTitle} from '@material-ui/lab';
 import AuthAlert from './AuthAlert';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
 		height: '100%',
 		paddingBottom: theme.spacing(3),
 		paddingTop: theme.spacing(3),
+	},
+	login: {
+		textDecoration: 'none',
+		paddingLeft: '5px',
 	},
 }));
 
@@ -79,7 +80,6 @@ const LoginView = () => {
 				<Container maxWidth="sm">
 					<form>
 						<Box mb={3}>
-							<AuthAlert />
 							<Typography color="textPrimary" variant="h2">
 								Sign Up
 							</Typography>
@@ -89,8 +89,9 @@ const LoginView = () => {
 								variant="body2"></Typography>
 						</Box>
 						<Box mt={3} mb={1}>
+							<AuthAlert />
 							<Typography align="center" color="textSecondary" variant="body1">
-								Signup with email address
+								Sign Up with email address
 							</Typography>
 						</Box>
 						<TextField
@@ -146,6 +147,17 @@ const LoginView = () => {
 							</Button>
 						</Box>
 					</form>
+					<Typography style={{float: 'right'}} variant="body1">
+						Already a member?
+						<Button
+							variant="text"
+							component={Link}
+							color="primary"
+							to="/login"
+							className={classes.login}>
+							Login
+						</Button>
+					</Typography>
 				</Container>
 			</Box>
 		</>
