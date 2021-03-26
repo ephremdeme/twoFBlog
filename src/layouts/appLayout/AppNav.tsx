@@ -24,7 +24,7 @@ import Appbar from './Appbar';
 import Cookies from 'js-cookie';
 import {UserRole} from 'features/user/types';
 
-const drawerWidth = 240;
+const drawerWidth = 210;
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({

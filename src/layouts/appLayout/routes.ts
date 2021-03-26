@@ -9,8 +9,8 @@ export interface INavRouter {
 const navs = {
 	[UserRole.ADMIN]: [
 		{
-			name: 'Admin Dashboard',
-			path: '/',
+			name: 'Dashboard',
+			path: '/dashboard',
 			icon: 'dashboard',
 		},
 		{
