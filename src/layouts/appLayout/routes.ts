@@ -15,8 +15,8 @@ const navs = {
 		},
 		{
 			name: 'Users',
-			path: '/users',
-			icon: 'users',
+			path: '/users/list',
+			icon: 'group',
 		},
 		{
 			name: 'Products',
@@ -31,7 +31,7 @@ const navs = {
 	],
 	[UserRole.SHOPE_ADMIN]: [
 		{
-			name: 'Admin Dashboard',
+			name: 'Dashboard',
 			path: '/',
 			icon: 'dashboard',
 		},
@@ -48,7 +48,7 @@ const navs = {
 	],
 	[UserRole.SELLER]: [
 		{
-			name: 'Admin Dashboard',
+			name: 'Dashboard',
 			path: '/',
 			icon: 'dashboard',
 		},
@@ -61,7 +61,7 @@ const navs = {
 
 	[UserRole.CUSTOMER_SERVICE]: [
 		{
-			name: 'Admin Dashboard',
+			name: 'Dashboard',
 			path: '/',
 			icon: 'dashboard',
 		},

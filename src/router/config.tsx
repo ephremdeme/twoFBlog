@@ -1,5 +1,5 @@
 import Loader from 'components/shared/Loader';
-import {UserRole} from 'features/auth/types';
+import { UserRole } from 'features/auth/types';
 import Appbar from 'layouts/appLayout/Appbar';
 import AppNav from 'layouts/appLayout/AppNav';
 import ProductAppBar from 'layouts/appLayout/product';
@@ -44,14 +44,6 @@ const routes: IRoute[] = [
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
 		permissions: [UserRole.ADMIN, UserRole.CUSTOMER_SERVICE],
-	},
-	{
-		path: '/users',
-		component: lazy(() => import('../pages/admin/UserManagement')),
-		exact: false,
-		fallback: <Loader />,
-		sidebar: () => <AppNav />,
-		permissions: [UserRole.ADMIN],
 	},
 	{
 		path: '/products/',
@@ -125,8 +117,27 @@ const routes: IRoute[] = [
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
+		routes: [
+			{
+				path: '/users/list',
+				component: lazy(() => import('../pages/admin/UserManagement')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [UserRole.ADMIN],
+			},
+			{
+				path: '/users/create',
+				component: lazy(() => import('../pages/admin/CreateUsers')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [UserRole.ADMIN],
+			},
+		],
 		permissions: [UserRole.ADMIN],
 	},
+
 	{
 		path: '/chat',
 		component: lazy(() => import('../pages/chat/ChatPage')),
