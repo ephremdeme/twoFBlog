@@ -201,7 +201,7 @@ export const updateBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 		...withoutId,
 		authorId: authorRef,
 	};
-	let data = await firestore.collection('blogs').doc(id).update(updatedBlog);
+	let data = await firestore.collection('blogs').doc(id).set(updatedBlog);
 	console.log('Updated Blog', data);
 
 	setTimeout(() => {
