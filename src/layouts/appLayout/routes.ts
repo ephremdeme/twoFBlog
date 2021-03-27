@@ -15,8 +15,18 @@ const navs = {
 		},
 		{
 			name: 'Users',
-			path: '/users/list',
+			path: '/auth/users',
 			icon: 'group',
+		},
+		{
+			name: 'Settings',
+			path: '/auth/list/admin',
+			icon: "settings",
+		},
+		{
+			name: 'Roles',
+			path: '/products/list/admin',
+			icon: "admin_panel_settings",
 		},
 		{
 			name: 'Products',
@@ -26,7 +36,7 @@ const navs = {
 		{
 			name: 'Blog',
 			path: '/editor',
-			icon: 'format_color_text',
+			icon: 'rss_feed',
 		},
 	],
 	[UserRole.SHOPE_ADMIN]: [

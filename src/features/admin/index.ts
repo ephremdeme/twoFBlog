@@ -16,7 +16,8 @@ export const {
 
 export const {
 	setLoadingUsers,
-	setUsers
+	setUsers,
+	setLastUserDoc
 } = adminSlice.actions;
 
 export const {fetchUsers} = thunks;

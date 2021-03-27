@@ -112,14 +112,14 @@ const routes: IRoute[] = [
 		],
 	},
 	{
-		path: '/users',
+		path: '/auth',
 		component: lazy(() => import('../pages/admin')),
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
 		routes: [
 			{
-				path: '/users/list',
+				path: '/auth/users',
 				component: lazy(() => import('../pages/admin/UserManagement')),
 				exact: false,
 				fallback: <Loader />,
@@ -127,7 +127,15 @@ const routes: IRoute[] = [
 				permissions: [UserRole.ADMIN],
 			},
 			{
-				path: '/users/create',
+				path: '/auth/user/:id',
+				component: lazy(() => import('../pages/admin/user/UserDetail')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [UserRole.ADMIN],
+			},
+			{
+				path: '/auth/create/user',
 				component: lazy(() => import('../pages/admin/CreateUsers')),
 				exact: false,
 				fallback: <Loader />,

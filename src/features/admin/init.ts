@@ -5,4 +5,5 @@ export const initialState: IAdminState = {
 	usersLoaded: false,
 	users: [],
 	filterableUsers: [],
+	lastUserDoc: null
 };

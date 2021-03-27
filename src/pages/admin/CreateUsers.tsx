@@ -139,8 +139,8 @@ const CreateNewUser = () => {
 							<MenuItem value="CUSTOMER_SERVICE">CUSTOMER_SERVICE</MenuItem>
 							<MenuItem value="USER">USER</MenuItem>
 							<MenuItem value="GUEST">GUEST</MenuItem>
-							{/* <MenuItem value="SHOPE_ADMIN">SHOPE_ADMIN</MenuItem> */}
-							{/* <MenuItem value="SELLER">SELLER</MenuItem> */}
+							<MenuItem value="SHOPE_ADMIN">SHOPE_ADMIN</MenuItem>
+							<MenuItem value="SELLER">SELLER</MenuItem>
 						</Select>
 					</FormControl>
 

@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
 				width: drawerWidth,
 				flexShrink: 0,
 			},
+			transition: 'width .1s ease-out',
 			"&:hover": {
 				width: 210,
 			}

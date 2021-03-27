@@ -229,8 +229,6 @@ export const createUserWithEmailPassword = (user: any): AppThunk => async (
 };
 
 
-
-
 export const createUserWithEmailPasswordAdmin = (user: any, userRole: string): AppThunk => async (
 	dispatch
 ) => {
@@ -255,16 +253,16 @@ export const createUserWithEmailPasswordAdmin = (user: any, userRole: string): A
 					'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
 				user_name: user.name,
 			};
-			// dispatch(
-			// 	setLogInSuccess({
-			// 		...current_user,
-			// 		authenticating: false,
-			// 		authenticated: true,
-			// 		isGuest: false,
-			// 		error: false,
-			// 		loaded: true
-			// 	})
-			// );
+			dispatch(
+				setLogInSuccess({
+					...current_user,
+					authenticating: false,
+					authenticated: true,
+					isGuest: false,
+					error: false,
+					loaded: true
+				})
+			);
 		},
 		(err) => {
 			dispatch(setFaliure(true));

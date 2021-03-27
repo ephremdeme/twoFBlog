@@ -21,5 +21,8 @@ export default {
 	setUsers: (state: IAdminState, action: PayloadAction<User[]>) => {
 		state.users = action.payload;
 		state.filterableUsers = action.payload;
+	},
+	setLastUserDoc: (state: IAdminState, action: PayloadAction<any>) => {
+		state.lastUserDoc = action.payload
 	}
 };

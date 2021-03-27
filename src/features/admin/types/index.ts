@@ -5,4 +5,5 @@ export interface IAdminState {
 	usersLoaded: boolean;
 	users: User[],
 	filterableUsers: User[],
+	lastUserDoc: any;
 };
