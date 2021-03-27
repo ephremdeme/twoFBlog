@@ -6,7 +6,6 @@ import {
 	CircularProgress,
 } from '@material-ui/core';
 import {red} from '@material-ui/core/colors';
-import loading from 'components/loading/loading';
 import React from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,8 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function EditorBackdrop(props: {loading: any}) {
-	console.log('Loading', props.loading);
-
 	const classes = useStyles();
 	return (
 		<Backdrop className={classes.backdrop} open={props.loading}>

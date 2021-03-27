@@ -23,12 +23,14 @@ import {
 	IBlog,
 	selectBlog,
 	selectBlogs,
+	setBlog,
 	setEditBlog,
 } from '../../features/editor';
 import Viewport from 'components/selectors/Viewport';
 import {RootState} from 'app/store';
 import {useDispatch, useSelector} from 'react-redux';
 import {BlogCard} from './BlogCrad';
+import {useCollection} from 'app/hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -80,6 +82,7 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 	// console.log('Equal', blog?.blogHash === hashed);
 
 	const user = useSelector((state: RootState) => state.auth);
+	const newId = useCollection('blogs').doc().id;
 
 	const blogs = useSelector(selectBlogs);
 	const blogEd = useSelector(selectBlog);
@@ -89,6 +92,21 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 		...blogEd,
 		authorId: blog?.authorId ? (blog?.authorId as string) : user.uid,
 	});
+
+	useEffect(() => {
+		if (edit !== undefined) return;
+		dispatch(
+			setBlog({
+				id: newId,
+				title: '',
+				blogHash: '',
+				date: new Date().toDateString(),
+				coverImageUrl: '',
+				authorId: user.uid,
+			})
+		);
+		console.log('EDit ', edit);
+	}, []);
 
 	useEffect(() => {
 		dispatch(
@@ -110,6 +128,7 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 	};
 
 	const [enabled, setEnabled] = useState(edit === undefined ? true : edit);
+
 	return (
 		<Editor resolver={resolvers} onRender={RenderNode}>
 			<CssBaseline />

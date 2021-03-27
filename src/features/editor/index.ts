@@ -102,7 +102,6 @@ export const fetchBlogs = (): AppThunk => async (dispatch) => {
 					authorId: data.authorId.id,
 				} as IBlog);
 				let refData = data.authorId.get();
-				console.log(data.authorId);
 
 				authors.push(refData);
 			});
@@ -118,6 +117,7 @@ export const fetchBlogs = (): AppThunk => async (dispatch) => {
 						user_name: value.data().user_name,
 						photo: value.data().photo,
 					};
+					return authorArr;
 				});
 
 				blogs = blogs.map((blog, index) => ({
@@ -151,7 +151,7 @@ export const fetchBlog = (blogId: string): AppThunk => async (dispatch) => {
 		},
 	} as IBlog;
 
-	console.log('FFFFF', blogData);
+	// console.log('FFFFF', blogData);
 	dispatch(setBlog(blogData));
 
 	dispatch(setLoadingBlog(false));
@@ -195,7 +195,6 @@ export const updateBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 	const firestore = FB.firestore();
 	let {id, authorId, ...withoutId} = blog;
 	dispatch(setLoadingBlog(true));
-	console.log('Update blog');
 
 	const authorRef = useCollection('users').doc(authorId);
 	let updatedBlog = {

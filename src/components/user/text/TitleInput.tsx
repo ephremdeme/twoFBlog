@@ -1,8 +1,6 @@
 import {useEditor, useNode, UserComponent} from '@craftjs/core';
-import {Box, makeStyles, TextField, Typography} from '@material-ui/core';
+import {makeStyles, TextField, Typography} from '@material-ui/core';
 import React from 'react';
-import {TextVariant} from './textSetting';
-import {FontChooser} from './textSetting';
 
 import WebFontLoader from 'webfontloader';
 import {useDispatch} from 'react-redux';
@@ -64,17 +62,8 @@ const TitleInput: UserComponent<{
 	date?: string;
 	variant?: string;
 	fontFamily?: string;
-}> = ({
-	handleChange,
-	placeholder,
-	value,
-	date,
-	author,
-	variant,
-	fontFamily,
-}) => {
+}> = ({handleChange, placeholder, value, date, author, fontFamily}) => {
 	const classes = useStyles();
-	const props = {fontFamily: fontFamily};
 
 	const dispatch = useDispatch();
 
@@ -83,11 +72,9 @@ const TitleInput: UserComponent<{
 		actions: {setProp},
 	} = useNode();
 
-	const {enabled} = useEditor((state, query) => ({
+	const {enabled} = useEditor((state) => ({
 		enabled: state.options.enabled,
 	}));
-
-	console.log('Font', fontFamily, 'variant', variant, value);
 
 	const handleChangeTitle = (
 		event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -127,16 +114,6 @@ const TitleInput: UserComponent<{
 				</>
 			)}
 		</div>
-	);
-};
-
-const TitleInputSetting = () => {
-	return (
-		<>
-			<div>
-				<FontChooser />
-			</div>
-		</>
 	);
 };
 

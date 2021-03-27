@@ -49,14 +49,11 @@ export const Divider: UserComponent<{
 }> = ({variant, orientation}) => {
 	const {
 		connectors: {connect, drag},
-		selected,
-		actions: {setProp},
 	} = useNode((state) => ({
 		selected: state.events.selected,
 		dragged: state.events.dragged,
 	}));
 	const classes = useStyles();
-	console.log(variant, orientation);
 
 	return (
 		<div
@@ -92,7 +89,6 @@ export default Divider;
 const DividerSettings = () => {
 	const {
 		actions: {setProp},
-		orientation,
 		variant,
 	} = useNode((node) => ({
 		orientation: node.data.props.orientation,
@@ -113,13 +109,13 @@ const DividerSettings = () => {
 			<IconButton
 				title="Middle Divider"
 				className={variant === 'middle' ? classes.button : ''}
-				onClick={(e) => setProp((props) => (props.variant = 'middle'))}>
+				onClick={() => setProp((props) => (props.variant = 'middle'))}>
 				<DividerMdIcon className="MuiSvgIcon-root" />
 			</IconButton>
 			<IconButton
 				title="Inset Divider"
 				className={variant === 'inset' ? classes.button : ''}
-				onClick={(e) => setProp((props) => (props.variant = 'inset'))}>
+				onClick={() => setProp((props) => (props.variant = 'inset'))}>
 				<DividerSmIcon className="MuiSvgIcon-root" />
 			</IconButton>
 		</div>
@@ -134,7 +130,6 @@ const SelectOrientation = () => {
 
 	const {
 		actions: {setProp},
-		orientation,
 	} = useNode((node) => ({
 		orientation: node.data.props.orientation,
 	}));

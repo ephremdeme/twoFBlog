@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import {Button, CssBaseline, List, ListItem} from '@material-ui/core';
+import {Button, CssBaseline} from '@material-ui/core';
 import {useEditor} from '@craftjs/core';
 import lz from 'lzutf8';
 import {Undo, Redo} from '@material-ui/icons';
@@ -61,16 +61,10 @@ export const NavBar: React.FC<{
 	setEnable: (enabled: boolean) => void;
 	handleChange: (title: string, value: string) => void;
 	values: IBlog;
-}> = ({enabled, setEnable, handleChange, values}) => {
+}> = ({enabled, setEnable, values}) => {
 	const classes = useStyles();
 
-	const {
-		connectors: {create},
-		actions,
-		query,
-		canRedo,
-		canUndo,
-	} = useEditor((state, query) => ({
+	const {actions, query, canRedo, canUndo} = useEditor((state, query) => ({
 		enabled: state.options.enabled,
 		canUndo: query.history.canUndo(),
 		canRedo: query.history.canRedo(),
@@ -79,7 +73,6 @@ export const NavBar: React.FC<{
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const user = useSelector((state: RootState) => state.auth);
 	const loading = useSelector(selectLoading);
-	console.log('ddd', loading);
 
 	const [message, setmessage] = useState('');
 

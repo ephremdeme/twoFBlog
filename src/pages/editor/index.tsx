@@ -8,7 +8,6 @@ import {BlogCard} from './BlogCrad';
 
 function BlogsIndex() {
 	const blogs = useAppSelector(selectBlogs);
-	const blogCollRef = useFirestore().collection('blogs');
 	const dispatch = useDispatch();
 	// const {data: RefData} = useFireCollectionRef<IBlog>(blogCollRef, setBlogs);
 
