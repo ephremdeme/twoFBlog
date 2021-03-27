@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {Redirect} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import {
 	Box,
 	Button,
 	Container,
 	Grid,
-	Link,
 	TextField,
 	Typography,
 	makeStyles,
 	Collapse,
+	CssBaseline,
 } from '@material-ui/core';
-import {ReactComponent as FacebookIcon} from '../../public/icons/icons8_google_logo_1.svg';
-import {ReactComponent as GoogleIcon} from '../../public/icons/icons8_google_logo_1.svg';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../app/store';
+import { ReactComponent as FacebookIcon } from '../../public/icons/icons8_google_logo_1.svg';
+import { ReactComponent as GoogleIcon } from '../../public/icons/icons8_google_logo_1.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 import {
 	singUpWithProvider,
 	signAsGuest,
@@ -22,8 +22,8 @@ import {
 	createUserWithEmailPassword,
 	setAuthFailure,
 } from '../../features/auth/index';
-import {UserRole} from 'features/user/types';
-import {Alert, AlertTitle} from '@material-ui/lab';
+import { UserRole } from 'features/user/types';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import AuthAlert from './AuthAlert';
 
 const useStyles = makeStyles((theme) => ({
@@ -62,10 +62,6 @@ const LoginView = () => {
 		}
 	};
 
-	if(auth.authenticated){
-		return <Redirect to="/dashboard"/>
-	}
-
 	return (
 		<Box
 			display="flex"
@@ -73,22 +69,14 @@ const LoginView = () => {
 			height="100%"
 			justifyContent="center"
 			className={classes.root}>
-			<Container maxWidth="sm">
+			<CssBaseline />
+			<Container maxWidth="sm" style={{ maxWidth: '450px'}}>
 				<form>
 					<Box mb={3}>
 						<AuthAlert />
-						<Typography color="textPrimary" variant="h2">
+						<Box fontSize="2rem" fontWeight={700} textAlign="center">
 							Sign Up
-						</Typography>
-						<Typography
-							color="textSecondary"
-							gutterBottom
-							variant="body2"></Typography>
-					</Box>
-					<Box mt={3} mb={1}>
-						<Typography align="center" color="textSecondary" variant="body1">
-							Signup with email address
-						</Typography>
+						</Box>
 					</Box>
 					<TextField
 						fullWidth
@@ -96,7 +84,7 @@ const LoginView = () => {
 						margin="normal"
 						name="name"
 						type="text"
-						variant="outlined"
+						size="small"
 						error={auth.errorMessage !== undefined && name === ''}
 						value={name}
 						onChange={(e) => {
@@ -109,7 +97,7 @@ const LoginView = () => {
 						margin="normal"
 						name="email"
 						type="email"
-						variant="outlined"
+						size="small"
 						error={auth.errorMessage !== undefined && email === ''}
 						value={email}
 						onChange={(e) => {
@@ -122,25 +110,40 @@ const LoginView = () => {
 						margin="normal"
 						name="password"
 						type="password"
-						variant="outlined"
+						size="small"
 						error={auth.errorMessage !== undefined && password === ''}
 						value={password}
 						onChange={(e) => {
 							setPassword(e.target.value);
 						}}
 					/>
-					<Box my={2}>
-						<Button
-							color="primary"
-							fullWidth
-							size="large"
-							// type="submit"
-							variant="contained"
-							onClick={() => {
-								handleLogin();
-							}}>
-							Sign Up now
+					<Box display="flex" flexWrap>
+						<Box my={2} mx={3}>
+							<Button
+								disableElevation
+								color="primary"
+								fullWidth
+								// type="submit"
+								variant="contained"
+								onClick={() => {
+									handleLogin();
+								}}>
+								Sign Up now
 						</Button>
+						</Box>
+						<Box my={2} mx={3}>
+							<Button
+								disableElevation
+								color="primary"
+								fullWidth
+								// type="submit"
+								variant="contained"
+								component={Link}
+								to={'/login'}
+							>
+								Login
+						</Button>
+						</Box>
 					</Box>
 				</form>
 			</Container>

@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Redirect} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import {
 	Box,
 	Button,
@@ -11,10 +11,10 @@ import {
 	makeStyles,
 	CssBaseline,
 } from '@material-ui/core';
-import {ReactComponent as FacebookIcon} from '../../public/icons/icons8_google_logo_1.svg';
-import {ReactComponent as GoogleIcon} from '../../public/icons/icons8_google_logo_1.svg';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../app/store';
+import { ReactComponent as FacebookIcon } from '../../public/icons/icons8_google_logo_1.svg';
+import { ReactComponent as GoogleIcon } from '../../public/icons/icons8_google_logo_1.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 import {
 	singUpWithProvider,
 	signAsGuest,
@@ -67,22 +67,13 @@ const LoginView = () => {
 				height="100%"
 				justifyContent="center"
 				className={classes.root}>
-				<Container maxWidth="sm">
+				<Container maxWidth="sm" style={{ maxWidth: '400px' }}>
 					<form onSubmit={handleSubmit}>
 						<Box mb={3}>
 							<AuthAlert />
-							<Box textAlign="center" fontSize="3.4rem" fontWeight={700}>
+							<Box textAlign="center" fontSize="3rem" fontWeight={700}>
 								Login
 							</Box>
-							<Typography
-								color="textSecondary"
-								gutterBottom
-								variant="body2"></Typography>
-						</Box>
-						<Box mt={3} mb={1}>
-							<Typography align="center" color="textSecondary" variant="body1">
-								login with email address
-							</Typography>
 						</Box>
 						<TextField
 							fullWidth
@@ -90,7 +81,7 @@ const LoginView = () => {
 							margin="normal"
 							name="email"
 							type="email"
-							variant="outlined"
+							size="small"
 							value={email}
 							error={auth.errorMessage !== undefined && email === ''}
 							onChange={(e) => {
@@ -103,19 +94,19 @@ const LoginView = () => {
 							margin="normal"
 							name="password"
 							type="password"
-							variant="outlined"
+							size="small"
 							value={password}
 							error={auth.errorMessage !== undefined && password === ''}
 							onChange={(e) => {
 								setPassword(e.target.value);
 							}}
 						/>
-						<Box my={2}>
+						<Box my={2} display="flex" justifyContent="center">
 							<Button
+								disableElevation
 								color="primary"
 								fullWidth
-								size="large"
-								variant="outlined"
+								variant="contained"
 								onClick={() => {
 									handleLogin();
 								}}>
@@ -123,14 +114,15 @@ const LoginView = () => {
 							</Button>
 						</Box>
 					</form>
-					<Box>
-						<Box textAlign="center" fontWeight={600} fontSize="2rem" >--- OR ---</Box>
-						<Box >
+					<Box my={3}>
+						<Box display="flex" justifyContent="center">
 							<Button
 								fullWidth
+								size="large"
+								style={{ maxWidth: "250px", margin: "auto" }}
 								startIcon={<GoogleIcon width="30px" height="30px" />}
 								onClick={handleSubmit}
-								variant="outlined">
+							>
 								Login with Google
 							</Button>
 						</Box>
