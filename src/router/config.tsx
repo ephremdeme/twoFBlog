@@ -32,7 +32,7 @@ const routes: IRoute[] = [
 		path: '/',
 		exact: true,
 		redirect: {
-			page: '/dashboard',
+			page: '/products/list',
 		},
 		fallback: <Loader />,
 		permissions: [UserRole.GUEST, UserRole.USER],
@@ -112,13 +112,40 @@ const routes: IRoute[] = [
 		],
 	},
 	{
-		path: '/users',
+		path: '/auth',
 		component: lazy(() => import('../pages/admin')),
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
+		routes: [
+			{
+				path: '/auth/users',
+				component: lazy(() => import('../pages/admin/UserManagement')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [UserRole.ADMIN],
+			},
+			{
+				path: '/auth/user/:id',
+				component: lazy(() => import('../pages/admin/user/UserDetail')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [UserRole.ADMIN],
+			},
+			{
+				path: '/auth/create/user',
+				component: lazy(() => import('../pages/admin/CreateUsers')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [UserRole.ADMIN],
+			},
+		],
 		permissions: [UserRole.ADMIN],
 	},
+
 	{
 		path: '/chat',
 		component: lazy(() => import('../pages/chat/ChatPage')),

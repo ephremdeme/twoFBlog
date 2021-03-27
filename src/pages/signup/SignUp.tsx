@@ -1,24 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Redirect, Link} from 'react-router-dom';
 import {
 	Box,
 	Button,
 	Container,
-	Grid,
 	TextField,
 	Typography,
 	makeStyles,
-	Collapse,
 	CssBaseline,
 } from '@material-ui/core';
-import {ReactComponent as FacebookIcon} from '../../public/icons/icons8_google_logo_1.svg';
-import {ReactComponent as GoogleIcon} from '../../public/icons/icons8_google_logo_1.svg';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../app/store';
 import {
-	singUpWithProvider,
-	signAsGuest,
-	isLoggedIn,
 	createUserWithEmailPassword,
 	setAuthFailure,
 } from '../../features/auth/index';
@@ -53,8 +46,6 @@ const LoginView = () => {
 	const [password, setPassword] = useState('');
 	const [name, setName] = useState('');
 	const auth = useSelector((state: RootState) => state.auth);
-
-	console.log('Err msg', auth.errorMessage);
 
 	const [open, setOpen] = React.useState<boolean>(
 		auth.errorMessage !== undefined

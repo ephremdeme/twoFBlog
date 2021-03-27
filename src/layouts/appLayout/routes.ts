@@ -9,9 +9,24 @@ export interface INavRouter {
 const navs = {
 	[UserRole.ADMIN]: [
 		{
-			name: 'Admin Dashboard',
-			path: '/',
+			name: 'Dashboard',
+			path: '/dashboard',
 			icon: 'dashboard',
+		},
+		{
+			name: 'Users',
+			path: '/auth/users',
+			icon: 'group',
+		},
+		{
+			name: 'Settings',
+			path: '/auth/list/admin',
+			icon: "settings",
+		},
+		{
+			name: 'Roles',
+			path: '/products/list/admin',
+			icon: "admin_panel_settings",
 		},
 		{
 			name: 'Products',
@@ -21,7 +36,7 @@ const navs = {
 		{
 			name: 'Blog Editor',
 			path: '/editor',
-			icon: 'format_color_text',
+			icon: 'rss_feed',
 		},
 		{
 			name: 'Blogs',
@@ -31,7 +46,7 @@ const navs = {
 	],
 	[UserRole.SHOPE_ADMIN]: [
 		{
-			name: 'Admin Dashboard',
+			name: 'Dashboard',
 			path: '/',
 			icon: 'dashboard',
 		},
@@ -48,7 +63,7 @@ const navs = {
 	],
 	[UserRole.SELLER]: [
 		{
-			name: 'Admin Dashboard',
+			name: 'Dashboard',
 			path: '/',
 			icon: 'dashboard',
 		},
@@ -61,7 +76,7 @@ const navs = {
 
 	[UserRole.CUSTOMER_SERVICE]: [
 		{
-			name: 'Admin Dashboard',
+			name: 'Dashboard',
 			path: '/',
 			icon: 'dashboard',
 		},

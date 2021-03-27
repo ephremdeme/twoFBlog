@@ -2,14 +2,16 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import {IProduct} from 'features/product/types';
-import {Link} from 'react-router-dom';
-import {Chip, createStyles, IconButton, makeStyles, Theme} from '@material-ui/core';
-import {useSelector} from 'react-redux';
-import {RootState} from 'app/store';
-import {AddBoxOutlined} from '@material-ui/icons';
+import { IProduct } from 'features/product/types';
+import { Link } from 'react-router-dom';
+import { Chip, createStyles, IconButton, makeStyles, Theme } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import { RootState } from 'app/store';
+import { AddBoxOutlined } from '@material-ui/icons';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import Skeleton from '@material-ui/lab/Skeleton';
+
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -51,7 +53,7 @@ interface ProductCard {
 	product: IProduct;
 }
 
-const ProductCard = ({product}: ProductCard) => {
+const ProductCard = ({ product }: ProductCard) => {
 	const classes = useStyles();
 	const theme = useSelector((state: RootState) => state.app.appTheme);
 
@@ -74,6 +76,7 @@ const ProductCard = ({product}: ProductCard) => {
 							alt={product.name}
 							src={product.thumbnail}
 						/>
+						<Skeleton width="100%" height="200px" />
 						<Box className={`${classes.child} image_overlay`}>
 							<IconButton aria-label="add product to chart">
 								<AddShoppingCartIcon />
