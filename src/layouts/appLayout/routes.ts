@@ -1,5 +1,5 @@
-import {UserRole} from 'features/user/types';
 import React from 'react';
+import {UserRole} from 'features/user/types';
 export interface INavRouter {
 	name: string;
 	path: string;
@@ -21,12 +21,12 @@ const navs = {
 		{
 			name: 'Settings',
 			path: '/auth/list/admin',
-			icon: "settings",
+			icon: 'settings',
 		},
 		{
 			name: 'Roles',
 			path: '/products/list/admin',
-			icon: "admin_panel_settings",
+			icon: 'admin_panel_settings',
 		},
 		{
 			name: 'Products',
@@ -97,6 +97,28 @@ const navs = {
 		},
 	],
 	[UserRole.BLOGGER]: [
+		{
+			name: 'User Dashboard',
+			path: '/',
+			icon: 'dashboard',
+		},
+		{
+			name: 'Products',
+			path: '/products/list',
+			icon: 'scatter_plot',
+		},
+		{
+			name: 'Blog Editor',
+			path: '/editor',
+			icon: 'format_color_text',
+		},
+		{
+			name: 'Blogs',
+			path: '/blogs',
+			icon: 'book',
+		},
+	],
+	[UserRole.EDITOR]: [
 		{
 			name: 'User Dashboard',
 			path: '/',
