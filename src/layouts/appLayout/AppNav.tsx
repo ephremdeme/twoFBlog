@@ -61,8 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			background: theme.palette.background.default,
 			width: drawerWidth,
 			border: 'none',
-			borderTop: 'none',
-			boxShadow: "0 15px 5px rgba(0,0,0,0.2)",
+			borderRight: '1px solid #666',
 			marginTop: '63px',
 			transition: 'width .3s',
 			"&:hover": {
@@ -122,7 +121,6 @@ export default function AppNav(props: Props) {
 
 	const drawer = (
 		<div>
-			<Divider />
 			<List>
 				{navs.map((nav: INavRouter, i: number) => (
 					<ListItem
