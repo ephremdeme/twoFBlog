@@ -228,6 +228,52 @@ export const createUserWithEmailPassword = (user: any): AppThunk => async (
 	);
 };
 
+
+export const createUserWithEmailPasswordAdmin = (user: any, userRole: string): AppThunk => async (
+	dispatch
+) => {
+	const auth = firebase.auth();
+	const db = firebase.firestore();
+	auth.createUserWithEmailAndPassword(user.email, user.password).then(
+		(_) => {
+			db.collection('users').doc(_.user?.uid).set({
+				email: _.user?.email,
+				user_name: user.name,
+				photo:
+					'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
+				isOnline: true,
+				uid: _.user?.uid,
+				role: userRole,
+			});
+			const current_user: any = {
+				uid: _.user?.uid,
+				role: userRole,
+				email: user.email,
+				photo:
+					'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
+				user_name: user.name,
+			};
+			dispatch(
+				setLogInSuccess({
+					...current_user,
+					authenticating: false,
+					authenticated: true,
+					isGuest: false,
+					error: false,
+					loaded: true
+				})
+			);
+		},
+		(err) => {
+			dispatch(setFaliure(true));
+			dispatch(setLoginInProgress(false))
+			dispatch(setAuthFailure(err.message));
+			return;
+		}
+	);
+};
+
+
 export const signInWithEmailPassword = (user: any): AppThunk => async (
 	dispatch
 ) => {

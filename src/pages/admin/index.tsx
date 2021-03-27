@@ -1,11 +1,18 @@
-import React from 'react'
+import React from 'react';
+import {IRoute} from 'router/config';
+import Router from '../../router/Router';
 
-const AdminUserRoleManagemnet = () => {
-    return (
-        <div>
-            UserRole
-        </div>
-    )
+interface IProps {
+	routes: IRoute[]
 }
 
-export default AdminUserRoleManagemnet
+const AdminUserRoleManagemnet: React.FC<IProps> = ({ routes }) => {
+	return (
+		<div>
+			<Router routes={routes} />
+		</div>
+	);
+};
+
+export default AdminUserRoleManagemnet;
+

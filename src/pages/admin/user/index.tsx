@@ -18,7 +18,7 @@ const columns: GridColDef[] = [
 	// isOnline: boolean;
 ];
 
-const AdminList = () => {
+const UserList = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const users = useSelector((state: RootState) => state.admin.users);
@@ -103,4 +103,4 @@ const AdminList = () => {
 	);
 };
 
-export default AdminList;
+export default UserList;
