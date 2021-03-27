@@ -1,28 +1,24 @@
 import React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import {red} from '@material-ui/core/colors';
 import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
 import CardMedia from '@material-ui/core/CardMedia';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import {useSpring, animated} from 'react-spring';
 import Typography from '@material-ui/core/Typography';
 import {Link} from 'react-router-dom';
 import './styles.css';
-import ts from 'typescript';
-import {IBlog, selectLoading} from 'features/editor';
+import {IBlog} from 'features/editor';
 import {useSelector} from 'react-redux';
 import {useFireDelete} from 'hooks/useFirestore';
-import {Backdrop, CircularProgress} from '@material-ui/core';
 import EditorBackdrop from './EditorBackdrop';
 import {RootState} from 'app/store';
+import {useImageDirDelete} from 'hooks/useStorage';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -72,6 +68,8 @@ export const BlogCard: React.FC<{
 
 	const user = useSelector((state: RootState) => state.auth);
 
+	const {handleDirDelete} = useImageDirDelete('images/');
+
 	return (
 		<div className={classes.rootDiv}>
 			<animated.div
@@ -115,6 +113,7 @@ export const BlogCard: React.FC<{
 								disabled={loading}
 								onClick={(e) => {
 									deleteDoc(blog.id);
+									handleDirDelete(blog.id);
 								}}>
 								<DeleteIcon style={{color: 'red'}} />
 								<EditorBackdrop loading={loading} />
