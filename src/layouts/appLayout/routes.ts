@@ -14,6 +14,11 @@ const navs = {
 			icon: 'dashboard',
 		},
 		{
+			name: 'Users',
+			path: '/users',
+			icon: 'users',
+		},
+		{
 			name: 'Products',
 			path: '/products/list/admin',
 			icon: "scatter_plot",

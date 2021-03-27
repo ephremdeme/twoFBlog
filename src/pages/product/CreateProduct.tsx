@@ -99,58 +99,12 @@ const CreateProduct = () => {
 								Optionally you can add additional desciption with field name and
 								it's value.
 							</h5>
-							{descriptionList.map((desc, i) => {
-								return (
-									<Grid
-										container
-										spacing={2}
-										justify="center"
-										alignItems="flex-end">
-										<Grid item sm={12} md={5}>
-											<TextField
-												id="input-with-icon-grid"
-												name="description_field"
-												label="Field Name"
-												value={desc.description_field}
-												onChange={(e) => handleInputChange(e, i)}
-											/>
-										</Grid>
-										<Grid item sm={12} md={5}>
-											<TextField
-												id="input-with-icon-grid"
-												name="description"
-												label="Field Description"
-												multiline
-												rowsMax={20}
-												rows={3}
-												value={desc.description}
-												onChange={(e) => handleInputChange(e, i)}
-											/>
-										</Grid>
-										<Grid item sm={12} md={2}>
-											<Box display="flex" justifyContent="space-between">
-												{descriptionList.length !== 1 && (
-													<IconButton
-														aria-label="delete"
-														className={classes.margin}
-														onClick={() => handleRemoveClick(i)}>
-														<DeleteIcon fontSize="inherit" />
-													</IconButton>
-												)}
-												{descriptionList.length - 1 === i && (
-													<IconButton
-														aria-label="delete"
-														className={classes.margin}
-														onClick={handleAddClick}>
-														<AddBoxIcon fontSize="inherit" />
-													</IconButton>
-												)}
-											</Box>
-										</Grid>
-									</Grid>
-								
-								);
-							})}
+
+
+							
+
+
+
 							{generalError && <div>{generalError}</div>}
 							<Box mt={3} display="flex" justifyContent="center">
 								<Button variant="outlined" size="small" type="submit">
@@ -396,6 +350,11 @@ export default CreateProduct;
 // 									<Grid item>
 // 										<Controller
 // 											name="stock_qty"
+// 											control={control}
+// 											defaultValue=""
+// 											rules={{
+// 												required: true,
+// 											}}
 // 											as={
 // 												<TextField
 // 													id="stock_quantity"
@@ -409,11 +368,6 @@ export default CreateProduct;
 // 													error={fieldsErrors.stock_qty}
 // 												/>
 // 											}
-// 											control={control}
-// 											defaultValue=""
-// 											rules={{
-// 												required: true,
-// 											}}
 // 										/>
 // 									</Grid>
 // 								</Grid>

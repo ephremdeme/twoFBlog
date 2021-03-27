@@ -46,6 +46,14 @@ const routes: IRoute[] = [
 		permissions: [UserRole.ADMIN, UserRole.CUSTOMER_SERVICE],
 	},
 	{
+		path: '/users',
+		component: lazy(() => import('../pages/admin/UserManagement')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: () => <AppNav />,
+		permissions: [UserRole.ADMIN],
+	},
+	{
 		path: '/products/',
 		exact: false,
 		component: lazy(() => import('../pages/product/')),
