@@ -31,12 +31,17 @@ const navs = {
 		{
 			name: 'Products',
 			path: '/products/list/admin',
-			icon: "scatter_plot",
+			icon: 'scatter_plot',
 		},
 		{
-			name: 'Blog',
+			name: 'Blog Editor',
 			path: '/editor',
 			icon: 'rss_feed',
+		},
+		{
+			name: 'Blogs',
+			path: '/blogs',
+			icon: 'book',
 		},
 	],
 	[UserRole.SHOPE_ADMIN]: [
@@ -81,9 +86,14 @@ const navs = {
 			icon: 'scatter_plot',
 		},
 		{
-			name: 'Blog',
+			name: 'Blog Editor',
 			path: '/editor',
 			icon: 'format_color_text',
+		},
+		{
+			name: 'Blogs',
+			path: '/blogs',
+			icon: 'book',
 		},
 	],
 	[UserRole.BLOGGER]: [
@@ -98,9 +108,14 @@ const navs = {
 			icon: 'scatter_plot',
 		},
 		{
-			name: 'Blog',
+			name: 'Blog Editor',
 			path: '/editor',
 			icon: 'format_color_text',
+		},
+		{
+			name: 'Blogs',
+			path: '/blogs',
+			icon: 'book',
 		},
 	],
 	[UserRole.GUEST]: [
@@ -112,7 +127,7 @@ const navs = {
 		{
 			name: 'Blogs',
 			path: '/blogs',
-			icon: 'format_color_text',
+			icon: 'book',
 		},
 		{
 			name: 'About',
@@ -132,9 +147,9 @@ const navs = {
 			icon: 'scatter_plot',
 		},
 		{
-			name: 'Blog',
-			path: '/editor',
-			icon: 'format_color_text',
+			name: 'Blogs',
+			path: '/blogs',
+			icon: 'book',
 		},
 	],
 };

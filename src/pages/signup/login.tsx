@@ -1,26 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, {useState} from 'react';
+import {Redirect, Link} from 'react-router-dom';
 import {
 	Box,
 	Button,
 	Container,
-	Grid,
-	Link,
 	TextField,
 	Typography,
 	makeStyles,
 	CssBaseline,
 } from '@material-ui/core';
-import { ReactComponent as FacebookIcon } from '../../public/icons/icons8_google_logo_1.svg';
-import { ReactComponent as GoogleIcon } from '../../public/icons/icons8_google_logo_1.svg';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
+import {ReactComponent as GoogleIcon} from '../../public/icons/icons8_google_logo_1.svg';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../app/store';
 import {
 	singUpWithProvider,
-	signAsGuest,
-	isLoggedIn,
-	createUserWithEmailPassword,
 	signInWithEmailPassword,
+	setAuthFailure,
 } from '../../features/auth/index';
 import AuthAlert from './AuthAlert';
 
@@ -29,6 +24,13 @@ const useStyles = makeStyles((theme) => ({
 		height: '100%',
 		paddingBottom: theme.spacing(3),
 		paddingTop: theme.spacing(3),
+	},
+	signup: {
+		textDecoration: 'none',
+		paddingLeft: '5px',
+		fontWeight: 700,
+		fontSize: '1.15em',
+		color: theme.palette.text.secondary,
 	},
 }));
 
@@ -51,6 +53,8 @@ const LoginView = () => {
 				password,
 			};
 			dispatch(signInWithEmailPassword(user));
+		} else {
+			dispatch(setAuthFailure('Fill the forms first!'));
 		}
 	};
 
@@ -67,13 +71,23 @@ const LoginView = () => {
 				height="100%"
 				justifyContent="center"
 				className={classes.root}>
-				<Container maxWidth="sm" style={{ maxWidth: '400px' }}>
+				<Container maxWidth="sm" style={{maxWidth: '400px'}}>
 					<form onSubmit={handleSubmit}>
 						<Box mb={3}>
 							<AuthAlert />
 							<Box textAlign="center" fontSize="3rem" fontWeight={700}>
 								Login
 							</Box>
+							<Typography
+								color="textSecondary"
+								gutterBottom
+								variant="body2"></Typography>
+						</Box>
+						<Box mt={3} mb={1}>
+							<AuthAlert />
+							<Typography align="center" color="textSecondary" variant="body1">
+								Login with email address
+							</Typography>
 						</Box>
 						<TextField
 							fullWidth
@@ -114,19 +128,32 @@ const LoginView = () => {
 							</Button>
 						</Box>
 					</form>
-					<Box my={3}>
-						<Box display="flex" justifyContent="center">
-							<Button
-								fullWidth
-								size="large"
-								style={{ maxWidth: "250px", margin: "auto" }}
-								startIcon={<GoogleIcon width="30px" height="30px" />}
-								onClick={handleSubmit}
-							>
-								Login with Google
-							</Button>
+					<Typography style={{textAlign: 'end'}} variant="body1">
+						Don't have an account?
+						<Typography
+							variant="body1"
+							component={Link}
+							to="/signup"
+							className={classes.signup}>
+							Sign Up
+						</Typography>
+					</Typography>
+					<div>
+						<Box my={3}>
+							<Box textAlign="center" fontWeight={600} fontSize="2rem">
+								--- OR ---
+							</Box>
+							<Box>
+								<Button
+									fullWidth
+									startIcon={<GoogleIcon width="30px" height="30px" />}
+									onClick={handleSubmit}
+									variant="outlined">
+									Login with Google
+								</Button>
+							</Box>
 						</Box>
-					</Box>
+					</div>
 				</Container>
 			</Box>
 		</>

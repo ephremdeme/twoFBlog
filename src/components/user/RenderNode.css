@@ -50,6 +50,12 @@ svg {
 	height: auto !important;
 }
 
+#divider {
+	min-height: 10%;
+	min-width: fit-content;
+	width: fit-content !important;
+}
+
 .container-tag {
 	min-height: fit-content;
 	min-width: fit-content;
@@ -57,9 +63,9 @@ svg {
 
 .controled-width {
 	max-width: 100%;
-	min-width: 100px;
+	min-width: 10%;
 	max-height: 100%;
-	min-height: 150px;
+	min-height: 100px;
 	flex-grow: 1;
 	overflow-wrap: break-word;
 }

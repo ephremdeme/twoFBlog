@@ -1,5 +1,5 @@
 import Loader from 'components/shared/Loader';
-import { UserRole } from 'features/auth/types';
+import {UserRole} from 'features/auth/types';
 import Appbar from 'layouts/appLayout/Appbar';
 import AppNav from 'layouts/appLayout/AppNav';
 import ProductAppBar from 'layouts/appLayout/product';
@@ -172,9 +172,7 @@ const routes: IRoute[] = [
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
-		permissions: [
-			UserRole.GUEST
-		]
+		permissions: [UserRole.GUEST],
 	},
 	{
 		path: '/guest_home',
@@ -201,6 +199,7 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/editor')),
 		exact: true,
 		fallback: <Loader />,
+		sidebar: () => <AppNav />,
 	},
 	{
 		path: '*',
