@@ -5,6 +5,7 @@ import {RootState, AppThunk} from './../../app/store';
 import FB from '../../firebase/firebase';
 import {useEffect, useState} from 'react';
 import {useCollection} from 'app/hooks';
+import {useDispatch, useSelector} from 'react-redux';
 
 export interface IBlog {
 	id: string;
@@ -13,6 +14,7 @@ export interface IBlog {
 	date: string;
 	coverImageUrl: string;
 	authorId: string;
+	published: boolean;
 	author?: IAuthor;
 }
 
@@ -40,6 +42,7 @@ const initialState: IEditorState = {
 		date: new Date().toDateString(),
 		coverImageUrl: '',
 		authorId: '',
+		published: false,
 	},
 };
 
@@ -54,6 +57,20 @@ const editorSlice = createSlice({
 			// console.log('dispatched hook: ', action.payload);
 			state.blogs = action.payload;
 		},
+		updateBlogs: (
+			state: IEditorState,
+			action: PayloadAction<{id: string; published: boolean}>
+		) => {
+			// console.log('dispatched hook: ', action.payload);
+			state.blogs = state.blogs.map((blog) => {
+				if (blog.id === action.payload.id)
+					return {
+						...blog,
+						published: action.payload.published,
+					};
+				return blog;
+			});
+		},
 		deleteBlog: (state: IEditorState, action: PayloadAction<string>) => {
 			state.blogs = state.blogs.filter((blog) => blog.id !== action.payload);
 		},
@@ -62,7 +79,7 @@ const editorSlice = createSlice({
 		},
 		setEditBlog: (
 			state: IEditorState,
-			action: PayloadAction<{key: string; value: string}>
+			action: PayloadAction<{key: string; value: string | boolean}>
 		) => {
 			let {key, value} = action.payload;
 			state.blog = {
@@ -80,6 +97,7 @@ export const {
 	setBlogs,
 	setBlog,
 	setEditBlog,
+	updateBlogs,
 } = editorSlice.actions;
 
 export const fetchBlogs = (): AppThunk => async (dispatch) => {
@@ -176,7 +194,7 @@ export const useFetchBlog = (blogId: string) => {
 
 export const postBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 	const firestore = FB.firestore();
-	let {id, authorId, ...withoutId} = blog;
+	let {id, authorId, author, ...withoutId} = blog;
 	dispatch(setLoadingBlog(true));
 	const authorRef = useCollection('users').doc(authorId);
 	let updatedBlog = {
@@ -191,28 +209,62 @@ export const postBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 	}, 2000);
 };
 
-export const updateBlog = (blog: IBlog): AppThunk => async (dispatch) => {
+export const useAddBlog = () => {
+	const [loading, setloading] = useState<boolean>();
+	const dispatch = useDispatch();
+
+	const usersRef = useCollection('users');
+	const handleBlogPost = async (blog: IBlog) => {
+		setloading(true);
+		const firestore = FB.firestore();
+		let {id, authorId, author, ...withoutId} = blog;
+		const authorRef = usersRef.doc(authorId);
+		dispatch(setLoadingBlog(true));
+		let updatedBlog = {
+			...withoutId,
+			authorId: authorRef,
+		};
+		let data = await firestore.collection('blogs').add(updatedBlog);
+		console.log('Added Blog', data);
+
+		dispatch(setLoadingBlog(false));
+
+		setloading(false);
+	};
+
+	return {handleBlogPost, loading};
+};
+
+export const updateBlogPublish = (
+	id: string,
+	published: boolean
+): AppThunk => async (dispatch) => {
 	const firestore = FB.firestore();
-	let {id, authorId, ...withoutId} = blog;
 	dispatch(setLoadingBlog(true));
 
-	const authorRef = useCollection('users').doc(authorId);
-	let updatedBlog = {
-		...withoutId,
-		authorId: authorRef,
-	};
-	let data = await firestore.collection('blogs').doc(id).set(updatedBlog);
-	console.log('Updated Blog', data);
+	dispatch(
+		updateBlogs({
+			id: id,
+			published: published,
+		})
+	);
 
-	setTimeout(() => {
-		dispatch(setLoadingBlog(false));
-	}, 2000);
+	await firestore.collection('blogs').doc(id).update({
+		published: published,
+	});
+
+	dispatch(setLoadingBlog(false));
 };
 
 export const selectLoading = (state: RootState) => state.editor.loading;
 
 export const selectBlogs = (state: RootState) => state.editor.blogs;
 export const selectBlog = (state: RootState) => state.editor.blog;
+
+export const selectPublishedBlogs = (state: RootState) =>
+	state.editor.blogs.filter((blog) => blog.published === true);
+export const selectUnPublishedBlogs = (state: RootState) =>
+	state.editor.blogs.filter((blog) => blog.published === false);
 // selector field sample
 // export const selectCount = (state: RootState) => state.counter.value;
 
