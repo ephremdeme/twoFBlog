@@ -100,6 +100,11 @@ export const NavBar: React.FC<{
 			history.push('/blogs');
 		}
 	}, [uploadLoading, history]);
+	useEffect(() => {
+		if (deleteLoading !== undefined && !deleteLoading) {
+			history.push('/blogs');
+		}
+	}, [deleteLoading, history]);
 
 	const validateBlog = (blog: IBlog) => {
 		const {coverImageUrl, title} = blog;
