@@ -186,7 +186,14 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/editor/editor')),
 		exact: false,
 		fallback: <Loader />,
-		permissions: [UserRole.BLOGGER, UserRole.ADMIN],
+		permissions: [UserRole.BLOGGER, UserRole.ADMIN, UserRole.EDITOR],
+	},
+	{
+		path: '/blogs/list/admin',
+		component: lazy(() => import('../pages/editor/admin/index')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: () => <AppNav />,
 	},
 	{
 		path: '/blogs/:blogId',
