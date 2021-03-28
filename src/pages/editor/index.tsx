@@ -1,5 +1,5 @@
 import {Container, Grid} from '@material-ui/core';
-import {useAppSelector, useFirestore} from 'app/hooks';
+import {useAppSelector, useCollection, useFirestore} from 'app/hooks';
 import {fetchBlogs, IBlog, selectBlogs, setBlogs} from 'features/editor';
 import {useFireCollection, useFireCollectionRef} from 'hooks/useFirestore';
 import React, {useEffect} from 'react';
@@ -9,8 +9,6 @@ import {BlogCard} from './BlogCrad';
 function BlogsIndex() {
 	const blogs = useAppSelector(selectBlogs);
 	const dispatch = useDispatch();
-	// const {data: RefData} = useFireCollectionRef<IBlog>(blogCollRef, setBlogs);
-
 	useEffect(() => {
 		dispatch(fetchBlogs());
 	}, []);
