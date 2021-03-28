@@ -93,6 +93,13 @@ export const NavBar: React.FC<{
 			setEnable(enabled);
 		}
 	}, []);
+	const history = useHistory();
+
+	useEffect(() => {
+		if (uploadLoading !== undefined && !uploadLoading) {
+			history.push('/blogs');
+		}
+	}, [uploadLoading, history]);
 
 	const validateBlog = (blog: IBlog) => {
 		const {coverImageUrl, title} = blog;
