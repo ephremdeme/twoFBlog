@@ -64,7 +64,11 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
+const EditorPage: React.FC<{
+	edit: boolean;
+	blog?: IBlog;
+	deleteAble?: boolean;
+}> = ({edit, deleteAble, blog}) => {
 	const resolvers = {
 		TextEditAble,
 		Image,
@@ -88,13 +92,17 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 	const blogEd = useSelector(selectBlog);
 	// console.log(blogEd, blog);
 
-	const [values, setValues] = useState<IBlog>({
-		...blogEd,
-		authorId: blog?.authorId ? (blog?.authorId as string) : user.uid,
-	});
-
 	useEffect(() => {
-		if (edit !== undefined) return;
+		if (edit !== undefined) {
+			if (!blog?.published)
+				dispatch(
+					setEditBlog({
+						key: 'published',
+						value: user.role === 'EDITOR',
+					})
+				);
+			return;
+		}
 		dispatch(
 			setBlog({
 				id: newId,
@@ -103,9 +111,9 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 				date: new Date().toDateString(),
 				coverImageUrl: '',
 				authorId: user.uid,
+				published: user.role === 'EDITOR',
 			})
 		);
-		console.log('EDit ', edit);
 	}, []);
 
 	useEffect(() => {
@@ -134,6 +142,7 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 			<CssBaseline />
 			<NavBar
 				enabled={enabled}
+				deleteAble={deleteAble}
 				setEnable={setEnabled}
 				handleChange={handleChange}
 				values={blogEd}
@@ -155,8 +164,7 @@ const EditorPage: React.FC<{edit: boolean; blog?: IBlog}> = ({edit, blog}) => {
 								id="titleinputid"
 								is={TitleInput}
 								placeholder="Title ....."
-								value={values.title}
-								handleChange={handleChange}
+								value={blogEd.title}
 							/>
 
 							{/* <div className={classes.title}>
