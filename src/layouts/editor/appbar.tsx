@@ -8,13 +8,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import {Button, CssBaseline} from '@material-ui/core';
 import {useEditor} from '@craftjs/core';
 import lz from 'lzutf8';
-import {Undo, Redo} from '@material-ui/icons';
+import {Undo, Redo, Delete} from '@material-ui/icons';
 import {
 	IBlog,
 	postBlog,
 	selectLoading,
 	setEditBlog,
-	updateBlog,
+	useAddBlog,
 } from '../../features/editor';
 import {useAppDispatch} from '../../app/hooks';
 import {useSelector} from 'react-redux';
@@ -25,7 +25,9 @@ import Brightness4Icon from '@material-ui/icons/Brightness4';
 import {toggleTheme} from 'features/app';
 import EditorBackdrop from 'pages/editor/EditorBackdrop';
 import {ErrorAlert} from 'components/helper';
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
+import {useFireDelete} from 'hooks/useFirestore';
+import {useImageDirDelete} from 'hooks/useStorage';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -61,7 +63,8 @@ export const NavBar: React.FC<{
 	setEnable: (enabled: boolean) => void;
 	handleChange: (title: string, value: string) => void;
 	values: IBlog;
-}> = ({enabled, setEnable, values}) => {
+	deleteAble?: boolean;
+}> = ({enabled, setEnable, values, deleteAble}) => {
 	const classes = useStyles();
 
 	const {actions, query, canRedo, canUndo} = useEditor((state, query) => ({
@@ -73,6 +76,12 @@ export const NavBar: React.FC<{
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const user = useSelector((state: RootState) => state.auth);
 	const loading = useSelector(selectLoading);
+
+	const {loading: deleteLoading, deleteDoc} = useFireDelete('blogs');
+
+	const {loading: uploadLoading, handleBlogPost} = useAddBlog();
+
+	const {handleDirDelete} = useImageDirDelete('images/');
 
 	const [message, setmessage] = useState('');
 
@@ -151,8 +160,23 @@ export const NavBar: React.FC<{
 					<IconButton onClick={() => dispatch(toggleTheme(appTheme))}>
 						{appTheme ? <Brightness7Icon /> : <Brightness4Icon />}
 					</IconButton>
-					{(user.role === 'BLOGGER' || user.role === 'ADMIN') && (
+					{(user.role === 'BLOGGER' ||
+						user.role === 'ADMIN' ||
+						user.role === 'EDITOR') && (
 						<>
+							{deleteAble && (
+								<Button
+									variant="contained"
+									color="secondary"
+									disabled={deleteLoading}
+									onClick={(e) => {
+										deleteDoc(values.id);
+										handleDirDelete(values.id);
+									}}
+									startIcon={<Delete />}>
+									Delete
+								</Button>
+							)}
 							<Button
 								color="inherit"
 								onClick={() => {
@@ -185,27 +209,18 @@ export const NavBar: React.FC<{
 										})
 									)
 										return;
-									if (values.id === '')
-										dispatch(
-											postBlog({
-												...values,
-												blogHash: hash,
-											})
-										);
-									else {
-										// dispatch(
-										// 	postBlog({
-										// 		...values,
-										// 		blogHash: hash,
-										// 	})
-										// );
-										dispatch(
-											updateBlog({
-												...values,
-												blogHash: hash,
-											})
-										);
-									}
+
+									handleBlogPost({
+										...values,
+										blogHash: hash,
+									});
+									// dispatch(
+									// 	postBlog({
+									// 		...values,
+									// 		blogHash: hash,
+									// 	})
+									// );
+
 									console.log(values);
 								}}>
 								Publish
