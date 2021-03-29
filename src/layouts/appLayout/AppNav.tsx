@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		// list items
 		listItems: {
-			width: '90%',
+			width: '80%',
 			padding: '.5rem auto',
 			borderRadius: '4px',
 			margin: '5px auto',
@@ -142,7 +142,7 @@ export default function AppNav(props: Props) {
 							key={i}
 							className={classes.listItems}>
 							<ListItemIcon>
-								<Icon style={{fontSize: 20}}>{nav.icon}</Icon>
+								<Icon style={{fontSize: 20, marginLeft: '-4px'}}>{nav.icon}</Icon>
 							</ListItemIcon>
 						</ListItem>
 					</TooltipCustom>
