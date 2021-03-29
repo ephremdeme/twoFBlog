@@ -75,7 +75,7 @@ const LikeViewComponent: React.FC<IProps> = ({ id }) => {
   const handleComment = () => {
     getCollection(PDB.PRODCUTS).doc(id).collection('comments').add({
       comment: comment,
-      uid: userId
+      uid: getCollection('users').doc(userId)
     })
     setComment("");
   }
