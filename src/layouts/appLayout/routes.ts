@@ -43,6 +43,11 @@ const navs = {
 			path: '/blogs',
 			icon: 'book',
 		},
+		// {
+		// 	name: 'Chat',
+		// 	path: '/chat',
+		// 	icon: 'format_color_text',
+		// },
 	],
 	[UserRole.SHOPE_ADMIN]: [
 		{
@@ -85,6 +90,11 @@ const navs = {
 			path: '/products/list',
 			icon: 'scatter_plot',
 		},
+		// {
+		// 	name: 'Blog',
+		// 	path: '/editor',
+		// 	icon: 'format_color_text',
+		// },
 		{
 			name: 'Blog Editor',
 			path: '/editor',

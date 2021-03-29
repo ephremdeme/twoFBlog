@@ -4,13 +4,13 @@ import React, {
 } from 'react';
 import { Container, Grid, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
+import { RootState } from '../../../app/store';
 import {
 	sendRealTimeMessage,
 	getSupportUser,
 	setGTempo,
-} from '../../features/user';
-import { User, Conversation } from '../../features/user/types';
+} from '../../../features/user';
+import { User, Conversation } from '../../../features/user/types';
 import {
 	Paper,
 	styled,
@@ -126,9 +126,9 @@ const ChatPage: React.FC<{}> = () => {
 	const [showChatMobile, setShowChatMobile] = useState(false);
 
 	useEffect(() => {
-		dispatch(getSupportUser(uid));
+		dispatch(getAllUser());
 	}, []);
-
+	
 	const init_selected_user = (user: User) => {
 		setchatStart(false);
 		dispatch(setGTempo(false))
@@ -156,7 +156,6 @@ const ChatPage: React.FC<{}> = () => {
 				isView: false,
 				createdAt: new Date(),
 			};
-			console.log('CONTENT', messageContent);
 			dispatch(sendRealTimeMessage(messageContent));
 			setmessage('');
 		}
@@ -174,7 +173,7 @@ const ChatPage: React.FC<{}> = () => {
 							fontSize="1rem"
 							textAlign="center"
 							ml={4}
-						>
+							>
 							<Hidden mdUp implementation="css">
 								<IconButton
 									color="inherit"
@@ -289,7 +288,7 @@ const ChatPage: React.FC<{}> = () => {
 								</Box>
 							}
 							{state.users_admin && state.users_admin
-								.map((user: any, index) => {
+								.map((user: User, index) => {
 									return (
 										<Card
 											className={classes.root}
@@ -350,7 +349,7 @@ const ChatPage: React.FC<{}> = () => {
 											onChange={(e) => {
 												setmessage(e.target.value);
 											}}
-										/>
+											/>
 									</Box>
 									<Box flexShrink={1} display="flex" justifyContent="center">
 										<form onSubmit={handleSendMessage}>
