@@ -146,6 +146,11 @@ export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 					isOnline: true,
 					uid: responce.user?.uid,
 					role: UserRole.USER,
+					last_send: new Date(),
+					typing: {
+						isTyping: false,
+						isTypingTo: ""
+					}
 				})
 				.then(
 					async (_) => {
@@ -194,17 +199,22 @@ export const createUserWithEmailPassword = (user: any): AppThunk => async (
 				email: _.user?.email,
 				user_name: user.name,
 				photo:
-					'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
+					'https://i.imgur.com/Yuv7QE6.png',
 				isOnline: true,
 				uid: _.user?.uid,
 				role: UserRole.USER,
+				last_send: new Date(),
+				typing: {
+					isTyping: false,
+					isTypingTo: ""
+				}
 			});
 			const current_user: any = {
 				uid: _.user?.uid,
 				role: UserRole.USER,
 				email: user.email,
 				photo:
-					'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
+					'https://i.imgur.com/Yuv7QE6.png',
 				user_name: user.name,
 			};
 			dispatch(
@@ -240,17 +250,22 @@ export const createUserWithEmailPasswordAdmin = (user: any, userRole: string): A
 				email: _.user?.email,
 				user_name: user.name,
 				photo:
-					'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
+					'https://i.imgur.com/Yuv7QE6.png',
 				isOnline: true,
 				uid: _.user?.uid,
 				role: userRole,
+				last_send: new Date(),
+				typing: {
+					isTyping: false,
+					isTypingTo: ""
+				}
 			});
 			const current_user: any = {
 				uid: _.user?.uid,
 				role: userRole,
 				email: user.email,
 				photo:
-					'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
+					'https://i.imgur.com/Yuv7QE6.png',
 				user_name: user.name,
 			};
 			dispatch(
@@ -359,7 +374,7 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 	auth.onAuthStateChanged((user: any) => {
 		if (user) {
 			if (user.isAnonymous === false) {
-				console.log('[HE]', user);
+				console.log('[USER]', user);
 				db.collection('users')
 					.doc(user.uid)
 					.update({
@@ -396,7 +411,6 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 									error: false,
 									loaded: true
 								});
-								console.log(getState().auth);
 							});
 					}).catch(err => {
 						dispatch(setFaliure(true))

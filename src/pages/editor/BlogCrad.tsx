@@ -108,7 +108,9 @@ export const BlogCard: React.FC<{
 								<VisibilityIcon style={{color: 'skyblue'}} />
 							</IconButton>
 						</Link>
-						{(user.role === 'BLOGGER' || user.role === 'ADMIN') && (
+						{/* {(user.role === 'BLOGGER' ||
+							user.role === 'ADMIN' ||
+							user.role === 'EDITOR') && (
 							<IconButton
 								disabled={loading}
 								onClick={(e) => {
@@ -118,7 +120,7 @@ export const BlogCard: React.FC<{
 								<DeleteIcon style={{color: 'red'}} />
 								<EditorBackdrop loading={loading} />
 							</IconButton>
-						)}
+						)} */}
 					</CardActions>
 				</Card>
 			</animated.div>

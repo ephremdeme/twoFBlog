@@ -88,8 +88,6 @@ function Appbar({ history }: any): JSX.Element {
 		setMobileOpen(!mobileOpen);
 	};
 
-	console.log('confirm', auth.isGuest)
-
 	// user popover
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const handleUserPopoverClick = (event: any) => {
