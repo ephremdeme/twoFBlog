@@ -119,8 +119,16 @@ const routes: IRoute[] = [
 		sidebar: () => <AppNav />,
 		routes: [
 			{
+				path: '/auth/settings',
+				component: lazy(() => import('../pages/admin/Settings')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [UserRole.ADMIN],
+			},
+			{
 				path: '/auth/users',
-				component: lazy(() => import('../pages/admin/UserManagement')),
+				component: lazy(() => import('../pages/admin/user/')),
 				exact: false,
 				fallback: <Loader />,
 				sidebar: () => <AppNav />,
@@ -136,7 +144,7 @@ const routes: IRoute[] = [
 			},
 			{
 				path: '/auth/create/user',
-				component: lazy(() => import('../pages/admin/CreateUsers')),
+				component: lazy(() => import('../pages/admin/user/CreateNewUser')),
 				exact: false,
 				fallback: <Loader />,
 				sidebar: () => <AppNav />,
@@ -145,7 +153,6 @@ const routes: IRoute[] = [
 		],
 		permissions: [UserRole.ADMIN],
 	},
-
 	{
 		path: '/chat',
 		component: lazy(() => import('../pages/chat/ChatPage')),

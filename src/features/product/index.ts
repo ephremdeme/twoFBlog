@@ -32,6 +32,6 @@ export const {
 	selectFilterableProducts,
 	selectDistinctProductCatagorys
 } = selectors;
-export const {fetchProducts} = thunks;
+export const {fetchProducts, postProduct} = thunks;
 
 export default productSlice.reducer;
