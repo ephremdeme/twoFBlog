@@ -13,18 +13,23 @@ import { Box } from '@material-ui/core';
 const useStylesLoader = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
+			position: 'fixed',
+			width: '65vw',
+			height: '90vh',
 			display: 'flex',
 			alignItems: 'center',
 			justifyContent: 'center',
 			zIndex: 500,
 		},
 		card: {
+			transform: 'translate(-50%,-50%)',
 			background: 'rgba(0,0,0,0.2)',
 			padding: '.4rem',
 			borderRadius: 50,
 			display: 'flex',
 			alignItems: 'center',
 			justifyContent: 'center',
+			marginTop: ''
 		},
 		bottom: {
 			color: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
