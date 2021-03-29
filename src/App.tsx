@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {
 	createMuiTheme,
@@ -6,19 +6,15 @@ import {
 	makeStyles,
 	Theme,
 	createStyles,
-	Container,
-	Box,
 } from '@material-ui/core';
 import {RootState} from './app/store';
 import {isLoggedIn} from './features/auth';
 import {useSelector, useDispatch} from 'react-redux';
 import Router from './router/Router';
-import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import routes, {IRoute} from './router/config';
 import {UserRole} from 'features/auth/types';
-import AppNav from 'layouts/appLayout/AppNav';
 import Loading from './components/loading/Loading2';
-import Error from 'components/error/error';
 import Chat from 'pages/chat/chatbox';
 
 const drawerWidth = 240;
@@ -93,9 +89,6 @@ function App() {
 			dispatch(isLoggedIn());
 		}
 	}, []);
-
-	console.log('?', auth.authenticating);
-	console.log('???', auth.loaded);
 
 	return (
 		<div>
