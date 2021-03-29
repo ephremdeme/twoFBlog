@@ -55,14 +55,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TitleInput: UserComponent<{
-	handleChange: (title: string, value: string) => void;
 	value: string;
 	placeholder: string;
 	author?: string;
 	date?: string;
 	variant?: string;
 	fontFamily?: string;
-}> = ({handleChange, placeholder, value, date, author, fontFamily}) => {
+}> = ({placeholder, value, date, author, fontFamily}) => {
 	const classes = useStyles();
 
 	const dispatch = useDispatch();
@@ -80,7 +79,6 @@ const TitleInput: UserComponent<{
 		event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
 	) => {
 		setProp((props) => (props.value = event?.target.value), 500);
-		handleChange('title', event.target.value);
 		dispatch(setEditBlog({key: 'title', value: event.target.value}));
 	};
 

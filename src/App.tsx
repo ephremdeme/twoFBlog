@@ -111,8 +111,7 @@ function App() {
 								<main className={classes.content}>
 									<div className={classes.toolbar}></div>
 									<Router routes={routes} />
-									{auth.role === UserRole.GUEST ||
-									(auth.role === UserRole.USER && !auth.authenticating) ? (
+									{auth.role === UserRole.USER && !auth.authenticating ? (
 										<Chat />
 									) : null}
 								</main>
