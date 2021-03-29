@@ -9,6 +9,7 @@ import { RootState } from 'app/store';
 import { Box, ListItemText, Paper, styled, Typography, Toolbar, Fab, Zoom, useScrollTrigger, makeStyles } from '@material-ui/core';
 import { ReactComponent as SeenIcon } from "public/chat_icons/icons8_double_tick.svg";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { ReactComponent as UnseenIcon } from "public/chat_icons/icons8_checkmark.svg";
 
 const PaperList = styled(Paper)({
     height: 'calc(100vh - 180px)',
@@ -128,7 +129,7 @@ function Test(props: any) {
                                         display="flex"
                                         flexDirection="row"
                                         justifyContent={
-                                            message.user_uid_1 === props.uid_1
+                                            message.user_uid_1 === props.uid_2
                                                 ? 'flex-start'
                                                 : 'flex-end'
                                         }>
@@ -140,17 +141,21 @@ function Test(props: any) {
                                         display="flex"
                                         flexDirection="row"
                                         justifyContent={
-                                            message.user_uid_1 === props.uid_1
+                                            message.user_uid_1 === props.uid_2
                                                 ? 'flex-start'
                                                 : 'flex-end'
                                         }>
                                         <Box>
-                                            <TextPaper style={{ background: message.user_uid_1 === props.uid_1 ? '#7B1FA2' : '#716BE4' }}>{message.message}</TextPaper>
+                                            <TextPaper style={{ background: message.user_uid_1 === props.uid_2 ? '#7B1FA2' : '#716BE4' }}>{message.message}</TextPaper>
                                         </Box>
                                         {
                                             message.user_uid_1 === props.uid_1 && message.isView ? <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
                                                 <SeenIcon width="1rem" height="1rem" />
+                                            </Box> : message.user_uid_1 === props.uid_1 && !message.isView ?
+                                            <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
+                                                <UnseenIcon width="1rem" height="1rem" />
                                             </Box> : null
+                                            
                                         }
                                     </Box>
                                     <AlwaysScrollToBottom />
@@ -167,7 +172,7 @@ function Test(props: any) {
                                     display="flex"
                                     flexDirection="row"
                                     justifyContent={
-                                        message.user_uid_1 === props.uid_1
+                                        message.user_uid_1 === props.uid_2
                                             ? 'flex-start'
                                             : 'flex-end'
                                     }>
@@ -179,15 +184,18 @@ function Test(props: any) {
                                     display="flex"
                                     flexDirection="row"
                                     justifyContent={
-                                        message.user_uid_1 === props.uid_1
+                                        message.user_uid_1 === props.uid_2
                                             ? 'flex-start'
                                             : 'flex-end'
                                     }>
-                                    <TextPaper style={{ background: message.user_uid_1 === props.uid_1 ? '#7B1FA2' : '#716BE4' }}>{message.message}</TextPaper>
+                                    <TextPaper style={{ background: message.user_uid_1 === props.uid_2 ? '#7B1FA2' : '#716BE4' }}>{message.message}</TextPaper>
                                     {
                                         message.user_uid_1 === props.uid_1 && message.isView ? <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
                                             <SeenIcon width="1rem" height="1rem" />
-                                        </Box> : null
+                                        </Box> : message.user_uid_1 === props.uid_1 && !message.isView ?
+                                            <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
+                                                <UnseenIcon width="1rem" height="1rem" />
+                                            </Box> : null
                                     }
                                 </Box>
                             </Box>

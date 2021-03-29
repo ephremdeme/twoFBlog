@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'app/store';
 import { Box, ListItemText, Paper, styled, Typography } from '@material-ui/core';
 import { ReactComponent as SeenIcon } from "public/chat_icons/icons8_double_tick.svg";
+import { ReactComponent as UnseenIcon } from "public/chat_icons/icons8_checkmark.svg";
 
 const PaperList = styled(Paper)({
     height: 'calc(100vh - 180px)',
@@ -107,9 +108,14 @@ function Test({ uid_1, uid_2 }: any) {
                                             <TextPaper style={{ background: message.user_uid_1 === uid_1 ? '#7B1FA2' : '#716BE4' }}>{message.message}</TextPaper>
                                         </Box>
                                         {
-                                            message.user_uid_1 === uid_1 && message.isView ? <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
-                                                <SeenIcon width="1rem" height="1rem" />
-                                            </Box> : null
+                                            message.user_uid_1 === uid_1 && message.isView ?
+                                                <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
+                                                    <SeenIcon width="1rem" height="1rem" />
+                                                </Box> :
+                                                message.user_uid_1 === uid_1 && !message.isView ?
+                                                    <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
+                                                        <UnseenIcon width="1rem" height="1rem" />
+                                                    </Box> : null
                                         }
                                     </Box>
                                     <AlwaysScrollToBottom />
@@ -146,7 +152,10 @@ function Test({ uid_1, uid_2 }: any) {
                                     {
                                         message.user_uid_1 === uid_1 && message.isView ? <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
                                             <SeenIcon width="1rem" height="1rem" />
-                                        </Box> : null
+                                        </Box> : message.user_uid_1 === uid_1 && !message.isView ?
+                                            <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
+                                                <UnseenIcon width="1rem" height="1rem" />
+                                            </Box> : null
                                     }
                                 </Box>
                             </Box>
