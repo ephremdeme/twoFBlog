@@ -10,8 +10,6 @@ import {
 	CssBaseline,
 	Dialog,
 	DialogActions,
-	DialogContent,
-	DialogContentText,
 	DialogTitle,
 } from '@material-ui/core';
 import {useEditor} from '@craftjs/core';

@@ -220,7 +220,7 @@ export const useFireDelete = <T>(
 	collection: string,
 	action?: ActionCreatorWithPayload<T, string>
 ) => {
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState<boolean>();
 	const [error, setError] = useState<string | null>(null);
 	const dispatch = useDispatch();
 	const docRef = useCollection(collection);
