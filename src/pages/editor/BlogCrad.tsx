@@ -103,7 +103,7 @@ export const BlogCard: React.FC<{
 						</Typography>
 					</CardContent>
 					<CardActions className={classes.cardIcons}>
-						<Link to={'/blogs/' + blog.id}>
+						<Link to={`/blogs/${blog.id}`}>
 							<IconButton>
 								<VisibilityIcon style={{color: 'skyblue'}} />
 							</IconButton>

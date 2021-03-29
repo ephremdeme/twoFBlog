@@ -18,9 +18,6 @@ import {
 	resetProductChart,
 	setChart,
 } from '../../../features/product';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ChatRoundedIcon from '@material-ui/icons/ChatRounded';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
@@ -33,6 +30,7 @@ import {PDB} from 'features/product/init';
 import {Link} from 'react-router-dom';
 import {getCollection} from 'app/hooks';
 import data from './data';
+import LikeViewComponent from './LikeViewComponent';
 
 const useStyles = makeStyles({
 	root: {
@@ -214,17 +212,7 @@ const ProductDetial = () => {
 								<Box fontWeight={300} fontSize="1rem" my={1}>
 									{product?.description}
 								</Box>
-								<Box>
-									<ButtonGroup
-										size="small"
-										aria-label="small outlined button group">
-										<Button startIcon={<VisibilityIcon />}>{view}</Button>
-										<Button startIcon={<FavoriteIcon />} onClick={handleLike}>
-											{like}
-										</Button>
-										{/* <Button startIcon={<ChatRoundedIcon />}>34</Button> */}
-									</ButtonGroup>
-								</Box>
+								<LikeViewComponent id={id} />
 							</Box>
 						</Grid>
 					</Grid>
