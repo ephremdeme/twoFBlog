@@ -8,6 +8,11 @@ export enum UserRole {
 	SELLER = 'SELLER'
 }
 
+interface Ityping {
+	isTyping: boolean;
+	isTypingTo: string;
+}
+
 export interface User {
 	uid: string;
 	role: UserRole;
@@ -16,6 +21,9 @@ export interface User {
 	user_name: string;
 	isOnline: boolean;
 	view: number;
+	key: string;
+	isTyping?: Ityping;
+	last_send: Date;
 }
 
 export interface Conversation {
@@ -33,5 +41,8 @@ export interface IUsers {
 	conversations_admin: Conversation[],
 	test: any,
 	pageVisit: number | null;
-	fetching: boolean
+	tempo: boolean;
+	openChatBox: boolean;
+	messageView: number;
+	isTyping: boolean
 }
