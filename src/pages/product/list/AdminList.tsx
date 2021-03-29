@@ -1,54 +1,43 @@
 import * as React from 'react';
-import {DataGrid, GridColDef} from '@material-ui/data-grid';
-import {useFireCollection, useFireCollectionRef} from 'hooks/useFirestore';
-import {PDB} from 'features/product/init';
-import {selectProducts, setProducts} from 'features/product';
-import {getDatabase, useAppSelector, useFirestore} from 'app/hooks';
-import {IProduct} from 'features/product/types';
+import { DataGrid, GridColDef, GridRowParams } from '@material-ui/data-grid';
+import { useFireCollection, useFireCollectionRef } from 'hooks/useFirestore';
+import { PDB } from 'features/product/init';
+import { selectProducts, setProducts } from 'features/product';
+import { getDatabase, useAppSelector, useFirestore } from 'app/hooks';
+import { IProduct } from 'features/product/types';
 import firebase from 'firebase';
-import {Box, Button} from '@material-ui/core';
-import {Link} from 'react-router-dom';
+import { Box, Button } from '@material-ui/core';
+import { Link, useHistory } from 'react-router-dom';
 import OverlayLoading from 'components/shared/OverlayLoading';
 
 
 const columns: GridColDef[] = [
-	{field: 'id', headerName: 'Id', width: 80},
-	{field: 'name', headerName: 'Name', width: 180},
-	{field: 'description', headerName: 'description', width: 180},
-	{field: 'qty', headerName: 'qty', width: 180, type: 'number'},
-	{field: 'price', headerName: 'price', width: 180, type: 'number'},
-	{field: 'currency', headerName: 'currency', width: 180},
-	{field: 'ratingReview', headerName: 'ratingReview', width: 180},
-	{field: 'catagory', headerName: 'catagory', width: 180},
-	{field: 'brand', headerName: 'brand', width: 180},
-	{field: 'condition', headerName: 'condition', width: 180},
-	{field: 'createdAt', headerName: 'createdAt', width: 180},
-	{field: 'updatedAt', headerName: 'updatedAt', width: 180},
+	{ field: 'id', headerName: 'Id', width: 80 },
+	{ field: 'name', headerName: 'Name', width: 180 },
+	{ field: 'qty', headerName: 'qty', width: 180, type: 'number' },
+	{ field: 'price', headerName: 'price', width: 180, type: 'number' },
+	{ field: 'condition', headerName: 'condition', width: 180 },
+	{ field: 'catagory', headerName: 'catagory', width: 180 },
 ];
 
 const AdminList = () => {
 	const blogs = useAppSelector(selectProducts);
 	const blogCollRef = useFirestore().collection(PDB.PRODCUTS);
-	const {data: RefData} = useFireCollectionRef<IProduct>(
+	const { data: RefData } = useFireCollectionRef<IProduct>(
 		blogCollRef,
 		setProducts
 	);
+	const history = useHistory();
 
 	const getData = (blogs: any) => {
 		if (blogs) {
 			return blogs.map((blog: any, id: number) => ({
-				id: id + 1,
+				id: blog.id,
 				name: blog.name,
-				description: blog.description,
 				qty: blog.qty,
 				price: blog.price,
-				currency: blog.currency,
-				ratingReview: blog.ratingReview,
-				catagory: blog.catagory,
-				brand: blog.brand,
 				condition: blog.condition,
-				createdAt: new Date().toTimeString(),
-				updatedAt: new Date().toTimeString()
+				catagory: blog.catagory,
 			}));
 		} else {
 			return [];
@@ -56,7 +45,7 @@ const AdminList = () => {
 	};
 
 	return (
-		<div style={{height: 400, width: '90%', margin: 'auto'}}>
+		<div style={{ height: 400, width: '90%', margin: 'auto' }}>
 			{blogs.length ? (
 				<>
 					<Box m={3} display="flex">
@@ -85,6 +74,13 @@ const AdminList = () => {
 							columns={columns}
 							pageSize={5}
 							checkboxSelection
+							onRowClick={(param: GridRowParams, event: React.MouseEvent) => {
+								const id = param.id;
+								const columns = param.columns;
+								const data = param.row;
+								history.push(`/products/${data.id}/detail`);
+								// setCurrentEditData(data)
+							}}
 						/>
 					)}
 				</>

@@ -306,7 +306,7 @@ export const signInWithEmailPassword = (user: any): AppThunk => async (
 						...current_user,
 						authenticating: false,
 						authenticated: true,
-						isGuest: true,
+						isGuest: false,
 						error: false,
 					});
 				},
