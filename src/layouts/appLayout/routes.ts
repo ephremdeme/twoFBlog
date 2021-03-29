@@ -19,6 +19,11 @@ const navs = {
 			icon: 'group',
 		},
 		{
+			name: 'Chat',
+			path: '/chat',
+			icon: 'email',
+		},
+		{
 			name: 'Settings',
 			path: '/auth/settings',
 			icon: 'settings',
@@ -42,6 +47,11 @@ const navs = {
 			name: 'Blogs',
 			path: '/blogs',
 			icon: 'book',
+		},
+		{
+			name: 'Blogs List',
+			path: '/blogs/list/admin',
+			icon: 'view_list',
 		},
 		// {
 		// 	name: 'Chat',
@@ -148,6 +158,11 @@ const navs = {
 			name: 'Blogs',
 			path: '/blogs',
 			icon: 'book',
+		},
+		{
+			name: 'Blogs List',
+			path: '/blogs/list/admin',
+			icon: 'view_list',
 		},
 	],
 	[UserRole.GUEST]: [
