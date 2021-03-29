@@ -20,8 +20,10 @@ const LikeViewComponent: React.FC<IProps> = ({ id }) => {
 
   useEffect(() => {
     const views$ = getCollection(PDB.PRODCUTS).doc(id).collection('views');
-    getCollection(PDB.PRODCUTS).doc(id).collection('views').add(userId)
-    setTimeout(() => setViewsCount(viewsCount+1), 2000);
+    getCollection(PDB.PRODCUTS).doc(id).collection('views').add({
+      id: userId
+    })
+    setTimeout(() => setViewsCount(viewsCount+1), 2000)
 
     collectionData(views$)
     .subscribe((data) => {
@@ -35,6 +37,7 @@ const LikeViewComponent: React.FC<IProps> = ({ id }) => {
   }, []);
 
   const handleLike = () => {
+    alert('k')
     getCollection(PDB.PRODCUTS).doc(id).collection('likes').add({
       id: userId
     })
@@ -47,6 +50,8 @@ const LikeViewComponent: React.FC<IProps> = ({ id }) => {
         aria-label="small outlined button group">
         <Button startIcon={<VisibilityIcon />}>{viewsCount}</Button>
         <Button startIcon={<FavoriteIcon />} onClick={() => handleLike} >
+          {/* onClick={handleLike}> */}
+          {/* {like} */}
           {likesCount}
         </Button>
         {/* <Button startIcon={<ChatRoundedIcon />}>34</Button> */}
