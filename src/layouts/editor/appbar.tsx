@@ -5,13 +5,20 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import {Button, CssBaseline} from '@material-ui/core';
+import {
+	Button,
+	CssBaseline,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+} from '@material-ui/core';
 import {useEditor} from '@craftjs/core';
 import lz from 'lzutf8';
 import {Undo, Redo, Delete} from '@material-ui/icons';
 import {
 	IBlog,
-	postBlog,
 	selectLoading,
 	setEditBlog,
 	useAddBlog,
@@ -86,6 +93,16 @@ export const NavBar: React.FC<{
 	const [message, setmessage] = useState('');
 
 	const [open, setopen] = useState(false);
+
+	const [openModal, setOpenModal] = React.useState(false);
+
+	const handleClickOpen = () => {
+		setOpenModal(true);
+	};
+
+	const handleClose = () => {
+		setOpenModal(false);
+	};
 
 	useEffect(() => {
 		if (!enabled) {
@@ -177,17 +194,42 @@ export const NavBar: React.FC<{
 						user.role === 'EDITOR') && (
 						<>
 							{deleteAble && (
-								<Button
-									variant="contained"
-									color="secondary"
-									disabled={deleteLoading}
-									onClick={(e) => {
-										deleteDoc(values.id);
-										handleDirDelete(values.id);
-									}}
-									startIcon={<Delete />}>
-									Delete
-								</Button>
+								<>
+									<Button
+										variant="outlined"
+										color="secondary"
+										disabled={deleteLoading}
+										onClick={handleClickOpen}
+										startIcon={<Delete />}>
+										Delete
+									</Button>
+
+									<Dialog
+										open={openModal}
+										onClose={handleClose}
+										aria-labelledby="alert-dialog-title"
+										aria-describedby="alert-dialog-description">
+										<DialogTitle id="alert-dialog-title">
+											{'Are you sure you want to delete?'}
+										</DialogTitle>
+
+										<DialogActions>
+											<Button onClick={handleClose} color="default">
+												Cancel
+											</Button>
+											<Button
+												onClick={() => {
+													deleteDoc(values.id);
+													handleDirDelete(values.id);
+													handleClose();
+												}}
+												color="secondary"
+												autoFocus>
+												Delete
+											</Button>
+										</DialogActions>
+									</Dialog>
+								</>
 							)}
 							<Button
 								color="inherit"
