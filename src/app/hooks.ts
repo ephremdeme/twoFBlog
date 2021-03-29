@@ -3,9 +3,9 @@ import {RootState, AppDispatch} from './store';
 import FB from '../firebase/firebase';
 const fbInstance = FB;
 
-const firestore = fbInstance.firestore();
-const storage = fbInstance.storage();
-const database = fbInstance.database();
+export const firestore = fbInstance.firestore();
+export const storage = fbInstance.storage();
+export const database = fbInstance.database();
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
