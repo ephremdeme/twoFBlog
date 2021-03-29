@@ -20,7 +20,7 @@ const navs = {
 		},
 		{
 			name: 'Settings',
-			path: '/auth/list/admin',
+			path: '/auth/settings',
 			icon: "settings",
 		},
 		{

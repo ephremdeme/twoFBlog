@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			border: 'none',
 			borderRight: '1px solid #666',
 			marginTop: '63px',
-			transition: 'width .3s',
+			transition: 'width .2s',
 			"&:hover": {
 				width: 210,
 			}
