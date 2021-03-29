@@ -37,7 +37,7 @@ const initialState: IEditorState = {
 		id: '',
 		title: '',
 		blogHash: '',
-		date: '',
+		date: new Date().toDateString(),
 		coverImageUrl: '',
 		authorId: '',
 	},
@@ -60,6 +60,16 @@ const editorSlice = createSlice({
 		setBlog: (state: IEditorState, action: PayloadAction<IBlog>) => {
 			state.blog = action.payload;
 		},
+		setEditBlog: (
+			state: IEditorState,
+			action: PayloadAction<{key: string; value: string}>
+		) => {
+			let {key, value} = action.payload;
+			state.blog = {
+				...state.blog,
+				[key]: value,
+			};
+		},
 	},
 });
 
@@ -69,6 +79,7 @@ export const {
 	deleteBlog,
 	setBlogs,
 	setBlog,
+	setEditBlog,
 } = editorSlice.actions;
 
 export const fetchBlogs = (): AppThunk => async (dispatch) => {
@@ -91,7 +102,6 @@ export const fetchBlogs = (): AppThunk => async (dispatch) => {
 					authorId: data.authorId.id,
 				} as IBlog);
 				let refData = data.authorId.get();
-				console.log(data.authorId);
 
 				authors.push(refData);
 			});
@@ -107,6 +117,7 @@ export const fetchBlogs = (): AppThunk => async (dispatch) => {
 						user_name: value.data().user_name,
 						photo: value.data().photo,
 					};
+					return authorArr;
 				});
 
 				blogs = blogs.map((blog, index) => ({
@@ -140,7 +151,7 @@ export const fetchBlog = (blogId: string): AppThunk => async (dispatch) => {
 		},
 	} as IBlog;
 
-	console.log('FFFFF', blogData);
+	// console.log('FFFFF', blogData);
 	dispatch(setBlog(blogData));
 
 	dispatch(setLoadingBlog(false));
@@ -172,21 +183,30 @@ export const postBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 		...withoutId,
 		authorId: authorRef,
 	};
-	firestore.collection('blogs').add(updatedBlog);
-	dispatch(setLoadingBlog(false));
+	let data = await firestore.collection('blogs').add(updatedBlog);
+	console.log('Added Blog', data);
+
+	setTimeout(() => {
+		dispatch(setLoadingBlog(false));
+	}, 2000);
 };
 
 export const updateBlog = (blog: IBlog): AppThunk => async (dispatch) => {
 	const firestore = FB.firestore();
 	let {id, authorId, ...withoutId} = blog;
 	dispatch(setLoadingBlog(true));
+
 	const authorRef = useCollection('users').doc(authorId);
 	let updatedBlog = {
 		...withoutId,
 		authorId: authorRef,
 	};
-	await firestore.collection('blogs').doc(id).update(updatedBlog);
-	dispatch(setLoadingBlog(false));
+	let data = await firestore.collection('blogs').doc(id).set(updatedBlog);
+	console.log('Updated Blog', data);
+
+	setTimeout(() => {
+		dispatch(setLoadingBlog(false));
+	}, 2000);
 };
 
 export const selectLoading = (state: RootState) => state.editor.loading;

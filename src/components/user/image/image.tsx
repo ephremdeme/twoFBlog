@@ -6,6 +6,9 @@ import {ImageSettings} from './imageSettings';
 import Firebase from '../../../firebase/firebase';
 import {CloudUpload, TapAndPlayOutlined} from '@material-ui/icons';
 import {Container} from '../../selectors/Container';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectBlog, setEditBlog} from 'features/editor';
+import {useImageUpload} from 'hooks/useStorage';
 
 const useStyles = makeStyles({
 	root: {
@@ -58,6 +61,7 @@ type ImageProp = {
 	small?: boolean;
 	fullWidth?: boolean;
 	imageUrl?: string;
+	imageName?: string;
 };
 
 export const Image: UserComponent<ImageProp> = ({
@@ -65,16 +69,21 @@ export const Image: UserComponent<ImageProp> = ({
 	small,
 	fullWidth,
 	imageUrl,
+	imageName,
 }) => {
 	const {
 		connectors: {connect, drag},
 		actions: {setProp},
 	} = useNode();
 	const classes = useStyles();
-	const [{alt, src, file}, setImg] = useState<any>({
+
+	const path = 'images/' + useSelector(selectBlog).id + '/';
+
+	const {url, handleUpload, error} = useImageUpload(path);
+
+	const [{alt, src}, setImg] = useState<any>({
 		src: imageUrl || 'null',
 		alt: '',
-		file: null,
 	});
 
 	const {enabled} = useEditor((state, query) => ({
@@ -84,40 +93,24 @@ export const Image: UserComponent<ImageProp> = ({
 
 	useEffect(() => setImageId(Date.now()), []);
 
-	const [loading, setLoading] = useState(false);
-	console.log('Image Url', imageUrl);
-
-	const [isUploaded, setIsUploaded] = useState(false);
+	useEffect(() => {
+		if (url) setProp((props) => (props.imageUrl = url), 500);
+	}, [url, setProp]);
 
 	const handleChange = (e: any) => {
-		if (e.target.files[0]) {
+		let image = e.target.files[0];
+		let name = Date.now() + image.name.replace(/\s+/g, '');
+
+		if (image) {
 			setImg({
-				src: URL.createObjectURL(e.target.files[0]),
-				alt: e.target.files[0].name,
-				file: e.target.files[0],
+				src: URL.createObjectURL(image),
+				alt: name,
+				file: image,
 			});
-			setProp(
-				(props) => (props.imageUrl = URL.createObjectURL(e.target.files[0])),
-				500
-			);
+			handleUpload(image, name, imageName);
+			setProp((props) => (props.imageUrl = URL.createObjectURL(image)), 500);
+			setProp((props) => (props.imageName = name), 500);
 		}
-	};
-
-	console.log('enabled', enabled);
-
-	const handleUpload = async () => {
-		setLoading(true);
-		const storageRef = Firebase.storage().ref();
-		const fileRef = storageRef.child('images/' + Date.now() + file.name);
-		await fileRef.put(file);
-		const url = await fileRef.getDownloadURL();
-		setImg((prevProp: any) => ({
-			...prevProp,
-			src: url,
-		}));
-		setProp((props) => (props.imageUrl = url), 500);
-		setIsUploaded(true);
-		setLoading(false);
 	};
 	return (
 		<div ref={(ref) => connect(drag(ref))}>
@@ -136,7 +129,7 @@ export const Image: UserComponent<ImageProp> = ({
 				</div>
 			</Container>
 
-			{enabled && !isUploaded && (
+			{enabled && (
 				<>
 					<input
 						accept="image/*"
@@ -155,14 +148,6 @@ export const Image: UserComponent<ImageProp> = ({
 							{src === 'null' ? ' Add Image' : 'Change Image'}
 						</Button>
 					</label>
-					{file && (
-						<Button
-							disabled={loading}
-							onClick={handleUpload}
-							startIcon={<CloudUpload />}>
-							Upload
-						</Button>
-					)}
 				</>
 			)}
 		</div>
@@ -176,66 +161,109 @@ Image.craft = {
 		bestFit: false,
 		fullWidth: false,
 		imageUrl: undefined,
+		imageName: undefined,
 	},
 	related: {
 		settings: ImageSettings,
 	},
 };
 
-export const CoverImage: React.FC<{
+interface ICoverImage {
 	handleChange: (key: string, value: string) => void;
 	imageUrl: string | undefined;
-}> = ({handleChange, imageUrl}) => {
+	bestFit?: boolean;
+	small?: boolean;
+	fullWidth?: boolean;
+	imageName?: string;
+}
+export const CoverImage: UserComponent<ICoverImage> = ({
+	handleChange,
+	imageUrl,
+	small,
+	bestFit,
+	fullWidth,
+	imageName,
+}) => {
+	const {
+		connectors: {connect, drag},
+		actions: {setProp},
+	} = useNode();
+
+	const {enabled} = useEditor((state, query) => ({
+		enabled: state.options.enabled,
+	}));
+
+	const path = 'images/' + useSelector(selectBlog).id + '/';
+
+	const {url, handleUpload, error} = useImageUpload(path);
+
 	const classes = useStyles();
-	const [{alt, src, file}, setImg] = useState<any>({
+	const [{alt, src}, setImg] = useState<any>({
 		src: imageUrl || null,
 		alt: '',
-		file: null,
 	});
 
-	const [isUploaded, setIsUploaded] = useState(false);
+	const dispatch = useDispatch();
 
-	const [loading, setLoading] = useState(false);
-
-	const handleUpload = async () => {
-		setLoading(true);
-		const storageRef = Firebase.storage().ref();
-		const fileRef = storageRef.child('images/' + Date.now() + file.name);
-		await fileRef.put(file);
-		const url = await fileRef.getDownloadURL();
-		setImg((prevProp: any) => ({
-			...prevProp,
-			src: url,
-			file: null,
-		}));
-		handleChange('coverImageUrl', url);
-		setIsUploaded(true);
-		setLoading(false);
-	};
+	const coverImageUrl = useSelector(selectBlog).coverImageUrl;
+	console.log('Image URL', coverImageUrl);
+	useEffect(() => {
+		if (url)
+			dispatch(
+				setEditBlog({
+					key: 'coverImageUrl',
+					value: url,
+				})
+			);
+	}, [url, dispatch]);
 
 	const handleFileChange = (e: any) => {
-		if (e.target.files[0]) {
+		let image = e.target.files[0];
+		let name = Date.now() + image.name.replace(/\s+/g, '');
+
+		if (image) {
 			setImg({
-				src: URL.createObjectURL(e.target.files[0]),
-				alt: e.target.files[0].name,
-				file: e.target.files[0],
+				src: URL.createObjectURL(image),
+				alt: name,
+				file: image,
 			});
+			handleUpload(image, name, imageName);
+			dispatch(
+				setEditBlog({
+					key: 'coverImageUrl',
+					value: URL.createObjectURL(e.target.files[0]),
+				})
+			);
+			// setProp((props) => (props.imageUrl = URL.createObjectURL(image)), 500);
+			setProp((props) => (props.imageName = name), 500);
 		}
 	};
 
-	console.log(!isUploaded, !imageUrl);
+	// console.log(small, bestFit, fullWidth);
 
 	return (
-		<div className={classes.root}>
-			<MuiContainer maxWidth={'xl'} className={classes.fill}>
+		<div ref={(ref) => connect(drag(ref))}>
+			<MuiContainer
+				maxWidth={'xl'}
+				className={
+					classes.fill +
+					' ' +
+					(small
+						? classes.small
+						: bestFit
+						? classes.bestFit
+						: fullWidth
+						? classes.fullWidth
+						: undefined)
+				}>
 				<img
-					src={src || imageUrl}
+					src={coverImageUrl}
 					alt={alt}
 					className={classes.img}
 					style={{maxWidth: '100%', height: 'auto', width: 'auto'}}
 				/>
 			</MuiContainer>
-			{!imageUrl && (
+			{!imageUrl && enabled && (
 				<div style={{margin: '20px'}}>
 					<input
 						accept="image/*"
@@ -251,16 +279,25 @@ export const CoverImage: React.FC<{
 							aria-label="upload picture"
 							component="span"
 							startIcon={<InsertPhotoIcon />}>
-							{!src ? ' Add Image' : 'Change Image'}
+							{!src ? ' Add Cover Image' : 'Change Image'}
 						</Button>
 					</label>
-					{file && (
-						<Button onClick={handleUpload} startIcon={<CloudUpload />}>
-							Upload
-						</Button>
-					)}
 				</div>
 			)}
 		</div>
 	);
+};
+
+CoverImage.craft = {
+	displayName: 'CoverImage',
+
+	props: {
+		small: false,
+		bestFit: false,
+		fullWidth: false,
+		imageName: undefined,
+	},
+	related: {
+		settings: ImageSettings,
+	},
 };

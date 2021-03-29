@@ -164,23 +164,49 @@ export const useFireCollectionRefSub = <T>(
  * @param {string} [id] - document id
  * @return {*}
  */
-export const useFireMutation = async (
-	collection: string,
-	data: firebase.default.firestore.DocumentData,
-	id?: string
-) => {
+export const useFireAdd = <T>(collection: string) => {
 	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+	const [data, setData] = useState<
+		firebase.default.firestore.DocumentData | undefined
+	>(undefined);
 	const dispatch = useDispatch();
 
 	const collRef = useCollection(collection);
-	if (id) {
-		await collRef.doc(id).update(data);
-		setLoading(false);
-	} else {
-		let doc = await (await collRef.add(data)).get();
-		let resp = {...doc.data(), id: doc.id};
-	}
-	return {loading};
+	const handleFunction = async (data: T) => {
+		try {
+			let doc = await (await collRef.add(data)).get();
+			let resp = {...doc.data(), id: doc.id};
+		} catch (error) {
+			setError(error);
+		}
+	};
+	return [handleFunction, {loading, error, data}];
+};
+
+export const useFireUpdateDoc = <T>(
+	collection: string,
+
+	action?: ActionCreatorWithPayload<T, string>
+) => {
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+	const [data, setData] = useState<
+		firebase.default.firestore.DocumentData | undefined
+	>(undefined);
+	const dispatch = useDispatch();
+
+	const collRef = useCollection(collection);
+	const handleFunction = async (data: T, id: string) => {
+		try {
+			await collRef.doc(id).update(data);
+			if (action) dispatch(action(data));
+			setLoading(false);
+		} catch (error) {
+			setError(error);
+		}
+	};
+	return [handleFunction, {loading, error, data}];
 };
 
 /**
@@ -190,8 +216,12 @@ export const useFireMutation = async (
  * @param {string} id - document id
  * @return {*}
  */
-export const useFireDelete = (collection: string) => {
+export const useFireDelete = <T>(
+	collection: string,
+	action?: ActionCreatorWithPayload<T, string>
+) => {
 	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 	const dispatch = useDispatch();
 	const docRef = useCollection(collection);
 	const deleteDoc = async (id: string) => {
@@ -202,9 +232,9 @@ export const useFireDelete = (collection: string) => {
 			dispatch(deleteBlog(id));
 		} catch (error) {
 			console.log(error);
-			throw error;
+			setError(error);
 		}
 	};
 
-	return {loading, deleteDoc};
+	return {loading, error, deleteDoc};
 };

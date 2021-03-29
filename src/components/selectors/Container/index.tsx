@@ -1,4 +1,3 @@
-import {Box} from '@material-ui/core';
 import React from 'react';
 import {Resizer} from '../Resizer';
 import {ContainerSettings} from './ContainerSettings';
@@ -64,7 +63,6 @@ export const Container = (props: Partial<Container>) => {
 		...defaultProps,
 		...props,
 	};
-	console.log('IDDD', id);
 
 	return (
 		<Resizer

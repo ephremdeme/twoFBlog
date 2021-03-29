@@ -1,8 +1,6 @@
-import React, {Ref, useEffect, useRef, useState} from 'react';
-import PropTypes, {ReactComponentLike} from 'prop-types';
-import {Button, makeStyles, Popper} from '@material-ui/core';
+import React, {useEffect, useRef, useState} from 'react';
+import {makeStyles} from '@material-ui/core';
 import {useNode, UserComponent} from '@craftjs/core';
-import sanitizeHtml from 'sanitize-html';
 import ContentEditable, {ContentEditableEvent} from 'react-contenteditable';
 import {TextSettings} from './textSetting';
 
@@ -28,8 +26,6 @@ const useStyles = makeStyles({
 
 export const TextEditAble: UserComponent<TextProps> = ({
 	text,
-	textAlign,
-	fontSize,
 	lineSpacing,
 	letterSpacing,
 	variant,
@@ -47,8 +43,6 @@ export const TextEditAble: UserComponent<TextProps> = ({
 		selected: state.events.selected,
 		dragged: state.events.dragged,
 	}));
-
-	console.log('font family', fontFamily);
 
 	const [editable, setEditable] = useState(false);
 
@@ -78,7 +72,7 @@ export const TextEditAble: UserComponent<TextProps> = ({
 	return (
 		<div
 			className={classes.root}
-			onClick={(e) => selected && setEditable(true)}
+			onClick={() => selected && setEditable(true)}
 			ref={(ref) => connect(drag(ref))}>
 			<ContentEditable
 				innerRef={inputRef}
