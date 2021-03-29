@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -20,11 +20,14 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import {useForm, Controller} from 'react-hook-form';
-// import ImageUploader from 'react-images-upload';
+import { useForm, Controller } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'app/store';
+import FB from '../../../firebase/firebase'
+import {postProduct} from '../../../features/product';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -42,45 +45,58 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Create() {
 	const classes = useStyles();
 	const history = useHistory();
+	const dispatch = useDispatch();
+	const userID = useSelector((state: RootState) => state.auth.uid);
 	const [title, setTitle] = useState('');
 	const [details, setDetails] = useState('');
 	const [titleError, setTitleError] = useState(false);
 	const [detailsError, setDetailsError] = useState(false);
+	const [file, setFile] = useState<any>(null);
 	const [category, setCategory] = useState('money');
+	const [condition, setCondition] = React.useState('');
+	
+	const handleConditionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+		setCondition(event.target.value as string);
+	};
 
-	const {handleSubmit, control, errors: fieldsErrors, reset} = useForm();
+	const { handleSubmit, control, errors: fieldsErrors, reset } = useForm();
 
-	const onSubmit = (data: any) => {
+	const onSubmit = async (data: any) => {
 		const descriptions = descriptionList.map(
 			(desc: any) => desc.description_field + '<:>' + desc.description
 		);
 
 		console.log('The Data: ', data);
+		console.log('file: ', file)
 
 		const dataUp = {
 			...data,
+			uid: userID,
 			addistionalDescription: descriptions,
+			condition: condition,
 		};
 
-		console.log(dataUp);
+		dispatch(
+			postProduct({
+				file: file,
+				data: dataUp,
+			})
+		);
 
-		// dispatch(
-		// 	postProduct({
-		// 		file: file,
-		// 		data: dataUp,
-		// 	})
-		// );
+		console.log('Data UP::::::::::::::;', dataUp);
 
 		// setTimeout(() => history.push('/product'), 1500);
 	};
 
-	// const onDrop = (picture: any) => {
-	// 	console.log(picture);
-	// };
+	// image file
+	const handleChange = (e: any) => {
+		let selected = e.target.files[0];
+		setFile(selected);
+	};
 
 	// additional description
 	const [descriptionList, setDescriptionList] = useState([
-		{description_field: '', description: ''},
+		{ description_field: '', description: '' },
 	]);
 	const handleInputChange = (
 		e: React.SyntheticEvent<EventTarget>,
@@ -104,13 +120,13 @@ export default function Create() {
 	const handleAddClick = () => {
 		setDescriptionList([
 			...descriptionList,
-			{description_field: '', description: ''},
+			{ description_field: '', description: '' },
 		]);
 	};
 	// additional description end
 
 	return (
-		<Container maxWidth="md" style={{marginTop: '1.3rem'}}>
+		<Container maxWidth="md" style={{ marginTop: '1.3rem' }}>
 			<Box fontSize="1.3rem" fontWeight={700}>
 				Create a new product
 			</Box>
@@ -119,7 +135,7 @@ export default function Create() {
 				<Grid container spacing={5}>
 					<Grid item sm={12} md={6}>
 						<Controller
-							name="stock_qty"
+							name="name"
 							control={control}
 							defaultValue=""
 							rules={{
@@ -135,13 +151,12 @@ export default function Create() {
 									fullWidth
 									required
 									error={titleError}
-									// name: string;
 								/>
 							}
 						/>
 
 						<Controller
-							name="stock_qty"
+							name="qty"
 							control={control}
 							defaultValue=""
 							rules={{
@@ -157,13 +172,12 @@ export default function Create() {
 									fullWidth
 									required
 									error={titleError}
-									// qty: string;
 								/>
 							}
 						/>
 
 						<Controller
-							name="stock_qty"
+							name="currency"
 							control={control}
 							defaultValue=""
 							rules={{
@@ -179,13 +193,13 @@ export default function Create() {
 									fullWidth
 									required
 									error={titleError}
-									// currency: string;
+								// currency: string;
 								/>
 							}
 						/>
 
 						<Controller
-							name="stock_qty"
+							name="price"
 							control={control}
 							defaultValue=""
 							rules={{
@@ -201,7 +215,7 @@ export default function Create() {
 									fullWidth
 									required
 									error={titleError}
-									// price: string;
+								// price: string;
 								/>
 							}
 						/>
@@ -209,7 +223,7 @@ export default function Create() {
 
 					<Grid item sm={12} md={6}>
 						<Controller
-							name="stock_qty"
+							name="brand"
 							control={control}
 							defaultValue=""
 							rules={{
@@ -225,13 +239,12 @@ export default function Create() {
 									fullWidth
 									required
 									error={titleError}
-									// brand: string;
 								/>
 							}
 						/>
 
 						<Controller
-							name="stock_qty"
+							name="catagory"
 							control={control}
 							defaultValue=""
 							rules={{
@@ -247,29 +260,38 @@ export default function Create() {
 									fullWidth
 									required
 									error={titleError}
-									// catagory: string;
 								/>
 							}
 						/>
 
 						{/* Image upload */}
+						<Button variant="outlined" size="small" component="label">
+							Upload Product Thumbnail Image
+							<input
+								name="images"
+								type="file"
+								multiple
+								accept="image/*"
+								hidden
+								onChange={handleChange}
+							/>
+						</Button>
 
-						<FormControl style={{minWidth: 250}}>
-							<InputLabel id="demo-simple-select-label">Age</InputLabel>
+						<FormControl style={{ minWidth: 250 }}>
+							<InputLabel id="demo-simple-select-label">Condition</InputLabel>
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
-								// value={age}
-								// onChange={handleChange}
+								value={condition}
+								onChange={handleConditionChange}
 							>
-								<MenuItem value={10}>Ten</MenuItem>
-								<MenuItem value={20}>Twenty</MenuItem>
-								<MenuItem value={30}>Thirty</MenuItem>
+								<MenuItem value="new">New</MenuItem>
+								<MenuItem value="used">Used</MenuItem>
 							</Select>
 						</FormControl>
 
 						<Controller
-							name="stock_qty"
+							name="description"
 							control={control}
 							defaultValue=""
 							rules={{
@@ -286,7 +308,6 @@ export default function Create() {
 									fullWidth
 									required
 									error={detailsError}
-									// description: string;
 								/>
 							}
 						/>
