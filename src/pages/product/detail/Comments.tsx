@@ -34,21 +34,25 @@ const Comments: React.FC<IProps> = ({ id }) => {
   const [comments, setComments] = useState<any[]>([]);
 
   useEffect(() => {
-    getCollection(PDB.PRODCUTS).doc(id).collection('comments').onSnapshot((commentRef: any) => {
-      const comments = commentRef.docs.map((doc: any) => doc.data())
-      const users: any[] = [];
-      setComments(comments.map((comment: any) => {
-        const commentDataWithUser: any = { comment: comment.comment }
-        getCollection('users').doc(comment.uid).get().then(((dataUser: any) => {
-          const user = dataUser.data();
-          commentDataWithUser.author = { userName: user.user_name, photo: user.photo, }
-          return commentDataWithUser
-        }));
-      }))
-      // console.log('Users', users)
-      console.log('Comments: ', comments)
-      setComments(comments)
-    });
+
+    const fetchUserComment = async () => {
+      getCollection(PDB.PRODCUTS).doc(id).collection('comments').onSnapshot((commentRef: any) => {
+        
+        // const comments = commentRef.docs.map((doc: any) => {
+        //   getCollection('users').doc(doc.data().uid).get().then(((dataUser: any) => {
+        //     let comm: any = { comment: doc.data().comment }
+        //     const user = dataUser.data();
+        //     comm.user = user
+        //   }));
+        //   return comm
+        // })
+
+        console.log('Comments: ', comments)
+        setComments(comments)
+      });
+    }
+
+    fetchUserComment()
   }, []);
 
   return (
