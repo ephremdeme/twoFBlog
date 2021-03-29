@@ -1,10 +1,10 @@
-import React, {Ref, useEffect, useRef, useState} from 'react';
-import PropTypes, {ReactComponentLike} from 'prop-types';
-import {Button, makeStyles, Popper} from '@material-ui/core';
+import React, {useEffect, useRef, useState} from 'react';
+import {makeStyles} from '@material-ui/core';
 import {useNode, UserComponent} from '@craftjs/core';
-import sanitizeHtml from 'sanitize-html';
 import ContentEditable, {ContentEditableEvent} from 'react-contenteditable';
 import {TextSettings} from './textSetting';
+
+import WebFontLoader from 'webfontloader';
 
 const useStyles = makeStyles({
 	root: {
@@ -26,11 +26,10 @@ const useStyles = makeStyles({
 
 export const TextEditAble: UserComponent<TextProps> = ({
 	text,
-	textAlign,
-	fontSize,
 	lineSpacing,
 	letterSpacing,
 	variant,
+	fontFamily,
 }) => {
 	const classes = useStyles();
 	const html = useRef<string>(text);
@@ -64,11 +63,16 @@ export const TextEditAble: UserComponent<TextProps> = ({
 		// html.current = sanitizeHtml(html.current);
 		// setProp((props) => (props.text = html.current), 500);
 	};
-
+	if (fontFamily)
+		WebFontLoader.load({
+			google: {
+				families: [fontFamily as string],
+			},
+		});
 	return (
 		<div
 			className={classes.root}
-			onClick={(e) => selected && setEditable(true)}
+			onClick={() => selected && setEditable(true)}
 			ref={(ref) => connect(drag(ref))}>
 			<ContentEditable
 				innerRef={inputRef}
@@ -81,8 +85,9 @@ export const TextEditAble: UserComponent<TextProps> = ({
 					lineHeight: lineSpacing,
 					letterSpacing: `${letterSpacing}px`,
 					overflowWrap: 'linebreak',
+					fontFamily: fontFamily,
 				}}
-				className={classes.text + ' ' + variant}
+				className={classes.text + ' ' + variant + ' apply-font'}
 				// style={{fontSize: `${fontSize}px`, textAlign}}
 				title="Editable"
 			/>
@@ -98,6 +103,7 @@ type TextProps = {
 	textRef?: React.RefObject<HTMLLinkElement>;
 	letterSpacing?: number;
 	variant?: string;
+	fontFamily?: string;
 };
 
 TextEditAble.craft = {

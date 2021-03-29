@@ -17,14 +17,20 @@ export const {
 	removeProductsAll,
 	removeProductChart,
 	resetProductChart,
-	resetChart
+	resetChart,
+	setFilterableProducts,
+	setFilterableProductsByField,
+	clearProductsFilter
 } = productSlice.actions;
 
 export const {
 	selectProducts,
 	selectLoadingProducts,
 	selectProdcutsLoaded,
-	selectChartTotal
+	selectChartTotal,
+	selectChartProductQty,
+	selectFilterableProducts,
+	selectDistinctProductCatagorys
 } = selectors;
 export const {fetchProducts} = thunks;
 

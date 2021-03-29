@@ -9,19 +9,39 @@ export interface INavRouter {
 const navs = {
 	[UserRole.ADMIN]: [
 		{
-			name: 'Admin Dashboard',
+			name: 'Dashboard',
 			path: '/dashboard',
 			icon: 'dashboard',
 		},
 		{
-			name: 'Products',
-			path: '/products/list/admin',
-			icon: "scatter_plot",
+			name: 'Users',
+			path: '/auth/users',
+			icon: 'group',
 		},
 		{
-			name: 'Blog',
+			name: 'Settings',
+			path: '/auth/settings',
+			icon: "settings",
+		},
+		{
+			name: 'Roles',
+			path: '/products/list/admin',
+			icon: "admin_panel_settings",
+		},
+		{
+			name: 'Products',
+			path: '/products/list/admin',
+			icon: 'scatter_plot',
+		},
+		{
+			name: 'Blog Editor',
 			path: '/editor',
-			icon: 'format_color_text',
+			icon: 'rss_feed',
+		},
+		{
+			name: 'Blogs',
+			path: '/blogs',
+			icon: 'book',
 		},
 		// {
 		// 	name: 'Chat',
@@ -31,8 +51,8 @@ const navs = {
 	],
 	[UserRole.SHOPE_ADMIN]: [
 		{
-			name: 'Admin Dashboard',
-			path: '/dashboard',
+			name: 'Dashboard',
+			path: '/',
 			icon: 'dashboard',
 		},
 		{
@@ -40,11 +60,16 @@ const navs = {
 			path: '/products/list',
 			icon: 'scatter_plot',
 		},
+		{
+			name: 'Users',
+			path: '/users',
+			icon: 'scatter_plot',
+		},
 	],
 	[UserRole.SELLER]: [
 		{
-			name: 'Admin Dashboard',
-			path: '/dashboard',
+			name: 'Dashboard',
+			path: '/',
 			icon: 'dashboard',
 		},
 		{
@@ -56,8 +81,8 @@ const navs = {
 
 	[UserRole.CUSTOMER_SERVICE]: [
 		{
-			name: 'Admin Dashboard',
-			path: '/dashboard',
+			name: 'Dashboard',
+			path: '/',
 			icon: 'dashboard',
 		},
 		{
@@ -71,9 +96,14 @@ const navs = {
 		// 	icon: 'format_color_text',
 		// },
 		{
-			name: 'Chat',
-			path: '/chat',
+			name: 'Blog Editor',
+			path: '/editor',
 			icon: 'format_color_text',
+		},
+		{
+			name: 'Blogs',
+			path: '/blogs',
+			icon: 'book',
 		},
 	],
 	[UserRole.BLOGGER]: [
@@ -88,26 +118,31 @@ const navs = {
 			icon: 'scatter_plot',
 		},
 		{
-			name: 'Blog',
+			name: 'Blog Editor',
 			path: '/editor',
 			icon: 'format_color_text',
+		},
+		{
+			name: 'Blogs',
+			path: '/blogs',
+			icon: 'book',
 		},
 	],
 	[UserRole.GUEST]: [
 		{
-			name: 'Guest Dashboard',
-			path: '/',
-			icon: 'dashboard',
-		},
-		{
 			name: 'Products',
 			path: '/products/list',
-			icon: 'scatter_plot',
+			icon: 'category',
 		},
 		{
-			name: 'Blog',
-			path: '/editor',
-			icon: 'format_color_text',
+			name: 'Blogs',
+			path: '/blogs',
+			icon: 'book',
+		},
+		{
+			name: 'About',
+			path: '/about',
+			icon: 'live_help',
 		},
 	],
 	[UserRole.USER]: [
@@ -122,9 +157,9 @@ const navs = {
 			icon: 'scatter_plot',
 		},
 		{
-			name: 'Blog',
-			path: '/editor',
-			icon: 'format_color_text',
+			name: 'Blogs',
+			path: '/blogs',
+			icon: 'book',
 		},
 	],
 };

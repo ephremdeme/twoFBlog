@@ -22,6 +22,7 @@ import {
 	ArrowForwardIos,
 	ExpandLess,
 	ExpandMore,
+	FontDownload,
 	FormatAlignCenter,
 	FormatAlignJustify,
 	FormatAlignLeft,
@@ -45,6 +46,9 @@ import {OverridableComponent} from '@material-ui/core/OverridableComponent';
 
 import {ReactComponent as FormatLetterSpacing} from '../../../public/icons/editor/Letter_Spacing.svg';
 import validUrl from 'valid-url';
+import {Font, FontManager} from '@samuelmeuli/font-manager';
+
+import FontPicker from 'font-picker-react';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -64,6 +68,22 @@ const useStyles = makeStyles((theme: Theme) =>
 			justifyContent: 'center',
 			display: 'flex',
 			alignItems: 'center',
+		},
+		fontPicker: {
+			color: theme.palette.text.secondary + ' !important',
+			backgroundColor: theme.palette.background.default + ' !important',
+			'& div': {
+				color: theme.palette.text.secondary + ' !important',
+				backgroundColor: theme.palette.background.default + ' !important',
+				'& ul': {
+					color: theme.palette.text.secondary + ' !important',
+					backgroundColor: theme.palette.background.default + ' !important',
+				},
+				'& button': {
+					color: theme.palette.text.secondary + ' !important',
+					backgroundColor: theme.palette.background.default + ' !important',
+				},
+			},
 		},
 	})
 );
@@ -410,7 +430,8 @@ const LineSpacing = () => {
 		</>
 	);
 };
-const TextVariant = () => {
+
+export const TextVariant = () => {
 	const classes = useStyles();
 
 	const {
@@ -539,6 +560,7 @@ const ListOrderButtons = () => {
 		</>
 	);
 };
+
 export const TextColor = () => {
 	const [foreColor, setForeColor] = useState('inhert');
 
@@ -669,6 +691,7 @@ export const TextSettings = () => {
 						<LinkButton cmd="createlink" name={'Link'}>
 							<InsertLink />
 						</LinkButton>
+						<FontChooser />
 					</>
 				)}
 				{active && (
@@ -743,6 +766,32 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 		textRef: node.data.props.textRef,
 	}));
 
+	const generateUrl = (url: string) => {
+		if (validUrl.isWebUri(url)) {
+			return url;
+		} else {
+			if (url.includes('http') || url.includes('https')) {
+				if (validUrl.isWebUri(url)) {
+					try {
+						let uri = new URL(url);
+						return uri.href;
+					} catch (error) {
+						return '';
+					}
+				}
+			} else {
+				let newUrl = `http://${url}`;
+				try {
+					let uri = new URL(newUrl);
+					return uri.href;
+				} catch (error) {
+					return '';
+				}
+			}
+		}
+		return '';
+	};
+
 	const [text, setText] = useState<string>();
 
 	// saved = [selection?.focusNode, selection?.focusOffset];
@@ -816,12 +865,20 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 			// selection?.collapse(saved[0], saved[1]);
 			document.getSelection()?.removeAllRanges();
 			document.getSelection()?.addRange(range);
-			if (!validUrl.isWebUri(link))
+			let newLink = validUrl.isWebUri(generateUrl(link));
+			console.log(newLink);
+			if (newLink) {
 				console.log('Restored caret', document.getSelection()?.rangeCount);
-			console.log(document.execCommand('createlink', false, link), 'Links');
+				console.log(
+					document.execCommand('createlink', false, newLink),
+					'Links'
+				);
+				handleClose(event);
+			} else {
+				setMessage('Invalid URL! Please insert again.');
+				setHasNoText(true);
+			}
 		}
-
-		handleClose(event);
 	};
 
 	function handleListKeyDown(event: React.KeyboardEvent) {
@@ -872,7 +929,7 @@ const LinkButton: React.FC<{name?: string; cmd: string; value?: string}> = ({
 									<MenuItem>
 										<TextField
 											onChange={handleChange}
-											placeholder="www.example.com"
+											placeholder="https://www.example.com"
 										/>
 										<Button onClick={handleSubmit}>Submit</Button>
 									</MenuItem>
@@ -963,6 +1020,89 @@ const LetterSpacing = () => {
 						className={classes.letterSpacing}
 						value={letterSpacing}
 						label="Letter Spacing"
+						onChange={handleChange}
+					/>
+				</ClickAwayListener>
+			</Popper>
+		</>
+	);
+};
+// AIzaSyBDdhhmoIgu0dsZnQGUgyKqllK5gdq6tNE
+export const FontChooser = () => {
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+	const {
+		actions: {setProp},
+		fontFamily,
+	} = useNode((node) => ({
+		fontFamily: node.data.props.fontFamily,
+	}));
+
+	const classes = useStyles();
+
+	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(anchorEl ? null : event.currentTarget);
+	};
+
+	const handleClose = (event: React.MouseEvent<EventTarget>) => {
+		setAnchorEl(null);
+	};
+
+	const open = Boolean(anchorEl);
+	const id = open ? 'simple-popper-font' : undefined;
+
+	const handleChange = (nextFont: Font) => {
+		console.log(nextFont.files);
+		console.log(nextFont.id);
+
+		setProp((props) => (props.fontFamily = nextFont.family), 500);
+	};
+
+	// private addFontLi(font: Font, listIndex?: number): void {
+	// 	const fontId = getFontId(font.family);
+	// 	const li = document.createElement("li");
+	// 	li.classList.add("font-list-item");
+	// 	const fontButton = document.createElement("button");
+	// 	fontButton.type = "button";
+	// 	fontButton.id = `font-button-${fontId}${this.fontManager.selectorSuffix}`;
+	// 	fontButton.classList.add("font-button");
+	// 	fontButton.textContent = font.family;
+
+	// 	// Update active font when font button is clicked
+	// 	const onActivate = (): void => {
+	// 		this.toggleExpanded();
+	// 		this.setActiveFont(font.family);
+	// 	};
+	// 	fontButton.onclick = onActivate;
+	// 	fontButton.onkeypress = onActivate;
+	// 	li.appendChild(fontButton);
+
+	// 	// Insert font button at the specified index. If not specified, append to the end of the list
+	// 	if (listIndex) {
+	// 		this.ul.insertBefore(li, this.ul.children[listIndex]);
+	// 	} else {
+	// 		this.ul.appendChild(li);
+	// 	}
+	// }
+
+	return (
+		<>
+			<IconButton
+				onClick={handleClick}
+				aria-describedby={id}
+				title="Choose Font">
+				<FontDownload />
+			</IconButton>
+			<Popper
+				id={id}
+				open={open}
+				anchorEl={anchorEl}
+				className={classes.fontPicker}>
+				<ClickAwayListener onClickAway={handleClose}>
+					<FontPicker
+						apiKey="AIzaSyBDdhhmoIgu0dsZnQGUgyKqllK5gdq6tNE "
+						limit={100}
+						activeFontFamily={fontFamily}
 						onChange={handleChange}
 					/>
 				</ClickAwayListener>

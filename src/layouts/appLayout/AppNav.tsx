@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -12,19 +12,19 @@ import {
 	Theme,
 	createStyles,
 } from '@material-ui/core/styles';
-import {useDispatch, useSelector} from 'react-redux';
-import {Box} from '@material-ui/core';
-import {Link} from 'react-router-dom';
-import {RootState} from '../../app/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import { RootState } from '../../app/store';
 import dashboardRoutes from './routes';
-import {INavRouter} from './routes';
+import { INavRouter } from './routes';
 import FB from '../../firebase/firebase';
 import Icon from '@material-ui/core/Icon';
 import Appbar from './Appbar';
 import Cookies from 'js-cookie';
-import {UserRole} from 'features/user/types';
+import { UserRole } from 'features/user/types';
 
-const drawerWidth = 240;
+const drawerWidth = 55;
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -36,12 +36,19 @@ const useStyles = makeStyles((theme: Theme) =>
 				width: drawerWidth,
 				flexShrink: 0,
 			},
+			transition: 'width .1s ease-out',
+			"&:hover": {
+				width: 210,
+			}
 		},
 		appBar: {
 			[theme.breakpoints.up('sm')]: {
 				width: `calc(100% - ${drawerWidth}px)`,
 				marginLeft: drawerWidth,
 			},
+			"&:hover": {
+				width: `calc(100% - ${210}px)`
+			}
 		},
 		menuButton: {
 			marginRight: theme.spacing(2),
@@ -52,8 +59,15 @@ const useStyles = makeStyles((theme: Theme) =>
 		// necessary for content to be below app bar
 		toolbar: theme.mixins.toolbar,
 		drawerPaper: {
+			background: theme.palette.background.default,
 			width: drawerWidth,
-			marginTop: '65px',
+			border: 'none',
+			borderRight: '1px solid #666',
+			marginTop: '63px',
+			transition: 'width .2s',
+			"&:hover": {
+				width: 210,
+			}
 		},
 		content: {
 			flexGrow: 1,
@@ -61,9 +75,14 @@ const useStyles = makeStyles((theme: Theme) =>
 		// list items
 		listItems: {
 			width: '90%',
+			padding: '.5rem auto',
 			borderRadius: '4px',
 			margin: '5px auto',
 			transition: 'all .4s',
+			'&:hover': {
+				background: '#1113',
+				transition: 'scale(1.1)'
+			},
 		},
 	})
 );
@@ -75,7 +94,7 @@ interface Props {
 
 export default function AppNav(props: Props) {
 	const classes = useStyles();
-	const {window} = props;
+	const { window } = props;
 	const dispatch = useDispatch();
 	const theme = useTheme();
 	const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -103,7 +122,6 @@ export default function AppNav(props: Props) {
 
 	const drawer = (
 		<div>
-			<Divider />
 			<List>
 				{navs.map((nav: INavRouter, i: number) => (
 					<ListItem
@@ -113,9 +131,9 @@ export default function AppNav(props: Props) {
 						key={i}
 						className={classes.listItems}>
 						<ListItemIcon>
-							<Icon style={{fontSize: 20}}>{nav.icon}</Icon>
+							<Icon style={{ fontSize: 20 }}>{nav.icon}</Icon>
 						</ListItemIcon>
-						<Box fontSize={14} fontWeight={500}>
+						<Box fontSize={14} fontWeight={600}>
 							{nav.name}
 						</Box>
 					</ListItem>

@@ -12,6 +12,7 @@ import {
 	ListItemText,
 	ButtonGroup,
 	Chip,
+	Divider,
 } from '@material-ui/core';
 import {RootState} from 'app/store';
 import React from 'react';
@@ -58,18 +59,14 @@ const Chart = () => {
 	};
 
 	const resetProdcutChart = (id: string) => {
-		dispatch(removeProductsAll(id));
-	};
-
-	const resetChartData = () => {
-		dispatch(resetChart);
+		dispatch(resetProductChart(id));
 	};
 
 	const renderProdcutList = () => {
 		const charts = Object.values(chart);
 
 		return charts.map((chart: any) => {
-			if (chart.products.length > 0) {
+			if (chart.products.length !== 0) {
 				return (
 					<List>
 						<ListItem>
@@ -130,6 +127,22 @@ const Chart = () => {
 						</ListItem>
 					</List>
 				);
+			} else {
+				<Box
+					minHeight="60vh"
+					minWidth="100%"
+					display="flex"
+					flexDirection="column"
+					justifyContent="center"
+					textAlign="center"
+					mt={6}>
+					<Box fontSize="2.6rem" fontWeight={600}>
+						No Product Selected in chart
+					</Box>
+					<Box fontSize="1rem" fontWeight={400}>
+						select a chart to buy...
+					</Box>
+				</Box>;
 			}
 		});
 	};
@@ -149,11 +162,17 @@ const Chart = () => {
 						</Box>
 					</Box>
 					<Box>{renderProdcutList()}</Box>
-
-					<Box my={2} mx={3} display="flex">
-						<Box fontWeight={600} fontSize="1.2rem"></Box>
+					<Divider />
+					<Box my={2} mx={3} display="flex" alignItems="center">
+						<Box fontWeight={600} fontSize="1.2rem" mr={2}>
+							Total Price
+						</Box>
 						<Box fontWeight={600} fontSize="1.2rem">
-							<Chip label={total} variant="outlined" />
+							{total === 0 ? (
+								<Chip component={Link} to="/products/list" label="Select a product" variant="outlined" />
+							) : (
+								<Chip label={total} variant="outlined" />
+							)}
 						</Box>
 					</Box>
 				</>
@@ -165,9 +184,8 @@ const Chart = () => {
 					flexDirection="column"
 					justifyContent="center"
 					textAlign="center"
-					mt={6}
-					>
-					<Box fontSize="2.6rem" fontWeight={600} >
+					mt={6}>
+					<Box fontSize="2.6rem" fontWeight={600}>
 						No Product Selected in chart
 					</Box>
 					<Box fontSize="1rem" fontWeight={400}>

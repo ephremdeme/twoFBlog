@@ -4,6 +4,7 @@ import productReducer from '../features/product';
 import appReducer from '../features/app';
 import userReducer from '../features/user';
 import authReducer from '../features/auth';
+import adminReducer from '../features/admin';
 import {
 	getFirebase,
 	actionTypes as rrfActionTypes
@@ -17,6 +18,7 @@ export const store = configureStore({
 		product: productReducer,
 		user: userReducer,
 		auth: authReducer,
+		admin: adminReducer
 	},
 	middleware: getDefaultMiddleware =>
 	getDefaultMiddleware({

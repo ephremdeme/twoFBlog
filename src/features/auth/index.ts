@@ -4,7 +4,6 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from 'app/store';
 import firebase, { provider } from '../../firebase/firebase';
 import Cookies from 'js-cookie';
-import history from "../../hooks/useRoutes";
 
 
 const initialState: User = {
@@ -135,8 +134,6 @@ export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 						error: false,
 						loaded: true
 					});
-					history.push('/dashboard')
-					window.location.href = window.location.href;
 				});
 		} else {
 			await db
@@ -173,8 +170,6 @@ export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 								loaded: true,
 							})
 						);
-						history.push('/dashboard')
-						window.location.href = window.location.href;
 					},
 					(err) => {
 						console.log('here is error', err.t, err.message);
@@ -222,8 +217,6 @@ export const createUserWithEmailPassword = (user: any): AppThunk => async (
 					loaded: true
 				})
 			);
-			history.push('/guest_home')
-			window.location.href = window.location.href;
 		},
 		(err) => {
 			console.log('here is error', err.t, err.message);
@@ -234,6 +227,52 @@ export const createUserWithEmailPassword = (user: any): AppThunk => async (
 		}
 	);
 };
+
+
+export const createUserWithEmailPasswordAdmin = (user: any, userRole: string): AppThunk => async (
+	dispatch
+) => {
+	const auth = firebase.auth();
+	const db = firebase.firestore();
+	auth.createUserWithEmailAndPassword(user.email, user.password).then(
+		(_) => {
+			db.collection('users').doc(_.user?.uid).set({
+				email: _.user?.email,
+				user_name: user.name,
+				photo:
+					'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
+				isOnline: true,
+				uid: _.user?.uid,
+				role: userRole,
+			});
+			const current_user: any = {
+				uid: _.user?.uid,
+				role: userRole,
+				email: user.email,
+				photo:
+					'https://lh4.googleusercontent.com/-djFaMA_PnyA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnO6peXlTzU6r1flAVs2tlgjoEl1Q/s96-c/photo.jpg',
+				user_name: user.name,
+			};
+			dispatch(
+				setLogInSuccess({
+					...current_user,
+					authenticating: false,
+					authenticated: true,
+					isGuest: false,
+					error: false,
+					loaded: true
+				})
+			);
+		},
+		(err) => {
+			dispatch(setFaliure(true));
+			dispatch(setLoginInProgress(false))
+			dispatch(setAuthFailure(err.message));
+			return;
+		}
+	);
+};
+
 
 export const signInWithEmailPassword = (user: any): AppThunk => async (
 	dispatch
@@ -270,8 +309,6 @@ export const signInWithEmailPassword = (user: any): AppThunk => async (
 						isGuest: true,
 						error: false,
 					});
-					history.push('/guest_home')
-					window.location.href = window.location.href;
 				},
 				(err) => {
 					console.log('here is error', err.t, err.message);
@@ -300,8 +337,6 @@ export const logoutUser = (uid: string): AppThunk => {
 					auth.signOut().then((_) => {
 						dispatch(setLoginInProgress(false));
 						dispatch(setLogoutSuccess());
-						history.push('/guest_home')
-						window.location.href = window.location.href;
 					});
 				},
 				(err) => {
@@ -383,11 +418,9 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 				dispatch(setLoginInProgress(false));
 				dispatch(setLogInSuccess({ ...current_guest }));
 				Cookies.set('user', { ...current_guest });
-				history.push('/guest_home')
 			}
 		} else {
 			dispatch(signAsGuest());
-			history.push('/guest_home')
 		}
 	});
 };

@@ -32,7 +32,7 @@ import {RootState} from 'app/store';
 import {PDB} from 'features/product/init';
 import {Link} from 'react-router-dom';
 import {getCollection} from 'app/hooks';
-import data from './data'
+import data from './data';
 
 const useStyles = makeStyles({
 	root: {
@@ -66,7 +66,6 @@ const ProductDetial = () => {
 	const [view, setView] = useState(1);
 	const chartProducts = useSelector((state: RootState) => state.product.chart);
 	const {data: product, loading} = useFireDoc<IProduct>(PDB.PRODCUTS, id);
-
 
 	useEffect(() => {
 		if (product) setLike(product.likes.length);
@@ -110,7 +109,6 @@ const ProductDetial = () => {
 				}}>
 				Add data to FB to fake the users
 			</Button> */}
-
 			{loading ? (
 				<OverlayLoading />
 			) : (
@@ -224,7 +222,7 @@ const ProductDetial = () => {
 										<Button startIcon={<FavoriteIcon />} onClick={handleLike}>
 											{like}
 										</Button>
-										<Button startIcon={<ChatRoundedIcon />}>34</Button>
+										{/* <Button startIcon={<ChatRoundedIcon />}>34</Button> */}
 									</ButtonGroup>
 								</Box>
 							</Box>

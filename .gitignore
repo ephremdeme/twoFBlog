@@ -30,3 +30,13 @@ package-lock.json
 .firebase/hosting.YnVpbGQ.cache
 .firebaserc
 firebase.json
+src/fonts/lisan/EthiopicLessan-Light.woff
+src/fonts/lisan/EthiopicLessan-Light.woff2
+src/fonts/lisan/EthiopicLessan-Regular.woff
+src/fonts/lisan/EthiopicLessan-Regular.woff2
+functions/.eslintrc.js
+functions/.gitignore
+functions/package.json
+functions/tsconfig.dev.json
+functions/tsconfig.json
+functions/src/index.ts
