@@ -1,10 +1,10 @@
 // import {fetchBlog, IBlog, selectBlog} from 'features/editor';
 import React, {useEffect} from 'react';
 import {useParams} from 'react-router-dom';
-import EditorPage from './editor';
 import {fetchBlog, selectBlog, selectLoading} from '../../features/editor';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from 'app/store';
+import EditorPage from 'pages/editor/editor';
 
 function ShowBlog() {
 	const {blogId} = useParams<{blogId: string}>();
