@@ -115,6 +115,11 @@ const navs = {
 			path: '/blogs',
 			icon: 'book',
 		},
+		{
+			name: 'Chat',
+			path: '/chat',
+			icon: 'email',
+		},
 	],
 	[UserRole.BLOGGER]: [
 		{
