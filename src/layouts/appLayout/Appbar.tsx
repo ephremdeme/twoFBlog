@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -6,11 +6,19 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { Avatar, Button, Divider, Grid, Hidden, Popover } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../../features/auth';
-import { RootState } from '../../app/store';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
+import {
+	Avatar,
+	Button,
+	Divider,
+	Grid,
+	Hidden,
+	Popover,
+	Tooltip,
+} from '@material-ui/core';
+import {useDispatch, useSelector} from 'react-redux';
+import {logoutUser} from '../../features/auth';
+import {RootState} from '../../app/store';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -24,9 +32,17 @@ import StarBorder from '@material-ui/icons/StarBorder';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
-import { toggleTheme } from 'features/app';
-import { Link, Route, Switch, withRouter } from 'react-router-dom';
-import routes, { IRoute } from 'router/config';
+import {toggleTheme} from 'features/app';
+import {
+	Link,
+	Route,
+	Switch,
+	useLocation,
+	useParams,
+	withRouter,
+} from 'react-router-dom';
+import routes, {IRoute} from 'router/config';
+import {Add} from '@material-ui/icons';
 
 const drawerWidth = 240;
 
@@ -44,7 +60,11 @@ const useStyles = makeStyles((theme: Theme) =>
 				display: 'none',
 			},
 		},
-		appBarTitlte: {},
+		appBarTitlte: {
+			textTransform: 'capitalize',
+			...theme.typography.h6,
+			fontWeight: 'bolder',
+		},
 		userPopoverContent: {
 			minWidth: '240px',
 		},
@@ -72,9 +92,14 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-function Appbar({ history }: any): JSX.Element {
+function Appbar({history}: any): JSX.Element {
 	const classes = useStyles();
 	const dispatch = useDispatch();
+
+	const location = useLocation();
+
+	const params = useParams();
+
 	const auth = useSelector((state: RootState) => state.auth);
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -107,10 +132,8 @@ function Appbar({ history }: any): JSX.Element {
 		setOpenPopMenu(!openPopMenu);
 	};
 	const signOut = () => {
-
 		dispatch(logoutUser(auth.uid));
-		history.push('/login')
-
+		history.push('/login');
 	};
 	// end of list popover
 
@@ -129,7 +152,7 @@ function Appbar({ history }: any): JSX.Element {
 							display="flex"
 							flexDirection="row"
 							alignItems="center">
-							<Box>
+							<Box display="flex" flexGrow="10">
 								<IconButton
 									color="inherit"
 									aria-label="open drawer"
@@ -140,9 +163,26 @@ function Appbar({ history }: any): JSX.Element {
 									<MenuIcon />
 								</IconButton>
 								<Typography variant="body1" className={classes.appBarTitlte}>
-									<b>DashBoard</b>
+									{Object.keys(params).length === 0
+										? location.pathname.split('/').slice(-1)[0]
+										: location.pathname.includes('blogs')
+										? 'Blogs'
+										: 'Products'}
 								</Typography>
 							</Box>
+							{(location.pathname.split('/').slice(-1)[0] === 'blogs' ||
+								location.pathname.indexOf('blogs')) &&
+								(auth.role === 'ADMIN' ||
+									auth.role === 'EDITOR' ||
+									auth.role === 'BLOGGER') && (
+									<Box display="flex" flexGrow="1">
+										<Tooltip title="Create New Blog">
+											<IconButton component={Link} to="/editor">
+												<Add />
+											</IconButton>
+										</Tooltip>
+									</Box>
+								)}
 
 							<Box ml="auto">
 								<Hidden smDown implementation="css">
@@ -162,15 +202,23 @@ function Appbar({ history }: any): JSX.Element {
 							</Box>
 
 							<Box mx={3}>
-							{
-							auth.isGuest && <Button variant="outlined" size="small" component={Link} to='/login'>
-								Login
-							</Button>
-							}
+								{auth.isGuest && (
+									<Button
+										variant="outlined"
+										size="small"
+										component={Link}
+										to="/login">
+										Login
+									</Button>
+								)}
 							</Box>
 						</Box>
 
-						<Box flexShrink={1} display="flex" alignItems="center" flexDirection="row">
+						<Box
+							flexShrink={1}
+							display="flex"
+							alignItems="center"
+							flexDirection="row">
 							<Avatar
 								aria-describedby={id}
 								className={classes.smallAvatar}
@@ -199,8 +247,8 @@ function Appbar({ history }: any): JSX.Element {
 												<Avatar alt="User" src={userAvatar} />
 											</Grid>
 											<Grid item>
-												<h3 style={{ margin: '0' }}>{userName}</h3>
-												<p style={{ margin: '0' }}>
+												<h3 style={{margin: '0'}}>{userName}</h3>
+												<p style={{margin: '0'}}>
 													{userStatus ? 'online' : 'offline'}
 												</p>
 											</Grid>
@@ -248,23 +296,29 @@ function Appbar({ history }: any): JSX.Element {
 												</ListItem>
 											</List>
 										</Collapse>
-										{auth.isGuest ?
-												<ListItem button>
-											<ListItemIcon>
-												<ExitToAppIcon />
-											</ListItemIcon>
-											<Box fontSize={14} fontWeight={500} onClick={() => { history.push('/login') }}>
-												Login
-													</Box>
-										</ListItem> : (
+										{auth.isGuest ? (
 											<ListItem button>
-											<ListItemIcon>
-												<ExitToAppIcon />
-											</ListItemIcon>
-											<Box fontSize={14} fontWeight={500} onClick={signOut}>
-												Logout
+												<ListItemIcon>
+													<ExitToAppIcon />
+												</ListItemIcon>
+												<Box
+													fontSize={14}
+													fontWeight={500}
+													onClick={() => {
+														history.push('/login');
+													}}>
+													Login
 												</Box>
-										</ListItem>
+											</ListItem>
+										) : (
+											<ListItem button>
+												<ListItemIcon>
+													<ExitToAppIcon />
+												</ListItemIcon>
+												<Box fontSize={14} fontWeight={500} onClick={signOut}>
+													Logout
+												</Box>
+											</ListItem>
 										)}
 										<ListItem button>
 											<ListItemIcon>

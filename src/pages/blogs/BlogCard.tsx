@@ -7,18 +7,16 @@ import {red} from '@material-ui/core/colors';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import {useSpring, animated} from 'react-spring';
 import Typography from '@material-ui/core/Typography';
 import {Link} from 'react-router-dom';
 import './styles.css';
 import {IBlog} from 'features/editor';
-import {useSelector} from 'react-redux';
-import {useFireDelete} from 'hooks/useFirestore';
-import EditorBackdrop from './EditorBackdrop';
 import {RootState} from 'app/store';
-import {useImageDirDelete} from 'hooks/useStorage';
+import auth from 'features/auth';
+import {useSelector} from 'react-redux';
+import {Edit} from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -64,11 +62,7 @@ export const BlogCard: React.FC<{
 		config: {mass: 1, tension: 150, friction: 20},
 	}));
 
-	const {loading, deleteDoc} = useFireDelete('blogs');
-
 	const user = useSelector((state: RootState) => state.auth);
-
-	const {handleDirDelete} = useImageDirDelete('images/');
 
 	return (
 		<div className={classes.rootDiv}>
@@ -103,24 +97,23 @@ export const BlogCard: React.FC<{
 						</Typography>
 					</CardContent>
 					<CardActions className={classes.cardIcons}>
+						{(user.role === 'ADMIN' ||
+							user.role === 'EDITOR' ||
+							user.role === 'BLOGGER') && (
+							<>
+								<Link to={`/blogs/${blog.id}/edit`}>
+									<IconButton>
+										<Edit style={{color: 'skyblue'}} />
+									</IconButton>
+								</Link>
+							</>
+						)}
+
 						<Link to={`/blogs/${blog.id}`}>
 							<IconButton>
 								<VisibilityIcon style={{color: 'skyblue'}} />
 							</IconButton>
 						</Link>
-						{/* {(user.role === 'BLOGGER' ||
-							user.role === 'ADMIN' ||
-							user.role === 'EDITOR') && (
-							<IconButton
-								disabled={loading}
-								onClick={(e) => {
-									deleteDoc(blog.id);
-									handleDirDelete(blog.id);
-								}}>
-								<DeleteIcon style={{color: 'red'}} />
-								<EditorBackdrop loading={loading} />
-							</IconButton>
-						)} */}
 					</CardActions>
 				</Card>
 			</animated.div>

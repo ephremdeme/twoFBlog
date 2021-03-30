@@ -34,10 +34,10 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-function EditorBackdrop(props: {loading: any}) {
+function EditorBackdrop(props: {loading: boolean | undefined}) {
 	const classes = useStyles();
 	return (
-		<Backdrop className={classes.backdrop} open={props.loading}>
+		<Backdrop className={classes.backdrop} open={props.loading as boolean}>
 			<CircularProgress color="inherit" />
 		</Backdrop>
 	);

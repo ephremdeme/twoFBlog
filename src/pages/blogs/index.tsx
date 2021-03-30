@@ -4,10 +4,14 @@ import {fetchBlogs, IBlog, selectBlogs, setBlogs} from 'features/editor';
 import {useFireCollection, useFireCollectionRef} from 'hooks/useFirestore';
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {BlogCard} from './BlogCrad';
+import {useParams} from 'react-router';
+import {BlogCard} from './BlogCard';
 
 function BlogsIndex() {
 	const blogs = useAppSelector(selectBlogs);
+	const params = useParams();
+	console.log(params, ' Params');
+
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(fetchBlogs());
