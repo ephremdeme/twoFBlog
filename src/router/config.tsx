@@ -135,6 +135,14 @@ const routes: IRoute[] = [
 				permissions: [UserRole.ADMIN],
 			},
 			{
+				path: '/auth/user/:id/edit',
+				component: lazy(() => import('../pages/admin/user/UserEdit')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [UserRole.ADMIN],
+			},
+			{
 				path: '/auth/user/:id',
 				component: lazy(() => import('../pages/admin/user/UserDetail')),
 				exact: false,
@@ -214,6 +222,13 @@ const routes: IRoute[] = [
 		exact: true,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
+	},
+	{
+		path: '/account-blocked',
+		component: lazy(() => import('../pages/util/BlockedPage')),
+		exact: false,
+		private: true,
+		fallback: <Loader />,
 	},
 	{
 		path: '*',

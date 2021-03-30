@@ -21,10 +21,11 @@ export interface User {
 	photo: string;
 	user_name: string;
 	isOnline: boolean;
-	view: number;
-	key: string;
+	view?: number;
+	key?: string;
 	isTyping?: Ityping;
-	last_send: Date;
+	last_send?: Date;
+	blocked?: boolean;
 }
 
 export interface Conversation {

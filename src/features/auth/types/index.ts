@@ -21,4 +21,5 @@ export interface User {
 	error: boolean;
 	errorMessage?: string;
 	loaded: boolean;
+	blocked?: boolean;
 }

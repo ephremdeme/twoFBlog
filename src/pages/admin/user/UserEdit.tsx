@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useHistory, useParams} from 'react-router';
+import {useParams} from 'react-router';
 import {useFireDoc} from '../../../hooks/useFirestore';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -34,38 +34,15 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-
-const UserDetail = () => {
+const UserEdit = () => {
 	const classes = useStyles();
 	const {id} = useParams();
-	const history = useHistory();
 	const {loading, data} = useFireDoc<User>('users', id);
-	const [editMode, setEditMode] = useState(false);
-
-	const getUserData = () => {
-		return (
-			data && (
-				<Grid item sm={12} md={5} lg={4}>
-					<Box fontWeight={500} fontSize="1.1rem" mb={1}>
-						{data.user_name}
-					</Box>
-					<Box fontWeight={500} fontSize="1rem" mb={1}>
-						{data.email}
-					</Box>
-					<Chip label={data.role} />
-					<Box fontWeight={500} fontSize="1rem" mb={1}>
-						{data.view}
-					</Box>
-				</Grid>
-			)
-		);
-	};
 
   const deleteUser = () => {
     getCollection('users').doc(id).delete()
-		history.push("/admin/users")
   }
-	
+
 	return (
 		<Container maxWidth="md">
 			{loading && !data && <LoadingOnly size={50} />}
@@ -84,9 +61,6 @@ const UserDetail = () => {
 							<IconButton aria-label="delete" onClick={deleteUser}>
 								<DeleteIcon fontSize="small" />
 							</IconButton>
-							<IconButton aria-label="delete" onClick={() => setEditMode(true)}>
-								<EditIcon fontSize="small" />
-							</IconButton>
 						</Box>
 					</Box>
 					<Divider style={{margin: '1rem 0 2rem'}} />
@@ -98,7 +72,7 @@ const UserDetail = () => {
 								src={data.photo}
 							/>
 						</Grid>
-						{!editMode ? getUserData() : <EditUserDetail user={data} id={id} />}
+						<EditUserDetail user={data} id={id} />
 					</Grid>
 				</>
 			)}
@@ -106,4 +80,4 @@ const UserDetail = () => {
 	);
 };
 
-export default UserDetail;
+export default UserEdit;

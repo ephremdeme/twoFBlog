@@ -11,7 +11,7 @@ const adminSlice = createSlice({
 });
 
 export const {
-	
+	selectUsers
 } = selectors;
 
 export const {

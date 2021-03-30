@@ -14,7 +14,7 @@ const useStylesLoader = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
 			position: 'fixed',
-			width: '65vw',
+			width: '70vw',
 			height: '90vh',
 			display: 'flex',
 			alignItems: 'center',
@@ -22,6 +22,7 @@ const useStylesLoader = makeStyles((theme: Theme) =>
 			zIndex: 500,
 		},
 		card: {
+			position: 'relative',
 			transform: 'translate(-50%,-50%)',
 			background: 'rgba(0,0,0,0.2)',
 			padding: '.4rem',
