@@ -1,18 +1,38 @@
-import { RootState } from 'app/store';
-import React, {Suspense} from 'react';
-import { useSelector } from 'react-redux';
+import {getCollection} from 'app/hooks';
+import {RootState} from 'app/store';
+import React, {Suspense, useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
 import {Redirect, Route} from 'react-router-dom';
 import {IRoute} from './config';
 
 const RouteWithSubRoutes = (route: IRoute) => {
 	const role = useSelector((state: RootState) => state.auth.role);
-	const authenticated = useSelector((state: RootState) => state.auth.authenticated)
+	const authenticated = useSelector(
+		(state: RootState) => state.auth.authenticated
+	);
+	const userId = useSelector((state: RootState) => state.auth.uid);
+	const [userBlocked, setUserBlocked] = useState(false);
+
+	useEffect(() => {
+		getCollection('users')
+			.where('uid', '==', userId)
+			.onSnapshot((snapshot) => {
+				const users = snapshot.docs.map((doc) => doc.data());
+				if (users[0]) {
+					setUserBlocked(users[0].blocked);
+				}
+			});
+		return () => {};
+	}, []);
 
 	return (
 		<Suspense fallback={route.fallback}>
 			<Route
 				path={route.path}
 				render={(props) => {
+					if (userBlocked) {
+						return <Redirect to={'/account-blocked'} />;
+					}
 					if (route.redirect) {
 						if (route.redirect.page) {
 							if (route.redirect.permissions) {
