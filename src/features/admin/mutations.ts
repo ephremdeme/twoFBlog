@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { User } from 'features/user/types';
-import { IAdminState, UserData } from './types';
+import { IAdminState } from './types';
 
 export interface IFieldQuery {
 	strValue?: string;
@@ -18,7 +18,7 @@ export default {
 			state.usersLoaded = true;
 		state.loadingUsers = action.payload;
 	},
-	setUsers: (state: IAdminState, action: PayloadAction<UserData>) => {
+	setUsers: (state: IAdminState, action: PayloadAction<User[]>) => {
 		state.users = action.payload;
 		state.filterableUsers = action.payload;
 	}
