@@ -5,7 +5,7 @@ export interface IProduct {
 	uid: string;
 	sid?: string;
 	description: string;
-	additionalDescription?: string;
+	additionalDescription?: string[];
 	thumbnail: string;
 	images: string[];
 	qty: string;
