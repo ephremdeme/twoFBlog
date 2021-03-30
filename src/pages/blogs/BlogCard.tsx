@@ -13,6 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import {Link} from 'react-router-dom';
 import './styles.css';
 import {IBlog} from 'features/editor';
+import {RootState} from 'app/store';
+import auth from 'features/auth';
+import {useSelector} from 'react-redux';
+import {Edit} from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -58,6 +62,8 @@ export const BlogCard: React.FC<{
 		config: {mass: 1, tension: 150, friction: 20},
 	}));
 
+	const user = useSelector((state: RootState) => state.auth);
+
 	return (
 		<div className={classes.rootDiv}>
 			<animated.div
@@ -91,6 +97,18 @@ export const BlogCard: React.FC<{
 						</Typography>
 					</CardContent>
 					<CardActions className={classes.cardIcons}>
+						{(user.role === 'ADMIN' ||
+							user.role === 'EDITOR' ||
+							user.role === 'BLOGGER') && (
+							<>
+								<Link to={`/blogs/${blog.id}/edit`}>
+									<IconButton>
+										<Edit style={{color: 'skyblue'}} />
+									</IconButton>
+								</Link>
+							</>
+						)}
+
 						<Link to={`/blogs/${blog.id}`}>
 							<IconButton>
 								<VisibilityIcon style={{color: 'skyblue'}} />
