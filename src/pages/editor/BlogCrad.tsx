@@ -7,18 +7,12 @@ import {red} from '@material-ui/core/colors';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import {useSpring, animated} from 'react-spring';
 import Typography from '@material-ui/core/Typography';
 import {Link} from 'react-router-dom';
 import './styles.css';
 import {IBlog} from 'features/editor';
-import {useSelector} from 'react-redux';
-import {useFireDelete} from 'hooks/useFirestore';
-import EditorBackdrop from './EditorBackdrop';
-import {RootState} from 'app/store';
-import {useImageDirDelete} from 'hooks/useStorage';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -64,12 +58,6 @@ export const BlogCard: React.FC<{
 		config: {mass: 1, tension: 150, friction: 20},
 	}));
 
-	const {loading, deleteDoc} = useFireDelete('blogs');
-
-	const user = useSelector((state: RootState) => state.auth);
-
-	const {handleDirDelete} = useImageDirDelete('images/');
-
 	return (
 		<div className={classes.rootDiv}>
 			<animated.div
@@ -108,19 +96,6 @@ export const BlogCard: React.FC<{
 								<VisibilityIcon style={{color: 'skyblue'}} />
 							</IconButton>
 						</Link>
-						{/* {(user.role === 'BLOGGER' ||
-							user.role === 'ADMIN' ||
-							user.role === 'EDITOR') && (
-							<IconButton
-								disabled={loading}
-								onClick={(e) => {
-									deleteDoc(blog.id);
-									handleDirDelete(blog.id);
-								}}>
-								<DeleteIcon style={{color: 'red'}} />
-								<EditorBackdrop loading={loading} />
-							</IconButton>
-						)} */}
 					</CardActions>
 				</Card>
 			</animated.div>

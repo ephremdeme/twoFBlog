@@ -55,14 +55,6 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 	})
 );
-// {
-// 	id: string;
-// 	title: string;
-// 	coverImageUrl: string;
-// 	blogHash: string;
-// 	date: string;
-// 	authorId: string;
-// }
 export const NavBar: React.FC<{
 	enabled: boolean;
 	setEnable: (enabled: boolean) => void;
@@ -234,9 +226,6 @@ export const NavBar: React.FC<{
 								onClick={() => {
 									actions.setOptions((options) => (options.enabled = !enabled));
 									setEnable(!enabled);
-									// let a = document.getElementById("parent")
-									// for (let child = a.firstElementChild; child; child = a.nextElementSibling){
-									// 	for (let child1 = child.firstElementChild; child1; child = child.nextElementSibling){ console.log(child1)}}
 									const json = query.serialize();
 									const hash = lz.encodeBase64(lz.compress(json));
 									dispatch(setEditBlog({key: 'blogHash', value: hash}));
@@ -266,18 +255,11 @@ export const NavBar: React.FC<{
 										...values,
 										blogHash: hash,
 									});
-									// dispatch(
-									// 	postBlog({
-									// 		...values,
-									// 		blogHash: hash,
-									// 	})
-									// );
-
 									console.log(values);
 								}}>
 								Publish
 							</Button>
-							<EditorBackdrop loading={loading} />
+							<EditorBackdrop loading={uploadLoading} />
 						</>
 					)}
 				</Toolbar>

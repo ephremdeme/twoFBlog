@@ -86,11 +86,10 @@ const EditorPage: React.FC<{
 	// console.log('Equal', blog?.blogHash === hashed);
 
 	const user = useSelector((state: RootState) => state.auth);
-	const newId = useCollection('blogs').doc().id;
+	const userColl = useCollection('blogs');
 
 	const blogs = useSelector(selectBlogs);
 	const blogEd = useSelector(selectBlog);
-	// console.log(blogEd, blog);
 
 	useEffect(() => {
 		if (edit !== undefined) {
@@ -105,7 +104,7 @@ const EditorPage: React.FC<{
 		}
 		dispatch(
 			setBlog({
-				id: newId,
+				id: userColl.doc().id,
 				title: '',
 				blogHash: '',
 				date: new Date().toDateString(),
@@ -166,41 +165,6 @@ const EditorPage: React.FC<{
 								placeholder="Title ....."
 								value={blogEd.title}
 							/>
-
-							{/* <div className={classes.title}>
-								{enabled && (
-									<>
-										<TitleInput
-											placeholder="Title ....."
-											value={values.title}
-											handleChange={handleChange}
-										/>
-									</>
-								)}
-								{!enabled && (
-									<>
-										<Typography variant="h2" align="center">
-											{values.title}
-										</Typography>
-										<Typography
-											variant="body1"
-											align="center"
-											className={classes.author}>
-											Posted on Posted on {values.date} by{' '}
-											{blog?.author?.user_name}
-										</Typography>
-									</>
-								)}
-							</div>
-								*/}
-							{/* <Element 
-								is={Container}
-								id="title-input"
-								width="100%"
-								height="auto"
-								flexDirection="column"
-								padding={['30', '30', '30', '30']}></Element> */}
-
 							<CoverImage
 								handleChange={handleChange}
 								imageUrl={blog?.coverImageUrl}

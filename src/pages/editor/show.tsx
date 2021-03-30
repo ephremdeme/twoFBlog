@@ -2,14 +2,7 @@
 import React, {useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import EditorPage from './editor';
-import {
-	fetchBlog,
-	IBlog,
-	selectBlog,
-	selectLoading,
-	setBlog,
-} from '../../features/editor';
-import {useFireDoc} from 'hooks/useFirestore';
+import {fetchBlog, selectBlog, selectLoading} from '../../features/editor';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from 'app/store';
 
@@ -21,11 +14,10 @@ function ShowBlog() {
 	const loading = useSelector(selectLoading);
 
 	const dispatch = useDispatch();
-	console.log('Blog', blog, loading);
 
 	useEffect(() => {
 		dispatch(fetchBlog(blogId));
-	}, []);
+	}, [blogId, dispatch]);
 
 	if (loading) return <h1>Loading</h1>;
 	return (
