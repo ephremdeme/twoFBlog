@@ -213,13 +213,7 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/editor/edit')),
 		exact: true,
 		fallback: <Loader />,
-		permissions: [
-			UserRole.BLOGGER,
-			UserRole.ADMIN,
-			UserRole.EDITOR,
-			UserRole.GUEST,
-			UserRole.USER,
-		],
+		permissions: [UserRole.BLOGGER, UserRole.ADMIN, UserRole.EDITOR],
 	},
 	{
 		path: '/blogs/:blogId',
@@ -235,7 +229,6 @@ const routes: IRoute[] = [
 			UserRole.USER,
 		],
 	},
-
 	{
 		path: '/blogs',
 		component: lazy(() => import('../pages/blogs')),
