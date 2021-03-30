@@ -72,7 +72,7 @@ export default function Create() {
 		const dataUp = {
 			...data,
 			uid: userID,
-			addistionalDescription: descriptions,
+			additionalDescription: descriptions,
 			condition: condition,
 		};
 
@@ -82,10 +82,7 @@ export default function Create() {
 				data: dataUp,
 			})
 		);
-
-		console.log('Data UP::::::::::::::;', dataUp);
-
-		// setTimeout(() => history.push('/product'), 1500);
+		setTimeout(() => history.push('/products/list/admin'), 1500);
 	};
 
 	// image file

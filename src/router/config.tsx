@@ -62,7 +62,7 @@ const routes: IRoute[] = [
 		routes: [
 			{
 				path: '/products/list/admin',
-				component: lazy(() => import('../pages/product/list/AdminList')),
+				component: lazy(() => import('../pages/product/admin')),
 				exact: false,
 				fallback: <Loader />,
 				permissions: [UserRole.ADMIN, UserRole.SHOPE_ADMIN],
@@ -92,8 +92,8 @@ const routes: IRoute[] = [
 				fallback: <Loader />,
 			},
 			{
-				path: '/products/:id/update',
-				component: lazy(() => import('../pages/product/UpdateProduct')),
+				path: '/products/:id/edit',
+				component: lazy(() => import('../pages/product/admin/Edit')),
 				exact: false,
 				fallback: <Loader />,
 				permissions: [UserRole.ADMIN, UserRole.SHOPE_ADMIN],

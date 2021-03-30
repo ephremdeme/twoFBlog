@@ -168,7 +168,7 @@ const UserList = () => {
 		},
 		{
 			field: 'view',
-			headerName: 'Publish',
+			headerName: 'View',
 			width: 90,
 			renderCell: (params: GridCellParams) => {
 				let {id} = params.value?.valueOf() as {id: string};
