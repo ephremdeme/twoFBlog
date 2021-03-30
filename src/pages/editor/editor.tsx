@@ -29,7 +29,7 @@ import {
 import Viewport from 'components/selectors/Viewport';
 import {RootState} from 'app/store';
 import {useDispatch, useSelector} from 'react-redux';
-import {BlogCard} from './BlogCrad';
+import {BlogCard} from '../blogs/BlogCard';
 import {useCollection} from 'app/hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -82,9 +82,6 @@ const EditorPage: React.FC<{
 
 	const dispatch = useDispatch();
 
-	// const hashed = `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`;
-	// console.log('Equal', blog?.blogHash === hashed);
-
 	const user = useSelector((state: RootState) => state.auth);
 	const userColl = useCollection('blogs');
 
@@ -92,7 +89,7 @@ const EditorPage: React.FC<{
 	const blogEd = useSelector(selectBlog);
 
 	useEffect(() => {
-		if (edit !== undefined) {
+		if (edit) {
 			if (!blog?.published)
 				dispatch(
 					setEditBlog({
@@ -102,17 +99,19 @@ const EditorPage: React.FC<{
 				);
 			return;
 		}
-		dispatch(
-			setBlog({
-				id: userColl.doc().id,
-				title: '',
-				blogHash: '',
-				date: new Date().toDateString(),
-				coverImageUrl: '',
-				authorId: user.uid,
-				published: user.role === 'EDITOR',
-			})
-		);
+		if (edit === undefined) {
+			dispatch(
+				setBlog({
+					id: userColl.doc().id,
+					title: '',
+					blogHash: '',
+					date: new Date().toDateString(),
+					coverImageUrl: '',
+					authorId: user.uid,
+					published: user.role === 'EDITOR',
+				})
+			);
+		}
 	}, []);
 
 	useEffect(() => {
@@ -136,17 +135,24 @@ const EditorPage: React.FC<{
 
 	const [enabled, setEnabled] = useState(edit === undefined ? true : edit);
 
+	useEffect(() => {
+		setEnabled(edit === undefined ? true : edit);
+		console.log(edit, 'Edit');
+	}, [edit]);
+
 	return (
 		<Editor resolver={resolvers} onRender={RenderNode}>
 			<CssBaseline />
-			<NavBar
-				enabled={enabled}
-				deleteAble={deleteAble}
-				setEnable={setEnabled}
-				handleChange={handleChange}
-				values={blogEd}
-			/>
-			{enabled && <MiniDrawer />}
+			{(edit || edit === undefined) && (
+				<NavBar
+					enabled={enabled}
+					deleteAble={deleteAble}
+					setEnable={setEnabled}
+					handleChange={handleChange}
+					values={blogEd}
+				/>
+			)}
+			{enabled && (edit || edit === undefined) && <MiniDrawer />}
 
 			<MuiContainer maxWidth={'lg'} className={classes.main} disableGutters>
 				<Viewport>
@@ -189,8 +195,27 @@ const EditorPage: React.FC<{
 					</Grid>
 				</MuiContainer>
 			)}
+
+			<EditEnabler edit={edit} setEnable={setEnabled} />
 		</Editor>
 	);
+};
+
+export const EditEnabler: React.FC<{
+	edit: boolean;
+	setEnable: (enabled: boolean) => void;
+}> = ({edit, setEnable}) => {
+	const {actions, enabled} = useEditor((state) => ({
+		enabled: state.options.enabled,
+	}));
+
+	useEffect(() => {
+		if (!edit && edit !== undefined) {
+			actions.setOptions((options) => (options.enabled = false));
+			setEnable(enabled);
+		}
+	}, []);
+	return <></>;
 };
 
 export default EditorPage;
