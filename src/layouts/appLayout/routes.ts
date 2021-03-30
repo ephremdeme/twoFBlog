@@ -39,11 +39,6 @@ const navs = {
 			icon: 'scatter_plot',
 		},
 		{
-			name: 'Blog Editor',
-			path: '/editor',
-			icon: 'rss_feed',
-		},
-		{
 			name: 'Blogs',
 			path: '/blogs',
 			icon: 'book',
