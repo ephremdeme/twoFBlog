@@ -32,7 +32,7 @@ interface IProps {
 
 const Comments: React.FC<IProps> = ({ id }) => {
   const classes = useStyles();
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<any[] | null>(null);
 
   useEffect(() => {
 
@@ -42,7 +42,7 @@ const Comments: React.FC<IProps> = ({ id }) => {
 
         let authors: any[] = [];
 
-        commentRef.forEach(doc=>{
+        commentRef.forEach(doc => {
 
           const data = doc.data();
           const comm: any = null;
@@ -60,30 +60,30 @@ const Comments: React.FC<IProps> = ({ id }) => {
           authors.push(refData);
         })
 
-          Promise.all(authors).then((values: any) => {
-            interface IAuther {
-              [index: string]: {};
-            }
-    
-            let authorArr: IAuther = {};
-            values.map((value: any) => {
-              authorArr[value.id] = {
-                uid: value.id,
-                user_name: value.data().user_name,
-                photo: value.data().photo,
-              };
-              
-              return authorArr;
-            });
-    
-            commentDatas = commentDatas.map((comment, index) => ({
-              ...comment,
-              author: authorArr[comment.uid] as IAuthor,
-            }));
+        Promise.all(authors).then((values: any) => {
+          interface IAuther {
+            [index: string]: {};
+          }
 
-            setComments(commentDatas)
+          let authorArr: IAuther = {};
+          values.map((value: any) => {
+            authorArr[value.id] = {
+              uid: value.id,
+              user_name: value.data().user_name,
+              photo: value.data().photo,
+            };
+
+            return authorArr;
+          });
+
+          commentDatas = commentDatas.map((comment, index) => ({
+            ...comment,
+            author: authorArr[comment.uid] as IAuthor,
+          }));
+
+          setComments(commentDatas)
         })
-        
+
         // const comments = commentRef.docs.map((doc: any) => {
         //   getCollection('users').doc(doc.data().uid).get().then(((dataUser: any) => {
         //     let comm: any = { comment: doc.data().comment }
@@ -104,11 +104,11 @@ const Comments: React.FC<IProps> = ({ id }) => {
   return (
     <Box>
       {
-        comments.length ? comments.map((comment: any) =>
+        comments ? comments.map((comment: any) =>
           <List className={classes.root}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src={comment.author.photo}/>
+                <Avatar alt="Remy Sharp" src={comment.author.photo} />
               </ListItemAvatar>
               <ListItemText
                 primary={comment.author.user_name}
