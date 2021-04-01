@@ -30,7 +30,7 @@ const navs = {
 		},
 		{
 			name: 'Roles',
-			path: '/products/list/admin',
+			path: '/auth/roles',
 			icon: 'admin_panel_settings',
 		},
 		{
