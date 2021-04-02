@@ -33,6 +33,8 @@ import { getCollection } from 'app/hooks';
 import data from './data';
 import LikeViewComponent from './LikeViewComponent';
 import { Rating } from '@material-ui/lab';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import AdditionalDetail from './AdditionalDetail';
 
 const useStyles = makeStyles({
 	root: {
@@ -63,6 +65,7 @@ const ProductDetial = () => {
 	const dispatch = useDispatch();
 	const [like, setLike] = useState(0);
 	const [liked, setLiked] = useState(false);
+	const [showAdditionalDetail, setShowAdditionalDetail] = useState(false);
 	const [view, setView] = useState(1);
 	const chartProducts = useSelector((state: RootState) => state.product.chart);
 	const { data: product, loading } = useFireDoc<IProduct>(PDB.PRODCUTS, id);
@@ -219,6 +222,8 @@ const ProductDetial = () => {
 									{product?.description}
 								</Box>
 								<LikeViewComponent id={id} />
+								{!showAdditionalDetail && <Button size="small" onClick={() => setShowAdditionalDetail(!showAdditionalDetail)}> <KeyboardArrowDownIcon /></Button>}
+								{showAdditionalDetail && product && <AdditionalDetail product={product} />}
 							</Box>
 						</Grid>
 					</Grid>
