@@ -26,6 +26,7 @@ import {selectChartProductQty, setFilterableProducts} from 'features/product';
 const useStyles = makeStyles((theme: Theme) => ({
 	root: {
 		width: '100%',
+		margin: "2rem 0px"
 	},
 	search: {
 		position: 'relative',
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 		justifyContent: 'center',
 	},
 	inputRoot: {
+		width: '100%',
 		color: 'inherit',
 		fontSize: '.8rem',
 		padding: '5px'

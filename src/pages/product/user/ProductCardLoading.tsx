@@ -13,7 +13,7 @@ const ProductCardLoading = ({loading, items}: IProps) => {
 		<Grid container>
 			{
 				new Array(items || 3).fill(0).map((_: number, i: number) => (
-					<Box key={i} width={210} marginRight={0.87} my={5}>
+					<Box key={i} width={210} marginRight={0.87} my={2}>
 						<Skeleton variant="rect" width={210} height={118} />
 						<Box pt={0.5}>
 							<Skeleton />

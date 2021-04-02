@@ -12,6 +12,7 @@ import {
 import ProductListUser from '../user/ProductListUser';
 import ProductCardLoading from '../user/ProductCardLoading';
 import ProductFilters from './ProductFilters';
+import ProductSearch from './product_search'
 
 const ProductList = () => {
 	const products = useSelector(selectFilterableProducts);
@@ -26,6 +27,7 @@ const ProductList = () => {
 	return (
 		<Page title="Products">
 			<Container>
+				{products && <ProductSearch />}
 				{loadingProducts && <MiniLoader />}
 				{!productsLoaded && <ProductCardLoading loading={true} items={15} />}
 				<Grid container spacing={2}>

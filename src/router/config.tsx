@@ -2,7 +2,6 @@ import Loader from 'components/shared/Loader';
 import {UserRole} from 'features/auth/types';
 import Appbar from 'layouts/appLayout/Appbar';
 import AppNav from 'layouts/appLayout/AppNav';
-import ProductAppBar from 'layouts/appLayout/product';
 import Chat from 'pages/chat/chatbox';
 import React, {
 	ComponentType,
@@ -58,7 +57,6 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/product/')),
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
-		appbar: () => <ProductAppBar />,
 		routes: [
 			{
 				path: '/products/list/admin',

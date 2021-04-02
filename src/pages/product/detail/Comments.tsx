@@ -10,9 +10,12 @@ import Typography from '@material-ui/core/Typography';
 import { getCollection } from 'app/hooks';
 import { PDB } from 'features/product/init';
 import LoadingOnly from 'components/shared/LoadingOnly';
-import { Box } from '@material-ui/core';
+import { Box, Button, IconButton } from '@material-ui/core';
 import { IAuthor } from 'features/editor';
 import { Rating } from '@material-ui/lab';
+import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
+import { useSelector } from 'react-redux';
+import { RootState } from 'app/store';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,6 +42,7 @@ interface IProps {
 
 const Comments: React.FC<IProps> = ({ id }) => {
   const classes = useStyles();
+  const userId = useSelector((state: RootState) => state.auth.uid);
   const [comments, setComments] = useState<any[] | null>(null);
 
   useEffect(() => {
@@ -99,6 +103,15 @@ const Comments: React.FC<IProps> = ({ id }) => {
     fetchUserComment()
   }, []);
 
+  const deleteComment = (idX: string) => {
+    const ref$ = getCollection(PDB.PRODCUTS).doc(id).collection('comments').doc(idX);
+    ref$.delete().then(()=>console.log("Deleted"), (err)=>console.log(err));
+  }
+
+  const updateComment = (data: { comment?: string, rating?: string }) => {
+    getCollection(PDB.PRODCUTS).doc(id).collection('comments').doc(id).update(data);
+  }
+
   return (
     <Box>
       {
@@ -108,12 +121,20 @@ const Comments: React.FC<IProps> = ({ id }) => {
               <Avatar className={classes.avatar} alt={comment.author.user_name} src={comment.author.photo} />
             </Box>
             <Box ml={2}>
-              <Box display="flex">
+              <Box display="flex" alignItems="center" >
                 <Box>
                   {comment.author.user_name}
                 </Box>
                 <Box ml={1}>
                   <Rating name="read-only" size="small" value={comment.rating} readOnly />
+                </Box>
+                <Box alignSelf="end" ml={2}>
+                  {
+                    comment.author.uid == userId &&
+                    <IconButton size="small" onClick={() => deleteComment(comment.id)}>
+                      <DeleteSweepIcon />
+                    </IconButton>
+                  }
                 </Box>
               </Box>
               <Box fontSize=".8rem" fontWeight={300} className={classes.commentText}>
