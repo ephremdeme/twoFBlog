@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import React, {useEffect, useState} from 'react';
+import {useHistory, useParams} from 'react-router';
 import {
 	Box,
 	ButtonGroup,
@@ -10,9 +10,9 @@ import {
 	Typography,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { useFireDoc } from '../../../hooks/useFirestore';
+import {useFireDoc} from '../../../hooks/useFirestore';
 import OverlayLoading from '../../../components/shared/OverlayLoading';
-import { IProduct } from 'features/product/types';
+import {IProduct} from 'features/product/types';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import {
 	removeProductChart,
@@ -25,14 +25,14 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'app/store';
-import { PDB } from 'features/product/init';
-import { Link } from 'react-router-dom';
-import { getCollection } from 'app/hooks';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from 'app/store';
+import {PDB} from 'features/product/init';
+import {Link} from 'react-router-dom';
+import {getCollection} from 'app/hooks';
 import data from './data';
 import LikeViewComponent from './LikeViewComponent';
-import { Rating } from '@material-ui/lab';
+import {Rating} from '@material-ui/lab';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import AdditionalDetail from './AdditionalDetail';
 
@@ -60,7 +60,7 @@ const useStyles = makeStyles({
 
 const ProductDetial = () => {
 	const classes = useStyles();
-	const { id } = useParams();
+	const {id} = useParams();
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const [like, setLike] = useState(0);
@@ -68,7 +68,7 @@ const ProductDetial = () => {
 	const [showAdditionalDetail, setShowAdditionalDetail] = useState(false);
 	const [view, setView] = useState(1);
 	const chartProducts = useSelector((state: RootState) => state.product.chart);
-	const { data: product, loading } = useFireDoc<IProduct>(PDB.PRODCUTS, id);
+	const {data: product, loading} = useFireDoc<IProduct>(PDB.PRODCUTS, id);
 
 	useEffect(() => {
 		if (product) setLike(product.likes.length);
@@ -127,7 +127,15 @@ const ProductDetial = () => {
 							md={5}
 							xs={12}
 							className={classes.productDetailImage}>
-							<img src={product?.thumbnail} alt="product thumbnail" />
+							<img
+								style={{
+									maxHeight: '450px',
+									maxWidth: '500px',
+									borderRadius: '10px',
+								}}
+								src={product?.thumbnail}
+								alt="product thumbnail"
+							/>
 						</Grid>
 						<Grid item lg={6} md={7} xs={12}>
 							<Box>
@@ -139,7 +147,7 @@ const ProductDetial = () => {
 										{product?.name}
 									</Box>
 									{!chartProducts[id] ||
-										chartProducts[id].products.length <= 0 ? (
+									chartProducts[id].products.length <= 0 ? (
 										<Button
 											size="small"
 											variant="outlined"
@@ -222,8 +230,19 @@ const ProductDetial = () => {
 									{product?.description}
 								</Box>
 								<LikeViewComponent id={id} />
-								{!showAdditionalDetail && <Button size="small" onClick={() => setShowAdditionalDetail(!showAdditionalDetail)}> <KeyboardArrowDownIcon /></Button>}
-								{showAdditionalDetail && product && <AdditionalDetail product={product} />}
+								{!showAdditionalDetail && (
+									<Button
+										size="small"
+										onClick={() =>
+											setShowAdditionalDetail(!showAdditionalDetail)
+										}>
+										{' '}
+										<KeyboardArrowDownIcon />
+									</Button>
+								)}
+								{showAdditionalDetail && product && (
+									<AdditionalDetail product={product} />
+								)}
 							</Box>
 						</Grid>
 					</Grid>
