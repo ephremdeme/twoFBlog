@@ -171,7 +171,7 @@ function Appbar({history}: any): JSX.Element {
 								</Typography>
 							</Box>
 							{(location.pathname.split('/').slice(-1)[0] === 'blogs' ||
-								location.pathname.indexOf('blogs')) &&
+								location.pathname.indexOf('blogs') !== -1) &&
 								(auth.role === 'ADMIN' ||
 									auth.role === 'EDITOR' ||
 									auth.role === 'BLOGGER') && (
