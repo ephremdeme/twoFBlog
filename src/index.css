@@ -1,9 +1,13 @@
 /* @import url(//fonts.googleapis.com/earlyaccess/notosansethiopic.css); */
 
+* {
+	font-family: 'Poppins', sans-serif !important;
+}
+
 html,
 body {
 	box-sizing: border-box;
-	font-family: 'Poppins', sans-serif;
+	font-family: 'Poppins', sans-serif !important;
 }
 
 .z-depth-2 {
