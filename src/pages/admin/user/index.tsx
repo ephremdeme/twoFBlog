@@ -8,25 +8,37 @@ import {
 	GridToolbarExport,
 } from '@material-ui/data-grid';
 import {
+	Avatar,
+	Badge,
 	Box,
 	Button,
+	ButtonGroup,
+	Card,
+	Chip,
 	Container,
 	createStyles,
 	FormControl,
+	Grid,
 	IconButton,
 	InputLabel,
 	makeStyles,
 	MenuItem,
 	Select,
 	Theme,
+	withStyles,
+	fade,
 } from '@material-ui/core';
-import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {fetchUsers, selectUsers} from 'features/admin';
 import {getCollection} from 'app/hooks';
 import {User} from 'features/user/types';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
+import ViewListIcon from '@material-ui/icons/ViewList';
+import AppsIcon from '@material-ui/icons/Apps';
+import BlockIcon from '@material-ui/icons/Block';
+import ContactlessIcon from '@material-ui/icons/Contactless';
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -111,18 +123,101 @@ function CustomToolbar() {
 	);
 }
 
+const useStylesUserList = makeStyles((theme: Theme) =>
+	createStyles({
+		rounded: {
+			width: theme.spacing(6),
+			height: theme.spacing(6),
+		},
+		search: {
+			position: 'relative',
+			borderRadius: theme.shape.borderRadius,
+			backgroundColor: fade(theme.palette.common.white, 0.15),
+			'&:hover': {
+				backgroundColor: fade(theme.palette.common.white, 0.25),
+			},
+			marginLeft: 0,
+			width: '100%',
+			[theme.breakpoints.up('sm')]: {
+				marginLeft: theme.spacing(1),
+				width: 'auto',
+			},
+		},
+		searchIcon: {
+			padding: theme.spacing(0, 2),
+			height: '100%',
+			position: 'absolute',
+			pointerEvents: 'none',
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		inputRoot: {
+			width: '100%',
+			color: 'inherit',
+			fontSize: '.8rem',
+			padding: '5px',
+		},
+		inputInput: {
+			padding: theme.spacing(1, 1, 1, 0),
+			// vertical padding + font size from searchIcon
+			paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+			transition: theme.transitions.create('width'),
+			width: '100%',
+			[theme.breakpoints.up('sm')]: {
+				width: '18ch',
+				'&:focus': {
+					width: '25ch',
+				},
+			},
+		},
+	})
+);
+
+const StyledBadge = withStyles((theme: Theme) =>
+	createStyles({
+		badge: {
+			backgroundColor: '#44b700',
+			color: '#44b700',
+			boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+			'&::after': {
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				width: '100%',
+				height: '100%',
+				borderRadius: '50%',
+				animation: '$ripple 1.2s infinite ease-in-out',
+				border: '1px solid currentColor',
+				content: '""',
+			},
+		},
+		'@keyframes ripple': {
+			'0%': {
+				transform: 'scale(.8)',
+				opacity: 1,
+			},
+			'100%': {
+				transform: 'scale(2.4)',
+				opacity: 0,
+			},
+		},
+	})
+)(Badge);
+
 const UserList = () => {
-	// const dispatch = useDispatch();
-	// const users = useSelector(selectUsers);
+	const classes = useStylesUserList();
 	const [users, setUsers] = React.useState<User[]>([]);
+	const [usersFiltered, setUsersFiltered] = React.useState<User[]>([]);
+	const [gridView, setGridView] = React.useState(false);
 
 	React.useEffect(() => {
 		// dispatch(fetchUsers());
-		getCollection('users')
-			.onSnapshot((snapshot) => {
-				const users = snapshot.docs.map((user) => user.data());
-				setUsers(users as User[]);
-			});
+		getCollection('users').onSnapshot((snapshot) => {
+			const users = snapshot.docs.map((user) => user.data());
+			setUsers(users as User[]);
+			setUsersFiltered(users as User[])
+		});
 	}, []);
 
 	const columns: GridColDef[] = [
@@ -209,13 +304,13 @@ const UserList = () => {
 				};
 
 				const onClick = () => {
-					if(blocked) {
+					if (blocked) {
 						getCollection('users').doc(id).update({
-							blocked: false
+							blocked: false,
 						});
 					} else {
 						getCollection('users').doc(id).update({
-							blocked: true
+							blocked: true,
 						});
 					}
 				};
@@ -233,7 +328,7 @@ const UserList = () => {
 		},
 	];
 
-	const rows = users.map((user: User) => {
+	const rows = usersFiltered.map((user: User) => {
 		const {uid, user_name, email, role, blocked} = user;
 
 		return {
@@ -247,9 +342,20 @@ const UserList = () => {
 		};
 	});
 
+	const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const filteredUsers = users.filter((user) =>
+			user.user_name.toLowerCase().includes(e.target.value.toLowerCase())
+		);
+		setUsersFiltered(filteredUsers);
+	};
+
 	return (
 		<Container>
-			<Box my={2} display="flex">
+			<Box
+				display="flex"
+				alignItems="flex-end"
+				justifyContent="space-between"
+				m={3}>
 				<Button
 					component={Link}
 					to="/auth/create/user"
@@ -257,19 +363,139 @@ const UserList = () => {
 					variant="outlined">
 					Add new user
 				</Button>
+				<Box flexGrow={1} mx={3}>
+					<div className={classes.search}>
+						<div className={classes.searchIcon}>
+							<SearchIcon />
+						</div>
+						<InputBase
+							placeholder="Search products…"
+							onChange={handleFilter}
+							classes={{
+								root: classes.inputRoot,
+								input: classes.inputInput,
+							}}
+							inputProps={{'aria-label': 'search'}}
+						/>
+					</div>
+				</Box>
+				<Box>
+					<ButtonGroup size="small" aria-label="small outlined button group">
+						<Button
+							startIcon={<ViewListIcon />}
+							onClick={() => setGridView(false)}>
+							list
+						</Button>
+						<Button startIcon={<AppsIcon />} onClick={() => setGridView(true)}>
+							grid
+						</Button>
+					</ButtonGroup>
+				</Box>
 			</Box>
+
 			<Box my={3}>
 				<div style={{minHeight: '400px', width: '100%'}}>
-					<DataGrid
-						components={{
-							NoRowsOverlay: CustomNoRowsOverlay,
-							Toolbar: CustomToolbar,
-						}}
-						rows={rows}
-						columns={columns}
-						pageSize={8}
-						autoHeight
-					/>
+					{gridView ? (
+						<Grid container spacing={3}>
+							{usersFiltered.map((user) => (
+								<Grid item sm={12} md={4} lg={3}>
+									<Card
+										elevation={0}
+										style={{
+											maxWidth: '250px',
+											minHeight: '150px',
+											maxHeight: '150px',
+										}}>
+										<Box
+											display="flex"
+											p={2}
+											flexDirection="column"
+											alignItems="center"
+											justifyContent="center">
+											<Box display="flex" alignItems="center" mt={1} mb={2}>
+												<Box mr={2}>
+													{user?.isOnline ? (
+														<StyledBadge
+															overlap="circle"
+															anchorOrigin={{
+																vertical: 'bottom',
+																horizontal: 'right',
+															}}
+															variant="dot">
+															<Avatar
+																src={user?.photo}
+																className={classes.rounded}
+															/>
+														</StyledBadge>
+													) : (
+														<Avatar
+															src={user?.photo}
+															className={classes.rounded}
+														/>
+													)}
+												</Box>
+												<Box>
+													<Box fontSize="1rem" fontWeight={600} mb={1}>
+														{user?.user_name}
+													</Box>
+													<Box mr={1}>
+														<Chip
+															variant="outlined"
+															size="small"
+															label={user?.role}
+														/>
+													</Box>
+												</Box>
+											</Box>
+
+											<ButtonGroup
+												size="small"
+												aria-label="small outlined button group">
+												<Button
+													component={Link}
+													to={`/auth/user/${user?.uid}`}
+													onClick={() => setGridView(false)}>
+													<VisibilityIcon />
+												</Button>
+												<Button
+													component={Link}
+													to={`/auth/user/${user?.uid}/edit`}
+													onClick={() => setGridView(true)}>
+													<EditIcon />
+												</Button>
+
+												<Button
+													onClick={() => {
+														if (user.blocked) {
+															getCollection('users').doc(user.uid).update({
+																blocked: false,
+															});
+														} else {
+															getCollection('users').doc(user.uid).update({
+																blocked: true,
+															});
+														}
+													}}>
+													{!user.blocked ? <ContactlessIcon /> : <BlockIcon />}
+												</Button>
+											</ButtonGroup>
+										</Box>
+									</Card>
+								</Grid>
+							))}
+						</Grid>
+					) : (
+						<DataGrid
+							components={{
+								NoRowsOverlay: CustomNoRowsOverlay,
+								Toolbar: CustomToolbar,
+							}}
+							rows={rows}
+							columns={columns}
+							pageSize={8}
+							autoHeight
+						/>
+					)}
 				</div>
 			</Box>
 		</Container>
