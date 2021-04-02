@@ -142,7 +142,7 @@ export default function AppNav(props: Props) {
 							key={i}
 							className={classes.listItems}>
 							<ListItemIcon>
-								<Icon style={{fontSize: 20, marginLeft: '-4px'}}>{nav.icon}</Icon>
+								<Box style={{fontSize: 20, marginLeft: '-4px'}}>{nav.icon}</Box>
 							</ListItemIcon>
 						</ListItem>
 					</TooltipCustom>
