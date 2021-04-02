@@ -66,14 +66,13 @@ const useStyles = makeStyles((theme: Theme) =>
 		// list items
 		listItems: {
 			width: '80%',
-			padding: '.5rem auto',
+			padding: 'auto',
 			borderRadius: '4px',
 			margin: '5px auto',
 			transition: 'all .4s',
-			background: theme.palette.background.default,
 			'&:hover': {
-				background: '#1113',
-				transition: 'scale(1.1)',
+				background: theme.palette.background.default,
+				transition: 'scale(1.21)',
 			},
 		},
 	})
