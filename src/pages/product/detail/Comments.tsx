@@ -12,6 +12,7 @@ import { PDB } from 'features/product/init';
 import LoadingOnly from 'components/shared/LoadingOnly';
 import { Box } from '@material-ui/core';
 import { IAuthor } from 'features/editor';
+import { Rating } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,6 +24,12 @@ const useStyles = makeStyles((theme: Theme) =>
     inline: {
       display: 'inline',
     },
+    avatar: {
+
+    },
+    commentText: {
+      color: `${theme.palette.type == 'dark' ? '#aaa' : '#444'}`
+    }
   }),
 );
 
@@ -84,15 +91,6 @@ const Comments: React.FC<IProps> = ({ id }) => {
           setComments(commentDatas)
         })
 
-        // const comments = commentRef.docs.map((doc: any) => {
-        //   getCollection('users').doc(doc.data().uid).get().then(((dataUser: any) => {
-        //     let comm: any = { comment: doc.data().comment }
-        //     const user = dataUser.data();
-        //     comm.user = user
-        //   }));
-        //   return comm
-        // })
-
         console.log('Comments: ', comments)
         setComments(comments)
       });
@@ -105,18 +103,24 @@ const Comments: React.FC<IProps> = ({ id }) => {
     <Box>
       {
         comments ? comments.map((comment: any) =>
-          <List className={classes.root}>
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src={comment.author.photo} />
-              </ListItemAvatar>
-              <ListItemText
-                primary={comment.author.user_name}
-                secondary={comment.comment}
-              />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-          </List>
+          <Box display="flex" my={2} className={classes.root}>
+            <Box>
+              <Avatar className={classes.avatar} alt={comment.author.user_name} src={comment.author.photo} />
+            </Box>
+            <Box ml={2}>
+              <Box display="flex">
+                <Box>
+                  {comment.author.user_name}
+                </Box>
+                <Box ml={1}>
+                  <Rating name="read-only" size="small" value={comment.rating} readOnly />
+                </Box>
+              </Box>
+              <Box fontSize=".8rem" fontWeight={300} className={classes.commentText}>
+                {comment.comment}
+              </Box>
+            </Box>
+          </Box>
         ) :
           <LoadingOnly />
       }
