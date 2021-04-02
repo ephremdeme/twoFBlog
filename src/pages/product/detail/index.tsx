@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {useHistory, useParams} from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router';
 import {
 	Box,
 	ButtonGroup,
@@ -7,11 +7,12 @@ import {
 	Container,
 	Grid,
 	makeStyles,
+	Typography,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import {useFireDoc} from '../../../hooks/useFirestore';
+import { useFireDoc } from '../../../hooks/useFirestore';
 import OverlayLoading from '../../../components/shared/OverlayLoading';
-import {IProduct} from 'features/product/types';
+import { IProduct } from 'features/product/types';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import {
 	removeProductChart,
@@ -24,13 +25,14 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from 'app/store';
-import {PDB} from 'features/product/init';
-import {Link} from 'react-router-dom';
-import {getCollection} from 'app/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'app/store';
+import { PDB } from 'features/product/init';
+import { Link } from 'react-router-dom';
+import { getCollection } from 'app/hooks';
 import data from './data';
 import LikeViewComponent from './LikeViewComponent';
+import { Rating } from '@material-ui/lab';
 
 const useStyles = makeStyles({
 	root: {
@@ -56,14 +58,14 @@ const useStyles = makeStyles({
 
 const ProductDetial = () => {
 	const classes = useStyles();
-	const {id} = useParams();
+	const { id } = useParams();
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const [like, setLike] = useState(0);
 	const [liked, setLiked] = useState(false);
 	const [view, setView] = useState(1);
 	const chartProducts = useSelector((state: RootState) => state.product.chart);
-	const {data: product, loading} = useFireDoc<IProduct>(PDB.PRODCUTS, id);
+	const { data: product, loading } = useFireDoc<IProduct>(PDB.PRODCUTS, id);
 
 	useEffect(() => {
 		if (product) setLike(product.likes.length);
@@ -134,7 +136,7 @@ const ProductDetial = () => {
 										{product?.name}
 									</Box>
 									{!chartProducts[id] ||
-									chartProducts[id].products.length <= 0 ? (
+										chartProducts[id].products.length <= 0 ? (
 										<Button
 											size="small"
 											variant="outlined"
@@ -208,6 +210,10 @@ const ProductDetial = () => {
 										Price {product?.currency} {product?.price}
 									</Box>
 									<Box>{product?.condition}</Box>
+									<Box display="flex" my={1} borderColor="transparent">
+										<Typography component="legend">Rating: </Typography>
+										<Rating name="read-only" value={4} readOnly />
+									</Box>
 								</Box>
 								<Box fontWeight={300} fontSize="1rem" my={1}>
 									{product?.description}

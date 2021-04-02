@@ -139,6 +139,14 @@ const routes: IRoute[] = [
 				permissions: [UserRole.ADMIN],
 			},
 			{
+				path: '/auth/roles',
+				component: lazy(() => import('../pages/admin/roles')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [UserRole.ADMIN],
+			},
+			{
 				path: '/auth/user/:id/edit',
 				component: lazy(() => import('../pages/admin/user/UserEdit')),
 				exact: false,

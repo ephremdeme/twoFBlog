@@ -1,9 +1,17 @@
 import React from 'react';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import PeopleIcon from '@material-ui/icons/People';
+import ChatIcon from '@material-ui/icons/Chat';
+import SettingsIcon from '@material-ui/icons/Settings';
+import SecurityIcon from '@material-ui/icons/Security';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
+import BallotIcon from '@material-ui/icons/Ballot';
+
 import {UserRole} from 'features/user/types';
 export interface INavRouter {
 	name: string;
 	path: string;
-	icon: string;
+	icon: JSX.Element;
 }
 
 const navs = {
@@ -11,61 +19,61 @@ const navs = {
 		{
 			name: 'Dashboard',
 			path: '/dashboard',
-			icon: 'dashboard',
+			icon: <DashboardIcon />
 		},
 		{
 			name: 'Users',
 			path: '/auth/users',
-			icon: 'group',
+			icon: <PeopleIcon />
 		},
 		{
 			name: 'Chat',
 			path: '/chat',
-			icon: 'email',
+			icon: <ChatIcon />
 		},
 		{
 			name: 'Settings',
 			path: '/auth/settings',
-			icon: 'settings',
+			icon: <SettingsIcon />
 		},
 		{
 			name: 'Roles',
-			path: '/products/list/admin',
-			icon: 'admin_panel_settings',
+			path: '/auth/roles',
+			icon: <SecurityIcon />
 		},
 		{
 			name: 'Products',
 			path: '/products/list/admin',
-			icon: 'scatter_plot',
+			icon: <ShoppingBasketIcon />
 		},
 		{
 			name: 'Blogs',
 			path: '/blogs',
-			icon: 'book',
+			icon: <BallotIcon />
 		},
 	],
 	[UserRole.SHOPE_ADMIN]: [
 		{
 			name: 'Dashboard',
 			path: '/',
-			icon: 'dashboard',
+			icon: <DashboardIcon />
 		},
 		{
 			name: 'Products',
 			path: '/products/list',
-			icon: 'scatter_plot',
+			icon: <ShoppingBasketIcon />
 		},
 	],
 	[UserRole.SELLER]: [
 		{
 			name: 'Dashboard',
 			path: '/',
-			icon: 'dashboard',
+			icon: <DashboardIcon />
 		},
 		{
 			name: 'Products',
 			path: '/products/list',
-			icon: 'scatter_plot',
+			icon: <ShoppingBasketIcon />
 		},
 	],
 
@@ -73,70 +81,70 @@ const navs = {
 		{
 			name: 'Dashboard',
 			path: '/',
-			icon: 'dashboard',
+			icon: <DashboardIcon />
 		},
 		{
 			name: 'Chat',
 			path: '/chat',
-			icon: 'email',
+			icon: <ChatIcon />
 		},
 	],
 	[UserRole.BLOGGER]: [
 		{
 			name: 'User Dashboard',
 			path: '/',
-			icon: 'dashboard',
+			icon: <DashboardIcon />
 		},
 		{
 			name: 'Blogs',
 			path: '/blogs',
-			icon: 'book',
+			icon: <DashboardIcon />
 		},
 	],
 	[UserRole.EDITOR]: [
 		{
 			name: 'User Dashboard',
 			path: '/',
-			icon: 'dashboard',
+			icon: <DashboardIcon />
 		},
 		{
 			name: 'Blogs',
 			path: '/blogs',
-			icon: 'book',
+			icon: <DashboardIcon />
 		},
 	],
 	[UserRole.GUEST]: [
 		{
 			name: 'Products',
 			path: '/products/list',
-			icon: 'category',
+			icon: <ShoppingBasketIcon />
 		},
 		{
 			name: 'Blogs',
 			path: '/blogs',
-			icon: 'book',
+			icon: <DashboardIcon />
 		},
 		{
 			name: 'About',
 			path: '/about',
-			icon: 'live_help',
+			icon: <DashboardIcon />
 		},
 	],
 	[UserRole.USER]: [
 		{
 			name: 'User Dashboard',
 			path: '/',
-			icon: 'dashboard',
+			icon: <DashboardIcon />
 		},
 		{
 			name: 'Products',
 			path: '/products/list',
-			icon: 'scatter_plot',
+			icon: <ShoppingBasketIcon />
 		},
 		{
 			name: 'Blogs',
 			path: '/blogs',
-			icon: 'book',
+			icon: <DashboardIcon />
 		},
 	],
 };

@@ -30,7 +30,7 @@ export default {
 			const id = action.payload.id;
 
 			if (state.chart[id]) {
-				state.chart[id].total += action.payload.price;
+				state.chart[id].total += +action.payload.price;
 				state.chart[id].products = [
 					...state.chart[id].products,
 					action.payload,
@@ -47,7 +47,7 @@ export default {
 		const id = action.payload;
 		if (state.chart[id]) {
 			const deltedItem = state.chart[id].products.pop();
-			state.chart[id].total -= deltedItem.price;
+			state.chart[id].total -= +deltedItem.price;
 			if (!state.chart[id].products.length)
 				state.chart[id] = {
 					total: 0,

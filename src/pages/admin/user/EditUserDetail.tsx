@@ -91,7 +91,7 @@ const EditUserDetail: React.FC<IProps> = ({user, id}) => {
 							labelId="demo-simple-select-label"
 							id="demo-simple-select"
 							value={roleUser}
-							onChange={handleChangeRole}>
+							onChange={handleChangeRole}
 						>
 							<MenuItem value="ADMIN">ADMIN</MenuItem>
 							<MenuItem value="EDITOR">EDITOR</MenuItem>
