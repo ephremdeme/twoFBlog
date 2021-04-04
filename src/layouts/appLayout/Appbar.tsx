@@ -43,6 +43,7 @@ import {
 } from 'react-router-dom';
 import routes, {IRoute} from 'router/config';
 import {Add} from '@material-ui/icons';
+import { UserRole } from 'features/user/types';
 
 const drawerWidth = 240;
 
@@ -108,6 +109,7 @@ function Appbar({history}: any): JSX.Element {
 	const userStatus = useSelector(
 		(state: RootState) => state.auth.authenticated
 	);
+	const role = useSelector((state: RootState) => state.auth.role);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -223,7 +225,7 @@ function Appbar({history}: any): JSX.Element {
 								aria-describedby={id}
 								className={classes.smallAvatar}
 								onClick={handleUserPopoverClick}
-								alt="Remy Sharp"
+								alt="user"
 								src={userAvatar}
 							/>
 							<Popover
@@ -251,6 +253,7 @@ function Appbar({history}: any): JSX.Element {
 												<p style={{margin: '0'}}>
 													{userStatus ? 'online' : 'offline'}
 												</p>
+												{(role !== UserRole.GUEST && role !== UserRole.USER) && <p>{role}</p>}
 											</Grid>
 										</Grid>
 									</Box>

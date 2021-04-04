@@ -26,7 +26,7 @@ import {selectChartProductQty, setFilterableProducts} from 'features/product';
 const useStyles = makeStyles((theme: Theme) => ({
 	root: {
 		width: '100%',
-		margin: "2rem 0px"
+		margin: '2rem 0px',
 	},
 	search: {
 		position: 'relative',
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 		width: '100%',
 		color: 'inherit',
 		fontSize: '.8rem',
-		padding: '5px'
+		padding: '5px',
 	},
 	inputInput: {
 		padding: theme.spacing(1, 1, 1, 0),
@@ -122,19 +122,18 @@ const ProductAppBar = (props: IProps) => {
 					</div>
 				</Box>
 				<Box alignSelf="flex-end">
-					{role === UserRole.USER ||
-						(role === UserRole.GUEST && (
-							<Tooltip title="checkout chart">
-								<IconButton
-									aria-label="cart"
-									component={Link}
-									to={'/products/chart'}>
-									<StyledBadge badgeContent={chartQty} color="secondary">
-										<ShoppingCartIcon />
-									</StyledBadge>
-								</IconButton>
-							</Tooltip>
-						))}
+					{(role === UserRole.USER) && (
+						<Tooltip title="checkout chart">
+							<IconButton
+								aria-label="cart"
+								component={Link}
+								to={'/products/chart'}>
+								<StyledBadge badgeContent={chartQty} color="secondary">
+									<ShoppingCartIcon />
+								</StyledBadge>
+							</IconButton>
+						</Tooltip>
+					)}
 					{role === UserRole.ADMIN && (
 						<>
 							<Tooltip title="checkout orders">
