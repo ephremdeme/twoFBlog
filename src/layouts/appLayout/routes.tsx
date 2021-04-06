@@ -6,7 +6,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import SecurityIcon from '@material-ui/icons/Security';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import BallotIcon from '@material-ui/icons/Ballot';
-import BusinessIcon from '@material-ui/icons/Business';
+import InfoIcon from '@material-ui/icons/Info';
 
 import {UserRole} from 'features/user/types';
 export interface INavRouter {
@@ -109,7 +109,7 @@ const navs = {
 		{
 			name: 'Blogs',
 			path: '/blogs',
-			icon: <DashboardIcon />
+			icon: <BallotIcon />
 		},
 	],
 	[UserRole.EDITOR]: [
@@ -121,7 +121,7 @@ const navs = {
 		{
 			name: 'Blogs',
 			path: '/blogs',
-			icon: <DashboardIcon />
+			icon: <BallotIcon />
 		},
 	],
 	[UserRole.GUEST]: [
@@ -133,12 +133,12 @@ const navs = {
 		{
 			name: 'Blogs',
 			path: '/blogs',
-			icon: <DashboardIcon />
+			icon: <BallotIcon />
 		},
 		{
 			name: 'About',
 			path: '/about',
-			icon: <DashboardIcon />
+			icon: <InfoIcon />
 		},
 	],
 	[UserRole.USER]: [
@@ -155,7 +155,7 @@ const navs = {
 		{
 			name: 'Blogs',
 			path: '/blogs',
-			icon: <DashboardIcon />
+			icon: <BallotIcon />
 		},
 	],
 };

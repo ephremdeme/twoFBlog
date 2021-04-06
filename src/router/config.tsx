@@ -120,6 +120,7 @@ const routes: IRoute[] = [
 				component: lazy(() => import('../pages/product/detail/index')),
 				exact: false,
 				fallback: <Loader />,
+				permissions: [UserRole.ADMIN, UserRole.SHOPE_ADMIN, UserRole.USER],
 			},
 			{
 				path: '/products/:id/edit',
