@@ -50,6 +50,7 @@
     "react-feather": "^2.0.9",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^6.15.4",
+    "react-list-drag-and-drop": "^0.9.2",
     "react-redux": "^7.2.0",
     "react-redux-firebase": "^3.10.0",
     "react-router-dom": "^5.2.0",

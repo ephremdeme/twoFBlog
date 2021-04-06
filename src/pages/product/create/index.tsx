@@ -4,10 +4,9 @@ import Container from '@material-ui/core/Container';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import {
 	Box,
-	Checkbox,
 	createStyles,
+	Divider,
 	Grid,
-	IconButton,
 	InputLabel,
 	makeStyles,
 	MenuItem,
@@ -15,19 +14,13 @@ import {
 	Theme,
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import { useHistory } from 'react-router-dom';
-import DeleteIcon from '@material-ui/icons/Delete';
-import AddBoxIcon from '@material-ui/icons/AddBox';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'app/store';
-import FB from '../../../firebase/firebase'
-import {postProduct} from '../../../features/product';
+import { postProduct } from '../../../features/product';
+import AdditionalDescriptionForm from './AdditionalDescriptionForm';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -39,6 +32,10 @@ const useStyles = makeStyles((theme: Theme) =>
 		margin: {
 			margin: theme.spacing(1),
 		},
+		formContainer: {
+			width: "80%",
+			margin: "auto"
+		}
 	})
 );
 
@@ -54,7 +51,7 @@ export default function Create() {
 	const [file, setFile] = useState<any>(null);
 	const [category, setCategory] = useState('money');
 	const [condition, setCondition] = React.useState('');
-	
+
 	const handleConditionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
 		setCondition(event.target.value as string);
 	};
@@ -62,9 +59,9 @@ export default function Create() {
 	const { handleSubmit, control, errors: fieldsErrors, reset } = useForm();
 
 	const onSubmit = async (data: any) => {
-		const descriptions = descriptionList.map(
-			(desc: any) => desc.description_field + '<:>' + desc.description
-		);
+		// const descriptions = descriptionList.map(
+		// 	(desc: any) => desc.description_field + '<:>' + desc.description
+		// );
 
 		console.log('The Data: ', data);
 		console.log('file: ', file)
@@ -72,7 +69,7 @@ export default function Create() {
 		const dataUp = {
 			...data,
 			uid: userID,
-			additionalDescription: descriptions,
+			// additionalDescription: descriptions,
 			condition: condition,
 		};
 
@@ -91,45 +88,19 @@ export default function Create() {
 		setFile(selected);
 	};
 
-	// additional description
-	const [descriptionList, setDescriptionList] = useState([
-		{ description_field: '', description: '' },
-	]);
-	const handleInputChange = (
-		e: React.SyntheticEvent<EventTarget>,
-		index: number
-	) => {
-		const value = (e.target as HTMLInputElement).value;
-		const name = (e.target as HTMLInputElement).name;
-		const list: any = [...descriptionList];
+	const onDescriptionChange = (desc: any) => {
+		console.log("AAAAAAAAAAAAAAAAAa: ", desc)
+	}
 
-		if (name) {
-			list[index][name] = value;
-		}
-		setDescriptionList(list);
-	};
-	const handleRemoveClick = (index: number) => {
-		const list = [...descriptionList];
-		list.splice(index, 1);
-		setDescriptionList(list);
-	};
-
-	const handleAddClick = () => {
-		setDescriptionList([
-			...descriptionList,
-			{ description_field: '', description: '' },
-		]);
-	};
-	// additional description end
 
 	return (
-		<Container maxWidth="md" style={{ marginTop: '1.3rem' }}>
+		<Container maxWidth="md" style={{ marginTop: '1.3rem' }} className={classes.formContainer} >
 			<Box fontSize="1.3rem" fontWeight={700}>
 				Create a new product
 			</Box>
 
 			<form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-				<Grid container spacing={5}>
+				<Grid container spacing={3}>
 					<Grid item sm={12} md={6}>
 						<Controller
 							name="name"
@@ -140,6 +111,7 @@ export default function Create() {
 							}}
 							as={
 								<TextField
+									variant="outlined"
 									className={classes.field}
 									onChange={(e) => setTitle(e.target.value)}
 									label="Product Name"
@@ -161,6 +133,7 @@ export default function Create() {
 							}}
 							as={
 								<TextField
+									variant="outlined"
 									className={classes.field}
 									onChange={(e) => setTitle(e.target.value)}
 									label="Quantity Available"
@@ -182,6 +155,7 @@ export default function Create() {
 							}}
 							as={
 								<TextField
+									variant="outlined"
 									className={classes.field}
 									onChange={(e) => setTitle(e.target.value)}
 									label="Currency"
@@ -190,7 +164,6 @@ export default function Create() {
 									fullWidth
 									required
 									error={titleError}
-								// currency: string;
 								/>
 							}
 						/>
@@ -204,6 +177,7 @@ export default function Create() {
 							}}
 							as={
 								<TextField
+									variant="outlined"
 									className={classes.field}
 									onChange={(e) => setTitle(e.target.value)}
 									label="Price"
@@ -212,10 +186,22 @@ export default function Create() {
 									fullWidth
 									required
 									error={titleError}
-								// price: string;
 								/>
 							}
 						/>
+						<Box mb={2}>
+							<Button variant="outlined" size="small" component="label">
+								Upload Product Thumbnail Image
+							<input
+									name="images"
+									type="file"
+									multiple
+									accept="image/*"
+									hidden
+									onChange={handleChange}
+								/>
+							</Button>
+						</Box>
 					</Grid>
 
 					<Grid item sm={12} md={6}>
@@ -228,6 +214,7 @@ export default function Create() {
 							}}
 							as={
 								<TextField
+									variant="outlined"
 									className={classes.field}
 									onChange={(e) => setTitle(e.target.value)}
 									label="Brand"
@@ -249,6 +236,7 @@ export default function Create() {
 							}}
 							as={
 								<TextField
+									variant="outlined"
 									className={classes.field}
 									onChange={(e) => setTitle(e.target.value)}
 									label="Catagory"
@@ -261,20 +249,7 @@ export default function Create() {
 							}
 						/>
 
-						{/* Image upload */}
-						<Button variant="outlined" size="small" component="label">
-							Upload Product Thumbnail Image
-							<input
-								name="images"
-								type="file"
-								multiple
-								accept="image/*"
-								hidden
-								onChange={handleChange}
-							/>
-						</Button>
-
-						<FormControl style={{ minWidth: 250 }}>
+						<FormControl variant="outlined" size="small" style={{ minWidth: 260, maxWidth: "400px" }}>
 							<InputLabel id="demo-simple-select-label">Condition</InputLabel>
 							<Select
 								labelId="demo-simple-select-label"
@@ -296,6 +271,7 @@ export default function Create() {
 							}}
 							as={
 								<TextField
+									variant="outlined"
 									className={classes.field}
 									onChange={(e) => setDetails(e.target.value)}
 									label="Description"
@@ -311,68 +287,64 @@ export default function Create() {
 					</Grid>
 				</Grid>
 
-				<Box fontSize=".86rem">Additional Description</Box>
-				{descriptionList.map((desc, i) => {
-					return (
-						<Grid container spacing={2} justify="center" alignItems="flex-end">
-							<Grid item sm={12} md={5}>
-								<TextField
-									id="input-with-icon-grid"
-									name="description_field"
-									label="Field Name"
-									value={desc.description_field}
-									required
-									onChange={(e) => handleInputChange(e, i)}
-								/>
-							</Grid>
-							<Grid item sm={12} md={5}>
-								<TextField
-									id="input-with-icon-grid"
-									name="description"
-									label="Field Description"
-									multiline
-									rowsMax={20}
-									rows={3}
-									required
-									value={desc.description}
-									onChange={(e) => handleInputChange(e, i)}
-								/>
-							</Grid>
-							<Grid item sm={12} md={2}>
-								<Box display="flex" justifyContent="space-between">
-									{descriptionList.length !== 1 && (
-										<IconButton
-											aria-label="delete"
-											className={classes.margin}
-											onClick={() => handleRemoveClick(i)}>
-											<DeleteIcon fontSize="inherit" />
-										</IconButton>
-									)}
-									{descriptionList.length - 1 === i && (
-										<IconButton
-											aria-label="delete"
-											className={classes.margin}
-											onClick={handleAddClick}>
-											<AddBoxIcon fontSize="inherit" />
-										</IconButton>
-									)}
-								</Box>
-							</Grid>
-						</Grid>
-					);
-				})}
+				<Divider />
+				<Box my={4}></Box>
+				<Grid container spacing={2}>
+					<Grid item xs={10} lg={6}>
+						<FormControl variant="outlined" size="small" style={{ minWidth: 260 }}>
+							<InputLabel id="demo-simple-select-outlined-label">Select Branch</InputLabel>
+							<Select
+								labelId="demo-simple-select-outlined-label"
+								id="demo-simple-select-outlined"
+								// value={age}
+								// onChange={handleChange}
+								label="Select Branch..."
+							>
+								<MenuItem value="">
+									<em>None</em>
+								</MenuItem>
+								<MenuItem value={10}>22 Branch</MenuItem>
+								<MenuItem value={20}>Arada</MenuItem>
+								<MenuItem value={30}>Mexico</MenuItem>
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={10} lg={6}>
+						<FormControl variant="outlined" size="small" style={{ minWidth: 260 }}>
+							<InputLabel id="demo-simple-select-outlined-label">Shope</InputLabel>
+							<Select
+								labelId="demo-simple-select-outlined-label"
+								id="demo-simple-select-outlined"
+								// value={age}
+								// onChange={handleChange}
+								label="Select Branch"
+							>
+								<MenuItem value={10}>Ten</MenuItem>
+								<MenuItem value={20}>Twenty</MenuItem>
+								<MenuItem value={30}>Thirty</MenuItem>
+							</Select>
+						</FormControl>
+					</Grid>
+				</Grid>
+
+				<Box fontSize=".86rem" mt={4}>Additional Description</Box>
+				<AdditionalDescriptionForm descriptions={onDescriptionChange} />
+
 				<Button
+					disableElevation
 					type="submit"
 					color="primary"
 					variant="contained"
 					style={{
-						marginTop: 10,
+						marginTop: "3rem",
+						maxWidth: "300px",
+						width: '80%'
 					}}
 					endIcon={<KeyboardArrowRightIcon />}>
 					Submit
 				</Button>
 				<Box mt={10}></Box>
 			</form>
-		</Container>
+		</Container >
 	);
 }

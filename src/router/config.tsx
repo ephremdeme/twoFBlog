@@ -1,5 +1,5 @@
 import Loader from 'components/shared/Loader';
-import {UserRole} from 'features/auth/types';
+import { UserRole } from 'features/auth/types';
 import Appbar from 'layouts/appLayout/Appbar';
 import AppNav from 'layouts/appLayout/AppNav';
 import Chat from 'pages/chat/chatbox';
@@ -50,6 +50,38 @@ const routes: IRoute[] = [
 			UserRole.SELLER,
 			UserRole.SHOPE_ADMIN,
 		],
+	},
+	{
+		path: '/admin',
+		component: lazy(() => import('../pages/dashboard/analytics/auth')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: () => <AppNav />,
+		permissions: [
+			UserRole.GUEST
+		],
+	},
+	{
+		path: '/shope',
+		component: lazy(() => import('../pages/shope')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: () => <AppNav />,
+		permissions: [
+			UserRole.ADMIN, UserRole.SHOPE_ADMIN
+		],
+		routes: [
+			{
+				path: '/shope/form',
+				component: lazy(() => import('../pages/shope/form')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [
+					UserRole.ADMIN, UserRole.SHOPE_ADMIN
+				],
+			},
+		]
 	},
 	{
 		path: '/products/',
