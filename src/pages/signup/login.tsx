@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Redirect, Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import {
 	Box,
 	Button,
@@ -9,9 +9,9 @@ import {
 	makeStyles,
 	CssBaseline,
 } from '@material-ui/core';
-import {ReactComponent as GoogleIcon} from '../../public/icons/icons8_google_logo_1.svg';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../app/store';
+import { ReactComponent as GoogleIcon } from '../../public/icons/icons8_google_logo_1.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 import {
 	singUpWithProvider,
 	signInWithEmailPassword,
@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 		paddingTop: theme.spacing(3),
 	},
 	signup: {
-		textDecoration: 'none',
 		paddingLeft: '5px',
 		fontWeight: 700,
 		fontSize: '1.15em',
@@ -58,10 +57,6 @@ const LoginView = () => {
 		}
 	};
 
-	if (auth.authenticated) {
-		return <Redirect to="/dashboard" />;
-	}
-
 	return (
 		<>
 			<CssBaseline />
@@ -71,7 +66,7 @@ const LoginView = () => {
 				height="100%"
 				justifyContent="center"
 				className={classes.root}>
-				<Container maxWidth="sm" style={{maxWidth: '400px'}}>
+				<Container maxWidth="sm" style={{ maxWidth: '400px' }}>
 					<form onSubmit={handleSubmit}>
 						<Box mb={3}>
 							<AuthAlert />
@@ -120,6 +115,7 @@ const LoginView = () => {
 								disableElevation
 								color="primary"
 								fullWidth
+								size="large"
 								variant="contained"
 								onClick={() => {
 									handleLogin();
@@ -128,24 +124,14 @@ const LoginView = () => {
 							</Button>
 						</Box>
 					</form>
-					<Typography style={{textAlign: 'end'}} variant="body1">
-						Don't have an account?
-						<Typography
-							variant="body1"
-							component={Link}
-							to="/signup"
-							className={classes.signup}>
-							Sign Up
-						</Typography>
-					</Typography>
+
+
 					<div>
-						<Box my={3}>
-							<Box textAlign="center" fontWeight={600} fontSize="2rem">
-								--- OR ---
-							</Box>
+						<Box my={5}>
 							<Box>
 								<Button
 									fullWidth
+									size="large"
 									startIcon={<GoogleIcon width="30px" height="30px" />}
 									onClick={handleSubmit}
 									variant="outlined">
@@ -154,6 +140,24 @@ const LoginView = () => {
 							</Box>
 						</Box>
 					</div>
+
+					<Typography style={{ float: 'right' }} variant="body1">
+						<Box fontWeight={600} display="flex" alignItems="center">
+							<Box>
+								Don't have an account?
+							</Box>
+							<Box ml={2} fontSize="1rem">
+								<Typography
+									variant="body2"
+									component={Link}
+									to="/signup"
+									className={classes.signup}>
+									Sign Up
+						</Typography>
+							</Box>
+						</Box>
+					</Typography>
+
 				</Container>
 			</Box>
 		</>
