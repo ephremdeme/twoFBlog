@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const AdditionalDescriptionForm = ({ descriptions }: any) => {
+const BranchsForm = ({ descriptions }: any) => {
   const classes = useStyles();
   const [descriptionList, setDescriptionList] = useState([
     { description_field: '', description: '' },
@@ -56,7 +56,7 @@ const AdditionalDescriptionForm = ({ descriptions }: any) => {
     <div>
       {descriptionList.map((desc, i) => {
         return (
-          <Box display="flex" mt={2} alignItems="center" className={classes.additionalFieldFormContainer}>
+          <Box key={i} display="flex" mt={2} alignItems="center" className={classes.additionalFieldFormContainer}>
             <TextField
               variant="outlined"
               size="small"
@@ -78,6 +78,7 @@ const AdditionalDescriptionForm = ({ descriptions }: any) => {
                 value={desc.description}
                 onChange={(e) => handleInputChange(e, i)}
               />
+             
             </Box>
             <Box ml={1}>
               <ButtonGroup
@@ -105,4 +106,4 @@ const AdditionalDescriptionForm = ({ descriptions }: any) => {
   )
 }
 
-export default AdditionalDescriptionForm
+export default BranchsForm

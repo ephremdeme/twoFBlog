@@ -123,7 +123,7 @@ const Comments: React.FC<IProps> = ({id}) => {
 		<Box>
 			{comments ? (
 				comments.map((comment: any) => (
-					<Box display="flex" my={2} className={classes.root}>
+					<Box display="flex" key={comment.id} my={2} className={classes.root}>
 						<Box>
 							<Avatar
 								className={classes.avatar}

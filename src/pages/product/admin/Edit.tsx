@@ -328,7 +328,7 @@ const EditForm: React.FC<IEditFormProps> = ({ product }) => {
         <Box fontSize=".86rem">Additional Description</Box>
         {descriptionList.map((desc, i) => {
           return (
-            <Grid container spacing={2} justify="center" alignItems="flex-end">
+            <Grid container spacing={2} key={i} justify="center" alignItems="flex-end">
               <Grid item sm={12} md={5}>
                 <TextField
                   id="input-with-icon-grid"
