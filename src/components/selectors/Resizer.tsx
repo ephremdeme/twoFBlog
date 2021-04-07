@@ -37,7 +37,7 @@ const Indicators = styled.div<{bound?: 'row' | 'column'}>`
 		&:nth-child(1) {
 			${(props: any) =>
 				props.bound
-					? props.bound == 'row'
+					? props.bound === 'row'
 						? `
                 left: 50%;
                 top: -5px;
@@ -61,7 +61,7 @@ const Indicators = styled.div<{bound?: 'row' | 'column'}>`
 		&:nth-child(3) {
 			${(props: any) =>
 				props.bound
-					? props.bound == 'row'
+					? props.bound === 'row'
 						? `
                 left: 50%;
                 bottom: -5px;
@@ -242,11 +242,11 @@ export const Resizer = ({propKey, children, ...props}: any) => {
 						) + '%';
 				else height = `${height}px`;
 
-				if (isPercentage(width) && dom.parentElement.style.width == 'auto') {
+				if (isPercentage(width) && dom.parentElement.style.width === 'auto') {
 					width = editingDimensions.current.width + d.width + 'px';
 				}
 
-				if (isPercentage(height) && dom.parentElement.style.height == 'auto') {
+				if (isPercentage(height) && dom.parentElement.style.height === 'auto') {
 					height = editingDimensions.current.height + d.height + 'px';
 				}
 

@@ -4,25 +4,20 @@ import {
 	ClickAwayListener,
 	createStyles,
 	Divider as MuiDivider,
-	FormControl,
 	Grow,
 	IconButton,
-	InputLabel,
 	makeStyles,
 	MenuItem,
 	MenuList,
 	Paper,
 	Popper,
-	Select,
-	SvgIcon,
 	Theme,
 } from '@material-ui/core';
 import {useNode, UserComponent} from '@craftjs/core';
 import {ReactComponent as DividerLgIcon} from '../../public/icons/large-divider.svg';
 import {ReactComponent as DividerMdIcon} from '../../public/icons/medium-divider.svg';
 import {ReactComponent as DividerSmIcon} from '../../public/icons/small-divider.svg';
-import {UseScrollTriggerOptions} from '@material-ui/core/useScrollTrigger/useScrollTrigger';
-import {Height, Maximize, Remove} from '@material-ui/icons';
+import {Height, Remove} from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({

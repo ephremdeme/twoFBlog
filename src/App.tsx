@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
 	createMuiTheme,
 	ThemeProvider,
@@ -6,13 +6,13 @@ import {
 	Theme,
 	createStyles,
 } from '@material-ui/core';
-import {RootState} from './app/store';
-import {isLoggedIn} from './features/auth';
-import {useSelector, useDispatch} from 'react-redux';
+import { RootState } from './app/store';
+import { isLoggedIn } from './features/auth';
+import { useSelector, useDispatch } from 'react-redux';
 import Router from './router/Router';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import routes, {IRoute} from './router/config';
-import {UserRole} from 'features/auth/types';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import routes, { IRoute } from './router/config';
+import { UserRole } from 'features/auth/types';
 import Loading from './components/loading/Loading2';
 import Chat from 'pages/chat/chatbox';
 
@@ -70,6 +70,14 @@ function App() {
 		palette: {
 			type: appTheme ? 'dark' : 'light',
 		},
+		typography: {
+			fontFamily: "Poppins",
+			h5: {
+				fontWeight: 500,
+				fontSize: 26,
+				letterSpacing: 0.5,
+			},
+		},
 	});
 
 	theme.overrides = {
@@ -87,7 +95,7 @@ function App() {
 		if (!auth.authenticated) {
 			dispatch(isLoggedIn());
 		}
-	}, []);
+	}, [auth.authenticated]);
 
 	return (
 		<div>
