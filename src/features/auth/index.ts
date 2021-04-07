@@ -199,7 +199,7 @@ export const createUserWithEmailPassword = (user: any): AppThunk => async (
 				email: _.user?.email,
 				user_name: user.name,
 				photo:
-					'https://i.imgur.com/Yuv7QE6.png',
+					'https://firebasestorage.googleapis.com/v0/b/cooomerce.appspot.com/o/avatar.png?alt=media',
 				isOnline: true,
 				uid: _.user?.uid,
 				role: UserRole.USER,
@@ -214,7 +214,7 @@ export const createUserWithEmailPassword = (user: any): AppThunk => async (
 				role: UserRole.USER,
 				email: user.email,
 				photo:
-					'https://i.imgur.com/Yuv7QE6.png',
+					'https://firebasestorage.googleapis.com/v0/b/cooomerce.appspot.com/o/avatar.png?alt=media',
 				user_name: user.name,
 			};
 			dispatch(
@@ -250,7 +250,7 @@ export const createUserWithEmailPasswordAdmin = (user: any, userRole: string): A
 				email: _.user?.email,
 				user_name: user.name,
 				photo:
-					'https://i.imgur.com/Yuv7QE6.png',
+					'https://firebasestorage.googleapis.com/v0/b/cooomerce.appspot.com/o/avatar.png?alt=media',
 				isOnline: true,
 				uid: _.user?.uid,
 				role: userRole,
@@ -265,7 +265,7 @@ export const createUserWithEmailPasswordAdmin = (user: any, userRole: string): A
 				role: userRole,
 				email: user.email,
 				photo:
-					'https://i.imgur.com/Yuv7QE6.png',
+					'https://firebasestorage.googleapis.com/v0/b/cooomerce.appspot.com/o/avatar.png?alt=media',
 				user_name: user.name,
 			};
 			dispatch(
@@ -374,7 +374,6 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 	auth.onAuthStateChanged((user: any) => {
 		if (user) {
 			if (user.isAnonymous === false) {
-				console.log('[USER]', user);
 				db.collection('users')
 					.doc(user.uid)
 					.update({
