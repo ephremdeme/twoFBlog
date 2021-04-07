@@ -33,6 +33,11 @@ const RouteWithSubRoutes = (route: IRoute) => {
 					if (userBlocked) {
 						return <Redirect to={'/account-blocked'} />;
 					}
+					if (route.loginRedirect) {
+						if(authenticated) {
+							return <Redirect to={route.loginRedirect} />;
+						}
+					}
 					if (route.redirect) {
 						if (route.redirect.page) {
 							if (route.redirect.permissions) {

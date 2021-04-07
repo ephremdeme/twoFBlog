@@ -22,6 +22,7 @@ export interface IRoute {
 	};
 	private?: boolean;
 	permissions?: UserRole[];
+	loginRedirect?: string;
 	sidebar?: () => React.ReactNode;
 	appbar?: () => React.ReactNode;
 }
@@ -62,8 +63,8 @@ const routes: IRoute[] = [
 		],
 	},
 	{
-		path: '/shope',
-		component: lazy(() => import('../pages/shope')),
+		path: '/shop',
+		component: lazy(() => import('../pages/shop')),
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
@@ -72,8 +73,18 @@ const routes: IRoute[] = [
 		],
 		routes: [
 			{
-				path: '/shope/form',
-				component: lazy(() => import('../pages/shope/form')),
+				path: '/shop/list',
+				component: lazy(() => import('../pages/shop/list')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [
+					UserRole.ADMIN, UserRole.SHOPE_ADMIN
+				],
+			},
+			{
+				path: '/shop/create',
+				component: lazy(() => import('../pages/shop/create')),
 				exact: false,
 				fallback: <Loader />,
 				sidebar: () => <AppNav />,
@@ -217,12 +228,14 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/signup/login')),
 		exact: false,
 		fallback: <Loader />,
+		loginRedirect: '/products/list'
 	},
 	{
 		path: '/signup',
 		component: lazy(() => import('../pages/signup/SignUp')),
 		exact: false,
 		fallback: <Loader />,
+		loginRedirect: '/products/list'
 	},
 	{
 		path: '/about',
