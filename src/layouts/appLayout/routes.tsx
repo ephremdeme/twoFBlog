@@ -7,7 +7,8 @@ import SecurityIcon from '@material-ui/icons/Security';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import BallotIcon from '@material-ui/icons/Ballot';
 import InfoIcon from '@material-ui/icons/Info';
-
+import BusinessIcon from '@material-ui/icons/Business';
+	
 import {UserRole} from 'features/user/types';
 export interface INavRouter {
 	name: string;
@@ -52,6 +53,11 @@ const navs = {
 			path: '/blogs',
 			icon: <BallotIcon />
 		},
+		{
+			name: 'Shops',
+			path: '/shop/list',
+			icon: <BusinessIcon />
+		},
 	],
 	[UserRole.SHOPE_ADMIN]: [
 		{
@@ -63,6 +69,11 @@ const navs = {
 			name: 'Products',
 			path: '/products/list',
 			icon: <ShoppingBasketIcon />
+		},
+		{
+			name: 'Shops',
+			path: '/shop/list',
+			icon: <BusinessIcon />
 		},
 	],
 	[UserRole.SELLER]: [

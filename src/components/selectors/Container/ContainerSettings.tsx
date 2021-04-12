@@ -8,32 +8,21 @@ import {
 	MenuItem,
 	Popper,
 	Slider,
-	SvgIcon,
 	SvgIconTypeMap,
 	TextField,
 	Typography,
 } from '@material-ui/core';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
 import {
-	FormatAlignCenter,
-	FormatAlignLeft,
-	FormatAlignRight,
-	VerticalAlignBottom,
-	VerticalAlignCenter,
 	ColorLens,
-	FormatColorFill,
 } from '@material-ui/icons';
 import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 import React, {useEffect, useState} from 'react';
 import {ChromePicker, Color, ColorResult} from 'react-color';
-import CheckBoxOutlineBlankRoundedIcon from '@material-ui/icons/CheckBoxOutlineBlankRounded';
 import {GenericMenuList} from 'components/user/text/textSetting';
-import ShopTwoIcon from '@material-ui/icons/ShopTwo';
 import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
 import {OverridableComponent} from '@material-ui/core/OverridableComponent';
-import AllOutIcon from '@material-ui/icons/AllOut';
 
 import {ReactComponent as AlignBottomVertical} from '../../../public/icons/editor/Align_Bottom_Vertically.svg';
 import {ReactComponent as AlignMiddleVertical} from '../../../public/icons/editor/Align_Middle_Vertically.svg';

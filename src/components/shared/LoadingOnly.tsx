@@ -2,13 +2,11 @@ import React from 'react';
 import {
 	makeStyles,
 	createStyles,
-	withStyles,
 	Theme,
 } from '@material-ui/core/styles';
 import CircularProgress, {
 	CircularProgressProps,
 } from '@material-ui/core/CircularProgress';
-import { Box } from '@material-ui/core';
 
 const useStylesLoader = makeStyles((theme: Theme) =>
 	createStyles({
@@ -50,10 +48,10 @@ const useStylesLoader = makeStyles((theme: Theme) =>
 interface IProps {
 	size?: number;
 	thickness?: number;
-	props: CircularProgressProps;
+	props?: CircularProgressProps;
 }
 
-const LoadingOnly = ({size=20, thickness=3, ...props}: CircularProgressProps) => {
+const LoadingOnly: React.FC<IProps> = ({size=20, thickness=3, ...props}: CircularProgressProps) => {
 	const classes = useStylesLoader();
 
 	return (

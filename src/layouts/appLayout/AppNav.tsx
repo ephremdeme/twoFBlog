@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			background: theme.palette.background.default,
 			width: drawerWidth,
 			border: 'none',
-			borderRight: '1px solid #666',
+			borderRight: theme.palette.type=='dark' ? '1px solid #666' : '1px solid #ddd',
 			marginTop: '63px',
 		},
 		content: {
@@ -133,7 +133,7 @@ export default function AppNav(props: Props) {
 		<div>
 			<List>
 				{navs.map((nav: INavRouter, i: number) => (
-					<TooltipCustom title={nav.name} arrow placement="right">
+					<TooltipCustom key={i} title={nav.name} arrow placement="right">
 						<ListItem
 							button
 							component={Link}

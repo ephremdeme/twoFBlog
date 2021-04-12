@@ -1,5 +1,5 @@
 import Loader from 'components/shared/Loader';
-import {UserRole} from 'features/auth/types';
+import { UserRole } from 'features/auth/types';
 import Appbar from 'layouts/appLayout/Appbar';
 import AppNav from 'layouts/appLayout/AppNav';
 import Chat from 'pages/chat/chatbox';
@@ -22,6 +22,7 @@ export interface IRoute {
 	};
 	private?: boolean;
 	permissions?: UserRole[];
+	loginRedirect?: string;
 	sidebar?: () => React.ReactNode;
 	appbar?: () => React.ReactNode;
 }
@@ -50,6 +51,48 @@ const routes: IRoute[] = [
 			UserRole.SELLER,
 			UserRole.SHOPE_ADMIN,
 		],
+	},
+	{
+		path: '/admin',
+		component: lazy(() => import('../pages/dashboard/analytics/auth')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: () => <AppNav />,
+		permissions: [
+			UserRole.GUEST
+		],
+	},
+	{
+		path: '/shop',
+		component: lazy(() => import('../pages/shop')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: () => <AppNav />,
+		permissions: [
+			UserRole.ADMIN, UserRole.SHOPE_ADMIN
+		],
+		routes: [
+			{
+				path: '/shop/list',
+				component: lazy(() => import('../pages/shop/list')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [
+					UserRole.ADMIN, UserRole.SHOPE_ADMIN
+				],
+			},
+			{
+				path: '/shop/create',
+				component: lazy(() => import('../pages/shop/create')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				permissions: [
+					UserRole.ADMIN, UserRole.SHOPE_ADMIN
+				],
+			},
+		]
 	},
 	{
 		path: '/products/',
@@ -185,12 +228,14 @@ const routes: IRoute[] = [
 		component: lazy(() => import('../pages/signup/login')),
 		exact: false,
 		fallback: <Loader />,
+		loginRedirect: '/products/list'
 	},
 	{
 		path: '/signup',
 		component: lazy(() => import('../pages/signup/SignUp')),
 		exact: false,
 		fallback: <Loader />,
+		loginRedirect: '/products/list'
 	},
 	{
 		path: '/about',

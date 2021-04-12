@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Redirect, Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import {
 	Box,
 	Button,
@@ -9,8 +9,8 @@ import {
 	makeStyles,
 	CssBaseline,
 } from '@material-ui/core';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../app/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 import {
 	createUserWithEmailPassword,
 	setAuthFailure,
@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: theme.palette.background.paper,
 	},
 	login: {
-		textDecoration: 'none',
 		paddingLeft: '5px',
 		fontWeight: 700,
 		fontSize: '1.15em',
@@ -64,10 +63,6 @@ const LoginView = () => {
 		}
 	};
 
-	if (auth.authenticated) {
-		return <Redirect to="/dashboard" />;
-	}
-
 	return (
 		<>
 			<CssBaseline />
@@ -77,16 +72,14 @@ const LoginView = () => {
 				height="100%"
 				justifyContent="center"
 				className={classes.root}>
-				<Container maxWidth="sm">
+				<Container maxWidth="sm" style={{ maxWidth: '400px' }}>
 					<form>
 						<Box mb={3}>
 							<Typography color="textPrimary" variant="h2">
-								Sign Up
+								<Box textAlign="center" fontWeight={800} fontSize="3rem">
+									Sign Up
+								</Box>
 							</Typography>
-							<Typography
-								color="textSecondary"
-								gutterBottom
-								variant="body2"></Typography>
 						</Box>
 						<Box mt={3} mb={1}>
 							<AuthAlert />
@@ -95,12 +88,12 @@ const LoginView = () => {
 							</Typography>
 						</Box>
 						<TextField
+							size="small"
 							fullWidth
 							label="User Name"
 							margin="normal"
 							name="name"
 							type="text"
-							variant="outlined"
 							error={auth.errorMessage !== undefined && name === ''}
 							value={name}
 							onChange={(e) => {
@@ -108,12 +101,12 @@ const LoginView = () => {
 							}}
 						/>
 						<TextField
+							size="small"
 							fullWidth
 							label="Email Address"
 							margin="normal"
 							name="email"
 							type="email"
-							variant="outlined"
 							error={auth.errorMessage !== undefined && email === ''}
 							value={email}
 							onChange={(e) => {
@@ -121,12 +114,12 @@ const LoginView = () => {
 							}}
 						/>
 						<TextField
+							size="small"
 							fullWidth
 							label="Password"
 							margin="normal"
 							name="password"
 							type="password"
-							variant="outlined"
 							error={auth.errorMessage !== undefined && password === ''}
 							value={password}
 							onChange={(e) => {
@@ -140,6 +133,7 @@ const LoginView = () => {
 								size="large"
 								// type="submit"
 								variant="contained"
+								disableElevation
 								onClick={() => {
 									handleLogin();
 								}}>
@@ -147,15 +141,21 @@ const LoginView = () => {
 							</Button>
 						</Box>
 					</form>
-					<Typography style={{float: 'right'}} variant="body1">
-						Already a member?
-						<Typography
-							variant="body1"
-							component={Link}
-							to="/login"
-							className={classes.login}>
-							Login
+					<Typography style={{ float: 'right' }} variant="body1">
+						<Box fontWeight={600} display="flex" alignItems="center">
+							<Box>
+								Already a member?
+							</Box>
+							<Box ml={2}>
+								<Typography
+									variant="body2"
+									component={Link}
+									to="/login"
+									className={classes.login}>
+									Login
 						</Typography>
+							</Box>
+						</Box>
 					</Typography>
 				</Container>
 			</Box>

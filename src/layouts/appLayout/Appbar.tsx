@@ -244,8 +244,8 @@ function Appbar({history}: any): JSX.Element {
 								}}>
 								<Box pt={2} className={classes.userPopoverContent}>
 									<Box m={2}>
-										<Grid container spacing={2}>
-											<Grid item justify="center" alignItems="center">
+										<Grid container spacing={2} justify="center" alignItems="center">
+											<Grid item>
 												<Avatar alt="User" src={userAvatar} />
 											</Grid>
 											<Grid item>

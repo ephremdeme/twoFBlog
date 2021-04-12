@@ -239,7 +239,7 @@ const ChatPage: React.FC<{}> = () => {
 							</Box>
 						}
 						{state.users_admin &&
-							state.users_admin.map((user: User, index) => {
+							state.users_admin.map((user: User, index: number) => {
 								return (
 									<Card
 										className={classes.root}

@@ -14,10 +14,10 @@ import {
 	Chip,
 	Divider,
 } from '@material-ui/core';
-import {RootState} from 'app/store';
+import { RootState } from 'app/store';
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectChartTotal} from '../../../features/product';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectChartTotal } from '../../../features/product';
 import {
 	resetChart,
 	removeProductChart,
@@ -31,7 +31,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -65,10 +65,10 @@ const Chart = () => {
 	const renderProdcutList = () => {
 		const charts = Object.values(chart);
 
-		return charts.map((chart: any) => {
+		return charts.map((chart: any, i: number) => {
 			if (chart.products.length !== 0) {
 				return (
-					<List>
+					<List key={i}>
 						<ListItem>
 							<ListItemAvatar>
 								<Avatar src={chart.products[0].thumbnail} />
@@ -129,6 +129,7 @@ const Chart = () => {
 				);
 			} else {
 				<Box
+					key={i}
 					minHeight="60vh"
 					minWidth="100%"
 					display="flex"

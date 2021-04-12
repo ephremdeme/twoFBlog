@@ -232,8 +232,10 @@ export const getRealTimeMessageView_USERS = (uid: string): AppThunk => async (di
 		if (snapshot.exists()) {
 			u.map(user => {
 				snapshot.forEach((message) => {
-					if (message.val().user_uid_1 === user.uid && message.val().user_uid_2 === uid && message.val().isView === false) {
-						views++;
+					if (message) {
+						if (message.val().user_uid_1 === user.uid && message.val().user_uid_2 === uid && message.val().isView === false) {
+							views++;
+						}
 					}
 				})
 				dispatch(setMessageView(views))
@@ -246,9 +248,9 @@ export const getRealTimeMessageView_USERS = (uid: string): AppThunk => async (di
 export const savePageVisit = (): AppThunk => async dispatch => {
 	return firebase.firestore().collection("page").doc('mywebpagevisit').get()
 		.then((value: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | any) => {
-			if (value) {
+			if (value && value.data()) {
 				firebase.firestore().collection("page").doc('mywebpagevisit').update({
-					visit: value.data().visit + 1
+					visit: value.data()?.visit + 1
 				})
 			}
 		})
@@ -257,7 +259,7 @@ export const savePageVisit = (): AppThunk => async dispatch => {
 export const getVisit = (): AppThunk => async (dispatch) => {
 	firebase.firestore().collection("page").doc('mywebpagevisit').get()
 		.then((value: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | any) => {
-			if (value) {
+			if (value && value.data()) {
 				const visits: number = value.data().visit;
 				dispatch(setGetPageView(visits))
 			}
@@ -268,7 +270,7 @@ export const getAllUser = (): AppThunk => async (dispatch) => {
 	firebase.firestore().collection("users").get()
 		.then((value: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | any) => {
 			const users: any[] = [];
-			if (value) {
+			if (value && value.data()) {
 				value.forEach((user: any) => {
 					if (user.data().role === UserRole.USER) {
 						users.push({ ...user.data() })

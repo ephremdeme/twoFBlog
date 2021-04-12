@@ -358,10 +358,10 @@ const UserList = () => {
 				m={3}>
 				<Button
 					component={Link}
-					to="/auth/create/user"
+					to="/shop/create"
 					size="small"
 					variant="outlined">
-					Add new user
+					Add new shope
 				</Button>
 				<Box flexGrow={1} mx={3}>
 					<div className={classes.search}>
@@ -397,8 +397,8 @@ const UserList = () => {
 				<div style={{minHeight: '400px', width: '100%'}}>
 					{gridView ? (
 						<Grid container spacing={3}>
-							{usersFiltered.map((user, i) => (
-								<Grid item key={i} sm={12} md={4} lg={3}>
+							{usersFiltered.map((user, id) => (
+								<Grid key={id} item sm={12} md={4} lg={3}>
 									<Card
 										elevation={0}
 										style={{
