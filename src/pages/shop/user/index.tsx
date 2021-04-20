@@ -398,7 +398,7 @@ const UserList = () => {
 					{gridView ? (
 						<Grid container spacing={3}>
 							{usersFiltered.map((user, id) => (
-								<Grid key={i} item sm={12} md={4} lg={3}>
+								<Grid key={id} item sm={12} md={4} lg={3}>
 									<Card
 										elevation={0}
 										style={{
