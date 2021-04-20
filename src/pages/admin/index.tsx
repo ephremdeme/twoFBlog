@@ -1,5 +1,5 @@
 import React from 'react';
-import {IRoute} from 'router/config';
+import { IRoute } from 'router/config';
 import Router from '../../router/Router';
 
 interface IProps {

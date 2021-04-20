@@ -22,19 +22,19 @@ export default function GroupOrientation() {
     <div className={classes.root}>
       <Grid container spacing={2}>
         <Grid item sm={12} md={6} lg={4}>
-        <ButtonGroup
-          orientation="vertical"
-          aria-label="vertical outlined primary button group"
-        >
-          <Button>ADMIN</Button>
-          <Button>EDITOR</Button>
-          <Button>BLOGGER</Button>
-          <Button>CUSTOMER_SERVICE</Button>
-          <Button>USER</Button>
-          <Button>GUEST</Button>
-          <Button>SHOPE_ADMIN</Button>
-          <Button>SELLER</Button>
-        </ButtonGroup>
+          <ButtonGroup
+            orientation="vertical"
+            aria-label="vertical outlined primary button group"
+          >
+            <Button>ADMIN</Button>
+            <Button>EDITOR</Button>
+            <Button>BLOGGER</Button>
+            <Button>CUSTOMER_SERVICE</Button>
+            <Button>USER</Button>
+            <Button>GUEST</Button>
+            <Button>SHOPE_ADMIN</Button>
+            <Button>SELLER</Button>
+          </ButtonGroup>
         </Grid>
         <Grid item sm={12} md={6} lg={4}>
           <Box fontWeight={500} fontSize="1.3rem" >

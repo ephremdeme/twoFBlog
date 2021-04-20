@@ -1,0 +1,14 @@
+.only-members {
+    padding: 20px 0;
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+}
+
+hr {
+    border-top: 2px dashed  gray;
+}

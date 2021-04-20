@@ -1,22 +1,21 @@
 import React from 'react';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import {red} from '@material-ui/core/colors';
+import { red } from '@material-ui/core/colors';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import IconButton from '@material-ui/core/IconButton';
-import {useSpring, animated} from 'react-spring';
+import { useSpring, animated } from 'react-spring';
 import Typography from '@material-ui/core/Typography';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './styles.css';
-import {IBlog} from 'features/editor';
-import {RootState} from 'app/store';
-import auth from 'features/auth';
-import {useSelector} from 'react-redux';
-import {Edit} from '@material-ui/icons';
+import { IBlog } from 'features/editor';
+import { RootState } from 'app/store';
+import { useSelector } from 'react-redux';
+import { Edit } from '@material-ui/icons';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -54,12 +53,12 @@ const trans = (x: number, y: number, s: number) =>
 
 export const BlogCard: React.FC<{
 	blog: IBlog;
-}> = ({blog}) => {
+}> = ({ blog }) => {
 	const classes = useStyles();
 	// console.log(blog);
 	const [props, set] = useSpring(() => ({
 		xys: [0, 0, 1],
-		config: {mass: 1, tension: 150, friction: 20},
+		config: { mass: 1, tension: 150, friction: 20 },
 	}));
 
 	const user = useSelector((state: RootState) => state.auth);
@@ -68,10 +67,10 @@ export const BlogCard: React.FC<{
 		<div className={classes.rootDiv}>
 			<animated.div
 				className="card"
-				onMouseMove={({clientX: x, clientY: y}) => set({xys: calc(x, y)})}
-				onMouseLeave={() => set({xys: [0, 1, 1]})}
+				onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
+				onMouseLeave={() => set({ xys: [0, 1, 1] })}
 				// @ts-ignore
-				style={{transform: props.xys.interpolate(trans)}}>
+				style={{ transform: props.xys.interpolate(trans) }}>
 				<Card className={classes.root}>
 					<CardHeader
 						// avatar={
@@ -100,18 +99,18 @@ export const BlogCard: React.FC<{
 						{(user.role === 'ADMIN' ||
 							user.role === 'EDITOR' ||
 							user.role === 'BLOGGER') && (
-							<>
-								<Link to={`/blogs/${blog.id}/edit`}>
-									<IconButton>
-										<Edit style={{color: 'skyblue'}} />
-									</IconButton>
-								</Link>
-							</>
-						)}
+								<>
+									<Link to={`/blogs/${blog.id}/edit`}>
+										<IconButton>
+											<Edit style={{ color: 'skyblue' }} />
+										</IconButton>
+									</Link>
+								</>
+							)}
 
 						<Link to={`/blogs/${blog.id}`}>
 							<IconButton>
-								<VisibilityIcon style={{color: 'skyblue'}} />
+								<VisibilityIcon style={{ color: 'skyblue' }} />
 							</IconButton>
 						</Link>
 					</CardActions>

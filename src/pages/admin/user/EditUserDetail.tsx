@@ -9,9 +9,9 @@ import {
 	TextField,
 } from '@material-ui/core';
 import { getCollection } from 'app/hooks';
-import {User} from 'features/auth/types';
+import { User } from 'features/auth/types';
 import React, { useEffect } from 'react';
-import {Controller, useForm} from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useHistory } from 'react-router';
 
 interface IProps {
@@ -24,9 +24,9 @@ interface IProps {
 	id: string;
 }
 
-const EditUserDetail: React.FC<IProps> = ({user, id}) => {
+const EditUserDetail: React.FC<IProps> = ({ user, id }) => {
 	const history = useHistory();
-	const {handleSubmit, control, errors: fieldsErrors, reset} = useForm({
+	const { handleSubmit, control, errors: fieldsErrors, reset } = useForm({
 		defaultValues: {
 			user_name: user.user_name,
 			email: user.email,
@@ -85,7 +85,7 @@ const EditUserDetail: React.FC<IProps> = ({user, id}) => {
 					/>
 				</Box>
 				<Box my={2}>
-					<FormControl style={{display: 'block', minWidth: '250px'}}>
+					<FormControl style={{ display: 'block', minWidth: '250px' }}>
 						<InputLabel id="demo-simple-select-label">Age</InputLabel>
 						<Select
 							labelId="demo-simple-select-label"

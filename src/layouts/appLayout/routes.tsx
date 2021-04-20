@@ -49,8 +49,8 @@ const navs = {
 			icon: <ShoppingBasketIcon />
 		},
 		{
-			name: 'Blogs',
-			path: '/blogs',
+			name: 'Posts',
+			path: '/posts',
 			icon: <BallotIcon />
 		},
 		{
@@ -108,8 +108,8 @@ const navs = {
 			icon: <DashboardIcon />
 		},
 		{
-			name: 'Blogs',
-			path: '/blogs',
+			name: 'Posts',
+			path: '/posts',
 			icon: <BallotIcon />
 		},
 	],
@@ -120,8 +120,8 @@ const navs = {
 			icon: <DashboardIcon />
 		},
 		{
-			name: 'Blogs',
-			path: '/blogs',
+			name: 'Posts',
+			path: '/posts',
 			icon: <BallotIcon />
 		},
 	],
@@ -132,8 +132,8 @@ const navs = {
 			icon: <ShoppingBasketIcon />
 		},
 		{
-			name: 'Blogs',
-			path: '/blogs',
+			name: 'Posts',
+			path: '/posts',
 			icon: <BallotIcon />
 		},
 		{
@@ -154,8 +154,8 @@ const navs = {
 			icon: <ShoppingBasketIcon />
 		},
 		{
-			name: 'Blogs',
-			path: '/blogs',
+			name: 'Posts',
+			path: '/posts',
 			icon: <BallotIcon />
 		},
 	],

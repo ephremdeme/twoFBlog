@@ -1,14 +1,13 @@
-import React, {useState} from 'react';
-import {useParams} from 'react-router';
-import {useFireDoc} from '../../../hooks/useFirestore';
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
+import React from 'react';
+import { useParams } from 'react-router';
+import { useFireDoc } from '../../../hooks/useFirestore';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import {deepOrange, green} from '@material-ui/core/colors';
-import {Box, Chip, Container, Divider, Grid, TextField} from '@material-ui/core';
-import {User} from 'features/user/types';
+import { deepOrange, green } from '@material-ui/core/colors';
+import { Box, Container, Divider, Grid } from '@material-ui/core';
+import { User } from 'features/user/types';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import LoadingOnly from 'components/shared/LoadingOnly';
 import EditUserDetail from './EditUserDetail';
 import { getCollection } from 'app/hooks';
@@ -36,12 +35,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const UserEdit = () => {
 	const classes = useStyles();
-	const {id} = useParams();
-	const {loading, data} = useFireDoc<User>('users', id);
+	const { id } = useParams();
+	const { loading, data } = useFireDoc<User>('users', id);
 
-  const deleteUser = () => {
-    getCollection('users').doc(id).delete()
-  }
+	const deleteUser = () => {
+		getCollection('users').doc(id).delete()
+	}
 
 	return (
 		<Container maxWidth="md">
@@ -63,7 +62,7 @@ const UserEdit = () => {
 							</IconButton>
 						</Box>
 					</Box>
-					<Divider style={{margin: '1rem 0 2rem'}} />
+					<Divider style={{ margin: '1rem 0 2rem' }} />
 					<Grid container spacing={1}>
 						<Grid item sm={12} md={5} lg={4}>
 							<Avatar

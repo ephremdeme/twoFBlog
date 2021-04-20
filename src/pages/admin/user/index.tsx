@@ -5,7 +5,7 @@ import {
 	GridColDef,
 	GridOverlay,
 	GridToolbarContainer,
-	GridToolbarExport,
+	GridToolbarExport
 } from '@material-ui/data-grid';
 import {
 	Avatar,
@@ -17,20 +17,16 @@ import {
 	Chip,
 	Container,
 	createStyles,
-	FormControl,
 	Grid,
 	IconButton,
-	InputLabel,
 	makeStyles,
-	MenuItem,
-	Select,
 	Theme,
 	withStyles,
-	fade,
+	fade
 } from '@material-ui/core';
-import {Link} from 'react-router-dom';
-import {getCollection} from 'app/hooks';
-import {User} from 'features/user/types';
+import { Link } from 'react-router-dom';
+import { getCollection } from 'app/hooks';
+import { User } from 'features/user/types';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 import ViewListIcon from '@material-ui/icons/ViewList';
@@ -221,14 +217,15 @@ const UserList = () => {
 	}, []);
 
 	const columns: GridColDef[] = [
-		{field: 'id', headerName: 'ID', width: 170},
-		{field: 'user_name', headerName: 'User Name', width: 160},
-		{field: 'email', headerName: 'Email', width: 160},
+		{ field: 'id', headerName: 'ID', width: 170 },
+		{ field: 'user_name', headerName: 'User Name', width: 160 },
+		{ field: 'email', headerName: 'Email', width: 160 },
 		{
 			field: 'role',
 			headerName: 'User Role',
 			type: 'string',
 			width: 190,
+			// TODO: change admin if needed from the table
 			// renderCell: (params: GridCellParams) => {
 			// 	let {id, role} = params.value?.valueOf() as {
 			// 		id: string;
@@ -266,12 +263,12 @@ const UserList = () => {
 			headerName: 'View',
 			width: 90,
 			renderCell: (params: GridCellParams) => {
-				let {id} = params.value?.valueOf() as {id: string};
+				let { id } = params.value?.valueOf() as { id: string };
 
 				return (
 					<Link to={`/auth/user/${id}`}>
 						<IconButton>
-							<VisibilityIcon style={{color: '#666'}} />
+							<VisibilityIcon style={{ color: '#666' }} />
 						</IconButton>
 					</Link>
 				);
@@ -282,12 +279,12 @@ const UserList = () => {
 			headerName: 'Edit',
 			width: 90,
 			renderCell: (params: GridCellParams) => {
-				let {id} = params.value?.valueOf() as {id: string};
+				let { id } = params.value?.valueOf() as { id: string };
 
 				return (
 					<Link to={`/auth/user/${id}/edit`}>
 						<IconButton>
-							<EditIcon style={{color: '#666'}} />
+							<EditIcon style={{ color: '#666' }} />
 						</IconButton>
 					</Link>
 				);
@@ -298,7 +295,7 @@ const UserList = () => {
 			headerName: 'Account Status',
 			width: 130,
 			renderCell: (params: GridCellParams) => {
-				let {id, blocked} = params.value?.valueOf() as {
+				let { id, blocked } = params.value?.valueOf() as {
 					id: string;
 					blocked: boolean;
 				};
@@ -329,16 +326,16 @@ const UserList = () => {
 	];
 
 	const rows = usersFiltered.map((user: User) => {
-		const {uid, user_name, email, role, blocked} = user;
+		const { uid, user_name, email, role, blocked } = user;
 
 		return {
 			id: uid,
 			user_name,
 			email,
 			role,
-			view: {id: uid, role},
-			edit: {id: uid},
-			blocked: {id: uid, blocked},
+			view: { id: uid, role },
+			edit: { id: uid },
+			blocked: { id: uid, blocked },
 		};
 	});
 
@@ -375,7 +372,7 @@ const UserList = () => {
 								root: classes.inputRoot,
 								input: classes.inputInput,
 							}}
-							inputProps={{'aria-label': 'search'}}
+							inputProps={{ 'aria-label': 'search' }}
 						/>
 					</div>
 				</Box>
@@ -394,7 +391,7 @@ const UserList = () => {
 			</Box>
 
 			<Box my={3}>
-				<div style={{minHeight: '400px', width: '100%'}}>
+				<div style={{ minHeight: '400px', width: '100%' }}>
 					{gridView ? (
 						<Grid container spacing={3}>
 							{usersFiltered.map((user, i) => (

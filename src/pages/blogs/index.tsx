@@ -1,11 +1,11 @@
-import {Container, Grid} from '@material-ui/core';
-import {useAppSelector, useCollection, useFirestore} from 'app/hooks';
-import {fetchBlogs, IBlog, selectBlogs, setBlogs} from 'features/editor';
-import {useFireCollection, useFireCollectionRef} from 'hooks/useFirestore';
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {useParams} from 'react-router';
-import {BlogCard} from './BlogCard';
+import { Container, Grid } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
+import { BlogCard } from './BlogCard';
+import { useAppSelector, useCollection, useFirestore } from 'app/hooks';
+import { fetchBlogs, IBlog, selectBlogs, setBlogs } from 'features/editor';
+import { useFireCollection, useFireCollectionRef } from 'hooks/useFirestore';
 
 function BlogsIndex() {
 	const blogs = useAppSelector(selectBlogs);

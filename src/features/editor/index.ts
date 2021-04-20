@@ -117,7 +117,7 @@ export const fetchBlogs = (): AppThunk => async (dispatch) => {
 				blogs.push({
 					id: doc.id,
 					...doc.data(),
-					authorId: data.authorId.id,
+					authorId: data.authorId?.id,
 				} as IBlog);
 				let refData = data.authorId.get();
 

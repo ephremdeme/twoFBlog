@@ -1,13 +1,13 @@
 // import {fetchBlog, IBlog, selectBlog} from 'features/editor';
-import React, {useEffect} from 'react';
-import {useParams} from 'react-router-dom';
-import {fetchBlog, selectBlog, selectLoading} from '../../features/editor';
-import {useSelector, useDispatch} from 'react-redux';
-import {RootState} from 'app/store';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { fetchBlog, selectBlog, selectLoading } from '../../features/editor';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'app/store';
 import EditorPage from 'pages/editor/editor';
 
 function ShowBlog() {
-	const {blogId} = useParams<{blogId: string}>();
+	const { blogId } = useParams<{ blogId: string }>();
 	// const {data, loading} = useFireDoc<IBlog>('blogs', blogId, setBlog);
 	const blog = useSelector(selectBlog);
 	const user = useSelector((state: RootState) => state.auth);

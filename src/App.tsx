@@ -10,7 +10,7 @@ import { RootState } from './app/store';
 import { isLoggedIn } from './features/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import Router from './router/Router';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom';
 import routes, { IRoute } from './router/config';
 import { UserRole } from 'features/auth/types';
 import Loading from './components/loading/Loading2';
@@ -65,6 +65,15 @@ function App() {
 	const auth = useSelector((state: RootState) => state.auth);
 	const dispatch = useDispatch();
 	const classes = useStyles();
+	const location = useLocation();
+
+	const hideNavBars = [
+		'/login', '/signup'
+	]
+
+	const checkHideNavBars = (path: string): boolean => {
+		return !(hideNavBars.includes(path))
+	}
 
 	const theme = createMuiTheme({
 		palette: {
@@ -116,7 +125,9 @@ function App() {
 									))}
 								</Switch>
 								<main className={classes.content}>
-									<div className={classes.toolbar}></div>
+									{checkHideNavBars(location.pathname) &&
+										<div className={classes.toolbar}></div>
+									}
 									<Router routes={routes} />
 									{auth.role === UserRole.USER && !auth.authenticating ? (
 										<Chat />

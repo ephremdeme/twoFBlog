@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {useHistory, useParams} from 'react-router';
-import {useFireDoc} from '../../../hooks/useFirestore';
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router';
+import { useFireDoc } from '../../../hooks/useFirestore';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import {deepOrange, green} from '@material-ui/core/colors';
-import {Box, Chip, Container, Divider, Grid, TextField} from '@material-ui/core';
-import {User} from 'features/user/types';
+import { deepOrange, green } from '@material-ui/core/colors';
+import { Box, Chip, Container, Divider, Grid } from '@material-ui/core';
+import { User } from 'features/user/types';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -37,9 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const UserDetail = () => {
 	const classes = useStyles();
-	const {id} = useParams();
+	const { id } = useParams();
 	const history = useHistory();
-	const {loading, data} = useFireDoc<User>('users', id);
+	const { loading, data } = useFireDoc<User>('users', id);
 	const [editMode, setEditMode] = useState(false);
 
 	const getUserData = () => {
@@ -61,11 +61,11 @@ const UserDetail = () => {
 		);
 	};
 
-  const deleteUser = () => {
-    getCollection('users').doc(id).delete()
+	const deleteUser = () => {
+		getCollection('users').doc(id).delete()
 		history.push("/admin/users")
-  }
-	
+	}
+
 	return (
 		<Container maxWidth="md">
 			{loading && !data && <LoadingOnly size={50} />}
@@ -89,7 +89,7 @@ const UserDetail = () => {
 							</IconButton>
 						</Box>
 					</Box>
-					<Divider style={{margin: '1rem 0 2rem'}} />
+					<Divider style={{ margin: '1rem 0 2rem' }} />
 					<Grid container spacing={1}>
 						<Grid item sm={12} md={5} lg={4}>
 							<Avatar

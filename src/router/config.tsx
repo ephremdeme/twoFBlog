@@ -1,8 +1,6 @@
 import Loader from 'components/shared/Loader';
 import { UserRole } from 'features/auth/types';
-import Appbar from 'layouts/appLayout/Appbar';
 import AppNav from 'layouts/appLayout/AppNav';
-import Chat from 'pages/chat/chatbox';
 import React, {
 	ComponentType,
 	lazy,
@@ -225,14 +223,14 @@ const routes: IRoute[] = [
 	},
 	{
 		path: '/login',
-		component: lazy(() => import('../pages/signup/login')),
+		component: lazy(() => import('../pages/auth/Login')),
 		exact: false,
 		fallback: <Loader />,
 		loginRedirect: '/products/list'
 	},
 	{
 		path: '/signup',
-		component: lazy(() => import('../pages/signup/SignUp')),
+		component: lazy(() => import('../pages/auth/SignUp')),
 		exact: false,
 		fallback: <Loader />,
 		loginRedirect: '/products/list'
@@ -254,47 +252,80 @@ const routes: IRoute[] = [
 		permissions: [UserRole.GUEST],
 	},
 	{
+		path: '/posts',
+		component: lazy(() => import('../pages/editor_new/Posts/Index')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: () => <AppNav />,
+		// permissions: [UserRole.GUEST],
+	},
+	{
 		path: '/editor',
-		component: lazy(() => import('../pages/editor/editor')),
-		exact: false,
-		fallback: <Loader />,
-		permissions: [UserRole.BLOGGER, UserRole.ADMIN, UserRole.EDITOR],
-	},
-	{
-		path: '/blogs/:blogId/edit',
-		component: lazy(() => import('../pages/editor/edit')),
-		exact: true,
-		fallback: <Loader />,
-		permissions: [UserRole.BLOGGER, UserRole.ADMIN, UserRole.EDITOR],
-	},
-	{
-		path: '/blogs/:blogId',
-		component: lazy(() => import('../pages/blogs/show')),
+		component: lazy(() => import('../pages/editor_new/Editor/Index')),
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
-		permissions: [
-			UserRole.BLOGGER,
-			UserRole.ADMIN,
-			UserRole.EDITOR,
-			UserRole.GUEST,
-			UserRole.USER,
-		],
+		// permissions: [UserRole.GUEST],
 	},
 	{
-		path: '/blogs',
-		component: lazy(() => import('../pages/blogs')),
-		exact: true,
+		path: '/posts/edit',
+		component: lazy(() => import('../pages/editor_new/Posts/Edit')),
+		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
-		permissions: [
-			UserRole.BLOGGER,
-			UserRole.ADMIN,
-			UserRole.EDITOR,
-			UserRole.GUEST,
-			UserRole.USER,
-		],
+		// permissions: [UserRole.GUEST],
 	},
+	{
+		path: '/posts/detail',
+		component: lazy(() => import('../pages/editor_new/Posts/Detail')),
+		exact: false,
+		fallback: <Loader />,
+		sidebar: () => <AppNav />,
+		// permissions: [UserRole.GUEST],
+	},
+	
+	// {
+	// 	path: '/editor',
+	// 	component: lazy(() => import('../pages/editor/editor')),
+	// 	exact: false,
+	// 	fallback: <Loader />,
+	// 	permissions: [UserRole.BLOGGER, UserRole.ADMIN, UserRole.EDITOR],
+	// },
+	// {
+	// 	path: '/blogs/:blogId/edit',
+	// 	component: lazy(() => import('../pages/editor/edit')),
+	// 	exact: true,
+	// 	fallback: <Loader />,
+	// 	permissions: [UserRole.BLOGGER, UserRole.ADMIN, UserRole.EDITOR],
+	// },
+	// {
+	// 	path: '/blogs/:blogId',
+	// 	component: lazy(() => import('../pages/blogs/show')),
+	// 	exact: false,
+	// 	fallback: <Loader />,
+	// 	sidebar: () => <AppNav />,
+	// 	permissions: [
+	// 		UserRole.BLOGGER,
+	// 		UserRole.ADMIN,
+	// 		UserRole.EDITOR,
+	// 		UserRole.GUEST,
+	// 		UserRole.USER,
+	// 	],
+	// },
+	// {
+	// 	path: '/blogs',
+	// 	component: lazy(() => import('../pages/blogs')),
+	// 	exact: true,
+	// 	fallback: <Loader />,
+	// 	sidebar: () => <AppNav />,
+	// 	permissions: [
+	// 		UserRole.BLOGGER,
+	// 		UserRole.ADMIN,
+	// 		UserRole.EDITOR,
+	// 		UserRole.GUEST,
+	// 		UserRole.USER,
+	// 	],
+	// },
 	{
 		path: '/account-blocked',
 		component: lazy(() => import('../pages/util/BlockedPage')),

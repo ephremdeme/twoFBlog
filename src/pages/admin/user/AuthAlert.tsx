@@ -1,8 +1,8 @@
-import {Collapse} from '@material-ui/core';
-import {Alert, AlertTitle} from '@material-ui/lab';
-import {RootState} from 'app/store';
-import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import { Collapse } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import { RootState } from 'app/store';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 function AuthAlert() {
 	const auth = useSelector((state: RootState) => state.auth);
