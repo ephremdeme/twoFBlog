@@ -110,8 +110,8 @@ function App() {
 		<div>
 			{
 				<div className={classes.root}>
-					{auth.authenticating && !auth.error && <Loading />}
-					{auth.loaded && (
+					{/* {auth.authenticating && !auth.error && <Loading />} */}
+					{/* {auth.loaded && ( */}
 						<ThemeProvider theme={theme}>
 							<BrowserRouter>
 								<Switch>
@@ -135,7 +135,7 @@ function App() {
 								</main>
 							</BrowserRouter>
 						</ThemeProvider>
-					)}
+					{/* )} */}
 				</div>
 			}
 		</div>

@@ -5,28 +5,28 @@ import Header from '../../../layouts/layouts/Posts/Header';
 import PostListItem from '../../../components/Posts/PostListItem';
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        main: {
-            width: '80%',
-            margin: '0 auto'
-        }
-    }),
+	createStyles({
+		main: {
+			width: '80%',
+			margin: '0 auto'
+		}
+	}),
 );
 
 const Index = () => {
-    const classes = useStyles();
+	const classes = useStyles();
 
-    return (
-        <>
-            <Header />
-            <Grid
-                container spacing={3}
-                className={classes.main}
-            >
-                <PostListItem />
-            </Grid>
-        </>
-    )
+	return (
+		<>
+			<Header />
+			<Grid
+				container spacing={3}
+				className={classes.main}
+			>
+				<PostListItem />
+			</Grid>
+		</>
+	)
 }
 
 export default Index

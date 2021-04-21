@@ -341,23 +341,23 @@ export const logoutUser = (uid: string): AppThunk => {
 		const auth = firebase.auth();
 		const db = firebase.firestore();
 		dispatch(setLoginInProgress(true));
-		const logout = db
+		db
 			.collection('users')
 			.doc(uid)
 			.update({
-				isOnline: false,
+				isOnline: false
 			})
 			.then(
 				(_) => {
 					auth.signOut().then((_) => {
 						dispatch(setLoginInProgress(false));
 						dispatch(setLogoutSuccess());
+						localStorage.clear();
 					});
 				},
 				(err) => {
-					console.log('here is error', err.t, err.message);
 					dispatch(setFaliure(true));
-					dispatch(setLoginInProgress(false))
+					dispatch(setLoginInProgress(false));
 					dispatch(setAuthFailure(err.message));
 					return;
 				}

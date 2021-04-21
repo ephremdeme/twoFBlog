@@ -8,11 +8,15 @@ import React, {
 	ReactNode,
 } from 'react';
 
+import Dashboard from '../pages/dashboard'
+import About from '../pages/util/About'
+import UsersAdmin from '../pages/admin/user/'
+
 export interface IRoute {
 	path: string;
 	exact: boolean;
 	fallback: NonNullable<ReactNode> | null;
-	component?: LazyExoticComponent<ComponentType<any>>;
+	component?: LazyExoticComponent<ComponentType<any>> | any;
 	routes?: IRoute[];
 	redirect?: {
 		page: string;
@@ -37,7 +41,7 @@ const routes: IRoute[] = [
 	},
 	{
 		path: '/dashboard',
-		component: lazy(() => import('../pages/dashboard')),
+		component: Dashboard,
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
@@ -172,7 +176,7 @@ const routes: IRoute[] = [
 			},
 			{
 				path: '/auth/users',
-				component: lazy(() => import('../pages/admin/user/')),
+				component: UsersAdmin,
 				exact: false,
 				fallback: <Loader />,
 				sidebar: () => <AppNav />,
@@ -237,7 +241,7 @@ const routes: IRoute[] = [
 	},
 	{
 		path: '/about',
-		component: lazy(() => import('../pages/util/About')),
+		component: About,
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
@@ -253,11 +257,37 @@ const routes: IRoute[] = [
 	},
 	{
 		path: '/posts',
-		component: lazy(() => import('../pages/editor_new/Posts/Index')),
+		component: lazy(() => import('../pages/editor_new/Posts/Posts')),
 		exact: false,
 		fallback: <Loader />,
 		sidebar: () => <AppNav />,
 		// permissions: [UserRole.GUEST],
+		routes: [
+			{
+				path: '/posts/list',
+				component: lazy(() => import('../pages/editor_new/Posts/Index')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				// permissions: [UserRole.GUEST],
+			},
+			{
+				path: '/posts/:id/detail',
+				component: lazy(() => import('../pages/editor_new/Posts/Detail')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				// permissions: [UserRole.GUEST],
+			},
+			{
+				path: '/posts/:id/edit',
+				component: lazy(() => import('../pages/editor_new/Posts/Edit')),
+				exact: false,
+				fallback: <Loader />,
+				sidebar: () => <AppNav />,
+				// permissions: [UserRole.GUEST],
+			}
+		]
 	},
 	{
 		path: '/editor',
@@ -267,22 +297,8 @@ const routes: IRoute[] = [
 		sidebar: () => <AppNav />,
 		// permissions: [UserRole.GUEST],
 	},
-	{
-		path: '/posts/edit',
-		component: lazy(() => import('../pages/editor_new/Posts/Edit')),
-		exact: false,
-		fallback: <Loader />,
-		sidebar: () => <AppNav />,
-		// permissions: [UserRole.GUEST],
-	},
-	{
-		path: '/posts/detail',
-		component: lazy(() => import('../pages/editor_new/Posts/Detail')),
-		exact: false,
-		fallback: <Loader />,
-		sidebar: () => <AppNav />,
-		// permissions: [UserRole.GUEST],
-	},
+	
+	
 	
 	// {
 	// 	path: '/editor',

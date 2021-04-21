@@ -127,7 +127,7 @@ const Header = (props: IEditorProps) => {
                 elevation={0}
             >
                 <Toolbar className={classes.appBarWrapper}>
-                    <Link to="/posts" className={classes.linkStyle}>
+                    <Link to="/posts/list" className={classes.linkStyle}>
                         <Button className={classes.button}><ChevronLeftIcon />Posts</Button>
                     </Link>
 

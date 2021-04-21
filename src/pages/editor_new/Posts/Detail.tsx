@@ -5,27 +5,27 @@ import Header from '../../../layouts/layouts/Posts/Header';
 import DetailComponent from '../../../components/Posts/Detail';
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    main: {
-        width:'80%',
-        margin:'0 auto'
-    }
-  }),
+	createStyles({
+		main: {
+			width: '80%',
+			margin: '0 auto'
+		}
+	}),
 );
 
 const Detail = () => {
-    const classes = useStyles();
-    return (
-        <>
-            <Header />
-            <Grid 
-                container spacing={3} 
-                className={classes.main}
-            >
-                <DetailComponent />
-            </Grid>
-        </>
-    )
+	const classes = useStyles();
+	return (
+		<>
+			<Header />
+			<Grid
+				container spacing={3}
+				className={classes.main}
+			>
+				<DetailComponent />
+			</Grid>
+		</>
+	)
 }
 
 export default Detail

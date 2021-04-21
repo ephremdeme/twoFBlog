@@ -50,7 +50,7 @@ const navs = {
 		},
 		{
 			name: 'Posts',
-			path: '/posts',
+			path: '/posts/list',
 			icon: <BallotIcon />
 		},
 		{
@@ -109,7 +109,7 @@ const navs = {
 		},
 		{
 			name: 'Posts',
-			path: '/posts',
+			path: '/posts/list',
 			icon: <BallotIcon />
 		},
 	],
@@ -121,7 +121,7 @@ const navs = {
 		},
 		{
 			name: 'Posts',
-			path: '/posts',
+			path: '/posts/list',
 			icon: <BallotIcon />
 		},
 	],
@@ -133,7 +133,7 @@ const navs = {
 		},
 		{
 			name: 'Posts',
-			path: '/posts',
+			path: '/posts/list',
 			icon: <BallotIcon />
 		},
 		{
@@ -155,7 +155,7 @@ const navs = {
 		},
 		{
 			name: 'Posts',
-			path: '/posts',
+			path: '/posts/list',
 			icon: <BallotIcon />
 		},
 	],
