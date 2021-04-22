@@ -13,15 +13,15 @@ import {
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
-import {useRouteMatch} from 'react-router';
-import {Link} from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import { useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import AddIcon from '@material-ui/icons/Add';
-import {RootState} from 'app/store';
-import {UserRole} from 'features/user/types';
-import {selectChartProductQty, setFilterableProducts} from 'features/product';
+import { RootState } from 'app/store';
+import { UserRole } from 'features/user/types';
+import { selectChartProductQty, setFilterableProducts } from 'features/product';
+import Guard from 'private/Guard';
 
 const useStyles = makeStyles((theme: Theme) => ({
 	root: {
@@ -31,10 +31,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 	search: {
 		position: 'relative',
 		borderRadius: theme.shape.borderRadius,
-		backgroundColor: fade(theme.palette.common.white, 0.15),
 		'&:hover': {
 			backgroundColor: fade(theme.palette.common.white, 0.25),
 		},
+		border: `${theme.palette.type === 'dark' ? "1px solid #555" : "1px solid #aaa"}`,
 		marginLeft: 0,
 		width: '100%',
 		[theme.breakpoints.up('sm')]: {
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 				width: '25ch',
 			},
 		},
-	},
+	}
 }));
 
 const StyledBadge = withStyles((theme: Theme) =>
@@ -77,8 +77,9 @@ const StyledBadge = withStyles((theme: Theme) =>
 		badge: {
 			right: -4,
 			top: 13,
-			border: `2px solid ${theme.palette.background.paper}`,
+			border: `1px solid ${theme.palette.background.paper}`,
 			padding: '0 4px',
+			margin: ".3rem 5rem"
 		},
 	})
 )(Badge);
@@ -92,10 +93,8 @@ type IProps = {
 const ProductAppBar = (props: IProps) => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const {backbtn, title, className} = props;
-	const {url} = useRouteMatch();
+	const { className } = props;
 	const role = useSelector((state: RootState) => state.auth.role);
-	const chartQty = useSelector(selectChartProductQty);
 
 	const handleFilterProducts = (e: React.ChangeEvent<HTMLInputElement>) => {
 		dispatch(setFilterableProducts(e.target.value));
@@ -116,24 +115,23 @@ const ProductAppBar = (props: IProps) => {
 								root: classes.inputRoot,
 								input: classes.inputInput,
 							}}
-							// onChange={handleFilterProducts}
-							inputProps={{'aria-label': 'search'}}
+							inputProps={{ 'aria-label': 'search' }}
 						/>
 					</div>
-				</Box>
-				<Box alignSelf="flex-end">
-					{(role === UserRole.USER) && (
-						<Tooltip title="checkout chart">
+					<Guard allowedRoles={
+						[
+							UserRole.BLOGGER
+						]}>
+						<Tooltip title="add a prodcut">
 							<IconButton
-								aria-label="cart"
+								aria-label="chart"
 								component={Link}
-								to={'/products/chart'}>
-								<StyledBadge badgeContent={chartQty} color="secondary">
-									<ShoppingCartIcon />
-								</StyledBadge>
+								to={'/products/create'}>
+								<AddIcon fontSize="small" />
 							</IconButton>
 						</Tooltip>
-					)}
+					</Guard>
+
 					{role === UserRole.ADMIN && (
 						<>
 							<Tooltip title="checkout orders">

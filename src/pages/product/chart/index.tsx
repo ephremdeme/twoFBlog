@@ -26,12 +26,12 @@ import {
 	setChart,
 } from '../../../features/product';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import { Link } from 'react-router-dom';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -105,17 +105,17 @@ const Chart = () => {
 													{chart && chart.products.length}
 												</Button>
 												<Button
-													startIcon={<ArrowUpwardIcon />}
+													startIcon={<AddIcon />}
 													onClick={() =>
 														addToChart(chart.products[0])
 													}></Button>
 												<Button
-													startIcon={<ArrowDownwardIcon />}
+													startIcon={<RemoveIcon />}
 													onClick={() =>
 														removeChart(chart.products[0].id)
 													}></Button>
 												<Button
-													startIcon={<NotInterestedIcon />}
+													startIcon={<DeleteSweepIcon />}
 													onClick={() =>
 														resetProdcutChart(chart.products[0].id)
 													}></Button>

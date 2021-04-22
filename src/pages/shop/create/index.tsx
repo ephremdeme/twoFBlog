@@ -61,7 +61,7 @@ export default function Create() {
 
   const onSubmit = async (data: any) => {
     // const descriptions = descriptionList.map(
-    // 	(desc: any) => desc.description_field + '<:>' + desc.description
+    	// (desc: any) => desc.description_field + '<:>' + desc.description
     // );
 
     console.log('The Data: ', data);
@@ -89,7 +89,7 @@ export default function Create() {
     setFile(selected);
   };
 
-  const onDescriptionChange = (desc: any) => {
+  const onBranchChange = (desc: any) => {
     console.log("AAAAAAAAAAAAAAAAAa: ", desc)
   }
 
@@ -275,7 +275,7 @@ export default function Create() {
         <Divider />
         <Box my={4}></Box>
         <Box fontSize="1rem" fontWeight={600}>Add Shop Branchs</Box>
-        <BranchsForm descriptions={onBranchAdded} />
+        <BranchsForm onBranchChange={onBranchChange} />
 
         <Button
           disableElevation

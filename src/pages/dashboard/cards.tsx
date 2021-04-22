@@ -6,12 +6,9 @@ import {
 	Grid,
 	Container,
 	styled,
-	Button,
 	Box,
-	Typography,
 	makeStyles,
 } from '@material-ui/core';
-import firebase from '../../firebase/firebase';
 import { ReactComponent as Dashboard_Icon_Web_Visit } from 'public/icons/dashboard/icons8_web_visit.svg';
 import { ReactComponent as Dashboard_Icon_Web_Blog } from 'public/icons/dashboard/icons8_blog.svg';
 import { ReactComponent as Dashboard_Icon_Web_Shooping } from 'public/icons/dashboard/icons8_shopping_cart.svg';
@@ -29,7 +26,7 @@ import {
 import PiechartDashboard from './PiechartDashboard';
 import { selectProducts, setProducts } from 'features/product';
 import { getVisit } from 'features/user';
-import { getDatabase, useAppSelector, useFirestore } from 'app/hooks';
+import { useAppSelector, useFirestore } from 'app/hooks';
 import { PDB } from 'features/product/init';
 import { useFireCollectionRef, useFireCollection } from 'hooks/useFirestore';
 import { IProduct } from 'features/product/types';

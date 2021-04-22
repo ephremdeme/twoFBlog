@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import {
   Box,
-  Checkbox,
   createStyles,
   Grid,
   IconButton,
@@ -14,22 +10,20 @@ import {
   Select,
   Theme,
 } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { useHistory, useParams } from 'react-router-dom';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { RootState } from 'app/store';
+import Button from '@material-ui/core/Button';
+import { IProduct } from 'features/product/types';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import DeleteIcon from '@material-ui/icons/Delete';
+import TextField from '@material-ui/core/TextField';
+import Container from '@material-ui/core/Container';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'app/store';
-import FB from '../../../firebase/firebase'
-import { postProduct, updateProduct } from '../../../features/product';
+import FormControl from '@material-ui/core/FormControl';
 import { useFireDoc } from '../../../hooks/useFirestore'
-import { IProduct } from 'features/product/types';
+import { useHistory, useParams } from 'react-router-dom';
+import { updateProduct } from '../../../features/product';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 
 const useStyles = makeStyles((theme: Theme) =>

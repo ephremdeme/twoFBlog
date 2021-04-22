@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {useHistory, useParams} from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import {
 	Box,
 	ButtonGroup,
@@ -10,31 +10,31 @@ import {
 	Typography,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import {useFireDoc} from '../../../hooks/useFirestore';
+import { useFireDoc } from '../../../hooks/useFirestore';
 import OverlayLoading from '../../../components/shared/OverlayLoading';
-import {IProduct} from 'features/product/types';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import { IProduct } from 'features/product/types';
 import {
 	removeProductChart,
 	resetProductChart,
 	setChart,
 } from '../../../features/product';
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'app/store';
+import { PDB } from 'features/product/init';
+import { Link } from 'react-router-dom';
+import { Rating } from '@material-ui/lab';
+import AdditionalDetail from './AdditionalDetail';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import LikeViewComponent from './LikeViewComponent';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from 'app/store';
-import {PDB} from 'features/product/init';
-import {Link} from 'react-router-dom';
-import {getCollection} from 'app/hooks';
-import data from './data';
-import LikeViewComponent from './LikeViewComponent';
-import {Rating} from '@material-ui/lab';
+import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import AdditionalDetail from './AdditionalDetail';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+// import data from './data';
+
 
 const useStyles = makeStyles({
 	root: {
@@ -60,15 +60,14 @@ const useStyles = makeStyles({
 
 const ProductDetial = () => {
 	const classes = useStyles();
-	const {id} = useParams();
-	const history = useHistory();
+	const { id } = useParams();
 	const dispatch = useDispatch();
 	const [like, setLike] = useState(0);
 	const [liked, setLiked] = useState(false);
-	const [showAdditionalDetail, setShowAdditionalDetail] = useState(false);
 	const [view, setView] = useState(1);
+	const [showAdditionalDetail, setShowAdditionalDetail] = useState(false);
+	const { data: product, loading } = useFireDoc<IProduct>(PDB.PRODCUTS, id);
 	const chartProducts = useSelector((state: RootState) => state.product.chart);
-	const {data: product, loading} = useFireDoc<IProduct>(PDB.PRODCUTS, id);
 
 	useEffect(() => {
 		if (product) setLike(product.likes.length);
@@ -147,7 +146,7 @@ const ProductDetial = () => {
 										{product?.name}
 									</Box>
 									{!chartProducts[id] ||
-									chartProducts[id].products.length <= 0 ? (
+										chartProducts[id].products.length <= 0 ? (
 										<Button
 											size="small"
 											variant="outlined"
@@ -171,13 +170,13 @@ const ProductDetial = () => {
 														chartProducts[id].products.length}
 												</Button>
 												<Button
-													startIcon={<ArrowUpwardIcon />}
+													startIcon={<AddIcon />}
 													onClick={addToChart}></Button>
 												<Button
-													startIcon={<ArrowDownwardIcon />}
+													startIcon={<RemoveIcon />}
 													onClick={removeChart}></Button>
 												<Button
-													startIcon={<NotInterestedIcon />}
+													startIcon={<DeleteSweepIcon />}
 													onClick={resetChart}>
 													reset
 												</Button>

@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 		paddingTop: theme.spacing(3),
 	},
 	container: {
+		marginTop: "8vh",
 		background: "#fff",
 		color: "#111",
 		boxShadow: "0 2px 20px rgba(0,0,0,0.3)",
@@ -75,7 +76,6 @@ const LoginView = () => {
 				display="flex"
 				flexDirection="column"
 				height="100%"
-				justifyContent="center"
 				className={classes.root}>
 				<Container maxWidth="sm" className={classes.container} style={{ minWidth: '300px', maxWidth: "400px" }}>
 					<form onSubmit={handleSubmit}>

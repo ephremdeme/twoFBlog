@@ -41,7 +41,7 @@ const PostItem = (props: any) => {
   }
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} elevation={0}>
       <CardActionArea onClick={viewClickHandle}>
         <CardMedia
           className={classes.media}
@@ -51,22 +51,22 @@ const PostItem = (props: any) => {
         <CardContent>
           <Typography
             gutterBottom
-            variant="h5"
-            component="h2"
+            variant="h6"
+            component="h6"
             noWrap
           >
             {props.blog.data().title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             Oct 16, 2020
-                  </Typography>
+          </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary" onClick={viewClickHandle}>
+        <Button size="small" onClick={viewClickHandle}>
           <VisibilityIcon />
         </Button>
-        <Button size="small" color="primary" onClick={editClickHandle}>
+        <Button size="small" onClick={editClickHandle}>
           <EditIcon />
         </Button>
       </CardActions>

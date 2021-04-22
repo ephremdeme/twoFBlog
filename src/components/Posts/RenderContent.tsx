@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: any) => ({
 const displayContent = (blog: any) => {
 
 	for (let i = 0; i <= blog.length; i++) {
-		if (blog[i].type == "MembersOnly") {
+		if (blog[i].type === "MembersOnly") {
 			console.log(blog[i].type)
 			return onlyMembers();
 		} else {
@@ -43,8 +43,8 @@ const displayContent = (blog: any) => {
 						return (
 							<ul>
 								{
-									blog[i].data.items.map((item: any) => {
-										return <li style={{ padding: 5 }}><Markup content={item} /></li>
+									blog[i].data.items.map((item: any, i: number) => {
+										return <li key={i} style={{ padding: 5 }}><Markup content={item} /></li>
 									})
 								}
 							</ul>

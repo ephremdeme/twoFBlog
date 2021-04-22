@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	createMuiTheme,
 	ThemeProvider,
@@ -10,11 +10,12 @@ import { RootState } from './app/store';
 import { isLoggedIn } from './features/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import Router from './router/Router';
-import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom';
-import routes, { IRoute } from './router/config';
+import { BrowserRouter, Switch, useLocation } from 'react-router-dom';
+import routes from './router/config';
 import { UserRole } from 'features/auth/types';
-import Loading from './components/loading/Loading2';
 import Chat from 'pages/chat/chatbox';
+import Layout from 'layouts/app';
+import { hideOnRoute } from 'utils/hideOnRoute';
 
 const drawerWidth = 240;
 
@@ -66,18 +67,14 @@ function App() {
 	const dispatch = useDispatch();
 	const classes = useStyles();
 	const location = useLocation();
-
 	const hideNavBars = [
 		'/login', '/signup'
-	]
-
-	const checkHideNavBars = (path: string): boolean => {
-		return !(hideNavBars.includes(path))
-	}
+	];
+	const [hideOnRouteState, setHideOnRouteState] = useState(hideOnRoute(hideNavBars, location.pathname))
 
 	const theme = createMuiTheme({
 		palette: {
-			type: appTheme ? 'dark' : 'light',
+			type: localStorage.getItem("theme") == 'dark' ? "dark" : appTheme ? "dark" : "light"
 		},
 		typography: {
 			fontFamily: "Poppins",
@@ -110,32 +107,20 @@ function App() {
 		<div>
 			{
 				<div className={classes.root}>
-					{/* {auth.authenticating && !auth.error && <Loading />} */}
-					{/* {auth.loaded && ( */}
-						<ThemeProvider theme={theme}>
-							<BrowserRouter>
-								<Switch>
-									{routes.map((route: IRoute, index) => (
-										<Route
-											key={index}
-											path={route.path}
-											exact={route.exact}
-											children={route.sidebar}
-										/>
-									))}
-								</Switch>
-								<main className={classes.content}>
-									{checkHideNavBars(location.pathname) &&
-										<div className={classes.toolbar}></div>
-									}
-									<Router routes={routes} />
-									{auth.role === UserRole.USER && !auth.authenticating ? (
-										<Chat />
-									) : null}
-								</main>
-							</BrowserRouter>
-						</ThemeProvider>
-					{/* )} */}
+					<ThemeProvider theme={theme}>
+						<BrowserRouter>
+							<Layout />
+							<main className={classes.content}>
+								{hideOnRouteState &&
+									<div className={classes.toolbar}></div>
+								}
+								<Router routes={routes} />
+								{auth.role === UserRole.USER && !auth.authenticating ? (
+									<Chat />
+								) : null}
+							</main>
+						</BrowserRouter>
+					</ThemeProvider>
 				</div>
 			}
 		</div>

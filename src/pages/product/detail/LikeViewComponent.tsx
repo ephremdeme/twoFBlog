@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, ButtonGroup, FormControl, IconButton, Input, InputAdornment, InputLabel, Typography } from '@material-ui/core'
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ChatRoundedIcon from '@material-ui/icons/ChatRounded';
-import { PDB } from 'features/product/init';
-import { getCollection } from 'app/hooks';
-import { collectionData } from 'rxfire/firestore';
-import { useSelector } from 'react-redux';
-import { RootState } from 'app/store';
-import ChatIcon from '@material-ui/icons/Chat';
-import SendIcon from '@material-ui/icons/Send';
 import Comments from './Comments'
+import { RootState } from 'app/store';
 import { Rating } from '@material-ui/lab';
+import { useSelector } from 'react-redux';
+import { getCollection } from 'app/hooks';
+import { PDB } from 'features/product/init';
+import ChatIcon from '@material-ui/icons/Chat';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import ChatRoundedIcon from '@material-ui/icons/ChatRounded';
+import { Box, Button, ButtonGroup, Input, InputAdornment } from '@material-ui/core'
 
 interface IProps {
   id: string;
@@ -30,14 +28,15 @@ const LikeViewComponent: React.FC<IProps> = ({ id }) => {
   const [rating, setRating] = useState<number | null>(0);
 
   useEffect(() => {
+    if (userId) {
+      if (getCollection(PDB.PRODCUTS).doc(id).collection('views').doc(userId).get()) setViwed(true);
+      if (getCollection(PDB.PRODCUTS).doc(id).collection('views').doc(userId).get()) setLiked(true);
+      if (getCollection(PDB.PRODCUTS).doc(id).collection('comments').doc(userId).get()) setCommented(true);
+      getCollection(PDB.PRODCUTS).doc(id).collection('views').doc(userId).set({
+        liked: true
+      });
+    }
 
-    if (getCollection(PDB.PRODCUTS).doc(id).collection('views').doc(userId).get()) setViwed(true);
-    if (getCollection(PDB.PRODCUTS).doc(id).collection('views').doc(userId).get()) setLiked(true);
-    if (getCollection(PDB.PRODCUTS).doc(id).collection('comments').doc(userId).get()) setCommented(true);
-
-    getCollection(PDB.PRODCUTS).doc(id).collection('views').doc(userId).set({
-      liked: true
-    });
 
     const views$ = getCollection(PDB.PRODCUTS).doc(id).collection('views');
     views$.onSnapshot((data) => {

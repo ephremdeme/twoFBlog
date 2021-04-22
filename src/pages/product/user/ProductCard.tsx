@@ -12,8 +12,6 @@ import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-
-
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		productCard: {

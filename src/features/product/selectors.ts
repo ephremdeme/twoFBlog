@@ -16,7 +16,7 @@ export default {
   selectChartProductQty: (state: RootState) => {
     let total = 0;
     for(const chart in state.product.chart) {
-      total += state.product.chart[chart].products.length
+      total += 1
     }
     return total
   },

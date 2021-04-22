@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { persistChart } from 'utils/localStorage';
 import { IProductState } from './init';
 import { IProduct } from './types';
 
@@ -42,6 +43,7 @@ export default {
 				};
 			}
 		}
+		persistChart(JSON.stringify(state.chart))
 	},
 	removeProductChart: (state: IProductState, action: PayloadAction<string>) => {
 		const id = action.payload;
@@ -54,12 +56,14 @@ export default {
 					products: [],
 				};
 		}
+		persistChart(JSON.stringify(state.chart))
 	},
 	removeProductsAll: (state: IProductState, action: PayloadAction<string>) => {
 		const id = action.payload;
 		if (state.chart[id]) {
 			state.chart[id].products = [];
 		}
+		persistChart(JSON.stringify(state.chart))
 	},
 	resetProductChart: (state: IProductState, action: PayloadAction<string>) => {
 		const id = action.payload;
@@ -69,11 +73,12 @@ export default {
 				total: 0,
 			};
 		}
+		persistChart(JSON.stringify(state.chart))
 	},
 	resetChart: (state: IProductState, action: PayloadAction<any>) => {
 		state.chart = {};
+		persistChart(JSON.stringify(state.chart))
 	},
-
 	setFilterableProducts: (
 		state: IProductState,
 		action: PayloadAction<string>
@@ -83,7 +88,6 @@ export default {
 		);
 		state.filterableProducts = filteredData;
 	},
-
 	setFilterableProductsByField: (
 		state: IProductState,
 		action: PayloadAction<IFieldQuery>

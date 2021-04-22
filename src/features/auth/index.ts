@@ -16,7 +16,7 @@ const initialState: User = {
 	user_name: '',
 	authenticating: false,
 	authenticated: false,
-	isGuest: false,
+	isGuest: true,
 	error: false,
 	loaded: false
 };

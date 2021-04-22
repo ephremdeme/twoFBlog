@@ -23,5 +23,5 @@ export const initialState: IProductState = {
 	prodcutsLoaded: false,
 	products: [],
 	filterableProducts: [],
-	chart: {}
+	chart: localStorage.getItem("chart") ? JSON.parse(localStorage.getItem("chart") || "") : {}
 };

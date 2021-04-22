@@ -58,7 +58,7 @@ const EditUserDetail: React.FC<IProps> = ({ user, id }) => {
 				<Box my={2}>
 					<Controller
 						name="user_name"
-						as={<TextField fullWidth id="prod_name" label="Name" />}
+						as={<TextField fullWidth variant="outlined" id="prod_name" label="Name" />}
 						control={control}
 						// defaultValue=""
 						rules={{
@@ -71,7 +71,7 @@ const EditUserDetail: React.FC<IProps> = ({ user, id }) => {
 						name="email"
 						as={
 							<TextField
-								fullWidth
+								fullWidth variant="outlined"
 								id="prod_name"
 								label="Email"
 								value={user.email}
@@ -106,9 +106,16 @@ const EditUserDetail: React.FC<IProps> = ({ user, id }) => {
 				</Box>
 
 				<Box my={2} display="flex" alignItems="center">
-					<Button variant="outlined" size="small" type="submit">
-						Update User
+					<Box mr={2}>
+						<Button variant="outlined" size="small" onClick={() => history.goBack()}>
+							Cancel
 					</Button>
+					</Box>
+					<Box>
+						<Button variant="outlined" size="small" type="submit">
+							Update User
+						</Button>
+					</Box>
 				</Box>
 			</form>
 		</Grid>

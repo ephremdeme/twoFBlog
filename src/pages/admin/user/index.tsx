@@ -127,11 +127,11 @@ const useStylesUserList = makeStyles((theme: Theme) =>
 		},
 		search: {
 			position: 'relative',
-			borderRadius: theme.shape.borderRadius,
-			backgroundColor: fade(theme.palette.common.white, 0.15),
+			borderRadius: 10,
 			'&:hover': {
 				backgroundColor: fade(theme.palette.common.white, 0.25),
 			},
+			border: `${theme.palette.type === 'dark' ? "1px solid #555" : "1px solid #aaa"}`,
 			marginLeft: 0,
 			width: '100%',
 			[theme.breakpoints.up('sm')]: {
@@ -208,7 +208,6 @@ const UserList = () => {
 	const [gridView, setGridView] = React.useState(false);
 
 	React.useEffect(() => {
-		// dispatch(fetchUsers());
 		getCollection('users').onSnapshot((snapshot) => {
 			const users = snapshot.docs.map((user) => user.data());
 			setUsers(users as User[]);
@@ -224,39 +223,7 @@ const UserList = () => {
 			field: 'role',
 			headerName: 'User Role',
 			type: 'string',
-			width: 190,
-			// TODO: change admin if needed from the table
-			// renderCell: (params: GridCellParams) => {
-			// 	let {id, role} = params.value?.valueOf() as {
-			// 		id: string;
-			// 		role: string;
-			// 	};
-
-			// 	const onClick = () => {
-			// 		console.log('Updating Publish');
-			// 		// dispatch(updateBlogPublish(id, !published));
-			// 	};
-
-			// 	return (
-			// 		<FormControl style={{width: "100%"}}>
-			// 			<InputLabel id="demo-simple-select-label">User Role</InputLabel>
-			// 			<Select
-			// 				labelId="demo-simple-select-label"
-			// 				id="demo-simple-select"
-			// 				value={role}
-			// 				// onChange={handleChange}
-			// 			>
-			// 				<MenuItem value="ADMIN">ADMIN</MenuItem>
-			// 				<MenuItem value="BLOGGER">BLOGGER</MenuItem>
-			// 				<MenuItem value="CUSTOMER_SERVICE">CUSTOMER_SERVICE</MenuItem>
-			// 				<MenuItem value="USER">USER</MenuItem>
-			// 				<MenuItem value="GUEST">GUEST</MenuItem>
-			// 				<MenuItem value="SHOPE_ADMIN">SHOPE_ADMIN</MenuItem>
-			// 				<MenuItem value="SELLER">SELLER</MenuItem>
-			// 			</Select>
-			// 		</FormControl>
-			// 	);
-			// },
+			width: 190
 		},
 		{
 			field: 'view',
@@ -396,8 +363,7 @@ const UserList = () => {
 						<Grid container spacing={3}>
 							{usersFiltered.map((user, i) => (
 								<Grid item key={i} sm={12} md={4} lg={3}>
-									<Card
-										elevation={0}
+									<Box
 										style={{
 											maxWidth: '250px',
 											minHeight: '150px',
@@ -433,13 +399,13 @@ const UserList = () => {
 												</Box>
 												<Box>
 													<Box fontSize="1rem" fontWeight={600} mb={1}>
-														{user?.user_name}
+														{user?.user_name.substring(0, 10)}
 													</Box>
 													<Box mr={1}>
 														<Chip
 															variant="outlined"
 															size="small"
-															label={user?.role}
+															label={user?.role.substring(0, 10)}
 														/>
 													</Box>
 												</Box>
@@ -477,7 +443,7 @@ const UserList = () => {
 												</Button>
 											</ButtonGroup>
 										</Box>
-									</Card>
+									</Box>
 								</Grid>
 							))}
 						</Grid>
