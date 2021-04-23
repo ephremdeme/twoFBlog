@@ -2280,11 +2280,6 @@
   resolved "https://registry.yarnpkg.com/@types/d3-time/-/d3-time-2.0.0.tgz#831dd093db91f16b83ba980e194bb8e4bcef44d6"
   integrity sha512-Abz8bTzy8UWDeYs9pCa3D37i29EWDjNTjemdk0ei1ApYVNqulYlGUKip/jLOpogkPSsPz/GvZCYiC7MFlEk0iQ==
 
-"@types/debounce@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@types/debounce/-/debounce-1.2.0.tgz#9ee99259f41018c640b3929e1bb32c3dcecdb192"
-  integrity sha512-bWG5wapaWgbss9E238T0R6bfo5Fh3OkeoSt245CM7JJwVwpw6MEBCbIxLq5z8KzsE3uJhzcIuQkyiZmzV3M/Dw==
-
 "@types/eslint@^7.2.6":
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-7.2.6.tgz#5e9aff555a975596c03a98b59ecd103decc70c3c"
@@ -10467,6 +10462,11 @@ react-resize-detector@^6.6.0:
     lodash.debounce "^4.0.8"
     lodash.throttle "^4.1.1"
     resize-observer-polyfill "^1.5.1"
+
+react-rolebased-router@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/react-rolebased-router/-/react-rolebased-router-1.2.3.tgz#ccd0bc9fedcb4219badb044c9b60a56b98a0b74c"
+  integrity sha512-8pHjox1uoKM6+e9V1fbvk6l9M3XAbspOeSj+7uSOpGMp+xp0xZ0g8DcEhwReagT0FvltSx0bPO5vNjkAHLNCnw==
 
 react-router-dom@^5.2.0:
   version "5.2.0"

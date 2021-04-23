@@ -8,11 +8,10 @@ import {
 	styled,
 	Box,
 	makeStyles,
+	createStyles,
+	Theme,
 } from '@material-ui/core';
-import { ReactComponent as Dashboard_Icon_Web_Visit } from 'public/icons/dashboard/icons8_web_visit.svg';
-import { ReactComponent as Dashboard_Icon_Web_Blog } from 'public/icons/dashboard/icons8_blog.svg';
-import { ReactComponent as Dashboard_Icon_Web_Shooping } from 'public/icons/dashboard/icons8_shopping_cart.svg';
-import { ReactComponent as Dashboard_Icon_Web_Users } from 'public/icons/dashboard/icons8_users.svg';
+
 import {
 	LineChart,
 	Line,
@@ -23,50 +22,59 @@ import {
 	Legend,
 	ResponsiveContainer,
 } from 'recharts';
-import PiechartDashboard from './PiechartDashboard';
-import { selectProducts, setProducts } from 'features/product';
+
 import { getVisit } from 'features/user';
-import { useAppSelector, useFirestore } from 'app/hooks';
 import { PDB } from 'features/product/init';
-import { useFireCollectionRef, useFireCollection } from 'hooks/useFirestore';
 import { IProduct } from 'features/product/types';
+import PiechartDashboard from './PiechartDashboard';
+import { useAppSelector, useFirestore } from 'app/hooks';
+import { selectProducts, setProducts } from 'features/product';
+import { useFireCollectionRef, useFireCollection } from 'hooks/useFirestore';
+import { ReactComponent as Dashboard_Icon_Web_Visit } from 'public/icons/dashboard/icons8_web_visit.svg';
+import { ReactComponent as Dashboard_Icon_Web_Blog } from 'public/icons/dashboard/icons8_blog.svg';
+import { ReactComponent as Dashboard_Icon_Web_Shooping } from 'public/icons/dashboard/icons8_shopping_cart.svg';
+import { ReactComponent as Dashboard_Icon_Web_Users } from 'public/icons/dashboard/icons8_users.svg';
 
-const useStyles = makeStyles((theme) => ({
-	title: {
-		color: 'black',
-	},
-	subTitle: {
-		color: 'black',
-	},
-}));
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		title: {
+			color: 'black',
+		},
+		subTitle: {
+			color: 'black',
+		},
+		myPaper: {
+			position: 'relative',
+			width: '100%',
+			height: '8rem',
+			borderRadius: 5,
+			backgroundColor: localStorage.getItem('theme') === 'dark' ? '#212121' : '#ededed',
+			'&:hover': {
+				backgroundColor: localStorage.getItem('theme') === 'dark' ? '#191919' : '#efefef',
+			},
+			display: 'flex',
+			justifyContent: 'flex-end'
+		},
+		mypaper2: {
+			width: '100%',
+			height: '20rem',
+			borderRadius: 5,
+			backgroundColor: localStorage.getItem('theme') === 'dark' ? '#212121' : '#ededed',
+			'&:hover': {
+				backgroundColor: localStorage.getItem('theme') === 'dark' ? '#191919' : '#efefef',
+			},
+			padding: '20px',
+		}
+	})
+);
 
-export const Cards = (): JSX.Element => {
+export const DashboardTopIndicators = (): JSX.Element => {
+	const classes = useStyles();
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	React.useEffect(() => {
 		return () => { };
 	}, []);
 
-	const MyPaper = styled(Paper)({
-		position: 'relative',
-		width: '100%',
-		height: '8rem',
-		backgroundColor: appTheme ? '#212121' : '#ededed',
-		'&:hover': {
-			backgroundColor: appTheme ? '#191919' : '#efefef',
-		},
-		display: 'flex',
-		justifyContent: 'flex-end',
-	});
-
-	const MyPaper2 = styled(Paper)({
-		width: '100%',
-		height: '20rem',
-		backgroundColor: appTheme ? '#212121' : '#ededed',
-		'&:hover': {
-			backgroundColor: appTheme ? '#191919' : '#efefef',
-		},
-		padding: '20px',
-	});
 
 	const HoverPaper = styled(Paper)({
 		position: 'absolute',
@@ -88,6 +96,7 @@ export const Cards = (): JSX.Element => {
 		},
 		// boxShadow: '2px 2px 10px',
 		border: 'none',
+		zIndex: 10
 	});
 
 	const data = [
@@ -139,25 +148,25 @@ export const Cards = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const blogs = useAppSelector(selectProducts);
 	const blogCollRef = useFirestore().collection(PDB.PRODCUTS);
-	const {data: RefData} = useFireCollectionRef<IProduct>(
-    blogCollRef,
+	const { data: RefData } = useFireCollectionRef<IProduct>(
+		blogCollRef,
 		setProducts
-  );
-  interface IVisit {
-	  visit: number;
-	  id?: string;
-  }
-  const {loading: loaingUsers, data: users} = useFireCollection('users');
-  const {loading: loaingBlogs, data: blog} = useFireCollection('blogs');
-  useEffect(() => {
-	  dispatch(getVisit());
-  }, [])
+	);
+	interface IVisit {
+		visit: number;
+		id?: string;
+	}
+	const { loading: loaingUsers, data: users } = useFireCollection('users');
+	const { loading: loaingBlogs, data: blog } = useFireCollection('blogs');
+	useEffect(() => {
+		dispatch(getVisit());
+	}, [])
 	return (
 		<Container>
 			<Box height={20} />
 			<Grid container spacing={4} justify="center">
 				<Grid item lg={3} xs={10}>
-					<MyPaper elevation={0}>
+					<Box className={classes.myPaper}>
 						<HoverPaper style={{ backgroundColor: '#88B' }} elevation={10}>
 							<Dashboard_Icon_Web_Users />
 						</HoverPaper>
@@ -169,10 +178,10 @@ export const Cards = (): JSX.Element => {
 								{users && users.length}
 							</Box>
 						</Box>
-					</MyPaper>
+					</Box>
 				</Grid>
 				<Grid item lg={3} xs={10}>
-					<MyPaper elevation={0}>
+					<Box className={classes.myPaper}>
 						<HoverPaper style={{ backgroundColor: '#7B6' }} elevation={10}>
 							<Dashboard_Icon_Web_Shooping />
 						</HoverPaper>
@@ -185,10 +194,10 @@ export const Cards = (): JSX.Element => {
 								{blogs && blogs.length}
 							</Box>
 						</Box>
-					</MyPaper>
+					</Box>
 				</Grid>
 				<Grid item lg={3} xs={10}>
-					<MyPaper elevation={0}>
+					<Box className={classes.myPaper}>
 						<HoverPaper style={{ backgroundColor: '#5AAF5E' }} elevation={10}>
 							<Dashboard_Icon_Web_Blog />
 						</HoverPaper>
@@ -201,10 +210,10 @@ export const Cards = (): JSX.Element => {
 								{blog && blog.length}
 							</Box>
 						</Box>
-					</MyPaper>
+					</Box>
 				</Grid>
 				<Grid item lg={3} xs={10}>
-					<MyPaper elevation={0}>
+					<Box className={classes.myPaper}>
 						<HoverPaper style={{ backgroundColor: '#2CBECF' }} elevation={10}>
 							<Dashboard_Icon_Web_Visit />
 						</HoverPaper>
@@ -217,13 +226,13 @@ export const Cards = (): JSX.Element => {
 								{page && page}
 							</Box>
 						</Box>
-					</MyPaper>
+					</Box>
 				</Grid>
 			</Grid>
 			<Box height={50} />
 			<Grid container spacing={5}>
 				<Grid item lg={8} xs={9}>
-					<MyPaper2>
+					<Box className={classes.mypaper2}>
 						<ResponsiveContainer width="100%" height="100%">
 							<LineChart
 								width={500}
@@ -244,12 +253,12 @@ export const Cards = (): JSX.Element => {
 								<Line type="monotone" dataKey="uv" stroke="#82ca9d" />
 							</LineChart>
 						</ResponsiveContainer>
-					</MyPaper2>
+					</Box>
 				</Grid>
 				<Grid item lg={4} xs={9}>
-					<MyPaper2>
+					<Box className={classes.mypaper2}>
 						<PiechartDashboard />
-					</MyPaper2>
+					</Box>
 				</Grid>
 			</Grid>
 		</Container>

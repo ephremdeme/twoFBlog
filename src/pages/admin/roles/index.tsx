@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Grid } from '@material-ui/core';
+import Selectors from './Selectors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,9 +38,7 @@ export default function GroupOrientation() {
           </ButtonGroup>
         </Grid>
         <Grid item sm={12} md={6} lg={4}>
-          <Box fontWeight={500} fontSize="1.3rem" >
-            Role Settings
-          </Box>
+          <Selectors />
         </Grid>
       </Grid>
     </div>

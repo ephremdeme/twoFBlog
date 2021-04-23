@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { User, UserRole } from './types/index';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from 'app/store';
+import { AppThunk, RootState } from 'app/store';
 import firebase, { provider } from '../../firebase/firebase';
 import Cookies from 'js-cookie';
 
@@ -18,7 +18,8 @@ const initialState: User = {
 	authenticated: false,
 	isGuest: true,
 	error: false,
-	loaded: false
+	loaded: false,
+	blocked: false
 };
 
 const authSlice = createSlice({
@@ -72,6 +73,9 @@ const authSlice = createSlice({
 		setFaliure: (state: User, action: PayloadAction<boolean>) => {
 			state.error = action.payload;
 		},
+		setUserBlocked: (state: User, action: PayloadAction<boolean>) => {
+			state.blocked = action.payload;
+		},
 	},
 });
 
@@ -86,7 +90,25 @@ export const {
 	setLoggedIn,
 	setCurrentRole,
 	setFaliure,
+	setUserBlocked
 } = authSlice.actions;
+
+
+// Selectors
+
+export const {
+	selectBlocked,
+	selectUserRole,
+	selectUserAuthenticated,
+	selectUserId
+} = {
+	selectBlocked: (state: RootState): boolean => state.auth.blocked??false,
+	selectUserRole: (state: RootState): UserRole[] => [state.auth.role],
+	selectUserAuthenticated: (state: RootState) => state.auth.authenticated,
+	selectUserId: (state: RootState) => state.auth.uid,
+}
+
+// Thunk Funcs
 
 export const singUpWithProvider = (): AppThunk => async (dispatch) => {
 	try {

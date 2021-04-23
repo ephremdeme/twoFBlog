@@ -4,10 +4,8 @@ import {
 	Theme,
 	createStyles,
 } from '@material-ui/core/styles';
-import {RootState} from '../../app/store';
-import {Cards} from './cards';
+import { DashboardTopIndicators } from './DashboardTopIndicators';
 import firebase from '../../firebase/firebase';
-import {useSelector} from 'react-redux';
 
 const drawerWidth = 240;
 
@@ -48,25 +46,11 @@ interface Props {
 
 export default function ResponsiveDrawer(props: Props) {
 	const classes = useStyles();
-	const [photo, setPhoto] = React.useState<any>('');
-	const [name, setName] = React.useState<any>(null);
-	const [email, setEmail] = React.useState<any>(null);
-
-	React.useEffect(() => {
-		firebase.auth().onAuthStateChanged((user): any => {
-			if (user) {
-				setPhoto(user.photoURL);
-				setName(user.displayName);
-				setEmail(user.email);
-			} else {
-			}
-		});
-	}, []);
 
 	return (
 		<div>
 			<div className={classes.toolbar} />
-			<Cards />
+			<DashboardTopIndicators />
 		</div>
 	);
 }

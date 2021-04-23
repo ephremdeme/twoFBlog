@@ -131,11 +131,11 @@ const useStylesUserList = makeStyles((theme: Theme) =>
 		},
 		search: {
 			position: 'relative',
-			borderRadius: theme.shape.borderRadius,
-			backgroundColor: fade(theme.palette.common.white, 0.15),
+			borderRadius: 10,
 			'&:hover': {
 				backgroundColor: fade(theme.palette.common.white, 0.25),
 			},
+			border: `${theme.palette.type === 'dark' ? "1px solid #555" : "1px solid #aaa"}`,
 			marginLeft: 0,
 			width: '100%',
 			[theme.breakpoints.up('sm')]: {

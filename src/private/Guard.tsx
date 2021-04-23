@@ -1,5 +1,5 @@
 import { UserRole } from 'features/auth/types'
-import React from 'react'
+import React from 'react';
 
 interface IProps {
   children: JSX.Element | JSX.Element[],

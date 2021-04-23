@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import {
 	createMuiTheme,
 	ThemeProvider,
@@ -6,16 +7,17 @@ import {
 	Theme,
 	createStyles,
 } from '@material-ui/core';
+
+import Layout from 'layouts/app';
+import AppRouter from 'AppRouter';
+import Chat from 'pages/chat/chatbox';
 import { RootState } from './app/store';
 import { isLoggedIn } from './features/auth';
-import { useSelector, useDispatch } from 'react-redux';
-import Router from './router/Router';
-import { BrowserRouter, Switch, useLocation } from 'react-router-dom';
-import routes from './router/config';
 import { UserRole } from 'features/auth/types';
-import Chat from 'pages/chat/chatbox';
-import Layout from 'layouts/app';
 import { hideOnRoute } from 'utils/hideOnRoute';
+import { useSelector, useDispatch } from 'react-redux';
+import { BrowserRouter, useLocation } from 'react-router-dom';
+import GlobalLoader from 'components/shared/GlobalLoader';
 
 const drawerWidth = 240;
 
@@ -105,6 +107,7 @@ function App() {
 
 	return (
 		<div>
+			{/* <GlobalLoader thickness={4} size={50} /> */}
 			{
 				<div className={classes.root}>
 					<ThemeProvider theme={theme}>
@@ -114,7 +117,7 @@ function App() {
 								{hideOnRouteState &&
 									<div className={classes.toolbar}></div>
 								}
-								<Router routes={routes} />
+								<AppRouter />
 								{auth.role === UserRole.USER && !auth.authenticating ? (
 									<Chat />
 								) : null}

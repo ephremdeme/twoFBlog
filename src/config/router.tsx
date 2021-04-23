@@ -1,38 +1,34 @@
+import React, { lazy } from 'react';
 import Loader from 'components/shared/Loader';
 import { UserRole } from 'features/auth/types';
-import React, {
-	ComponentType,
-	lazy,
-	LazyExoticComponent,
-	ReactNode,
-} from 'react';
+import { RouterConfig } from "react-rolebased-router/lib/types";
 
+// page imports
 import Dashboard from '../pages/dashboard'
 import About from '../pages/util/About'
 import UsersAdmin from '../pages/admin/user/'
 
-export interface IRoute {
-	path: string;
-	exact: boolean;
-	fallback: NonNullable<ReactNode> | null;
-	component?: LazyExoticComponent<ComponentType<any>> | any;
-	routes?: IRoute[];
-	redirect?: {
-		page: string;
-		permissions?: UserRole[];
-	};
-	private?: boolean;
-	permissions?: UserRole[];
-	loginRedirect?: string;
-}
-
-const routes: IRoute[] = [
+const routes: RouterConfig[] = [
 	{
 		path: '/',
 		exact: true,
-		redirect: {
-			page: '/products/list',
-		},
+		redirect: [
+			{
+				page: "/dashboard",
+				permissions: [
+					UserRole.ADMIN,
+					UserRole.CUSTOMER_SERVICE,
+					UserRole.BLOGGER,
+					UserRole.EDITOR,
+					UserRole.SELLER,
+					UserRole.SHOPE_ADMIN
+				]
+			},
+			{
+				page: "/products/list",
+				permissions: [UserRole.GUEST, UserRole.USER]
+			}
+		],
 		fallback: <Loader />,
 		permissions: [UserRole.GUEST, UserRole.USER],
 	},
