@@ -3,6 +3,7 @@ import { Box, Button, ButtonGroup, createStyles, makeStyles, TextField, Theme } 
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import { v4 as uuidv4 } from 'uuid';
+import SelectMembers from './SelectMembers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,10 +33,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+export interface IBranch {
+  id: string;
+  branchName: string;
+  branchAddress: string;
+  branchPhone: string;
+  members: string[];
+}
+
 const AdditionalDescriptionForm = ({ onBranchChange }: any) => {
   const classes = useStyles();
-  const [branchList, setDescriptionList] = useState([
-    { branch_name: '', branch_address: '', branch_phone: '' }
+  const [branchList, setBranchList] = useState<IBranch[]>([
+    { id: uuidv4(), branchName: '', branchAddress: '', branchPhone: '', members: [] }
   ]);
 
   const handleInputChange = (
@@ -49,22 +58,22 @@ const AdditionalDescriptionForm = ({ onBranchChange }: any) => {
     if (name) {
       list[index][name] = value;
     }
-    setDescriptionList(list);
+    setBranchList(list);
     onBranchChange(branchList);
   };
   const handleRemoveClick = (index: number) => {
     const list = [...branchList];
     list.splice(index, 1);
-    setDescriptionList(list);
+    setBranchList(list);
     onBranchChange(branchList);
   };
 
   const handleAddClick = () => {
     const newBranchList = [
       ...branchList,
-      { id: uuidv4(), branch_name: '', branch_address: '', branch_phone: '' }
+      { id: uuidv4(), branchName: '', branchAddress: '', branchPhone: '', members: [] }
     ]
-    setDescriptionList(newBranchList);
+    setBranchList(newBranchList);
     onBranchChange(newBranchList);
   };
 
@@ -84,40 +93,47 @@ const AdditionalDescriptionForm = ({ onBranchChange }: any) => {
         return (
           <Box key={i} mt={2} alignItems="center" className={classes.additionalFieldFormContainer}>
             <Box mx={1} mb={2}>
-              <Box>
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  id="input-with-icon-grid"
-                  name="branch_name"
-                  label="Branch Name"
-                  value={desc.branch_name}
-                  required
-                  className={classes.inputField}
-                  onChange={(e) => handleInputChange(e, i)}
-                />
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  id="input-with-icon-grid"
-                  name="branch_address"
-                  label="Branch Phone Number"
-                  required
-                  className={classes.inputField}
-                  value={desc.branch_address}
-                  onChange={(e) => handleInputChange(e, i)}
-                />
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  id="input-with-icon-grid"
-                  name="branch_phone"
-                  label="Branch Adress"
-                  required
-                  className={classes.inputField}
-                  value={desc.branch_phone}
-                  onChange={(e) => handleInputChange(e, i)}
-                />
+              <Box display="flex" flexDirection={{ md: "column", lg: "row" }} justifySelf="space-around">
+                <Box>
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    id="input-with-icon-grid"
+                    name="branchName"
+                    label="Branch Name"
+                    value={desc.branchName}
+                    required
+                    className={classes.inputField}
+                    onChange={(e) => handleInputChange(e, i)}
+                  />
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    id="input-with-icon-grid"
+                    name="branchAddress"
+                    label="Branch Phone Number"
+                    required
+                    className={classes.inputField}
+                    value={desc.branchAddress}
+                    onChange={(e) => handleInputChange(e, i)}
+                  />
+                </Box>
+                <Box>
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    id="input-with-icon-grid"
+                    name="branchPhone"
+                    label="Branch Adress"
+                    required
+                    className={classes.inputField}
+                    value={desc.branchPhone}
+                    onChange={(e) => handleInputChange(e, i)}
+                  />
+                  <Box ml={2} my={1}>
+                    <SelectMembers />
+                  </Box>
+                </Box>
               </Box>
               <Box mx={2}>
                 <ButtonGroup

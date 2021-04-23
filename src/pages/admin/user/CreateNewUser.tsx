@@ -15,20 +15,12 @@ import {
 	Select,
 	MenuItem,
 } from '@material-ui/core';
-import { ReactComponent as FacebookIcon } from '../../../public/icons/icons8_google_logo_1.svg';
-import { ReactComponent as GoogleIcon } from '../../../public/icons/icons8_google_logo_1.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import {
-	singUpWithProvider,
-	signAsGuest,
-	isLoggedIn,
-	createUserWithEmailPassword,
 	createUserWithEmailPasswordAdmin,
 	setAuthFailure,
 } from '../../../features/auth/index';
-import { UserRole } from 'features/user/types';
-import { Alert, AlertTitle } from '@material-ui/lab';
 import AuthAlert from './AuthAlert';
 
 const useStyles = makeStyles((theme) => ({

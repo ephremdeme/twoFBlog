@@ -1,48 +1,48 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import { IProduct } from 'features/product/types';
-import { Link } from 'react-router-dom';
-import { Chip, createStyles, IconButton, makeStyles, Theme } from '@material-ui/core';
-import { useSelector } from 'react-redux';
-import { RootState } from 'app/store';
-import { AddBoxOutlined } from '@material-ui/icons';
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import Skeleton from '@material-ui/lab/Skeleton';
+import React from "react";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import { IProduct } from "features/product/types";
+import { Link } from "react-router-dom";
+import { Chip, createStyles, IconButton, makeStyles, Theme } from "@material-ui/core";
+import { useSelector } from "react-redux";
+import { RootState } from "app/store";
+import { AddBoxOutlined } from "@material-ui/icons";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import LocalOfferIcon from "@material-ui/icons/LocalOffer";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		productCard: {
-			position: 'relative',
+			position: "relative",
 			zIndex: 1,
 		},
 		prodImage: {
 			width: 210,
 			maxHeight: 165,
-			borderRadius: '5px',
-			boxShadow: '0 0 5px rgba(0,0,0,0.1)',
-			overflow: 'hidden',
-			position: 'relative',
+			borderRadius: "5px",
+			boxShadow: "0 0 5px rgba(0,0,0,0.1)",
+			overflow: "hidden",
+			position: "relative",
 		},
 		image: {
-			width: '100%',
-			height: 'auto',
-			transition: 'all .4s',
-			'&:hover': {
-				transform: 'scale(1.2)',
+			width: "100%",
+			height: "auto",
+			transition: "all .4s",
+			"&:hover": {
+				transform: "scale(1.2)",
 			},
 		},
 		child: {
-			position: 'absolute',
+			position: "absolute",
 			top: 0,
 			left: 0,
-			width: '100%',
-			height: '100%',
-			background: 'rgba(0,0,0,0.4)',
+			width: "100%",
+			height: "100%",
+			background: "rgba(0,0,0,0.4)",
 			zIndex: 3,
-			display: 'none',
+			display: "none",
 		},
 	})
 );
@@ -60,8 +60,8 @@ const ProductCard = ({ product }: ProductCard) => {
 			<Link
 				to={`/products/${product.id}/detail`}
 				style={{
-					textDecoration: 'none',
-					color: theme ? 'white' : '#212121',
+					textDecoration: "none",
+					color: localStorage.getItem("theme") === "dark" ? "white" : "#212121",
 				}}>
 				<Box
 					minWidth={210}
@@ -87,7 +87,7 @@ const ProductCard = ({ product }: ProductCard) => {
 						</Box>
 
 						<Typography display="block" variant="caption" color="textSecondary">
-							{product.currency}{' '}
+							{product.currency}{" "}
 							<Chip
 								variant="outlined"
 								size="small"

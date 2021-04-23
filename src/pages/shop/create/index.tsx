@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import {
   Box,
   createStyles,
   Divider,
   Grid,
-  InputLabel,
   makeStyles,
-  MenuItem,
-  Select,
   Slider,
   Theme,
   Typography,
 } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
+import { RootState } from 'app/store';
+import BranchsForm, { IBranch } from './BranchsForm';
 import { useHistory } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'app/store';
-import BranchsForm from './BranchsForm';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,6 +48,7 @@ export default function Create() {
   const [file, setFile] = useState<any>(null);
   const [category, setCategory] = useState('money');
   const [condition, setCondition] = React.useState('');
+  const [branchs, setBranchs] = useState<IBranch>();
 
   const handleConditionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setCondition(event.target.value as string);
@@ -70,16 +67,12 @@ export default function Create() {
     const dataUp = {
       ...data,
       uid: userID,
-      // additionalDescription: descriptions,
       condition: condition,
+      branchs
     };
 
-    // dispatch(
-    // postProduct({
-    // 	file: file,
-    // 	data: dataUp,
-    // })
-    // );
+    console.log('DATA UP GOES HERE: ', dataUp)
+
     setTimeout(() => history.push('/products/list/admin'), 1500);
   };
 
@@ -89,8 +82,8 @@ export default function Create() {
     setFile(selected);
   };
 
-  const onBranchChange = (desc: any) => {
-    console.log("AAAAAAAAAAAAAAAAAa: ", desc)
+  const onBranchChange = (branchs: IBranch) => {
+    setBranchs(branchs)
   }
 
   const masks = [{

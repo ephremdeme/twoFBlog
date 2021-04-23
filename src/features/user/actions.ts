@@ -1,9 +1,10 @@
 import { AppThunk } from 'app/store';
 import firebase from '../../firebase/firebase';
 import Cookies from 'js-cookie';
-import { Conversation, User, UserRole } from "./types/index";
+import { Conversation, User } from "./types/index";
 import { convertTimestamp } from "convert-firebase-timestamp";
 import { setGetPageView, setGetRealTimeUser, setGetRealTimeUser_admin, setGetUser_admin, setMessageView, setRefreshUser, setRefreshUser_admin, setTempo } from '.';
+import { UserRole } from 'features/auth/types';
 
 export const setGTempo = (is: boolean): AppThunk => async dispatch => {
 	dispatch(setTempo(is))

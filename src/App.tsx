@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import {
 	createMuiTheme,
@@ -8,16 +8,18 @@ import {
 	createStyles,
 } from '@material-ui/core';
 
+import firebase from 'firebase'
 import Layout from 'layouts/app';
 import AppRouter from 'AppRouter';
 import Chat from 'pages/chat/chatbox';
 import { RootState } from './app/store';
-import { isLoggedIn } from './features/auth';
+import { useSelector } from 'react-redux';
 import { UserRole } from 'features/auth/types';
-import { hideOnRoute } from 'utils/hideOnRoute';
-import { useSelector, useDispatch } from 'react-redux';
-import { BrowserRouter, useLocation } from 'react-router-dom';
 import GlobalLoader from 'components/shared/GlobalLoader';
+import { getCollection, useAppDispatch } from 'app/hooks';
+import { getGlobalLoading, setGlobalLoader } from 'features/app';
+import { BrowserRouter, useHistory, useLocation } from 'react-router-dom';
+import { isLoggedIn, selectBlocked, selectUserId, setUserBlocked } from './features/auth';
 
 const drawerWidth = 240;
 
@@ -64,15 +66,17 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function App() {
+	const dispatch = useAppDispatch();
 	const appTheme = useSelector((state: RootState) => state.app.appTheme);
 	const auth = useSelector((state: RootState) => state.auth);
-	const dispatch = useDispatch();
 	const classes = useStyles();
-	const location = useLocation();
+	const history = useHistory();
+	const blocked = useSelector(selectBlocked);
+	const globalLoader = useSelector(getGlobalLoading)
+
 	const hideNavBars = [
 		'/login', '/signup'
 	];
-	const [hideOnRouteState, setHideOnRouteState] = useState(hideOnRoute(hideNavBars, location.pathname))
 
 	const theme = createMuiTheme({
 		palette: {
@@ -103,20 +107,55 @@ function App() {
 		if (!auth.authenticated) {
 			dispatch(isLoggedIn());
 		}
+		if (auth.authenticated) {
+			dispatch(setGlobalLoader({
+				loading: false,
+				msg: ""
+			}))
+			history.push('/')
+			firebase.auth().onAuthStateChanged((user: any) => {
+				if (user) {
+					getCollection('users')
+						.where('uid', '==', user.uid)
+						.onSnapshot((snapshot) => {
+							const users = snapshot.docs.map((doc) => doc.data());
+							if (users[0]) {
+								console.log("BLOCKED USER: ", blocked);
+								dispatch(setUserBlocked(users[0].blocked));
+								if (!users[0].blocked) {
+									dispatch(setGlobalLoader({
+										loading: true,
+										msg: "Verifying Account Validation...."
+									}))
+									history.push("/");
+									setTimeout(() => dispatch(setGlobalLoader({
+										loading: false,
+										msg: ""
+									})), 100)
+								} else {
+									dispatch(setGlobalLoader({
+										loading: true,
+										msg: "Your account has been blocked..."
+									}));
+									history.push('/account-blocked')
+								}
+							}
+						});
+				}
+			})
+		}
 	}, [auth.authenticated]);
 
 	return (
 		<div>
-			{/* <GlobalLoader thickness={4} size={50} /> */}
+			{ globalLoader.loading && <GlobalLoader thickness={4} size={50} />}
 			{
 				<div className={classes.root}>
 					<ThemeProvider theme={theme}>
 						<BrowserRouter>
 							<Layout />
 							<main className={classes.content}>
-								{hideOnRouteState &&
-									<div className={classes.toolbar}></div>
-								}
+								<div className={classes.toolbar}></div>
 								<AppRouter />
 								{auth.role === UserRole.USER && !auth.authenticating ? (
 									<Chat />

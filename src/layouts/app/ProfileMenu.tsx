@@ -16,7 +16,7 @@ import { toggleTheme } from 'features/app';
 import {
   useHistory,
 } from 'react-router-dom';
-import { UserRole } from 'features/user/types';
+import { UserRole } from 'features/auth/types';
 
 const StyledMenu = withStyles({
   paper: {

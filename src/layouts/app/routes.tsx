@@ -8,157 +8,198 @@ import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import BallotIcon from '@material-ui/icons/Ballot';
 import InfoIcon from '@material-ui/icons/Info';
 import BusinessIcon from '@material-ui/icons/Business';
-	
-import {UserRole} from 'features/user/types';
+import { UserRole } from 'features/auth/types';
+
 export interface INavRouter {
 	name: string;
 	path: string;
 	icon: JSX.Element;
 }
 
-const navs = {
-	[UserRole.ADMIN]: [
-		{
-			name: 'Dashboard',
-			path: '/dashboard',
-			icon: <DashboardIcon />
-		},
-		{
-			name: 'Users',
-			path: '/auth/users',
-			icon: <PeopleIcon />
-		},
-		{
-			name: 'Chat',
-			path: '/chat',
-			icon: <ChatIcon />
-		},
-		{
-			name: 'Settings',
-			path: '/auth/settings',
-			icon: <SettingsIcon />
-		},
-		{
-			name: 'Roles',
-			path: '/auth/roles',
-			icon: <SecurityIcon />
-		},
-		{
-			name: 'Products',
-			path: '/products/list/admin',
-			icon: <ShoppingBasketIcon />
-		},
-		{
-			name: 'Posts',
-			path: '/posts/list',
-			icon: <BallotIcon />
-		},
-		{
-			name: 'Shops',
-			path: '/shop/list',
-			icon: <BusinessIcon />
-		},
-	],
-	[UserRole.SHOPE_ADMIN]: [
-		{
-			name: 'Dashboard',
-			path: '/',
-			icon: <DashboardIcon />
-		},
-		{
-			name: 'Products',
-			path: '/products/list',
-			icon: <ShoppingBasketIcon />
-		},
-		{
-			name: 'Shops',
-			path: '/shop/list',
-			icon: <BusinessIcon />
-		},
-	],
-	[UserRole.SELLER]: [
-		{
-			name: 'Dashboard',
-			path: '/',
-			icon: <DashboardIcon />
-		},
-		{
-			name: 'Products',
-			path: '/products/list',
-			icon: <ShoppingBasketIcon />
-		},
-	],
+export function getNav(role: UserRole) {
+	const navs = {
+		[UserRole.ADMIN]: [
+			{
+				name: 'Dashboard',
+				path: '/dashboard',
+				icon: <DashboardIcon />
+			},
+			{
+				name: 'Users',
+				path: '/auth/users',
+				icon: <PeopleIcon />
+			},
+			{
+				name: 'Chat',
+				path: '/chat',
+				icon: <ChatIcon />
+			},
+			{
+				name: 'Settings',
+				path: '/auth/settings',
+				icon: <SettingsIcon />
+			},
+			{
+				name: 'Roles',
+				path: '/auth/roles',
+				icon: <SecurityIcon />
+			},
+			{
+				name: 'Products',
+				path: '/products/list/admin',
+				icon: <ShoppingBasketIcon />
+			},
+			{
+				name: 'Posts',
+				path: '/posts/list',
+				icon: <BallotIcon />
+			},
+			{
+				name: 'Shops',
+				path: '/shop/list',
+				icon: <BusinessIcon />
+			},
+		],
+		[UserRole.SHOPE_ADMIN]: [
+			{
+				name: 'Dashboard',
+				path: '/',
+				icon: <DashboardIcon />
+			},
+			{
+				name: 'Products',
+				path: '/products/list',
+				icon: <ShoppingBasketIcon />
+			},
+			{
+				name: 'Shops',
+				path: '/shop/list',
+				icon: <BusinessIcon />
+			},
+		],
+		[UserRole.SHOPE_BRANCH_ADMIN]: [
+			{
+				name: 'Dashboard',
+				path: '/',
+				icon: <DashboardIcon />
+			},
+			{
+				name: 'Products',
+				path: '/products/list',
+				icon: <ShoppingBasketIcon />
+			},
+			{
+				name: 'Shops',
+				path: '/shop/list',
+				icon: <BusinessIcon />
+			},
+		],
+		[UserRole.SHOPE_BRANCH_SELLER]: [
+			{
+				name: 'Dashboard',
+				path: '/',
+				icon: <DashboardIcon />
+			},
+			{
+				name: 'Products',
+				path: '/products/list',
+				icon: <ShoppingBasketIcon />
+			},
+			{
+				name: 'Shops',
+				path: '/shop/list',
+				icon: <BusinessIcon />
+			},
+		],
+		[UserRole.SELLER]: [
+			{
+				name: 'Dashboard',
+				path: '/',
+				icon: <DashboardIcon />
+			},
+			{
+				name: 'Products',
+				path: '/products/list',
+				icon: <ShoppingBasketIcon />
+			},
+		],
+		[UserRole.CUSTOMER_SERVICE]: [
+			{
+				name: 'Dashboard',
+				path: '/',
+				icon: <DashboardIcon />
+			},
+			{
+				name: 'Chat',
+				path: '/chat',
+				icon: <ChatIcon />
+			},
+		],
+		[UserRole.BLOGGER]: [
+			{
+				name: 'User Dashboard',
+				path: '/',
+				icon: <DashboardIcon />
+			},
+			{
+				name: 'Posts',
+				path: '/posts/list',
+				icon: <BallotIcon />
+			},
+		],
+		[UserRole.EDITOR]: [
+			{
+				name: 'User Dashboard',
+				path: '/',
+				icon: <DashboardIcon />
+			},
+			{
+				name: 'Posts',
+				path: '/posts/list',
+				icon: <BallotIcon />
+			},
+		],
+		[UserRole.GUEST]: [
+			{
+				name: 'Products',
+				path: '/products/list',
+				icon: <ShoppingBasketIcon />
+			},
+			{
+				name: 'Posts',
+				path: '/posts/list',
+				icon: <BallotIcon />
+			},
+			{
+				name: 'About',
+				path: '/about',
+				icon: <InfoIcon />
+			},
+		],
+		[UserRole.USER]: [
+			{
+				name: 'User Dashboard',
+				path: '/',
+				icon: <DashboardIcon />
+			},
+			{
+				name: 'Products',
+				path: '/products/list',
+				icon: <ShoppingBasketIcon />
+			},
+			{
+				name: 'Posts',
+				path: '/posts/list',
+				icon: <BallotIcon />
+			},
+		],
+	};
 
-	[UserRole.CUSTOMER_SERVICE]: [
-		{
-			name: 'Dashboard',
-			path: '/',
-			icon: <DashboardIcon />
-		},
-		{
-			name: 'Chat',
-			path: '/chat',
-			icon: <ChatIcon />
-		},
-	],
-	[UserRole.BLOGGER]: [
-		{
-			name: 'User Dashboard',
-			path: '/',
-			icon: <DashboardIcon />
-		},
-		{
-			name: 'Posts',
-			path: '/posts/list',
-			icon: <BallotIcon />
-		},
-	],
-	[UserRole.EDITOR]: [
-		{
-			name: 'User Dashboard',
-			path: '/',
-			icon: <DashboardIcon />
-		},
-		{
-			name: 'Posts',
-			path: '/posts/list',
-			icon: <BallotIcon />
-		},
-	],
-	[UserRole.GUEST]: [
-		{
-			name: 'Products',
-			path: '/products/list',
-			icon: <ShoppingBasketIcon />
-		},
-		{
-			name: 'Posts',
-			path: '/posts/list',
-			icon: <BallotIcon />
-		},
-		{
-			name: 'About',
-			path: '/about',
-			icon: <InfoIcon />
-		},
-	],
-	[UserRole.USER]: [
-		{
-			name: 'User Dashboard',
-			path: '/',
-			icon: <DashboardIcon />
-		},
-		{
-			name: 'Products',
-			path: '/products/list',
-			icon: <ShoppingBasketIcon />
-		},
-		{
-			name: 'Posts',
-			path: '/posts/list',
-			icon: <BallotIcon />
-		},
-	],
-};
+	for (let k in navs) {
+		if (k == role) {
+			return navs[k]
+		}
+	}
 
-export default navs;
+	return []
+}

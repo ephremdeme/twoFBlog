@@ -8,6 +8,9 @@ import CircularProgress, {
   CircularProgressProps,
 } from '@material-ui/core/CircularProgress';
 import { Box } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import { getGlobalLoading } from 'features/app';
+import { Chat } from '@material-ui/icons';
 
 const useStylesLoader = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,13 +20,13 @@ const useStylesLoader = makeStyles((theme: Theme) =>
       height: "100vh",
       display: 'flex',
       flexDirection: 'column',
-      background: '#FFF',
+      background: localStorage.getItem('theme') === "dark" ? "#212121" : "#fff" ,
       justifyContent: 'center',
       zIndex: 1500,
     },
     card: {
       position: 'relative',
-      background: '#fff',
+      background: localStorage.getItem('theme') === "dark" ? "#212121" : "#fff" ,
       padding: '.4rem',
       borderRadius: 50,
       display: 'flex',
@@ -53,12 +56,12 @@ const useStylesLoader = makeStyles((theme: Theme) =>
 interface IProps {
   size?: number;
   thickness?: number;
-  msg?: string;
   props?: CircularProgressProps;
 }
 
-const GlobalLoader: React.FC<IProps> = ({ size = 20, thickness = 3, msg = "Loading Please Wait....", ...props }) => {
+const GlobalLoader: React.FC<IProps> = ({ size = 20, thickness = 3, ...props }) => {
   const classes = useStylesLoader();
+  const globalLoader = useSelector(getGlobalLoading);
 
   return (
     <div className={classes.root}>
@@ -76,7 +79,7 @@ const GlobalLoader: React.FC<IProps> = ({ size = 20, thickness = 3, msg = "Loadi
             {...props}
           />
         </div>
-        <Box mt={2} fontWeight={400}>{msg}</Box>
+        <Box mt={2} fontSize="1rem" fontWeight={500}>{globalLoader.msg}</Box>
       </Box>
     </div>
   );

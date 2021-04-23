@@ -10,9 +10,9 @@ import { sendRealTimeUserMessage, setClearRealTimeMessage, setGetRealTimeMessage
 import { list } from 'rxfire/database';
 import { debounceTime, map, tap, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { UserRole } from 'features/user/types';
 import { ReactComponent as SeenIcon } from "public/chat_icons/icons8_double_tick.svg";
 import { ReactComponent as UnseenIcon } from "public/chat_icons/icons8_checkmark.svg";
+import { UserRole } from 'features/auth/types';
 
 interface IItems {
     date: Date;
@@ -163,11 +163,11 @@ const Chatbox = ({ uid_1 }: any): JSX.Element => {
                                         {
                                             message.user_uid_1 === uid_1 && message.isView ? <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
                                                 <SeenIcon width="1rem" height="1rem" />
-                                            </Box> : 
-                                            message.user_uid_1 === uid_1 && !message.isView ?
-                                            <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
-                                                <UnseenIcon width="1rem" height="1rem" />
-                                            </Box> : null
+                                            </Box> :
+                                                message.user_uid_1 === uid_1 && !message.isView ?
+                                                    <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
+                                                        <UnseenIcon width="1rem" height="1rem" />
+                                                    </Box> : null
                                         }
                                         <TextPaper style={{ background: message.user_uid_1 === uid_1 ? '#7B1FA2' : '#716BE4' }}>{message.message}</TextPaper>
                                     </Box>
@@ -184,10 +184,10 @@ const Chatbox = ({ uid_1 }: any): JSX.Element => {
                                         message.user_uid_1 === uid_1 && message.isView ? <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
                                             <SeenIcon width="1rem" height="1rem" />
                                         </Box> :
-                                        message.user_uid_1 === uid_1 && !message.isView ?
-                                                    <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
-                                                        <UnseenIcon width="1rem" height="1rem" />
-                                                    </Box> : null
+                                            message.user_uid_1 === uid_1 && !message.isView ?
+                                                <Box height="100%" display="flex" pb={1} alignSelf="flex-end">
+                                                    <UnseenIcon width="1rem" height="1rem" />
+                                                </Box> : null
                                     }
                                     <TextPaper style={{ background: message.user_uid_1 === uid_1 ? '#7B1FA2' : '#716BE4' }}>{message.message}</TextPaper>
                                 </Box>

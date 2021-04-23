@@ -1,9 +1,38 @@
+import React, { useEffect } from 'react';
 import { Box } from '@material-ui/core';
-import React from 'react';
-import { useRouteMatch } from 'react-router';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { selectBlocked } from 'features/auth';
+import { setGlobalLoader } from 'features/app';
+import { useHistory, useRouteMatch } from 'react-router';
 
 const BlockedPage = () => {
-	const { url } = useRouteMatch()
+	const { url } = useRouteMatch();
+	const dispatch = useAppDispatch();
+	const blocked = useAppSelector(selectBlocked)
+	const history = useHistory()
+
+	useEffect(() => {
+		dispatch(setGlobalLoader({
+			loading: true,
+			msg: "Your account has been blocked..."
+		}));
+
+		if (!blocked) {
+			history.push('/')
+			dispatch(setGlobalLoader({
+				loading: false,
+				msg: ""
+			}));
+		}
+	}, []);
+
+	if (!blocked) {
+		history.push('/')
+		dispatch(setGlobalLoader({
+			loading: false,
+			msg: ""
+		}));
+	}
 
 	return (
 		<Box

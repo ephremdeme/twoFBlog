@@ -1,28 +1,27 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { createStyles, makeStyles, useTheme, Theme, withStyles } from '@material-ui/core/styles';
+import { RootState } from 'app/store';
+import { getNav, INavRouter } from './routes';
+import ProfileMenu from './ProfileMenu';
+import List from '@material-ui/core/List';
+import { useSelector } from 'react-redux';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import { UserRole } from 'features/auth/types';
+import Toolbar from '@material-ui/core/Toolbar';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import IconButton from '@material-ui/core/IconButton';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { selectChartProductQty } from 'features/product';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import { Badge, Box, Button, Hidden, Tooltip } from '@material-ui/core';
-import FB from '../../firebase/firebase';
-import { UserRole } from 'features/auth/types';
-import { RootState } from 'app/store';
-import { useSelector } from 'react-redux';
-import dashboardRoutes, { INavRouter } from './routes';
-import { Link } from 'react-router-dom';
-import ProfileMenu from './ProfileMenu';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { selectChartProductQty } from 'features/product';
+import { Badge, Box, Button, Hidden, Tooltip } from '@material-ui/core';
+import { createStyles, makeStyles, useTheme, Theme, withStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 280;
 
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
     },
     mobileMenuDrawer: {
-      width: 270
+      width: 70
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
@@ -106,15 +105,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const StyledBadge = withStyles((theme: Theme) =>
-	createStyles({
-		badge: {
+  createStyles({
+    badge: {
       color: '#fff',
-			right: -4,
-			top: 13,
-			border: `1px solid ${theme.palette.background.paper}`,
-			padding: '0 4px',
-		},
-	})
+      right: -4,
+      top: 13,
+      border: `1px solid ${theme.palette.background.paper}`,
+      padding: '0 4px',
+    },
+  })
 )(Badge);
 
 export default function Layout() {
@@ -123,23 +122,12 @@ export default function Layout() {
   const [open, setOpen] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [navs, setNavs] = useState<INavRouter[]>([]);
-  const [photo, setPhoto] = React.useState<any>('');
-  const [name, setName] = React.useState<any>(null);
-  const [email, setEmail] = React.useState<any>(null);
   const role: UserRole = useSelector((state: RootState) => state.auth.role);
   const auth = useSelector((state: RootState) => state.auth);
-	const chartQty = useSelector(selectChartProductQty);
+  const chartQty = useSelector(selectChartProductQty);
 
   React.useEffect(() => {
-    FB.auth().onAuthStateChanged((user): any => {
-      if (user) {
-        setPhoto(user.photoURL);
-        setName(user.displayName);
-        setEmail(user.email);
-      } else {
-      }
-    });
-    setNavs(dashboardRoutes[role]);
+    setNavs(getNav(role));
   }, []);
 
   const handleDrawerOpen = () => {
@@ -251,7 +239,7 @@ export default function Layout() {
                         className={classes.chartBtn}
                         to={'/products/chart'}>
                         <StyledBadge badgeContent={chartQty}>
-                          <ShoppingCartIcon />
+                          <ShoppingCartIcon style={{ color: "#FFF" }} />
                         </StyledBadge>
                       </IconButton>
                     </Tooltip>
@@ -302,11 +290,13 @@ export default function Layout() {
             </Hidden>
             <Hidden>
               <Drawer anchor="left" open={mobileOpen} onClose={toggleMobileDrawer} className={classes.mobileMenuDrawer}>
-                <div className={classes.toolbar}>
-                  Menu
-          </div>
-                <Divider />
-                {drawer}
+                <Box mr={6}>
+                  <div className={classes.toolbar}>
+                    Menu
+                  </div>
+                  <Divider />
+                  {drawer}
+                </Box>
               </Drawer>
             </Hidden>
           </>

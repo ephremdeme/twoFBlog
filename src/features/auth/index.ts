@@ -4,6 +4,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from 'app/store';
 import firebase, { provider } from '../../firebase/firebase';
 import Cookies from 'js-cookie';
+import { setGlobalLoader } from 'features/app';
 
 
 const initialState: User = {
@@ -393,6 +394,10 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 	dispatch(setFaliure(false));
 	const auth = firebase.auth();
 	const db = firebase.firestore();
+	dispatch(setGlobalLoader({
+		loading: true,
+		msg: "Authenticating..."
+	}))
 	auth.onAuthStateChanged((user: any) => {
 		if (user) {
 			if (user.isAnonymous === false) {
@@ -432,6 +437,10 @@ export const isLoggedIn = (): AppThunk => async (dispatch, getState) => {
 									error: false,
 									loaded: true
 								});
+								dispatch(setGlobalLoader({
+									loading: false,
+									msg: ""
+								}))
 							});
 					}).catch(err => {
 						dispatch(setFaliure(true))

@@ -19,9 +19,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import AddIcon from '@material-ui/icons/Add';
 import { RootState } from 'app/store';
-import { UserRole } from 'features/user/types';
-import { selectChartProductQty, setFilterableProducts } from 'features/product';
-import Guard from 'private/Guard';
+import { setFilterableProducts } from 'features/product';
+import UnlockAccess from 'utils/UnlockAccess';
+import { UserRole } from 'features/auth/types';
 
 const useStyles = makeStyles((theme: Theme) => ({
 	root: {
@@ -118,10 +118,16 @@ const ProductAppBar = (props: IProps) => {
 							inputProps={{ 'aria-label': 'search' }}
 						/>
 					</div>
-					<Guard allowedRoles={
-						[
-							UserRole.BLOGGER
-						]}>
+					
+					<UnlockAccess request={[UserRole.ADMIN]}>
+						<Tooltip title="checkout orders">
+							<IconButton
+								aria-label="checkout orders"
+								component={Link}
+								to={'/products/orders'}>
+								<ListAltIcon fontSize="small" />
+							</IconButton>
+						</Tooltip>
 						<Tooltip title="add a prodcut">
 							<IconButton
 								aria-label="chart"
@@ -130,27 +136,7 @@ const ProductAppBar = (props: IProps) => {
 								<AddIcon fontSize="small" />
 							</IconButton>
 						</Tooltip>
-					</Guard>
-
-					{role === UserRole.ADMIN && (
-						<>
-							<Tooltip title="checkout orders">
-								<IconButton
-									aria-label="checkout orders"
-									component={Link}
-									to={'/products/orders'}>
-									<ListAltIcon fontSize="small" />
-								</IconButton>
-							</Tooltip>
-							<Tooltip title="add a prodcut">
-								<IconButton
-									aria-label="chart"
-									component={Link}
-									to={'/products/create'}>
-									<AddIcon fontSize="small" />
-								</IconButton>
-							</Tooltip>
-						</>
+					</UnlockAccess>
 					)}
 				</Box>
 			</Box>

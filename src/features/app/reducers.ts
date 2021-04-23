@@ -1,6 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { persistTheme } from "utils/localStorage";
-import { IAppState } from './index'
+import { IAppState, IGlobalLoader } from './index'
 
 export default {
 	toggleTheme: (state: IAppState, action: PayloadAction<boolean>) => {
@@ -9,5 +9,8 @@ export default {
 	},
 	setProfileMenu: (state: IAppState, action: PayloadAction<boolean>) => {
 		state.profileMenu = action.payload;
-	}
+	},
+	setGlobalLoader: (state: IAppState, action: PayloadAction<IGlobalLoader>) => {
+		state.globalLoading = action.payload;
+	},
 }

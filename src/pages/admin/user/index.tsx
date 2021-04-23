@@ -35,6 +35,8 @@ import BlockIcon from '@material-ui/icons/Block';
 import ContactlessIcon from '@material-ui/icons/Contactless';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
+import UnlockAccess from 'utils/UnlockAccess';
+import { UserRole } from 'features/auth/types';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -320,13 +322,15 @@ const UserList = () => {
 				alignItems="flex-end"
 				justifyContent="space-between"
 				m={3}>
-				<Button
-					component={Link}
-					to="/auth/create/user"
-					size="small"
-					variant="outlined">
-					Add new user
-				</Button>
+				<UnlockAccess request={[UserRole.ADMIN]}>
+					<Button
+						component={Link}
+						to="/auth/create/user"
+						size="small"
+						variant="outlined">
+						Add new user
+					</Button>
+				</UnlockAccess>
 				<Box flexGrow={1} mx={3}>
 					<div className={classes.search}>
 						<div className={classes.searchIcon}>

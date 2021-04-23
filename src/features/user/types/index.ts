@@ -1,15 +1,4 @@
-export enum UserRole {
-	USER = 'USER',
-	GUEST = 'GUEST',
-	ADMIN = 'ADMIN',
-	SELLER = 'SELLER',
-	EDITOR = 'EDITOR',
-	BLOGGER = 'BLOGGER',
-	CUSTOMER_SERVICE = 'CUSTOMER_SERVICE',
-	SHOPE_ADMIN = 'SHOPE_ADMIN',
-	SHOPE_BRANCH_ADMIN = 'SHOPE_BRANCH_ADMIN',
-	SHOPE_BRANCH_SELLER = 'SHOPE_BRANCH_SELLER',
-}
+import { UserRole } from "features/auth/types";
 
 interface Ityping {
 	isTyping: boolean;

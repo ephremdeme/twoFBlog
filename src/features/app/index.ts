@@ -2,14 +2,24 @@ import { createSlice } from '@reduxjs/toolkit';
 import reducers from './reducers'
 import selectors from './selectors'
 
+export interface IGlobalLoader {
+	loading: boolean;
+	msg: string;
+}
+
 export interface IAppState {
 	appTheme: boolean;
 	profileMenu: boolean;
+	globalLoading: IGlobalLoader
 }
 
 const initialState: IAppState = {
 	appTheme: false,
-	profileMenu: localStorage.getItem("theme") == "dark"
+	profileMenu: localStorage.getItem("theme") == "dark",
+	globalLoading: {
+		loading: false,
+		msg: "Loading Please Wait...."
+	}
 }
 
 const appSlice = createSlice({
@@ -18,7 +28,7 @@ const appSlice = createSlice({
 	reducers
 })
 
-export const { toggleTheme, setProfileMenu } = appSlice.actions;
-export const { getAppTheme, getProfileMenu } = selectors;
+export const { toggleTheme, setProfileMenu, setGlobalLoader } = appSlice.actions;
+export const { getAppTheme, getProfileMenu, getGlobalLoading } = selectors;
 
 export default appSlice.reducer
