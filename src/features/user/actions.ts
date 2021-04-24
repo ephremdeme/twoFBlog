@@ -1,5 +1,5 @@
 import { AppThunk } from 'app/store';
-import firebase from '../../firebase/firebase';
+import firebase from '../../firebase';
 import Cookies from 'js-cookie';
 import { Conversation, User } from "./types/index";
 import { convertTimestamp } from "convert-firebase-timestamp";

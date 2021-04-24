@@ -171,7 +171,7 @@ export default function Layout() {
           [classes.appBarShift]: open,
         })}
       >
-        <Toolbar variant="dense">
+        <Toolbar>
           {
             !(auth.isGuest || auth.role === UserRole.USER) && (
               <>

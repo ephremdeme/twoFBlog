@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import { createFirestoreInstance } from "redux-firestore";
-import firebase from "./firebase/firebase";
+import firebase from "./firebase";
 import route from "./hooks/useRoutes";
 import { Router } from "react-router";
 import Main from 'hoc/main';

@@ -5,7 +5,7 @@ import {
 	createStyles,
 } from '@material-ui/core/styles';
 import { DashboardTopIndicators } from './DashboardTopIndicators';
-import firebase from '../../firebase/firebase';
+import firebase from '../../firebase';
 
 const drawerWidth = 240;
 

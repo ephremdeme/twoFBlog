@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 import {PayloadAction} from '@reduxjs/toolkit';
 import {RootState, AppThunk} from './../../app/store';
 
-import FB from '../../firebase/firebase';
+import FB from '../../firebase';
 import {useEffect, useState} from 'react';
 import {useCollection} from 'app/hooks';
 import {useDispatch, useSelector} from 'react-redux';

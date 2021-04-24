@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import firebase from "../../firebase/firebase";
+import firebase from "../../firebase";
 import { list } from 'rxfire/database';
 import { map } from 'rxjs/operators';
 import { setClearRealTimeMessage_admin, setGetRealTimeMessage_admin, updateViewStatus } from 'features/user';

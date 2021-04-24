@@ -40,13 +40,28 @@ import config from "./config";
 //   }
 // }
 
+
 firebase.initializeApp(config);
 // firebase.firestore();
 // firebase.storage();
 // firebase.auth();
 const storage = firebase.storage();
+const firestore = firebase.firestore();
+const auth = firebase.auth();
+const database = firebase.database();
 
+if (window.location.hostname === "localhost") {
+  firestore.useEmulator("localhost", 8080);
+  auth.useEmulator("http://localhost:9099");
+}
 
-const provider = new firebase.auth.GoogleAuthProvider();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-export {provider, storage, firebase as default}
+export {
+  googleProvider,
+  firestore,
+  storage,
+  auth,
+  database,
+  firebase as default
+}

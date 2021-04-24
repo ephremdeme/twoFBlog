@@ -1,4 +1,4 @@
-import { storage } from '../../firebase/firebase';
+import { storage } from '../../firebase';
 import MembersOnly from '../../plugins/only-members-plugin';
 const Embed = require('@editorjs/embed');
 const Image = require('@editorjs/image');

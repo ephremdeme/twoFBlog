@@ -4,11 +4,8 @@ import { setLoadingProducts, setProducts } from "./index";
 import { map } from 'rxjs/operators'
 import { AppThunk } from "app/store";
 import { PDB } from './init';
-import FB from '../../firebase/firebase';
-import { storage, firestore } from '../../app/hooks'
-import firebase from 'firebase'
+import { storage, firestore } from '../../firebase'
 import { IProduct } from './types';
-
 
 export const fetchProducts = (): AppThunk => async (dispatch, getState) => {
 	const products$ = getCollection(PDB.PRODCUTS)

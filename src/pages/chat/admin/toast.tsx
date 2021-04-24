@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { collection } from 'rxfire/firestore';
 import { map } from 'rxjs/operators';
-import firebase from "../../../firebase/firebase";
+import firebase from "../../../firebase";
 import { ReactComponent as TypingLoad } from "public/chat_icons/typing.svg";
 import { Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';

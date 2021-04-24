@@ -103,48 +103,48 @@ function App() {
 		},
 	};
 
-	useEffect(() => {
-		if (!auth.authenticated) {
-			dispatch(isLoggedIn());
-		}
-		if (auth.authenticated) {
-			dispatch(setGlobalLoader({
-				loading: false,
-				msg: ""
-			}))
-			history.push('/')
-			firebase.auth().onAuthStateChanged((user: any) => {
-				if (user) {
-					getCollection('users')
-						.where('uid', '==', user.uid)
-						.onSnapshot((snapshot) => {
-							const users = snapshot.docs.map((doc) => doc.data());
-							if (users[0]) {
-								console.log("BLOCKED USER: ", blocked);
-								dispatch(setUserBlocked(users[0].blocked));
-								if (!users[0].blocked) {
-									dispatch(setGlobalLoader({
-										loading: true,
-										msg: "Verifying Account Validation...."
-									}))
-									history.push("/");
-									setTimeout(() => dispatch(setGlobalLoader({
-										loading: false,
-										msg: ""
-									})), 100)
-								} else {
-									dispatch(setGlobalLoader({
-										loading: true,
-										msg: "Your account has been blocked..."
-									}));
-									history.push('/account-blocked')
-								}
-							}
-						});
-				}
-			})
-		}
-	}, [auth.authenticated]);
+	// useEffect(() => {
+	// 	if (!auth.authenticated) {
+	// 		dispatch(isLoggedIn());
+	// 	}
+	// 	if (auth.authenticated) {
+	// 		dispatch(setGlobalLoader({
+	// 			loading: false,
+	// 			msg: ""
+	// 		}))
+	// 		history.push('/')
+	// 		firebase.auth().onAuthStateChanged((user: any) => {
+	// 			if (user) {
+	// 				getCollection('users')
+	// 					.where('uid', '==', user.uid)
+	// 					.onSnapshot((snapshot) => {
+	// 						const users = snapshot.docs.map((doc) => doc.data());
+	// 						if (users[0]) {
+	// 							console.log("BLOCKED USER: ", blocked);
+	// 							dispatch(setUserBlocked(users[0].blocked));
+	// 							if (!users[0].blocked) {
+	// 								dispatch(setGlobalLoader({
+	// 									loading: true,
+	// 									msg: "Verifying Account Validation...."
+	// 								}))
+	// 								history.push("/");
+	// 								setTimeout(() => dispatch(setGlobalLoader({
+	// 									loading: false,
+	// 									msg: ""
+	// 								})), 100)
+	// 							} else {
+	// 								dispatch(setGlobalLoader({
+	// 									loading: true,
+	// 									msg: "Your account has been blocked..."
+	// 								}));
+	// 								history.push('/account-blocked')
+	// 							}
+	// 						}
+	// 					});
+	// 			}
+	// 		})
+	// 	}
+	// }, [auth.authenticated]);
 
 	return (
 		<div>

@@ -1,11 +1,6 @@
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {RootState, AppDispatch} from './store';
-import FB from '../firebase/firebase';
-const fbInstance = FB;
-
-export const firestore = fbInstance.firestore();
-export const storage = fbInstance.storage();
-export const database = fbInstance.database();
+import { database, storage, firestore } from '../firebase';
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();

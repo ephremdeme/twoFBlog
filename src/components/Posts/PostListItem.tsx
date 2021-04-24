@@ -1,7 +1,7 @@
 import React from 'react'
 import { Grid, Box } from '@material-ui/core';
 import PostItem from './PostItem';
-import firebase from '../../firebase/firebase';
+import firebase from '../../firebase';
 import { useEffect, useState } from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
 

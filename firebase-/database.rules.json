@@ -1,0 +1,6 @@
+{
+  "rules": {
+    ".read": "auth.uid != null",  // 2021-4-6
+    ".write":"auth.uid != null",  // 2021-4-6
+  }
+}

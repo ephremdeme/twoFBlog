@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardHeader, Badge, IconButton, styled, Paper, ListItemText, Box, Typography } from '@material-ui/core';
 import { ReactComponent as SendMessage } from '../../public/icons/icons8_paper_plane.svg';
-import firebase from '../../firebase/firebase';
+import firebase from '../../firebase';
 import './Chat.css';
 import { RootState } from '../../app/store';
 import { useSelector, useDispatch } from 'react-redux';

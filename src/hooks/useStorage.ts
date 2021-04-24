@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import FB from '../firebase/firebase';
+import FB from '../firebase';
 
 const useStorage = ({file, data, collection}: any) => {
 	const storage = FB.storage();
