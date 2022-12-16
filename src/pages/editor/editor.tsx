@@ -83,7 +83,7 @@ const EditorPage: React.FC<{
 	const dispatch = useDispatch();
 
 	const user = useSelector((state: RootState) => state.auth);
-	const userColl = useCollection('blogs');
+	const blogsColl = useCollection('blogs');
 
 	const blogs = useSelector(selectBlogs);
 	const blogEd = useSelector(selectBlog);
@@ -102,7 +102,7 @@ const EditorPage: React.FC<{
 		if (edit === undefined) {
 			dispatch(
 				setBlog({
-					id: userColl.doc().id,
+					id: blogsColl.doc().id,
 					title: '',
 					blogHash: '',
 					date: new Date().toDateString(),

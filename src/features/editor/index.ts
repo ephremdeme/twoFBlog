@@ -149,31 +149,33 @@ export const fetchBlogs = (): AppThunk => async (dispatch) => {
 		});
 };
 
-export const fetchBlog = (blogId: string): AppThunk => async (dispatch) => {
-	const firestore = FB.firestore();
+export const fetchBlog =
+	(blogId: string): AppThunk =>
+	async (dispatch) => {
+		const firestore = FB.firestore();
 
-	let blog: any = await firestore.collection('blogs').doc(blogId).get();
-	let data = blog.data();
-	let refData = await data.authorId.get();
+		let blog: any = await firestore.collection('blogs').doc(blogId).get();
+		let data = blog.data();
+		let refData = await data.authorId.get();
 
-	dispatch(setLoadingBlog(true));
+		dispatch(setLoadingBlog(true));
 
-	let blogData = {
-		id: blog.id,
-		...blog.data(),
-		authorId: data.authorId.id,
-		author: {
-			uid: refData.id,
-			user_name: refData.data().user_name,
-			photo: refData.data().photo,
-		},
-	} as IBlog;
+		let blogData = {
+			id: blog.id,
+			...blog.data(),
+			authorId: data.authorId.id,
+			author: {
+				uid: refData.id,
+				user_name: refData.data().user_name,
+				photo: refData.data().photo,
+			},
+		} as IBlog;
 
-	// console.log('FFFFF', blogData);
-	dispatch(setBlog(blogData));
+		// console.log('FFFFF', blogData);
+		dispatch(setBlog(blogData));
 
-	dispatch(setLoadingBlog(false));
-};
+		dispatch(setLoadingBlog(false));
+	};
 
 export const useFetchBlog = (blogId: string) => {
 	const [blog, setBlog] = useState<IBlog>(initialState.blog);
@@ -192,22 +194,24 @@ export const useFetchBlog = (blogId: string) => {
 	return {blog, loading};
 };
 
-export const postBlog = (blog: IBlog): AppThunk => async (dispatch) => {
-	const firestore = FB.firestore();
-	let {id, authorId, author, ...withoutId} = blog;
-	dispatch(setLoadingBlog(true));
-	const authorRef = useCollection('users').doc(authorId);
-	let updatedBlog = {
-		...withoutId,
-		authorId: authorRef,
-	};
-	let data = await firestore.collection('blogs').add(updatedBlog);
-	console.log('Added Blog', data);
+export const postBlog =
+	(blog: IBlog): AppThunk =>
+	async (dispatch) => {
+		const firestore = FB.firestore();
+		let {id, authorId, author, ...withoutId} = blog;
+		dispatch(setLoadingBlog(true));
+		const authorRef = useCollection('users').doc(authorId);
+		let updatedBlog = {
+			...withoutId,
+			authorId: authorRef,
+		};
+		let data = await firestore.collection('blogs').add(updatedBlog);
+		console.log('Added Blog', data);
 
-	setTimeout(() => {
-		dispatch(setLoadingBlog(false));
-	}, 2000);
-};
+		setTimeout(() => {
+			dispatch(setLoadingBlog(false));
+		}, 2000);
+	};
 
 export const useAddBlog = () => {
 	const [loading, setLoading] = useState<boolean>();
@@ -232,26 +236,25 @@ export const useAddBlog = () => {
 	return {handleBlogPost, loading};
 };
 
-export const updateBlogPublish = (
-	id: string,
-	published: boolean
-): AppThunk => async (dispatch) => {
-	const firestore = FB.firestore();
-	dispatch(setLoadingBlog(true));
+export const updateBlogPublish =
+	(id: string, published: boolean): AppThunk =>
+	async (dispatch) => {
+		const firestore = FB.firestore();
+		dispatch(setLoadingBlog(true));
 
-	dispatch(
-		updateBlogs({
-			id: id,
+		dispatch(
+			updateBlogs({
+				id: id,
+				published: published,
+			})
+		);
+
+		await firestore.collection('blogs').doc(id).update({
 			published: published,
-		})
-	);
+		});
 
-	await firestore.collection('blogs').doc(id).update({
-		published: published,
-	});
-
-	dispatch(setLoadingBlog(false));
-};
+		dispatch(setLoadingBlog(false));
+	};
 
 export const selectLoading = (state: RootState) => state.editor.loading;
 
